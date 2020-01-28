@@ -1,0 +1,145 @@
+\chapter{Llamadas al sistema}
+
+\subsection{\code{chmod}}\label{chmod}
+
+\begin{lstlisting}[language=C]
+#include <sys/stat.h>
+
+int chmod  (const char* pathname, mode_t mode);
+int fchmod (int fd, mode_t mode);
+\end{lstlisting}
+
+Cambia los permisos de acceso del fichero especificado por \code{pathname} a los especificado en la máscara \code{mode}.
+En caso de éxito, devuelve \code{0}.
+En caso de fracaso, devuelve \code{-1} acompañado por el \code{errno} apropiado.
+
+La variante \code{fchmod} identifica el fichero por su descriptor \code{fd}.
+
+\subsection{\code{chdir}}\label{chdir}
+
+\begin{lstlisting}[language=C]
+#include <unistd.h>
+
+int chdir  (const char* path);
+int fchdir (int fd);
+\end{lstlisting}
+
+Cambia el directorio de trabajo al especificado por la ruta \code{path}.
+En caso de éxito, devuelve \code{0}.
+En caso de fracaso, devuelve \code{-1} acompañado por el \code{errno} apropiado.
+
+La variante \code{fstat} identifica el directorio por su descriptor \code{fd}.
+
+\subsection{\code{close}}\label{close}
+
+\begin{lstlisting}[language=C]
+#include <unistd.h>
+
+int close (int fd);
+\end{lstlisting}
+
+Cierra el fichero especificado por su descriptor \code{fd}, eliminando a su vez todos los cerrojos asociados.
+En caso de éxito, devuelve \code{0}.
+En caso de fracaso, devuelve \code{-1} acompañado por el \code{errno} apropiado.
+
+\subsection{\code{fork}}\label{fork}
+
+\begin{lstlisting}[language=C]
+#include <sys/types.h>
+#include <unistd.h>
+
+pid_t fork ();
+\end{lstlisting}
+
+Crea un proceso hijo duplicando el proceso invocante o proceso padre.
+En caso de éxito, devuelve el \code{PID} del hijo en el padre y \code{0} en el hijo.
+En caso de fracaso, devuelve \code{-1} en el padre acompañado por el \code{errno} apropiado y sin crear ningún hijo.
+
+\subsection{\code{lskeek}}\label{lseek}
+
+\begin{lstlisting}[language=C]
+#include <sys/types.h>
+#include <unistd.h>
+
+off_t lseek (int fd, off_t offset, int whence);
+\end{lstlisting}
+
+Reposiciona el offset del fichero especificado por su descriptor \code{fd} a \code{offter} de acuerdo a la directiva \code{whence}, que puede ser:
+
+\begin{itemize}
+	\item\code{SEEK\_END}\textbf{:} Mover el offset a \code{offset} bytes posteriores al final del fichero.
+	\item\code{SEEK\_CUR}\textbf{:} Mover el offset a \code{offset} bytes posteriores al actual.
+	\item\code{SEEK\_SET}\textbf{:} Mover el offset a \code{offset} bytes.
+\end{itemize}
+
+\subsection{\code{open}}\label{open}
+
+\begin{lstlisting}[language=C]
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+
+int open  (const char* pathname, int flags);
+int open  (const char* pathname, int flags, mode_t mode);
+int creat (const char* pathname, mode_t mode);
+\end{lstlisting}
+
+Abre el fichero especificado por \code{pathname}.
+Si no existe y se ha especificado \code{O\_CREAT} como \code{flag}, llama a \code{creat} para crearlo pasándole sus propios argumentos.
+Devuelve el descriptor del fichero abierto.
+
+\subsection{\code{read}}\label{read}
+
+\begin{lstlisting}[language=C]
+#include <unistd.h>
+
+ssize_t read (int fd, void* buf, size_t count);
+\end{lstlisting}
+
+Lee los \code{count} primeros bytes de un fichero especificado por su descriptor \code{fs} y los almacena en el búfer \code{buf}.
+En caso de éxito, devuelve el número de bytes leídos o \code{0} si se ha llegado el final del fichero, tras el cual nunca sigue leyendo.
+En caso de fracaso, devuelve \code{-1} acompañado por el \code{errno} apropiado.
+
+\subsection{\code{stat}}\label{stat}
+
+\begin{lstlisting}[language=C]
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <unistd.h>
+
+int stat  (const char* pathname, struct stat* statbuf);
+int fstat (int fd, struct stat* statbuf);
+int lstat (const char* pathname, struct stat* statbuf);
+\end{lstlisting}
+
+Escribe los metadatos del fichero identificado por su \code{pathname} en la estructura \code{statbuf}.
+No requiere permisos en el fichero de trabajo, pero sí en todos sus directorios ancestros.
+En caso de éxito, devuelve \code{0}.
+En caso de fracaso, devuelve \code{-1} acompañado por el \code{errno} apropiado.
+
+La variante \code{fstat} identifica el fichero por su descriptor \code{fd}.
+La variante \code{lstat} es idéntica a \code{stat}, pero si se le pasa un enlace simbólico devuelve su información y no la del fichero al que apunta.
+
+\subsection{\code{umask}}\label{umask}
+
+\begin{lstlisting}[language=C]
+#include <sys/types.h>
+#include <sys/stat.h>
+
+mode_t umask (mode_t mask);
+\end{lstlisting}
+
+Cambia la máscara de creación de ficheros por defecto del proceso que ejecuta la llamada a \code{mask}.
+Devuelve que había antes de ser cambiada.
+
+\subsection{\code{write}}\label{write}
+
+\begin{lstlisting}[language=C]
+#include <unistd.h>
+
+ssize_t write (int fd, const void* buf, size_t count);
+\end{lstlisting}
+
+Escribe los \code{count} primeros bytes de un búfer \code{buf} en un fichero especificado por su descriptor \code{fd}.
+En caso de éxito, se devuelve el número de bytes escritos.
+En caso de fracaso, devuelve \code{-1} acompañado por el \code{errno} apropiado.

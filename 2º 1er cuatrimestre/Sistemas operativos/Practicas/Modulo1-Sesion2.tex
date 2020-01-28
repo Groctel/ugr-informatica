@@ -1,0 +1,222 @@
+\section{Herramientas de administración del sistema de archivos}
+
+\subsection{Partición de dispositivos de almacenamiento secundario}
+
+Para poder utilizar una unidad de memoria masiva es necesario dividirla en secciones (al menos una) llamadas \textbf{particiones}, que permiten alojar un sistema de archivos y constituyen un \textbf{disco lógico} (siendo el físico la propia unidad de memoria).
+Las particiones están formadas por un sectores de 512, 1024, 2048 (u otros múltiplos de 2) bytes, que son las unidades mínimas de almacenamiento de un sistema de archivos.
+Al crear una partición se le asocia una etiqueta en función del sistema de archivos que se quiere alojar en ellas.
+Estas pueden consultarse mediante la orden \code{sfdisk -T}.
+
+Para identificar las particiones de un disco, éste incorpora al inicio una tabla de particiones.
+Antiguamente, ésta seguía el formato MBR (\emph{master boot record}), pero los sistemas modernos siguen el formato GPT (\emph{GUID partition table}).
+
+\subsubsection{Particiones recomendadas en un sistema}
+
+Un disco en el que se almacene un sistema debe contar, como mínimo, con una partición de arranque (\code{/boot}) y una partición primaria en la que se encuentre la raíz del sistema de archivos.
+La partición primaria puede dividirse en varias particiones separadas, como una partición específica para \code{/home}, que permite reinstalar el sistema sin tener que crear una copia de seguridad de todos los ficheros de usuario o utilizar un disco SSD únicamente para la raíz del sistema.
+También se pueden añadir particiones \code{swap}, que permite almacenar datos que no caben en la RAM o guardar toda la RAM al hibernar el sistema.
+
+Los discos de almacenamiento secundario pueden contener tantas particiones como se desee sin más restricciones en su tipo o formato que el propósito de los mismos.
+
+Las particiones de un sistema pueden consultarse mediante la orden \code{lsblk}:
+
+\begin{lstlisting}[language=Bash]
+lsblk
+# NAME        MAJ:MIN RM   SIZE RO TYPE MOUNTPOINT
+# sda           8:0    0 931.5G  0 disk
+#   sda1        8:1    0  1023M  0 part /boot
+#   sda2        8:2    0 922.5G  0 part /home
+#   sda3        8:3    0     8G  0 part [SWAP]
+# nvme0n1     259:0    0 238.5G  0 disk
+#   nvme0n1p1 259:1    0 238.5G  0 part /
+\end{lstlisting}
+
+\subsubsection{Partición paso a paso de un dispositivo}
+
+Los ficheros \code{/dev/loop?} nos permiten simular dispositivos de almacenamiento virtual del espacio de los mismos.
+Aquí mostramos paso a paso cómo crear un disco \code{loop} y montarlo en el sistema.
+Todos estos pasos deben realizarse desde \code{root}.
+
+Primero vamos a crear dos ficheros \code{loop} mediante la orden \code{mknod}, que recibe los siguientes argumentos:
+
+\begin{itemize}
+	\item El nombre del fichero a crear
+	\item El tipo de fichero a crear (\code{b} simboliza un fichero de bloques especial con búfer).
+	\item Identificador del tipo de hardware de la partición (\emph{major}).
+	\item Identificador de la instancia de del \code{major} (\code{minor}).
+\end{itemize}
+
+\begin{lstlisting}[language=Bash]
+mknod /dev/loop0 b 7 0
+mknod /dev/loop1 b 7 1
+\end{lstlisting}
+
+Hecho esto, vamos a crear dos ficheros de 20 y 30 MB, respectivamente, mediante la orden \code{dd}, que recibe los siguientes argumentos:
+
+\begin{itemize}
+	\item Fichero de entrada de datos (\code{if}).
+	\item Fichero de salida de datos (\code{of}).
+	\item Número de bytes a leer en bloque (\code{bs}).
+	\item Número de bloques a copiar (\code{count}).
+\end{itemize}
+
+\begin{lstlisting}[language=Bash]
+dd if=/dev/zero of=./fichero_SA20 bs=2k count=10000
+dd if=/dev/zero of=./fichero_SA30 bs=3k count=10000
+\end{lstlisting}
+
+Creados los ficheros, vamos a asociar a cada dispositivo \code{loop} su propio fichero de sistema de archivos mediante la orden \code{losetup}:
+
+\begin{lstlisting}[language=Bash]
+losetup /dev/loop0 ./fichero_SA20
+losetup /dev/loop1 ./fichero_SA30
+\end{lstlisting}
+
+Usando \code{fdisk} o \code{gdisk} podemos leer el estado de las particiones:
+
+\begin{lstlisting}[language=Bash]
+fdisk -l /dev/loop0
+# Disk /dev/loop0: 19.54 MiB, 20480000 bytes, 40000 sectors
+# Units: sectors of 1 * 512 = 512 bytes
+# Sector size (logical/physical): 512 bytes / 512 bytes
+# I/O size (minimum/optimal): 512 bytes / 512 bytes
+gdisk /dev/loop0
+# GPT fdisk (gdisk) version 1.0.4
+#
+# Partition table scan:
+#   MBR: not present
+#   BSD: not present
+#   APM: not present
+#   GPT: not present
+#
+# Creating new GPT entries in memory.
+\end{lstlisting}
+
+Para particionar un disco externo se recomienda usar \code{gdisk}, que crea una tabla de particiones GPT en caso de que no exista y permite modificar las particiones navegando por menús sencillos.
+
+\subsection{Asignación de un sistema de archivos a una partición (formateo lógico)}
+
+Ya creadas las particiones de un disco, se debe escoger el sistema de archivos que va a utilizar cada una.
+El sistema utilizado por los sistemas Linux actuales es \code{ext4}, una evolución de \code{ext3} y \code{ext2} que incorpora un diario (\emph{journal}) con información de recuperación de los ficheros, extensiones que permiten describir conjuntos de bloques de discos contiguos para mejorar el rendimiento al trabajar con ficheros grandes y reducir la fragmentación del disco y asigación retardada de espacio en disco, que permite postergr la asignación de bloques de disco hasta el momento inminente de la escritura.
+
+\pagebreak
+
+Podemos crear particiones mediante la orden \code{mkfs} seguida de un punto y el tipo de partición que queremos asignar:
+
+\begin{lstlisting}[language=Bash]
+mkfs.ext3 /dev/loop0
+mkfs.ext4 /dev/loop1
+\end{lstlisting}
+
+\subsection{Ajuste de parámetros configurables de un sistema de archivos y comprobación de errores}
+
+Una vez disponibles los sistemas de archivos podemos usar la orden \code{tune2fs} para ajustar los parámetros de los sistemas de archivos \code{ext[234]}.
+La opción \code{-l} nos permite obtener información sobre el sistema de archivos pasado como segundo argumento, \code{-c} establece el segundo argumento como el número máximo de montajes que se pueden realizar sin llevar a cabo una comprobación de consistencia del sistema de archivos pasado como tercer argumento y \code{-L} pone al sistema de archivos pasado como tercer argumento la etiqueta pasada como segundo argumento.
+
+Con el tiempo, los sistemas de archivos pueden corromperse, empeorando su rendimiento y causando posibles pérdidas de información.
+Para subsanar esto, Linux comprueba automáticamente la salud de los sistemas en función del número de montajes de los mismos.
+Para realizar esta tarea manualmente usamos la orden \code{fsck}, que comprueba los metadatos del sistema de archivos (no su contenido explícito) para buscar inconsistencias en el mismo que pueden ser, por ejemplo, las siguientes:
+
+\begin{itemize}
+	\item Bloques asignados a varios ficheros simultáneamente.
+	\item Bloques marcados como libres asignados a ficheros.
+	\item Bloques marcados como asignados que realmente están libres.
+	\item Inconsistencia del número de enlaces a un fichero.
+	\item Inodos marcados como ocupados que no están asociados a ningún fichero.
+\end{itemize}
+
+\subsection{Montaje y desmontaje de sistemas de archivos}
+
+Los sistemas de archivos deben montarse en el sistema para acceder a ellos.
+En Linux, los sistemas de archivos pueden montarse en cualquier directorio, que denominamos \textbf{punto de montaje}.
+Para montarlos, usamos la orden \code{mount} pasando el sistema de archivos como primer argumento y el punto de montaje como segundo argumento.
+Para desmontarlos, usamos la orden \code{umount} pasando el punto de montaje como argumento.
+Debemos tener en cuenta que no podemos desmontar un sistema de archivos si está siendo utilizado.
+
+Para montar un sistema de archivos de forma automática debemos incluirlo en \code{/etc/fstab} con los argumentos indicados en \S1.1.3 o usando la orden \code{genfstab}.
+
+\subsection{Administración de software}
+
+En los sistemas Linux, el software no se instala descargando un ejecutable de una página web (que podría ser maliciosa) e instalando su contenido en el ordenador.
+Éste es un proceso ortopédico y atrasado, ya que no garantiza la seguridad o autenticidad del software descargado más allá de la ilusión de confianza y obliga al desarrollador a incorporar su propio sistema de actualizaciones y gestión de dependencias.\footnote{Por supuesto, estamos hablando de Windows.}
+
+Los sistemas Linux estructuran el software en paquetes que se instalan una única vez en el sistema y cuentan con un árbol de dependencias de otros paquetes.
+Estos paquetes pueden contener binarios o código fuente que debe ser compilado para instalarlo.
+Las labores de administración de software en Linux se realizan mediante \textbf{gestores de paquetes}, que son interfaces gráficas o textuales que permiten instalar, desinstalar y administrar programas.
+En esta sección mostramos cómo usar algunos de ellos.
+
+\subsubsection{\code{apt}}
+
+Es el gestor de paquetes de Debian y sus distribuciones derivadas.
+Permite instalar ficheros \code{.deb} y \code{.rpm} y acepta los siguientes argumentos:
+
+\begin{itemize}
+	\item\code{autoremove}\textbf{:} Elimina todas las dependencias huérfanas.
+	\item\code{install}\textbf{:} Instala el paquete pasado como segundo argumento.
+	\item\code{search}\textbf{:} Busca el paquete pasado como segundo argumento en los repositorios instalados.
+	\item\code{update}\textbf{:} Actualiza la base de datos de los repositorios instalados.
+	\item\code{upgrade}\textbf{:} Actualiza los paquete cuya versión es inferior a la disponible en los repositorios instalados.
+	\item\code{remove}\textbf{:} Elimina el paquete pasado como segundo argumento.
+\end{itemize}
+
+\subsubsection{\code{pacman}}
+
+Es el gestor de paquetes de ArchLinux y sus distribuciones derivadas.
+Acepta los siguientes argumentos.
+
+\begin{itemize}
+	\item\code{-c}\textbf{:} Elimina todas las dependencias huérfanas.
+	\item\code{-Q}\textbf{:} Muestra todos los paquetes instalados o el pasado como segundo argumento si lo está. Puede encauzarse a \code{grep} para buscar paquetes que coincidan con una expresión regular.
+	\item\code{-R}\textbf{:} Elimina el paquete pasado como segundo argumento.
+	\item\code{-S}\textbf{:} Instala el paquete pasado como argumento.
+	\item\code{-Syu}\textbf{:} Actualiza los repositorios cuya versión local es inferior a la global y actualiza el sistema.
+	\item\code{-Syyu}\textbf{:} Actualiza todos los repositorios y actualiza el sistema.
+	\item\code{-U}\textbf{:} Instala un paquete desde la ruta pasada como segundo argumento.
+\end{itemize}
+
+\subsubsection{\code{rpm}}
+
+Es un gestor de paquetes de bajo nivel propio de RedHat.
+Acepta los siguientes argumentos.
+
+\begin{itemize}
+	\item\code{-e}\textbf{:} Elimina el paquete pasado como segundo argumento.
+	\item\code{-F}\textbf{:} Actualiza paquetes descargándolos del servidor pasado como segundo argumento.
+	\item\code{-i}\textbf{:} Instala el paquete pasado como segundo argumento.
+	\item\code{-qa}\textbf{:} Muestra información sobre todos los paquetes instalados. Puede encauzarse con \code{grep} para buscar paquetes que coincidan con una expresión regular.
+	\item\code{-qi}\textbf{:} Muestra información sobre el paquete instalado pasado como segundo argumento.
+	\item\code{-U}\textbf{:} Actualiza el paquete pasado como segundo argumento.
+	\item\code{-V}\textbf{:} Verifica la integridad de la instalación del paqeute pasado como segundo argumento.
+\end{itemize}
+
+\subsubsection{\code{yay}}
+
+No es un gestor de paquetes como tal, sino un cliente para buscar paquetes en el AUR (\emph{Arch User Repository}) que incorpora todas las funcionalidades de \code{pacman}.
+Como adición a \code{pacman}, permite buscar paquetes en los repositorios pasando una cadena de caracteres como argumento y ejecuta \code{yay -Syu} al ser llamado sin argumentos.
+
+\subsubsection{\code{yum}}
+
+Es un gestor de paquetes usado para instalar ficheros \code{.rpm}, propios de RedHat.
+Acepta los siguientes argumentos:
+
+\begin{itemize}
+	\item\code{install}\textbf{:} Instala el paquete pasado como segundo argumento.
+	\item\code{list}\textbf{:} Muestra los paquetes disponibles en los repositorios.
+	\item\code{list installed}\textbf{:} Muestra los paquetes instalados en el sistema.
+	\item\code{list updates}\textbf{:} Muestra los paquetes instalados que pueden ser actualizados.
+	\item\code{remove}\textbf{:} Elimina el paquete pasado como segundo argumento y todos aquellos que dependen de él.
+	\item\code{update}\textbf{:} Actualiza todos los paquetes instalados.
+\end{itemize}
+
+\subsection{Administración de cuotas}
+
+Las cuotas de disco son restricciones del uso de los sistemas de archivos que pueden realizar los usuarios de un sistema que requieren del paquete \code{quota}.
+Estas restricciones sobre el uso de bloques e inodos pueden establecerse mediante dos tipos de límites:
+
+\begin{itemize}
+	\item\textbf{Límite \emph{hard}:} El usuario no puede sobrepasarlo. Si llega al límite, el sistema no le permite usar más bloques ni inodos, impidiéndole aumentar el tamaño de sus ficheros o crear nuevos.
+	\item\textbf{Límite \emph{soft}:} Debe configurarse como un valor inferior al límite \emph{hard} y puede sobrepasarse durante cierto tiempo (periodo de gracia), tras el cual el sistema actúa como si se hubiera superado el límite \emph{hard}.
+\end{itemize}
+
+Para trabajar con las cuotas de un sistema de archivos pueden usarse las órdenes \code{quota} para asignar cuotas al usuario pasado como argumento y \code{repquota} para mostrar estadísticas de las cuotas de todos los usuarios que hagan uso del sistema de archivos pasado como argumento.
+

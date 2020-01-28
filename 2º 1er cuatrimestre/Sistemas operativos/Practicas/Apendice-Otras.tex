@@ -1,0 +1,64 @@
+\chapter{Otras bibliotecas}
+
+\subsection{\code{ntfw}}\label{ntfw}
+
+\begin{lstlisting}[language=C]
+#include <ftw.h>
+
+int nftw (const char *dirpath,
+          int (*fn) (const char* fpath, const struct stat* sb,
+                     int typeflag, struct FTW* ftwbuf),
+          int nopenfd, int flags);
+\end{lstlisting}
+
+Recorre el árbol de directorios de raíz \code{fpath} y llama a la rutina \code{fn} una vez por cada entrada.
+Por defecto, recorre el árbol en preorden transversal, es decir, primero lee recursivamente los directorios y luego los ficheros.
+
+Para evitar agotar el número de descriptores de ficheros, se establece \code{nopenfd} como máximo de ficheros abiertos posibles simultáneamente.
+Al rebasar este límite, \code{nftw} funciona más lento porque tiene que ir cerrando y abriendo directorios.
+Se usa como máximo un descriptor por fichero del árbol.
+
+Para cada entrada del árbol, \code{fn} recibe cuatro argumentos:
+
+\begin{itemize}
+	\item\code{fpath}\textbf{:} Ruta de la entrada expresada relativa o absolutamente de la misma forma que \code{dirpath}.
+	\item\code{sb}\textbf{:} Puntero a la estructura \code{stat} devuelta por \code{stat(fpath)}.
+	\item\code{typeflag}\textbf{:} Un entero que tiene uno de los siguientes valores:
+	\begin{itemize}
+		\item\code{FTW\_D}\textbf{:} \code{fpath} es un directorio.
+		\item\code{FTW\_DNR}\textbf{:} \code{fpath} es un directorio que no puede leerse.
+		\item\code{FTW\_DP}\textbf{:} Recorriendo en postorden (\code{FTW\_DEPTH}), el contenido de este directorio ya ha sido recorrido.
+		\item\code{FTW\_F}\textbf{:} \code{fpath} es un fichero regular.
+		\item\code{FTW\_NS}\textbf{:} La llamada a \code{stat} ha fallado con este fichero (probablemente por restricciones de permisos), por lo que \code{statbuf} tiene un valor indefinido.
+		\item\code{FTW\_SL}\textbf{:} Desreferenciando enlaces simbólicos (\code{FTW\_PHYS}), el fichero es uno.
+		\item\code{FTW\_SLN}\textbf{:} Sin desreferenciar enlaces simbólicos, el fichero es uno, por lo que se pierde su referencia.
+	\end{itemize}
+	\item\code{ftwbuf}\textbf{:} Puntero a una estructura de tipo \code{FTW}.
+\end{itemize}
+
+\begin{lstlisting}[language=C]
+struct FTW {
+	int base,  // Offset del fichero con respecto a pathname
+	    level; // Profundidad del fichero en el árbol
+};
+\end{lstlisting}
+
+Cada vez que se llama a \code{fn}, ésta devuelve un valor entero que valdrá \code{0} en caso de éxito, y cualquier otro número en caso de error.
+Al devolverse un error, \code{nftw} deja de recorrer el árbol y devuelve dicho valor.
+También devuelve \code{-1} si el error es de otro tipo.
+
+Por último, \code{flags} indica banderas seleccionables múltiplemente con \code{OR}, que pueden ser una de las siguientes:
+
+\begin{itemize}
+	\item\code{FTW\_DIR}\textbf{:} Realizar un cambio de directorio (\code{chdir}) en cada uno antes de procesar su contenido.
+	\item\code{FTW\_DEPTH}\textbf{:} Realizar un recorrido postorden del árbol, es decir, se llama a \code{fn} sobre todos los ficheros y subdirectorios de un directorio antes de llamarla sobre él mismo.
+	\item\code{FTW\_MOUNT}\textbf{:} No salir del sistema de archivos, es decir, no cruzar puntos de montaje.
+	\item\code{FTW\_PHYS}\textbf{:} No seguir enlaces simbólicos.
+\end{itemize}
+
+\begin{lstlisting}[language=C]
+\end{lstlisting}
+\begin{lstlisting}[language=C]
+\end{lstlisting}
+\begin{lstlisting}[language=C]
+\end{lstlisting}

@@ -1,0 +1,389 @@
+\section{Monitorización del sistema}
+
+\subsection{Control y gestión de CPU}
+
+\subsubsection{\code{uptime}}
+
+Esta orden muestra información sobre el tiempo que lleva el sistema encencido, el número de usuarios conectados y la carga media del mismo en los últimos uno, cinco y quince minutos.
+La carga del sistema se define como el número de procesos que están en espera ociosa de la CPU\@.
+En los sistemas multinúcleo se debe multiplicar este valor por el número de núcleos para obtener la carga total del sistema.
+
+Por otra parte, la orden \code{w} muestra esta información y un desglose de las actividades que están realizando los usuarios conectados actualmente.
+
+\begin{lstlisting}[language=Bash]
+uptime
+# 20:18:36 up  9:11,  1 user,  load average: 0.70, 0.87, 1.31
+w
+# 20:18:36 up  9:11,  1 user,  load average: 0.70, 0.87, 1.31
+# USER     TTY   LOGIN@  IDLE   JCPU   PCPU   WHAT
+# groctel  tty7  11:18   9:11m  11:00  7.30s  i3 -a --restart /run/user/1000/i3/restart-state.1608
+\end{lstlisting}
+
+\subsubsection{\code{time}}
+
+Esta orden mide el tiempo de ejecución de un programa y muestra un resumen de los recursos utilizados por el mismo al acabar su ejecución.
+El tiempo total (\code{real}) que ha tardado en ejecutarse se computa como la suma del tiempo de ejecución en modo usuario (\code{user}), el tiempo de ejecución en modo kernel (\code{sys}) y el tiempo de espera, de forma que éste puede computarse de la siguiente manera:
+
+\[T_{espera}=T_{real}-T_{user}-T_{sys}\]
+
+Esta orden se ejecuta anteponiéndola a la orden a ejecutar y medir:
+
+\begin{lstlisting}[language=Bash]
+time ls /
+# bin   dev  games  lib    lost+found  opt   root  sbin  sys  usr
+# boot  etc  home   lib64  mnt         proc  run   srv   tmp  var
+#
+# ls --color=tty /  0.00s user 0.00s system 82% cpu 0.001 total
+\end{lstlisting}
+
+\subsubsection{\code{nice} y \code{renice}}
+
+Linux planifica el uso de los recursos del sistema mediante una jerarquía de prioridades llamadas \emph{niceness}.
+Los procesos de usuarios pueden tener valores \code{nice} de \code{0} a \code{19} mientras que los procesos de \code{root} pueden tener valores de \code{-1} a \code{-20}, siendo los números más bajos los que tienen mayor prioridad\footnote{Tras una vida aprendiendo a ser amables, resulta que se da prioridad a los procesos que le gritan a la pobre alma que les atiende en la ventanilla\ldots}.
+La orden \code{nice} nos permite cambiar la priodidad del proceso pasado como segundo argumento a la suma (o resta) del valor pasado como primer argumento precedido de \code{-}:
+
+\begin{lstlisting}[language=Bash]
+nice -5 zathura    # Aumenta en 5 el nice de zathura
+nice --10 runelite # Disminuye en 10 el nice de runelite
+\end{lstlisting}
+
+Por su parte, la orden \code{renice} permite alterar el valor de uno o más procesos en ejecución de la misma forma que \code{nice} pero sin preceder el valor de \code{-} e identificando los procesos por su PID\@:
+
+\begin{lstlisting}[language=Bash]
+renice 5 9030 # Aumenta en 5 el nice del proceso de PID 9030
+\end{lstlisting}
+
+\subsubsection{\code{pstree}}
+
+Muestra los procesos en ejecución en forma de árbol.
+Acepta los siguientes argumentos:
+
+\begin{itemize}
+	\item\code{-a}\textbf{:} Muestra los argumentos con los que se ejecuta cada proceos.
+	\item\code{-A}\textbf{:} Usa caracteres ASCII (no UTF-8) para dibujar el árbol.
+	\item\code{-G}\textbf{:} Usa los caracteres de VT100.
+	\item\code{-h}\textbf{:} Resalta el proceso actual (\code{pstree}) y sus ancestros.
+	\item\code{-H}\textbf{:} Resalta el proceso pasado como segundo argumento y sus ancestros.
+	\item\code{-l}\textbf{:} Usa un formato largo, truncando las líneas por defecto.
+	\item\code{-n}\textbf{:} Ordena los procesos por el PID de su padre en lugar de por el nombre.
+	\item\code{-p}\textbf{:} Desactiva la muestra de los PID entre paréntesis para cada proceso.
+	\item\code{-u}\textbf{:} Si el UID de un proceso difiere del de su padre, muestra el nuevo entre paréntesis.
+	\item\code{-Z}\textbf{:} Muestra el contexto de seguridad para cada proceso en SELinux.
+\end{itemize}
+
+\begin{lstlisting}[language=Bash]
+pstree -A
+# systemd-+-NetworkManager---2*[{NetworkManager}]
+#         |-accounts-daemon---2*[{accounts-daemon}]
+#         |-agetty
+#         |-colord---2*[{colord}]
+#         |-cupsd
+#         |-dbus-daemon
+#         |-2*[entr]
+#         |-firefox-+-Web Content---40*[{Web Content}]
+#         |         |-Web Content---35*[{Web Content}]
+#         |         |-Web Content---33*[{Web Content}]
+#         |         |-Web Content---23*[{Web Content}]
+#         |         |-WebExtensions---30*[{WebExtensions}]
+#         |         `-73*[{firefox}]
+\end{lstlisting}
+
+\subsubsection{\code{ps}}
+
+Esta orden se implementa usando el sistema de archivos \code{/proc} y muestra la siguiente información sobre los procesos en ejecución:
+
+\begin{itemize}
+	\item\code{USER}\textbf{:} Usuario que ejecutó el programa.
+	\item\code{PID}\textbf{:} Identificador del proceso.
+	\item\code{PPID}\textbf{:} PID del padre del proceso.
+	\item\code{\%CPU}\textbf{:} Porcentaje entre el tiempo de CPU del programa y su tiempo de ejecución.
+	\item\code{\%MEM}\textbf{:} Porcentaje de memoria principal consumida estimada.
+	\item\code{VSZ}\textbf{:} Tamaño virtual de proceso ($c\acute{o}digo+datos+pila$) en KB\@.
+	\item\code{RSS}\textbf{:} Memoria real usada en KB\@.
+	\item\code{TTY}\textbf{:} Terminal asociada con el proceso.
+	\item\code{STAT}\textbf{:} Estado del proceso, que puede ser uno de los siguientes:
+	\begin{itemize}
+		\item\code{D}\textbf{:} Durmiendo ininterrumpible.
+		\item\code{l}\textbf{:} Contiene procesos multihebra.
+		\item\code{L}\textbf{:} Páginas bloqueadas en memoria.
+		\item\code{N}\textbf{:} Prioridad baja ($>0$).
+		\item\code{s}\textbf{:} Líder de sesión.
+		\item\code{R}\textbf{:} En ejecución o listo.
+		\item\code{S}\textbf{:} Durmiendo.
+		\item\code{T}\textbf{:} Parado.
+		\item\code{Z}\textbf{:} Zombi.
+		\item\code{<}\textbf{:} Prioridad alta ($<0$).
+		\item\code{+}\textbf{:} Proceso en primer plano.
+	\end{itemize}
+\end{itemize}
+
+Esta orden se ejecuta normalmente con el argumento \code{-ef}, siendo \code{e} la selección de todo procesos en el sistema y \code{f} la muestra de información completa de los procesos.
+Si se ejecuta sin argumentos muestra únicamente los procesos lanzados por el usuario que ejecuta la orden.
+
+\subsubsection{\code{top}}
+
+Esta orden muestra información sobre la actividad del procesador y los procesos en ejecución de forma continuada e interactiva.
+Las cinco primeras líneas muestran, en orden, las estadísticas de \code{uptime}, estadísticas sobre los procesos del sistema el estado actual de la CPU, el estado actual de la  memoria y el estado actual del espacio \code{swap}.
+Tras esta cabecera, se muestran los procesos en orden decreciende de uso de CPU, actualizándose cada cincos egundos.
+Podemos realizar las siguientes acciones sobre los procesos:
+
+\begin{itemize}
+	\item\code{A}\textbf{:} Ordenar los procesos por el tiempo de ejecución.
+	\item\code{k}\textbf{:} Enviar una señal \code{kill} a un proceso.
+	\item\code{q}\textbf{:} Cerrar la interfaz.
+	\item\code{N}\textbf{:} Ordenar los procesos por PID\@.
+	\item\code{P}\textbf{:} Ordenar los procesos por uso de la CPU\@.
+	\item\code{n}\textbf{:} Cambiar el número de procesos mostrados.
+	\item\code{r}\textbf{:} Cambiar la prioridad de un proceso.
+\end{itemize}
+
+\pagebreak
+
+\begin{lstlisting}[language=Bash]
+top
+# Tasks: 269 total,   1 running, 268 sleeping,   0 stopped,   0 zombie
+# %Cpu(s):  2.4 us,  0.4 sy,  0.0 ni, 96.2 id,  1.0 wa,  0.1 hi,  0.0 si,  0.0 st
+# MiB Mem :   7815.9 total,   2251.3 free,   2179.1 used,   3385.5 buff/cache
+# MiB Swap:   8191.0 total,   7497.5 free,    693.5 used.   4749.7 avail Mem
+#
+#    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+#   1951 groctel   20   0 3712852 366700 123248 S  28.2   4.6   9:15.44 firefox
+#   2044 groctel   20   0 2542732 157648  96980 S   3.0   2.0   2:05.89 Web Content
+#  90517 groctel   20   0 1281976 115580  72024 S   3.0   1.4   0:59.06 mpv
+#   1678 groctel    9 -11 2412604  10164   7500 S   1.7   0.1   6:42.27 pulseaudio
+#   2010 groctel   20   0 4037780 513816  50044 S   1.0   6.4  12:53.95 telegram-deskto
+\end{lstlisting}
+
+Como mejora a \code{top} existe \code{htop}, que ofrece más opciones de interacción y una interfaz más detallada.
+
+\subsubsection{\code{mpstat}}
+
+Para ejecutarla es necesario tener instalado el paquete \code{systat}.
+Esta orden muestra las siguientes estadísticas del procesador junto con la media global de las mismas:
+
+\begin{itemize}
+	\item\code{CPU}\textbf{:} Número identificador del procesador.
+	\item\code{\%idle}\textbf{:} Porcentaje de tiempo que la CPU está desocupada y el sistema no tiene peticiones de disco pendientes.
+	\item\code{\%iowait}\textbf{:} Porcentaje de tiempo que la CPU está desocupada mientras que espera a que se terminen peticiones de E/S.
+	\item\code{\%irq}\textbf{:} Porcentaje de tiempo que la CPU gasta con interrupciones hardware.
+	\item\code{\%nice}\textbf{:} Porcentaje de uso de la CPU para tareas con \code{nice} mayor que \code{0}.
+	\item\code{\%soft}\textbf{:} Porcentaje de tiempo que la CPU gasta con interrupciones software.
+	\item\code{\%sys}\textbf{:} Porcentaje de tiempo de la CPU para tareas del sistema.
+	\item\code{\%user}\textbf{:} Procentaje de uso de la CPU para tareas de usuario.
+	\item\code{intr/s}\textbf{:} Número de interrupciones recibidas por segundo.
+\end{itemize}
+
+La orden recibe como primer argumento el número de segundos que deben pasar por cada muestreo y como segundo argumento el número de muestremos que va a realizar.
+Por defecto muestra una sola línea en el momento de ejecución y, si se le pasa únicamente el primer argumento, se ejecuta indefinidamente.
+
+\begin{lstlisting}[language=Bash]
+mpstat 2 3
+# Linux 5.4.15-arch1-1 (grocpc) 	27/01/20 	_x86_64_	(12 CPU)
+#
+# 12:22:35 CPU %usr %nice %sys %iowait %irq %soft %steal %guest %gnice %idle
+# 12:22:37 all 1.21  0.08 0.87    0.50 0.17  0.00   0.00   0.00   0.00 97.17
+# 12:22:39 all 0.83  0.04 0.71    0.00 0.04  0.00   0.00   0.00   0.00 98.38
+# 12:22:41 all 1.32  0.04 0.87    0.00 0.21  0.04   0.00   0.00   0.00 97.52
+# Average: all 1.12  0.06 0.82    0.17 0.14  0.01   0.00   0.00   0.00 97.69
+\end{lstlisting}
+
+\subsection{Control y gestión de memoria}
+
+\subsubsection{\code{free}}
+
+Visualiza el uso actual de memoria, informando sobre el consumo de RAM y \code{swap}.
+
+\begin{lstlisting}[language=Bash]
+free
+#               total        used        free      shared  buff/cache   available
+# Mem:        8003512     1730656     4359984       93520     1912872     5869584
+# Swap:       8387580           0     8387580
+\end{lstlisting}
+
+\subsubsection{\code{vmstat}}
+
+Esa orden supervisa el sistema mostrando información sobre el uso de recursos del sistema aceptando los mismos argumentos que \code{mpstat}.
+Muestra la siguiente información:
+
+\begin{itemize}
+	\item\code{cpu}\textbf{:} Información sobre el procesador.
+	\begin{itemize}
+		\item\code{id}\textbf{:} Tiempo gastado ociosamente.
+		\item\code{st}\textbf{:} Tiempo robado de una máquina virtual
+		\item\code{sy}\textbf{:} Tiempo gastado en modo kernel.
+		\item\code{us}\textbf{:} Tiempo gastado en modo usuario.
+		\item\code{wa}\textbf{:} Tiempo gastado esperando a E/S.
+	\end{itemize}
+	\item\code{io}\textbf{:} Información sobre la E/S.
+	\begin{itemize}
+		\item\code{bi}\textbf{:} Bloques recibidos de dispositivos de bloques.
+		\item\code{bo}\textbf{:} Bloques enviados a dispositivos de bloques.
+	\end{itemize}
+	\item\code{memory}\textbf{:} Información sobre el uso de memoria.
+	\begin{itemize}
+		\item\code{active}\textbf{:} Cantidad de memoria activa.
+		\item\code{buff}\textbf{:} Cantidad de memoria usada como búfer.
+		\item\code{cache}\textbf{:} Cantidad de memoria usada como caché.
+		\item\code{free}\textbf{:} Cantidad de memoria libre.
+		\item\code{inact}\textbf{:} Cantidad de memoria inactiva.
+		\item\code{swpd}\textbf{:} Cantidad de memoria virtual usada.
+	\end{itemize}
+	\item\code{procs}\textbf{:} Información sobre los procesos del sistema.
+	\begin{itemize}
+		\item\code{b}\textbf{:} Número de procesos en descanso ininterrumpible.
+		\item\code{r}\textbf{:} Número de procesos ejecutables.
+	\end{itemize}
+	\item\code{swap}\textbf{:} Información sobre el espacio de intercambio.
+	\begin{itemize}
+		\item\code{si}\textbf{:} Cantidad de memoria intercambiada desde el disco.
+		\item\code{so}\textbf{:} Cantidad de memoria intercambiada al disco.
+	\end{itemize}
+	\item\code{system}\textbf{:} Información sobre el funcionamiento del sistema.
+	\begin{itemize}
+		\item\code{cs}\textbf{:} Número de cambios de contexto por segundo.
+		\item\code{in}\textbf{:} Número de interrupciones por segundo, incluyendo el reloj.
+	\end{itemize}
+\end{itemize}
+
+\begin{lstlisting}[language=Bash]
+vmstat 1 3
+# procs -----------memory---------- ---swap-- -----io---- -system-- ------cpu-----
+#  r  b swpd    free   buff   cache   si   so    bi    bo   in   cs us sy id wa st
+#  1  0    0 4398844 385756 1554776    0    0    35     6   77  213  1  1 98  0  0
+#  1  0    0 4398844 385756 1554776    0    0     0     0  669 2265  1  1 98  0  0
+#  0  0    0 4398852 385756 1554776    0    0     0     0  607 2160  1  1 98  0  0
+\end{lstlisting}
+
+\subsection{Control y gestión de dispositivos E/S}
+
+\subsubsection{Consulta de información de archivo}
+
+Con la orden \code{ls} podemos examinar los ficheros de un directorio y sus propiedades.
+Admite los siguientes argumentos:
+
+\begin{itemize}
+	\item\code{-a}\textbf{:} Muestra los ficheros ocultos.
+	\item\code{-h}\textbf{:} Muestra los valores en formato legible para humanos (no en bytes).
+	\item\code{-i}\textbf{:} Muestra los inodos de los ficheros.
+	\item\code{-l}\textbf{:} Usa un formato largo con un fichero por línea.
+	\item\code{-n}\textbf{:} Como \code{-l} pero muestra los usuarios y grupos con su ID numérico.
+\end{itemize}
+
+El formato largo de esta orden muestra una línea de diez caracteres en la que el más significativo es el tipo de fichero, los tres siguientes son los permisos del usuario creador sobre el mismo, los tres siguientes son los permisos del grupo de usuarios al que pertenece el usuario creador y los últimos tres son los permisos del resto de usuarios.
+El tipo de ficheros indicados por el primer carácter puede ser uno de éstos:
+
+\begin{itemize}
+	\item\code{-}\textbf{:} Fichero regular.
+	\item\code{b}\textbf{:} Fichero especial de dispositivo de bloques.
+	\item\code{c}\textbf{:} Fichero especial de dispositivo de caracteres.
+	\item\code{d}\textbf{:} Fichero directorio.
+	\item\code{l}\textbf{:} Enlace simbólico.
+	\item\code{p}\textbf{:} Fichero FIFO\@.
+\end{itemize}
+
+\begin{lstlisting}[language=Bash]
+ls -la Practicas
+# total 80K
+# drwxr-xr-x 2 groctel groctel 4.0K Jan 22 18:14 Codigo
+# drwxr-xr-x 3 groctel groctel 4.0K Jan 27 13:04 .
+# drwxr-xr-x 3 groctel groctel 4.0K Jan 26 14:17 ..
+# -rw-r--r-- 1 groctel groctel  16K Jan 26 18:12 Modulo1-Sesion1.tex
+# -rw-r--r-- 1 groctel groctel  14K Jan 26 19:28 Modulo1-Sesion2.tex
+# -rw-r--r-- 1 groctel groctel  14K Jan 27 13:04 Modulo1-Sesion3.tex
+\end{lstlisting}
+
+Esta orden también permite ordenar los ficheros en función de sus metadatos con los siguientes argumentos:
+
+\begin{itemize}
+	\item\code{-c}\textbf{:} Ordena por \code{ctime}, el tiempo desde la última modificación del fichero.
+	\item\code{-t}\textbf{:} Ordena por hora de modificación.
+	\item\code{-u}\textbf{:} Ordena por hora de acceso.
+	\item\code{-X}\textbf{:} Ordena alfabéticamente por extensiones yendo primero los directorios.
+\end{itemize}
+
+\subsubsection{Consulta de metadatos del sistema de archivos}
+
+Para el correcto funcionamiento del sistema de archivos, éste debe almacenar datos sobre los bloques de disco libres y ocupados y los inodos libres y asignados de forma que pueda asignarlos correctamente.
+La orden \code{df} nos permite visualizar esta información para cada sistema de archivos montado (o el sistema de archivos en el que se aloja el directorio pasado como argumento).
+El argumento \code{-i} nos permite visualizar los inodos.
+
+\begin{lstlisting}[language=Bash]
+df -h
+# Filesystem      Size  Used Avail Use% Mounted on
+# dev             3.9G     0  3.9G   0% /dev
+# run             3.9G  1.2M  3.9G   1% /run
+# /dev/nvme0n1p1  234G  177G   46G  80% /
+# tmpfs           3.9G   42M  3.8G   2% /dev/shm
+# tmpfs           3.9G     0  3.9G   0% /sys/fs/cgroup
+# tmpfs           3.9G  4.9M  3.9G   1% /tmp
+# /dev/sda2       908G  402G  460G  47% /home
+# /dev/sda1      1021M   45M  977M   5% /boot
+# tmpfs           782M   12K  782M   1% /run/user/1000
+df -hi
+# Filesystem     Inodes IUsed IFree IUse% Mounted on
+# dev              976K   495  975K    1% /dev
+# run              977K   778  977K    1% /run
+# /dev/nvme0n1p1    15M  610K   15M    4% /
+# tmpfs            977K    63  977K    1% /dev/shm
+# tmpfs            977K    18  977K    1% /sys/fs/cgroup
+# tmpfs            977K    28  977K    1% /tmp
+# /dev/sda2         58M  536K   58M    1% /home
+# /dev/sda1           0     0     0     - /boot
+# tmpfs            977K    27  977K    1% /run/user/1000
+\end{lstlisting}
+
+Para ver el espacio que ocupa en disco un directorio o un fichero con todos sus contenido podemos usar la orden \code{du}, que muestra un desglose de todos los ficheros y su tamaño y el tamaño total en la última línea.
+Podemos encauzar esta orden con \code{tail} para mostrar únicamente el tamaño total.
+
+\begin{lstlisting}[language=Bash]
+du -h .
+# 36K	./Practicas/Codigo
+# 112K	./Practicas
+# 1.3M	.
+du | tail -1
+# 1316	.
+\end{lstlisting}
+
+\subsubsection{Creación de enlace a archivos}
+
+Para crear enlaces usamos la orden \code{ln}, que crea un enlace al fichero pasado como primer argumento en la ruta pasada como segundo argumento.
+Por defecto, \code{ln} crea enlaces duros, pero podemos crear enlaces simbólicos con el argumento \code{-s}.
+La orden \code{ls -l}, cuya salida se mostró anteriormente, muestra el número de enlaces duros cada uno de los ficheros antes del nombre del usuario creador.
+
+\pagebreak
+
+\subsubsection{Ficheros especiales de dispositivo}
+
+Los dispositivos del sistema se representan en los sistemas UNIX como ficheros especiales de dispositivos, que pueden ser de dos tipos:
+
+\begin{itemize}
+	\item\textbf{Ficheros especiales de bloque:} Representan dispositivos de bloque, que suelen coincidir con dispositivos de almacenamiento masivio, \emph{ramdisks} y \emph{loop}.
+	\item\textbf{Ficheros especiales de caracteres:} Representan dispositivos de caracteres como puertos seriales, paralelos y USB, consolar virtuales (\code{console}), \code{audio}, \code{tty}\ldots
+\end{itemize}
+
+Estos dispositivos pueden verse en \code{/dev}.
+
+\begin{lstlisting}[language=Bash]
+ls -l /dev
+# crw-r--r--   1 root root   10, 235 Jan 27 11:26 autofs
+# crw-------   1 root root   10, 234 Jan 27 11:26 btrfs-control
+# crw-------   1 root root    5,   1 Jan 27 11:27 console
+# lrwxrwxrwx   1 root root        11 Jan 27 11:26 core -> /proc/kcore
+# crw-------   1 root root   10,  60 Jan 27 11:26 cpu_dma_latency
+# crw-------   1 root root   10, 203 Jan 27 11:26 cuse
+# crw-------   1 root root  240,   0 Jan 27 11:26 drm_dp_aux0
+# crw-------   1 root root  240,   1 Jan 27 11:26 drm_dp_aux1
+# crw-rw----   1 root video  29,   0 Jan 27 11:26 fb0
+# crw-rw-rw-   1 root root    1,   7 Jan 27 11:26 full
+# crw-rw-rw-   1 root root   10, 229 Jan 27 11:26 fuse
+# crw-------   1 root root  236,   0 Jan 27 11:32 hidraw0
+# crw-------   1 root root  236,   1 Jan 27 11:32 hidraw1
+# crw-------   1 root root   10, 228 Jan 27 11:26 hpet
+# crw-------   1 root root   10, 183 Jan 27 11:26 hwrng
+# lrwxrwxrwx   1 root root        12 Jan 27 11:26 initctl -> /run/initctl
+# crw-r--r--   1 root root    1,  11 Jan 27 11:26 kmsg
+# crw-rw-rw-   1 root kvm    10, 232 Jan 27 11:26 kvm
+# lrwxrwxrwx   1 root root        28 Jan 27 11:26 log -> /run/systemd/journal/dev-log
+# crw-rw----   1 root disk   10, 237 Jan 27 11:26 loop-control
+\end{lstlisting}
+

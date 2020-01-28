@@ -1,0 +1,40 @@
+\section{Llamadas al sistema para el control de procesos}
+
+\subsection{Creación de procesos}
+
+\subsubsection{Identificadores de procesos}
+
+Cada proceso tiene un identificador unívoco o \code{PID}, que es un entero no negativo.
+Se tiene que para el proceso principal del sistema, \code{init}, \code{PID=1}.
+Además del \code{PID}, existen otros identificadores asociados a procesos:
+
+\begin{lstlisting}[language=C]
+#include <unistd.h>
+#include <sys/types.h>
+pid_t getpid(void);  // PID del proceso invocante
+pid_t getppid(void); // PID del padre del proceso invocante
+uid_t getuid(void);  // UID del usuario invocante real
+uid_t geteuid(void); // UID del usuario invocante efectivo
+gid_t getgid(void);  // GID del usuario invocante real
+gid_t getegid(void); // GID del usuario invocante efectivo
+\end{lstlisting}
+
+Distinguimos entre usuario real y efectivo, siendo el primero el que ejecuta un proceso y el segundo aquél con el que se identifica el primero.
+Por ejemplo, al ejecutar una orden precedida de \code{sudo}, el usuario real es quien la ejecuta y el usuario efectivo es \code{root}.
+
+\subsubsection{\code{fork}}
+
+
+
+\begin{lstlisting}[language=C]
+\end{lstlisting}
+\begin{lstlisting}[language=C]
+\end{lstlisting}
+\begin{lstlisting}[language=C]
+\end{lstlisting}
+\begin{lstlisting}[language=C]
+\end{lstlisting}
+\begin{lstlisting}[language=C]
+\end{lstlisting}
+\begin{lstlisting}[language=C]
+\end{lstlisting}

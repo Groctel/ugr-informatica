@@ -1,0 +1,131 @@
+\chapter{Rutinas comunes}
+
+\subsection{Apertura de ficheros}
+
+Variables utilizadas:
+
+\begin{itemize}
+	\item\code{int fd}\textbf{:} Descriptor de fichero.
+\end{itemize}
+
+\begin{lstlisting}[language=C]
+if ((fd = open("./fichero", O_CREAT|O_WRONLY, S_IRUSR|S_IWUSR)) < 0) {
+	printf("Error %d en open\n", errno);
+	perror("Error en open\n");
+	exit(1);
+}
+\end{lstlisting}
+
+\subsection{Cierre de ficheros}
+
+Variables utilizadas:
+
+\begin{itemize}
+	\item\code{int fd}\textbf{:} Descriptor de fichero.
+\end{itemize}
+
+\begin{lstlisting}[language=C]
+close(fd);
+\end{lstlisting}
+
+\subsection{Escritura de ficheros}
+
+Variables utilizadas:
+
+\begin{itemize}
+	\item\code{char* buf}\textbf{:} Cadena de caracteres a escribir en el fichero.
+	\item\code{int fd}\textbf{:} Descriptor de fichero.
+	\item\code{int long\_buf}\textbf{:} Longitud de la cadena del  búfer (\code{buf}).
+\end{itemize}
+
+\begin{lstlisting}[language=C]
+if (write(fd, buf1, long_buf1) != long_buf1) {
+	perror("Error en primer write\n");
+	exit(2);
+}
+\end{lstlisting}
+
+\subsection{Posicionamiento en ficheros}
+
+Variables utilizadas:
+
+\begin{itemize}
+	\item\code{int fd}\textbf{:} Descriptor de fichero.
+\end{itemize}
+
+\begin{lstlisting}[language=C]
+if (lseek(fd, 40, SEEK_SET) < 0) {
+	perror("Error en lseek\n");
+	exit(3);
+}
+\end{lstlisting}
+
+
+Variables utilizadas:
+
+\begin{itemize}
+	\item\code{}\textbf{:}
+\end{itemize}
+Variables utilizadas:
+
+\begin{itemize}
+	\item\code{}\textbf{:}
+\end{itemize}
+\begin{lstlisting}[language=C]
+\end{lstlisting}
+Variables utilizadas:
+
+\begin{itemize}
+	\item\code{}\textbf{:}
+\end{itemize}
+\begin{lstlisting}[language=C]
+\end{lstlisting}
+Variables utilizadas:
+
+\begin{itemize}
+	\item\code{}\textbf{:}
+\end{itemize}
+\begin{lstlisting}[language=C]
+\end{lstlisting}
+Variables utilizadas:
+
+\begin{itemize}
+	\item\code{}\textbf{:}
+\end{itemize}
+\begin{lstlisting}[language=C]
+\end{lstlisting}
+Variables utilizadas:
+
+\begin{itemize}
+	\item\code{}\textbf{:}
+\end{itemize}
+\begin{lstlisting}[language=C]
+\end{lstlisting}
+Variables utilizadas:
+
+\begin{itemize}
+	\item\code{}\textbf{:}
+\end{itemize}
+\begin{lstlisting}[language=C]
+\end{lstlisting}
+Variables utilizadas:
+
+\begin{itemize}
+	\item\code{}\textbf{:}
+\end{itemize}
+\begin{lstlisting}[language=C]
+\end{lstlisting}
+Variables utilizadas:
+
+\begin{itemize}
+	\item\code{}\textbf{:}
+\end{itemize}
+\begin{lstlisting}[language=C]
+\end{lstlisting}
+Variables utilizadas:
+
+\begin{itemize}
+	\item\code{}\textbf{:}
+\end{itemize}
+\begin{lstlisting}[language=C]
+\end{lstlisting}

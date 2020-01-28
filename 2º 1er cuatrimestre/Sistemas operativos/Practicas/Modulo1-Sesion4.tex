@@ -1,0 +1,82 @@
+\section{Automatización de tareas}
+
+\subsection{Procesos demonio (\emph{daemon})}
+
+Los daemon son procesos (no parte del kernel) que se ejecutan en segundo plano sin estar asociados a un terminal o una sesión de usuario, que pueden iniciarse al arrancarse el sistema durante toda su vida o únicamente para cumplir propósitos específicos.
+Debido a su atemporalidad, es muy común que existan mecanismos que detecten si su ejecución cesa por algún imprevisto y los rearranque.
+En muchos casos, los daemon están a la espera de un evento específico, por lo que existen mecanismos de comunicación para informarle sobre este hecho, sobre todo si el daemon es un servidor que espera un evento de un cliente.
+También puede darse el caso de que el daemon esté realizando una labor periódicamente o que lance otros procesos que hagan el trabajo por él.
+En muchos casos de ejecutan con privilegio de superusuario (\code{UID=0}) y su padre es \code{init} (\code{PID=1}).
+
+\subsection{Ejecutar tareas a una hora determinada: daemon \code{atd}}
+
+Podemos usar \code{atd} para ejecutar órdenes en un momento de tiempo determinado.
+Para configurarlo usamos las siguientes órdenes:
+
+\begin{itemize}
+	\item\code{at}\textbf{:} Ordena la ejecución de órdenes a una hora determinada.
+	\item\code{atq}\textbf{:} Consulta la lista de órdenes.
+	\item\code{atrm}\textbf{:} Elimina órdenes.
+	\item\code{batch}\textbf{:} Ordena la ejecución de órdenes que se ejecutarán cuando la carga del sistema sea baja.
+\end{itemize}
+
+\subsubsection{\code{at}}
+
+Esta orden recibe los siguientes argumentos:
+
+\begin{itemize}
+	\item\code{-f}\textbf{:} Lee las órdenes desde el fichero pasado como argumento siguiente. Si no se especifica, se lee de \code{stdin}, que debe terminarse con \code{\^{}D}.
+	\item\code{-q}\textbf{:} Usa la cola pasada como argumento siguiente. Las colas son caracteres en el rango \code{[a-zA-Z]} con \code{nice} directamente proporcional al valor del mismo. La cola \code{=} se reserva para los procesos en ejecución.
+	\item\code{-t}\textbf{:} Ejecuta la orden a la hora pasada como argumento siguiente, aunque no es obligatorio especificar \code{-t}. Esta hora debe obedecer la sintaxis \code{[[CC]YY]MMDDhhmm[.ss]}.
+	\item\code{-u}\textbf{:} Envía un correo al usuario pasado como argumento siguiente en lugar de al actual.
+\end{itemize}
+
+El orden de argumentos es siempre \code{-q}, \code{-f}, \code{-u}, \code{-t}.
+Adicionamente, se puede indicar \code{-m} para enviar un correo al usuario al finalizar la tarea, \code{-M} para no mandarlo en ningún caso y \code{-v} para mostrar la hora en la que se ejecutará la tarea antes de leerla.
+También pueden usarse como argumentos \code{-l} como alias de \code{atq}, \code{-r} y \code{-d} como alias de \code{atrm} y \code{-b} como alias de \code{batch}.
+
+Siguiendo el funcionamiento normal de Linux, cuando llega el momento de que \code{at} ejecute una orden, ésta abre una subshell \code{/bin/sh} para ejecutarla, por lo que la orden ejecutada es hija de \code{at}.
+
+\begin{lstlisting}[language=Bash]
+at 16:16
+# warning: commands will be executed using /bin/sh
+# at Mon Jan 27 16:16:00 2020
+# at> ls > ls_out
+# at> <EOT>
+# job 10 at Mon Jan 27 16:16:00 2020
+\end{lstlisting}
+
+Como hemos visto, la orden ejecutada por \code{at} no se lanza en una subshell hija de la nuestra, sino de \code{init}, por lo que su \code{stdout} y \code{stderr} son inaccesibles para nosotros.
+Para subsanar esto, podemos redirigir la salida estándar con \code{1} y la salida de error estándar con \code{2} y el nivel de redirección apropiado.
+Si no se especifican ninguna de las dos salidas, \code{at} intentará usar \code{sendmail} antes de dirigirse a ellas.
+
+\begin{lstlisting}[language=Bash]
+du -h | tail -1 1>>~/du_at 2>/dev/null
+pacman -Syyu 1>/dev/null 2>&1
+\end{lstlisting}
+
+\subsection{Ejecuciones periódicas: daemon \code{cron}}
+
+Para ejecutar tareas de forma periódica usamos \code{cron}, que lee las órdenes a ejecutar de un fichero \code{crontab} que podemos especificar mediante la orden homónima o estar localizado en \code{/etc/cron.d}.
+Estos ficheros siguien la siguiente sintaxis por cada línea ejecutable, en la que \code{*} indica indiferencia en la restricción, un guión indica un rango de valores y se pueden separar valores por comas:
+
+\begin{lstlisting}[language=Bash]
+# minuto   hora  dia-del-mes  mes dia-de-la-semana  orden
+      37     13           29    2           Monday    yay
+      00  00-23            *    *                *    yay
+      00  00,12            *    *                *    yay
+\end{lstlisting}
+
+De esta forma, el primer \code{yay} se ejecutaría todos los 29 de febrero o los lunes a las 13:37, el segundo se ejecutará cada vez que sea la hora en punto y el tercero a las doce de la noche y del mediodía.
+Cabe destacar que, como hemos indicado, la restricción del día del mes se relaciona con la del día de la semana como \code{OR} y no \code{AND}, como podría pensarse.
+
+En estos archivos también pueden declararse las siguientes constantes, entre otras, de la misma forma que se declararían en un script:
+
+\begin{itemize}
+	\item\code{SHELL}\textbf{:} Establecida de forma predeterminada a \code{/bin/sh}.
+	\item\code{LOGNAME}\textbf{:} Se toma de \code{/etc/passwd} de forma predeterminada.
+	\item\code{HOME}\textbf{:} Se toma de \code{/etc/passwd} de forma predeterminada.
+\end{itemize}
+
+Los ficheros \code{/etc/cron.allow} y \code{/etc/cron.deny} determinan qué usuarios pueden ejecutar \code{crontab} aparte de \code{root}.
+
