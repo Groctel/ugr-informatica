@@ -1,5 +1,49 @@
 \chapter{Otras bibliotecas}
 
+\subsection{\code{exec}}\label{exec}
+
+\begin{lstlisting}[language=C]
+#include <unistd.h>
+
+extern char** environ;
+
+int execl   (const char* pathname, const char* arg, ...
+             /*, (char*) NULL */);
+int execlp  (const char* file, const char* arg, ...
+             /*, (char*) NULL */);
+int execle  (const char* pathname, const char* arg, ...
+             /*, (char*) NULL, char* const envp[] */);
+int execv   (const char* pathname, char* const argv[]);
+int execvp  (const char* file, char* const argv[]);
+int execvpe (const char* file, char* const argv[],
+             char* const envp[]);
+\end{lstlisting}
+
+Todas las funciones de la familia \code{exec} reemplazan la imagen del proceso incovante con una del proceso invocado, actuando como interfaces de la llamada al sistema \code{execve}.
+Todas estas funciones devuelven, únicamente si ocurre un error, \code{-1} acompañado por el \code{errno} apropiado.
+Reciben como primer argumento el nombre del fichero que se va a ejecutar y se dividen en varias categorías según sus sufijos:
+
+\subsubsection{\code{e}: \code{execle()} y \code{execvpe()}}
+
+El entorno del invocante se especifica mediante el argumento \code{envp}, que es un array de punteros a cadenas de caracteres de finalización nula y debe acabar obligatoriamente en un puntero nulo.
+El resto de funciones \code{exec} (que no incluyen la \code{e}) toman el entorno para la nueva imagen del proceso de la variable externa \code{environ} en la invocación.
+
+\subsubsection{\code{l}: \code{execl()}, \code{execlp()}y \code{execle()}}
+
+El argumento \code{arg} se interpreta como \code{arg0, arg1, ..., argn}, siendo todos cadenas de caracteres de finalización nula que representan los argumentos con los que se ejecuta el proceso.
+El último argumento debe ser obligatoriamente un puntero nulo casteado a \code{(char*) NULL}.
+
+\subsubsection{\code{p}: \code{execlp()}, \code{execvp()} y \code{execvpe()}}
+
+Duplican las acciones de la shell para la búsqueda del ejecutable si éste no contiene un carácter \code{/}.
+Éste se busca en \code{\$PATH}.
+En caso de que no esté definido, se busca por defecto en el valor que devuelve \code{confstr(\_CS\_PATH)} (generalmente \code{/bin:/usr/bin}).
+Si la ruta sí contiene \code{/}, se ignora \code{\$PATH} y se busca en la ruta especificada.
+
+\subsubsection{\code{v}: \code{execv()}, \code{execvp()} y \code{execvpe()}}
+
+El argumento \code{argv} es un array de punteros a cadenas de caracteres de finalización nula que representa los argumentos con los que se inejecuta el proceso y que debe acabar obligatoriamente en un puntero nulo.
+
 \subsection{\code{ntfw}}\label{ntfw}
 
 \begin{lstlisting}[language=C]
@@ -56,8 +100,6 @@ Por último, \code{flags} indica banderas seleccionables múltiplemente con \cod
 	\item\code{FTW\_PHYS}\textbf{:} No seguir enlaces simbólicos.
 \end{itemize}
 
-\begin{lstlisting}[language=C]
-\end{lstlisting}
 \begin{lstlisting}[language=C]
 \end{lstlisting}
 \begin{lstlisting}[language=C]

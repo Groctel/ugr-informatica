@@ -1,0 +1,41 @@
+\section{Llamadas al sistema para gestión y control de señales}
+
+\subsection{Señales}
+
+Las señales son un mecanismo básico de sincronización que hace uso del kernel de Linux para indicar a los procesos que han ocurrido eventos (síncrono o asíncronos) relacionados con su ejecución.
+Los procesos pueden tanto recibir señales del kernel como enviarse señales entre ellos para informar que los receptores deben reaccionar a un evento.
+
+Un \textbf{manejador de señales} es una rutina definida en el programa que es invocada cuando el proceso recibe una señal.
+Los manejadores pueden interrumpir el flujo en cualquier momento de forma que, tras acabar su trabajo, el programa continúa ejecutándose por donde iba.
+Decimos que una señal es \emph{depositada} cuando el proceso receptor inicia una acción sobre ella y que está \emph{pendiente} cuando ha sido generada pero aún no ha sido depositada.
+
+Un proceso puede bloquear la recepción de una o varias señales a la vez.
+Las señales bloqueadas se almacenan en la \textbf{máscara de bloqueo de señales}, que es un conjunto de señales a la espera de depositarse o ignorarse.
+Una señal recibida cuando ya está enmascarada es redundante y no se regista en ella.
+
+\subsection{Tipos de señales}
+
+POSIX define las siguientes señales:
+
+\begin{itemize}
+\item\code{SIGABRT}\textbf{:} Señal de aborto procedente de la llamada \code{abort}, que termina el proceso y realiza un volcado de memoria\footnote{\emph{Core dumped}.}.
+\item\code{SIGALRM}\textbf{:} Señal procedente de la llamada al sistema \code{alarm}, que termina el proceso.
+\item\code{SIGCONT}\textbf{:} Reanuda el proceso si estaba parado.
+\item\code{SIGFPE}\textbf{:} Excepción de coma flotante, que termina el proceso y realiza un volcado de memoria.
+\item\code{SIGHUP}\textbf{:} Desconexión de la terminal que termina el proceso. También reanuda los daemons \code{init}, \code{httpd} e \code{inetd}.
+\item\code{SIGILL}\textbf{:} Excepción producida por la ejecución de una instrucción ilegal, que termina el proceso y realiza un volcado de memoria.
+\item\code{SIGINT}\textbf{:} Interrupción de teclado \code{\^{}C}, que termina el proceso.
+\item\code{SIGKILL}\textbf{:} Señal para terminar un proceso que no se puede ignorar ni manejar.
+\item\code{SIGPIPE}\textbf{:} Señal de cauce roto (escritura sin lectores), que finaliza el proceso.
+\item\code{SIGQUIT}\textbf{:} Terminación procedente del teclado, que termina el proceso y realiza un volcado de memoria.
+\item\code{SIGSEGV}\textbf{:} Violación de segmento (referencia inválida a memoria), que termina el proceso y realiza un volcado de memoria.
+\item\code{SIGSTOP}\textbf{:} Señal para parar un proceso que no se puede ignorar ni manejar.
+\item\code{SIGTERM}\textbf{:} Señal para terminar un proceso que sí puede manejarse.
+\item\code{SIGTSTP}\textbf{:} Señal para parar la escritura en la tty, que detiene el proceso.
+\item\code{SIGTTIN}\textbf{:} Señal de entrada de la tty para un proceso de fondo, que detiene el proceso.
+\item\code{SIGTTOU}\textbf{:} Señal de salida a la tty para un proceso de fondo, que detiene el proceso.
+\item\code{SIGUSR1}\textbf{:} Señal definida por el usuario, que detiene el proceso.
+\item\code{SIGUSR2}\textbf{:} Señal definida por el usuario, que detiene el proceso.
+\end{itemize}
+
+\subsection{Notas sobre señales}

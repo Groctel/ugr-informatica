@@ -1,0 +1,45 @@
+\section{Comunicación entre procesos utilizando cauces}
+
+\subsection{Concepto y tipos de cauce}
+
+Los cauces son mecanismos que permiten la comunicación y sincronización entre procesos.
+En un mismo cauce puede haber varios procesos lectores y escritores, lo que implica un problema de \emph{productor/consuimdor} en su uso, que hay que resolver para su correcto funcionamiento.
+Los datos de un cauce se tratan en orden FIFO y su lectura se traduce en la eliminación de los mismo del cauce, por lo que se consumen únicamente por el primer proceso que los lee.
+Si un proceso intenta leer datos de un cauce vacío se bloquea y espera hasta poder leerlos, sincronizándose con el proceso escritor.
+Un ejemplo muy común de uso de cauces es el uso del operador \code{|} en las órdenes que mandamos a la shell:
+
+\begin{lstlisting}[language=Bash]
+pacman -Q | grep xorg | sed 's/ .*//g'
+\end{lstlisting}
+
+En este caso, el resultado de ejecutar \code{pacman -Q}, que se muestra por \code{stdout}, se pasa como entrada a \code{grep xorg}, que muestra únicamente los paquetes que contienen \code{xorg} en el nombre, y esta salida se pasa a \code{sed 's/ .*//g'}, que elimina las versiones de los paquetes y deja únicamente los nombres.
+Ambos son cauces sin nombres creados dinámicamente mediante la llamada al sistema \code{pipe} (\S\ref{pipe}).
+
+\subsection{Cauces sin nombre}
+
+Los cauces sin nombre son cauces que no tienen un fichero asociado en el sistema de archivos, sino que existen únicamente en memoria principal.
+Al crearse usando la llamada \code{pipe}, se devuelven dos descriptores, uno de lectura y uno de escritura.
+Estos cauces sólo pueden utilizarse por el proceso creador y sus hijos y se cierran y eliminan por el kernel cuando tienen exactamente cero productores y consumidores.
+
+\subsubsection{Creación de cauces sin nombre}
+
+Para crear un cauce sin nombre usamos la llamada \code{pipe}, a la que le pasamos un array de dos enteros.
+El primer entero es el descriptor de fichero del extremo de lectura del cauce y el segundo, el de escritura.
+Creado el cauce, creamos un proceso hijo para que herede los descriptores y establecemos el sentido del flujo en ambas partes cerrando los descriptores que no queremos usar en cada uno de los procesos con la llamada \code{close}.
+
+Para redireccionar la entrada o salida estándar al descriptor de lectura o escritura podemos usar \code{close} para cerrar el cauce y \code{dup2} para realizar la redirección.
+
+\subsection{Cauces con nombre}
+
+Los cauces con nomnbre se crean mediante una llamada a \code{mknod} y \code{mkfifo} como ficheros especiales, por lo que están permanentemente asociados a una ruta en el sistema de archivos.
+Al contrario que los cauces sin nombre, éstos sí se abren y cierran llamando a \code{open} y \code{close} y cualquier proceso puede usarlos llamando a \code{read} y \code{write}.
+
+\subsubsection{Creación de ficheros FIFO}
+
+Para crear ficheros fifo usamos la llamada \code{mknod} especificando \code{S\_IFIFO} en OR con los permisos de creación (en octal) en el argumento \code{mode} y \code{0} en el argumento \code{dev}.
+Para esta tarea también podemos usar la llamada \code{mkfifo}, que simplemente necesita pasarle como argumentos la ruta de creación del fichero y los permisos de acceso en \code{mode}.
+
+\subsubsection{Uso de cauces FIFO}
+
+Los cauces FIFO se pueden leer con \code{read} de forma bloqueante para el proceso lector siempre en la cabeza de la cola, por lo que no se puede ejecutar \code{lseek} sobre ellos (igualmente, no tiene sentido acceder a otros elementos de la cola).
+La llamada \code{read} desbloquea el proceso lector al leer el dato o cuando todos los procesos productores cierran el cauce o terminan, devolviendo \code{0}.
