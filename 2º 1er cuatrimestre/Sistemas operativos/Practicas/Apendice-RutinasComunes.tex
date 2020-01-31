@@ -1,5 +1,38 @@
 \chapter{Rutinas comunes}
 
+\subsection{Ajuste de la posición de flujos de directorios}
+
+Variables utilizadas:
+
+\begin{itemize}
+	\item\code{DIR* dir}\textbf{:} Flujo de directorio.
+	\item\code{long loc}\textbf{:} Posición sobre el directorio.
+\end{itemize}
+
+\begin{lstlisting}[language=C]
+loc = telldir(dir);
+
+// Trabajo sobre el directorio
+
+seekdir(dir, loc);
+\end{lstlisting}
+
+\subsection{Apertura de directorios}
+
+Variables utilizadas:
+
+\begin{itemize}
+	\item\code{DIR* dir}\textbf{:} Flujo de directorio.
+\end{itemize}
+
+\begin{lstlisting}[language=C]
+if (dir = opendir("Directorio") == NULL) {
+	printf("Error %d al intentar abrir el directorio\n", errno);
+	perror("Error en opendir\n");
+	exit(1);
+}
+\end{lstlisting}
+
 \subsection{Apertura de ficheros}
 
 Variables utilizadas:
@@ -10,8 +43,86 @@ Variables utilizadas:
 
 \begin{lstlisting}[language=C]
 if ((fd = open("./fichero", O_CREAT|O_WRONLY, S_IRUSR|S_IWUSR)) < 0) {
-	printf("Error %d en open\n", errno);
+	printf("Error %d al intentar abrir el fichero\n", errno);
 	perror("Error en open\n");
+	exit(1);
+}
+\end{lstlisting}
+
+\pagebreak
+
+\subsection{Borrado de ficheros}
+
+\begin{lstlisting}[language=C]
+if (unlink("./fichero") < 0) {
+	printf("Error %d al intentar eliminar el fichero\n", errno);
+	perror("Error en unlink\n");
+	exit(1);
+}
+\end{lstlisting}
+
+\subsection{Cambio de permisos de ficheros}
+
+Variables utilizadas:
+
+\begin{itemize}
+	\item\code{int fd}\textbf{:} Descriptor de fichero.
+\end{itemize}
+
+\begin{lstlisting}[language=C]
+if (chmod("./fichero", 0750) < 0) {
+	printf("Error %d al intentar cambiar los permisos del fichero", errno);
+	perror("Error en chmod\n");
+	exit(1);
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=C]
+if (fchmod(fd, 0750) < 0) {
+	printf("Error %d al intentar cambiar los permisos del fichero", errno);
+	perror("Error en fchmod\n");
+	exit(1);
+}
+\end{lstlisting}
+
+\subsection{Cambio del directorio de trabajo}
+
+Variables utilizadas:
+
+\begin{itemize}
+	\item\code{int fd}\textbf{:} Descriptor de fichero.
+\end{itemize}
+
+\begin{lstlisting}[language=C]
+if (chdir("./directorio") < 0) {
+	printf("Error %d al intentar cambiar el directorio de trabajo", errno);
+	perror("Error en chdir\n");
+	exit(1);
+}
+
+\end{lstlisting}
+\begin{lstlisting}[language=C]
+if (chdir(fd) < 0) {
+	printf("Error %d al intentar cambiar el directorio de trabajo", errno);
+	perror("Error en chdir\n");
+	exit(1);
+}
+\end{lstlisting}
+
+\pagebreak
+
+\subsection{Cierre de directorios}
+
+Variables utilizadas:
+
+\begin{itemize}
+	\item\code{DIR* dir}\textbf{:} Flujo de directorio.
+\end{itemize}
+
+\begin{lstlisting}[language=C]
+if (closedir(dir) < 0) {
+	printf("Error %d al intentar cerrar el directorio\n", errno);
+	perror("Error en closedir\n");
 	exit(1);
 }
 \end{lstlisting}
@@ -25,7 +136,97 @@ Variables utilizadas:
 \end{itemize}
 
 \begin{lstlisting}[language=C]
-close(fd);
+if (close(fd) < 0) {
+	printf("Error %d al intentar cerrar el fichero\n", errno);
+	perror("Error en close\n");
+	exit(1);
+}
+\end{lstlisting}
+
+\subsection{Creación de cauces con nombre}
+
+\begin{lstlisting}[language=C]
+if (mkfifo("./fifo", 0750) < 0) {
+	printf("Error %d al intentar crear un fichero fifo", errno);
+	perror("Error en mkfifo\n");
+	exit(1);
+}
+\end{lstlisting}
+
+\pagebreak
+
+\subsection{Creación de cauces sin nombre}
+
+Variables utilizadas:
+
+\begin{itemize}
+	\item\code{int pid}\textbf{:} Identificador de los procesos padre e hijo.
+	\item\code{int pipefd[2]}\textbf{:} Identificadores de los extremos del cauce.
+	\item\code{char c}\textbf{:} Carácter que se transmite por el cauce.
+\end{itemize}
+
+\begin{lstlisting}[language=C]
+pipe(pipefd);
+
+pid = fork();
+
+if (!pid) {
+	close(pipefd[0]);
+	write(pipefd[1], "a", 1);
+}
+else {
+	close(pipefd[1]);
+	read(pipefd[0], c, 1);
+	printf("%s\n", c);
+}
+\end{lstlisting}
+
+\subsection{Creación de proceso hijo}
+
+Variables utilizadas:
+
+\begin{itemize}
+	\item\code{int pid}\textbf{:} Identificador de los procesos padre e hijo.
+\end{itemize}
+
+\begin{lstlisting}[language=C]
+pid = fork();
+
+if (pid == 0)
+	// Tarejas ejecutadas por el hijo
+else
+	// Tareas ejecutadas por el padre
+\end{lstlisting}
+
+\subsection{Consulta de la posición de elementos en directorios}
+
+Variables utilizadas:
+
+\begin{itemize}
+	\item\code{DIR* dir}\textbf{:} Flujo de directorio.
+\end{itemize}
+
+\begin{lstlisting}[language=C]
+if (telldir(dir) < 0) {
+	printf("Error %d al intentar obtener una posición sobre el directorio", errno);
+	perror("Error en telldir\n");
+	exit(1);
+}
+\end{lstlisting}
+
+\pagebreak
+
+\subsection{Ejecución de órdenes externas al proceso}
+
+Variables utilizadas:
+
+\begin{itemize}
+	\item\code{char* arg}\textbf{:} Cadena de caracteres que se pasa como argumento.
+\end{itemize}
+
+\begin{lstlisting}[language=C]
+execlp("yay", "yay", "-S", "minecraft-launcher", NULL);
+execlp("./ejecutable", arg, NULL);
 \end{lstlisting}
 
 \subsection{Escritura de ficheros}
@@ -39,13 +240,57 @@ Variables utilizadas:
 \end{itemize}
 
 \begin{lstlisting}[language=C]
-if (write(fd, buf1, long_buf1) != long_buf1) {
-	perror("Error en primer write\n");
-	exit(2);
+if (write(fd, buf, long_buf) != long_buf1) {
+	printf("Error %d al intentar escribir sobre el fichero", errno);
+	perror("Error en write\n");
+	exit(1);
 }
 \end{lstlisting}
 
-\subsection{Posicionamiento en ficheros}
+\subsection{Lectura de datos de entrada estándar}
+
+Variables utilizadas:
+
+\begin{itemize}
+	\item\code{int numero}\textbf{:} Número entero a leer.
+	\item\code{char cadena[256]}\textbf{:} Cadena de hasta 256 caracteres a leer.
+\end{itemize}
+
+\begin{lstlisting}[language=C]
+scanf("%d", &numero);
+scanf("%s, cadena);
+\end{lstlisting}
+
+\subsection{Lectura del contenido de directorios}
+
+Variables utilizadas:
+
+\begin{itemize}
+	\item\code{DIR* dir}\textbf{:} Flujo de directorio.
+	\item\code{struct dirent* dnt}\textbf{:} Entrada del contenido de un directorio.
+\end{itemize}
+
+\begin{lstlisting}[language=C]
+while ((dnt = readdir(dir)) != NULL)
+	printf("%s\n", dnt->d_name);
+\end{lstlisting}
+
+\pagebreak
+
+\subsection{Muestra de variables por salida estándar}
+
+Variables utilizadas:
+
+\begin{itemize}
+	\item\code{int numero}\textbf{:} Número entero a mostrar.
+	\item\code{char* cadena}\textbf{:} Cadena de caracteres a mostrar.
+\end{itemize}
+
+\begin{lstlisting}[language=C]
+printf("%s %d\n", cadena, numero);
+\end{lstlisting}
+
+\subsection{Posicionamiento sobre ficheros}
 
 Variables utilizadas:
 
@@ -55,77 +300,21 @@ Variables utilizadas:
 
 \begin{lstlisting}[language=C]
 if (lseek(fd, 40, SEEK_SET) < 0) {
+	printf("Error %d al intentar posicionarse sobre sobre el fichero", errno);
 	perror("Error en lseek\n");
-	exit(3);
+	exit(1);
 }
 \end{lstlisting}
 
+\subsection{Vuelta al inicio de directorios}
 
 Variables utilizadas:
 
 \begin{itemize}
-	\item\code{}\textbf{:}
+	\item\code{DIR* dir}\textbf{:} Flujo de directorio.
 \end{itemize}
-Variables utilizadas:
 
-\begin{itemize}
-	\item\code{}\textbf{:}
-\end{itemize}
 \begin{lstlisting}[language=C]
+rewinddir(dir);
 \end{lstlisting}
-Variables utilizadas:
 
-\begin{itemize}
-	\item\code{}\textbf{:}
-\end{itemize}
-\begin{lstlisting}[language=C]
-\end{lstlisting}
-Variables utilizadas:
-
-\begin{itemize}
-	\item\code{}\textbf{:}
-\end{itemize}
-\begin{lstlisting}[language=C]
-\end{lstlisting}
-Variables utilizadas:
-
-\begin{itemize}
-	\item\code{}\textbf{:}
-\end{itemize}
-\begin{lstlisting}[language=C]
-\end{lstlisting}
-Variables utilizadas:
-
-\begin{itemize}
-	\item\code{}\textbf{:}
-\end{itemize}
-\begin{lstlisting}[language=C]
-\end{lstlisting}
-Variables utilizadas:
-
-\begin{itemize}
-	\item\code{}\textbf{:}
-\end{itemize}
-\begin{lstlisting}[language=C]
-\end{lstlisting}
-Variables utilizadas:
-
-\begin{itemize}
-	\item\code{}\textbf{:}
-\end{itemize}
-\begin{lstlisting}[language=C]
-\end{lstlisting}
-Variables utilizadas:
-
-\begin{itemize}
-	\item\code{}\textbf{:}
-\end{itemize}
-\begin{lstlisting}[language=C]
-\end{lstlisting}
-Variables utilizadas:
-
-\begin{itemize}
-	\item\code{}\textbf{:}
-\end{itemize}
-\begin{lstlisting}[language=C]
-\end{lstlisting}

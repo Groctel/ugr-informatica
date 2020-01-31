@@ -100,7 +100,83 @@ Por último, \code{flags} indica banderas seleccionables múltiplemente con \cod
 	\item\code{FTW\_PHYS}\textbf{:} No seguir enlaces simbólicos.
 \end{itemize}
 
+\subsection{\code{perror}}
+
 \begin{lstlisting}[language=C]
+#include <stdio.h>
+
+void perror (const char* s);
 \end{lstlisting}
+
+Imprime un mensaje de error con la cadena de caracteres \code{s} por la salida de error estándar.
+Por la salud mental de quienes lo lean, se recomienda (porque la logística de obligarlo a la fuerza es demasiado compleja) que este error acabe en \code{\textbackslash{}n}.
+
 \begin{lstlisting}[language=C]
+perror("Sa matao Paco!\n");
 \end{lstlisting}
+
+\subsection{\code{printf}}
+
+\begin{lstlisting}[language=C]
+#include <stdio.h>
+
+int printf  (const char* format, ...);
+int dprintf (int fd, const char* format, ...);
+int sprintf (char *str, const char* format, ...);
+\end{lstlisting}
+
+Imprime por salida estándar una cadena de caracteres formada por un formato \code{format} y tantos datos como se deseen añadir.
+El formato es una cadena de caracteres que puede contener una cadena normal y (entre muchos otros) los siguientes especificadores:
+
+\begin{itemize}
+	\item\code{\%d}\textbf{:} Se sustituye por un número escrito en base decimal especificado en los argumentos siguientes.
+	\item\code{\%s}\textbf{:} Se sustituye por una cadena de caracteres especificada en los argumentos siguientes.
+	\item\code{\textbackslash{}n}\textbf{:} Se sustituye por un salto de línea.
+\end{itemize}
+
+Los argumentos a imprimir añadidos tras el formato deben corresponderse en orden y tipo con los especificados en el formato.
+En caso de éxito, devuelve el número de caracteres impresos.
+En caso de fracaso, devuelve un valor negativo.
+
+\begin{lstlisting}[language=C]
+char* saludo = "Hola\0";
+int   numero = 10;
+
+// Hola
+printf("Hola\n");
+// Hola
+printf("%s\n", saludo);
+// Hola, muy buenas.
+printf("%s, muy buenas\n", saludo);
+// Hola, muy buenas.
+printf("%s%s\n", saludo, "muy buenas");
+// En este examen voy a sacar un 10!
+printf("En este examen voy a sacar un %d!\n", numero);
+// He sacado un 10. Oh! Hola, no te había visto.
+printf("He sacado un %d. Oh! %s, no te había visto.\n", numero, saludo);
+\end{lstlisting}
+
+La variante \code{dprintf} introduce la salida en el fichero identificado por su descriptor \code{fd}\footnote{Estoy bastante seguro de que borra todos los datos incluso probando a abrir el fichero con \code{O\_APPEND}, pero es muy tarde y no me apetece ponerme a investigar movidas raras. Mucho que podemos escribir en un fichero con \code{printf}}.
+La variante \code{sprintf} introduce la salida en la cadena de caracteres \code{str}, permitiendo traducir cualquier dato a cadenas de caracteres.
+
+\subsection{\code{scanf}}
+
+\begin{lstlisting}[language=C]
+#include <stdio.h>
+
+int scanf  (const char* format, ...);
+\end{lstlisting}
+
+Lee de entrada estándar una cadena de caracteres y la traduce al tipo de dato especificado en el formato \code{format}, introduciéndola traducida en las variables pasadas como argumentos.
+El formato de lectura es idéntico al de \code{printf}.
+Las variables a sobreescribir se pasan a los argumentos posteriores al formato por referencia, excepto las cadena de caracteres, que pueden pasarse por valor (ya que apuntan al primer elemento de la misma) y deben estar inicializadas en tiempo de compilación, es decir, declaradas como vectores de caracteres o con un valor.
+
+\begin{lstlisting}[language=C]
+int  numero;
+char cadena[256];
+
+scanf("%d", &numero);
+scanf("%s", &cadena);
+scanf("%s", cadena);
+\end{lstlisting}
+

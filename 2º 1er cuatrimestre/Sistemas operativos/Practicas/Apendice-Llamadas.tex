@@ -30,6 +30,23 @@ En caso de fracaso, devuelve \code{-1} acompañado por el \code{errno} apropiado
 
 La variante \code{fstat} identifica el directorio por su descriptor \code{fd}.
 
+\subsection{\code{clone}}\label{clone}
+
+\begin{lstlisting}[language=C]
+#define _GNU_SOURCE
+#include <sched.h>
+
+int clone (int (*fn)(void*), void* stack, int flags, void* arg, ...
+           /* pid_t* parent_tid, void* tls, pid_t* child_tid */);
+\end{lstlisting}
+
+Crea un proceso hijo de manera análoga a \code{fork}, con más control sobre la creación.
+Este hijo ejecuta la rutina \code{arg} y finaliza cuando ésta lo hace o cuando se reciba un \code{\_exit}.
+En caso de éxito, devuelve el \code{PID} del hijo.
+En caso de fracaso, devuelve \code{-1} acompañado por el \code{errno} apropiado.
+
+\pagebreak
+
 \subsection{\code{close}}\label{close}
 
 \begin{lstlisting}[language=C]
@@ -41,6 +58,48 @@ int close (int fd);
 Cierra el fichero especificado por su descriptor \code{fd}, eliminando a su vez todos los cerrojos asociados.
 En caso de éxito, devuelve \code{0}.
 En caso de fracaso, devuelve \code{-1} acompañado por el \code{errno} apropiado.
+
+\subsection{\code{dup}}\label{dup}
+
+\begin{lstlisting}[language=C]
+#include <unistd.h>
+
+int dup  (int oldfd);
+int dup2 (int oldfd, int newfd);
+\end{lstlisting}
+
+Crea una copia del descriptor de fichero \code{oldfd} usando el descriptor de fichero no usado de orden menor.
+En caso de éxito, devuelve \code{0}.
+En caso de fracaso, devuelve \code{-1} acompañado por el \code{errno} apropiado.
+
+La variante dup2 permite seleccionar el nuevo descriptor de fichero como \code{newfd}.
+
+\subsection{\code{fcntl}}\label{fcntl}
+
+\begin{lstlisting}[language=C]
+#include <unistd.h>
+#include <fcntl.h>
+
+int fcntl (int fd, int cmd, ... /* arg */);
+\end{lstlisting}
+
+Manipula el fichero identificado por su descriptor \code{fd} según la acción \code{cmd} determinada.
+Estas acciones vienen detalladas en \S2.6.
+La presencia del tercer argumento \code{arg} viene determinada por las especificaciones de cada \code{cmd}.
+En caso de éxito, devuelve un valor distinto en función del \code{cmd}:
+
+\begin{itemize}
+	\item\code{F\_DUPFD}\textbf{:} El nuevo descriptor de fichero.
+	\item\code{F\_GETFD}\textbf{:} Las banderas del descriptor de fichero.
+	\item\code{F\_GETFL}\textbf{:} Las banderas de estado del fichero.
+	\item\code{F\_GETOWN}\textbf{:} El propietario del descriptor de fichero.
+	\item\code{F\_GETPIPE\_SZ} \textbf{y} \code{F\_SETPIPE\_SZ}\textbf{:} La capacidad del cauce.
+	\item\textbf{Cualquier otro} \code{cmd}\textbf{:} \code{0}.
+\end{itemize}
+
+En caso de fracaso, devuelve \code{-1} acompañado por el \code{errno} apropiado.
+
+\pagebreak
 
 \subsection{\code{fork}}\label{fork}
 
@@ -54,6 +113,24 @@ pid_t fork ();
 Crea un proceso hijo duplicando el proceso invocante o proceso padre.
 En caso de éxito, devuelve el \code{PID} del hijo en el padre y \code{0} en el hijo.
 En caso de fracaso, devuelve \code{-1} en el padre acompañado por el \code{errno} apropiado y sin crear ningún hijo.
+
+\subsection{\code{kill}}\label{kill}
+
+\begin{lstlisting}[language=C]
+#include <sys/types.h>
+#include <signal.h>
+
+int kill (pid_t pid, int sig);
+\end{lstlisting}
+
+Envía una señal \code{sig} a un proceso de identificador \code{pid}, que puede pertenecer a cuatro categorías:
+
+\begin{itemize}
+	\item\code{< -1}\textbf{:} Cualquier proceso cuyo \code{GID} sea igual al valor absoluto de \code{pid}.
+	\item\code{-1}\textbf{:} Cualquier proceso sobre el que el invocante tiene permiso de envío de señales exceptuando \code{init}.
+	\item\code{0}\textbf{:} Cualquier proceso cuyo \code{GID} sea igual al del invocante en el momento de llamar a \code{kill}.
+	\item\code{> 0}\textbf{:} El proceso cuyo \code{PID} sea igual al valor de \code{pid}.
+\end{itemize}
 
 \subsection{\code{lskeek}}\label{lseek}
 
@@ -72,6 +149,44 @@ Reposiciona el offset del fichero especificado por su descriptor \code{fd} a \co
 	\item\code{SEEK\_SET}\textbf{:} Mover el offset a \code{offset} bytes.
 \end{itemize}
 
+\subsection{\code{mkfifo}}\label{mkfifo}
+
+\begin{lstlisting}[language=C]
+#include <sys/types.h>
+#include <sys/stat.h>
+
+int mkfifo(const char* pathname, mode_t mode);
+\end{lstlisting}
+
+Crea un cauce con nombre en \code{pathname} con permisos de acceso \code{mode}.
+En caso de éxito, devuelve \code{0}.
+En caso de fracaso, devuelve \code{-1} en el padre acompañado por el \code{errno}.
+
+\subsection{\code{mknod}}\label{mknod}
+
+\begin{lstlisting}[language=C]
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
+#include <unistd.h>
+
+int mknod(const char* pathname, mode_t mode, dev_t dev);
+\end{lstlisting}
+
+Crea un nodo del sistema de archivos en \code{pathname} de tipo \code{mode} y \emph{mayor} y \emph{minor} \code{dev} en caso de que el nodo sea un dispositivo especial de caracteres o bloques (por defecto es \code{0}).
+El argumento \code{mode} puede ser uno de los siguientes:
+
+\begin{itemize}
+	\item\code{S\_IFBLK}\textbf{:} Fichero especial de bloques.
+	\item\code{S\_IFCHR}\textbf{:} Fichero especial de caracteres.
+	\item\code{S\_IFIFO}\textbf{:} Fichero FIFO (cauce).
+	\item\code{S\_IFREG}\textbf{:} Fichero regular.
+	\item\code{S\_IFSOC}\textbf{:} Fichero de tipo socket.
+\end{itemize}
+
+En caso de éxito, devuelve \code{0}.
+En caso de fracaso, devuelve \code{-1} en el padre acompañado por el \code{errno} apropiado.
+
 \subsection{\code{open}}\label{open}
 
 \begin{lstlisting}[language=C]
@@ -88,6 +203,21 @@ Abre el fichero especificado por \code{pathname}.
 Si no existe y se ha especificado \code{O\_CREAT} como \code{flag}, llama a \code{creat} para crearlo pasándole sus propios argumentos.
 Devuelve el descriptor del fichero abierto.
 
+\subsection{\code{pipe}}\label{pipe}
+
+\begin{lstlisting}[language=C]
+#include <unistd.h>
+
+int pipe(int pipefd[2]);
+\end{lstlisting}
+
+Crea un cauce sin nombre.
+El primer elemento de \code{pipefd} es el proceso lector y el segundo, el escritor.
+En caso de éxito, devuelve \code{0}.
+En caso de fracaso, devuelve \code{-1} acompañado por el \code{errno} apropiado y no modifica \code{pipefd}.
+
+\pagebreak
+
 \subsection{\code{read}}\label{read}
 
 \begin{lstlisting}[language=C]
@@ -99,6 +229,74 @@ ssize_t read (int fd, void* buf, size_t count);
 Lee los \code{count} primeros bytes de un fichero especificado por su descriptor \code{fs} y los almacena en el búfer \code{buf}.
 En caso de éxito, devuelve el número de bytes leídos o \code{0} si se ha llegado el final del fichero, tras el cual nunca sigue leyendo.
 En caso de fracaso, devuelve \code{-1} acompañado por el \code{errno} apropiado.
+
+\subsection{\code{sigaction}}\label{sigaction}
+
+\begin{lstlisting}[language=C]
+#include <signal.h>
+
+struct sigaction {
+	void     (*sa_handler)(int);
+	void     (*sa_sigaction)(int, siginfo_t*, void*);
+	sigset_t   sa_mask;
+	int        sa_flags;
+	void     (*sa_restorer)(void);
+};
+
+int sigaction (int signum, const struct sigaction* act,
+               struct sigaction* oldact);
+\end{lstlisting}
+
+Determina la acción \code{act} realizada por un proceso al recibir la señal \code{signum} (a excepción de \code{SIGKILL} y \code{SIGSTOP}).
+Si \code{oldact} es una estructura no nula, se guarda la acción sobreescrita en ésta.
+En caso de éxito, devuelve \code{0}.
+En caso de fracaso, devuelve \code{-1} acompañado por el \code{errno} apropiado.
+
+\subsection{\code{sigpending}}\label{sigpending}
+
+\begin{lstlisting}[language=C]
+#include <signal.h>
+
+int sigpending(sigset_t* set);
+\end{lstlisting}
+
+Examina el número de señales pendientes de recepción por parte de la hebra invocante, escribiéndolas en \code{set}.
+En caso de éxito, devuelve \code{0}.
+En caso de fracaso, devuelve \code{-1} acompañado por el \code{errno} apropiado.
+
+\subsection{\code{sigprocmask}}\label{sigprocmask}
+
+\begin{lstlisting}[language=C]
+#include <signal.h>
+
+int sigprocmask (int how, const sigset_t* set, sigset_t* oldset);
+\end{lstlisting}
+
+Examina o cambia la máscara de señal de la hebra invocante en función del valor de \code{how}, que puede ser uno de los siguientes:
+
+\begin{itemize}
+	\item\code{SIG\_BLOCK}\textbf{:} Se bloquean las señales actuales más las de \code{set}.
+	\item\code{SIG\_SETMASK}\textbf{:} Se desbloquean las señales de \code{set}.
+	\item\code{SIG\_UNBLOCK}\textbf{:} Se cambian las señales bloqueadas por las de \code{set}.
+\end{itemize}
+
+Por su parte, \code{set} es un puntero a un conjunto de señales enmascaradas.
+Si es un puntero nulo, \code{sigprocmask} se utiliza como consulta.
+Por último, \code{oldset} representa el conjunto de señales enmascaradas actualmente.
+Si no es un puntero nulo, el valor anterior de la máscara de señal se guarda en él.
+En caso de éxito, devuelve \code{0}.
+En caso de fracaso, devuelve \code{-1} acompañado por el \code{errno} apropiado.
+
+\subsection{\code{sigsuspend}}\label{sigsuspend}
+
+\begin{lstlisting}[language=C]
+#include <signal.h>
+
+int sigsuspend(const sigset_t* mask);
+\end{lstlisting}
+
+Reemplaza temporalmente la máscara de señal de la hebra invocante por la máscara \code{mask} y suspende la ejecución de la hebra hasta la recepción de una señal cuya acción sea invocar al receptor de señales o finalizar el proceso.
+Siempre devuelve \code{-1} acompañado por el \code{errno} apropiado, a menos que la señal finalize el proceso, en cuyo caso no devuelve ningún valor.
 
 \subsection{\code{stat}}\label{stat}
 
@@ -131,6 +329,51 @@ mode_t umask (mode_t mask);
 
 Cambia la máscara de creación de ficheros por defecto del proceso que ejecuta la llamada a \code{mask}.
 Devuelve que había antes de ser cambiada.
+
+\pagebreak
+
+\subsection{\code{unlink}}\label{unlink}
+
+\begin{lstlisting}[language=C]
+#include <unistd.h>
+
+int unlink(const char* pathname);
+\end{lstlisting}
+
+Elimina el fichero de ruta \code{pathname}.
+En caso de éxito, devuelve \code{0}.
+En caso de fracaso, devuelve \code{-1} acompañado por el \code{errno} apropiado.
+
+\subsection{\code{wait}}\label{wait}
+
+\begin{lstlisting}[language=C]
+#include <sys/types.h>
+#include <sys/wait.h>
+
+pid_t wait    (int* wstatus);
+pid_t waitpid (pid_t pid, int* wstatus, int options);
+\end{lstlisting}
+
+Suspende la ejecución del proceso invocante hasta que uno de sus hijos termine de ejecutarse y guarda información sobre el estado del mismo en el entero al que apunta \code{wstatus}.
+En caso de éxito, devuelve el \code{PID} del hijo finalizado.
+En caso de fracaso, devuelve \code{-1} acompañado por el \code{errno} apropiado.
+
+La variante \code{waitpid} permite especificar el hijo en el argumento \code{pid}, que puede pertenecer a cuatro categorías:
+
+\begin{itemize}
+	\item\code{< -1}\textbf{:} Cualquier hijo cuyo \code{GID} sea igual al valor absoluto de \code{pid}.
+	\item\code{-1}\textbf{:} Cualquier hijo.
+	\item\code{0}\textbf{:} Cualquier hijo cuyo \code{GID} sea igual al del invocante en el momento de llamar a \code{waitpid}.
+	\item\code{> 0}\textbf{:} El hijo cuyo \code{PID} sea igual al valor de \code{pid}.
+\end{itemize}
+
+Esta variante también acepta tres opciones seleccionables con \code{OR} en \code{options}:
+
+\begin{itemize}
+	\item\code{WCONTINUED}\textbf{:} Devolver valor adicionalmente si un hijo detenido ha sido continuado por \code{SIGCONT}.
+	\item\code{WNOHANG}\textbf{:} Devolver valor inmediatamente si ningún hijo ha finalizado. Devuelve \code{0} si el hijo \code{pid} existe pero no se ha cambiado su estado.
+	\item\code{WUNTRACED}\textbf{:} Devolver valor adicionalmente si un hijo ha sido detenido.
+\end{itemize}
 
 \subsection{\code{write}}\label{write}
 
