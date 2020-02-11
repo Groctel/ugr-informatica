@@ -2,14 +2,14 @@
 
 \subsection{Llamadas al sistema relacionadas con los permisos de los archivos}
 
-\subsubsection{\code{umask}}
+\subsubsection{\texttt{umask}}
 
 Podemos jugar la máscara de creación de ficheros creados por un procesos con la orden \code{umask} (\S\ref{umask}).
 Este máscara es un valor octal de tres cifras precedidas de \code{0} en las que se especifican los permisos \code{rwx} para los tres grupos de usuarios.
 Por defecto (y por desgracia) se asigna la máscara \code{0777}.
 Por favor, no uséis \code{0777}.
 
-\subsubsection{\code{chmod} y \code{fchmod}}
+\subsubsection{\texttt{chmod} y \texttt{fchmod}}
 
 Estas llamadas nos permiten cambiar los permisos de acceso de un fichero ya existente.
 La llamada \code{chmod} (\S\ref{chmod}) nos permite trabajar sobre un fichero especidicado por su ruta mientras que \code{fchmod} (\S\ref{fchmod}) lo hace sobre un fichero referenciado por su descriptor en un proceso.

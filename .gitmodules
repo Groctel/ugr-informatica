@@ -1,0 +1,3 @@
+[submodule "aqademia"]
+	path = aqademia
+	url = https://github.com/Groctel/aqademia

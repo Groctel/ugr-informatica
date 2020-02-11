@@ -22,19 +22,19 @@ gid_t getegid(void); // GID del usuario invocante efectivo
 Distinguimos entre usuario real y efectivo, siendo el primero el que ejecuta un proceso y el segundo aquél con el que se identifica el primero.
 Por ejemplo, al ejecutar una orden precedida de \code{sudo}, el usuario real es quien la ejecuta y el usuario efectivo es \code{root}.
 
-\subsubsection{\code{fork}}
+\subsubsection{\texttt{fork}}
 
 La única forma de crear un proceso en UNIX es que un proceso llame a \code{fork} (\S\ref{fork}).
 Esta llamada crea un proceso idéntico al padre con varias diferencias, entre las que está el valor de retorno.
 Podemos identifical al padre del proceso hijo, es decir, el proceso que llamó a \code{fork} mediante una llamada a \code{getppid}.
 Tras la llamada, tanto el padre como el hijo ejecutan la instrucción siguiente a ella, pudiendo bifurcarse condicionalmente en función de su \code{PID}.
 
-\subsection{\code{exec}}
+\subsection{\texttt{exec}}
 
 Uno de los usos de \code{fork} es crear un proceso hijo que ejecute un programa distinto al del padre.
 Esto se consigue utilizando una de las llamadas al sistema de la familia \code{exec} (\S\ref{exec}).
 
-\subsection{\code{clone}}
+\subsection{\texttt{clone}}
 
 Cada hebra que se ejecuta en un procesador viene identificada unívocamente por su \code{TID} (\emph{thread ID}).
 A la hora de crear un proceso, \code{fork} llama a \code{clone} (\S\ref{clone})  para crear una hebra con un mayor control de sus propiedados, de forma que la primera actúa como interfaz ante la segunda.

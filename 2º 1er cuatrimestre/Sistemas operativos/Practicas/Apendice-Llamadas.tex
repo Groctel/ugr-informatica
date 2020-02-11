@@ -1,6 +1,6 @@
 \chapter{Llamadas al sistema}
 
-\subsection{\code{chmod}}\label{chmod}
+\section{\texttt{chmod}}\label{chmod}
 
 \begin{lstlisting}[language=C]
 #include <sys/stat.h>
@@ -15,7 +15,7 @@ En caso de fracaso, devuelve \code{-1} acompañado por el \code{errno} apropiado
 
 La variante \code{fchmod} identifica el fichero por su descriptor \code{fd}.
 
-\subsection{\code{chdir}}\label{chdir}
+\section{\texttt{chdir}}\label{chdir}
 
 \begin{lstlisting}[language=C]
 #include <unistd.h>
@@ -30,7 +30,7 @@ En caso de fracaso, devuelve \code{-1} acompañado por el \code{errno} apropiado
 
 La variante \code{fstat} identifica el directorio por su descriptor \code{fd}.
 
-\subsection{\code{clone}}\label{clone}
+\section{\texttt{clone}}\label{clone}
 
 \begin{lstlisting}[language=C]
 #define _GNU_SOURCE
@@ -47,7 +47,7 @@ En caso de fracaso, devuelve \code{-1} acompañado por el \code{errno} apropiado
 
 \pagebreak
 
-\subsection{\code{close}}\label{close}
+\section{\texttt{close}}\label{close}
 
 \begin{lstlisting}[language=C]
 #include <unistd.h>
@@ -59,7 +59,7 @@ Cierra el fichero especificado por su descriptor \code{fd}, eliminando a su vez 
 En caso de éxito, devuelve \code{0}.
 En caso de fracaso, devuelve \code{-1} acompañado por el \code{errno} apropiado.
 
-\subsection{\code{dup}}\label{dup}
+\section{\texttt{dup}}\label{dup}
 
 \begin{lstlisting}[language=C]
 #include <unistd.h>
@@ -74,7 +74,7 @@ En caso de fracaso, devuelve \code{-1} acompañado por el \code{errno} apropiado
 
 La variante dup2 permite seleccionar el nuevo descriptor de fichero como \code{newfd}.
 
-\subsection{\code{fcntl}}\label{fcntl}
+\section{\texttt{fcntl}}\label{fcntl}
 
 \begin{lstlisting}[language=C]
 #include <unistd.h>
@@ -101,7 +101,7 @@ En caso de fracaso, devuelve \code{-1} acompañado por el \code{errno} apropiado
 
 \pagebreak
 
-\subsection{\code{fork}}\label{fork}
+\section{\texttt{fork}}\label{fork}
 
 \begin{lstlisting}[language=C]
 #include <sys/types.h>
@@ -114,7 +114,7 @@ Crea un proceso hijo duplicando el proceso invocante o proceso padre.
 En caso de éxito, devuelve el \code{PID} del hijo en el padre y \code{0} en el hijo.
 En caso de fracaso, devuelve \code{-1} en el padre acompañado por el \code{errno} apropiado y sin crear ningún hijo.
 
-\subsection{\code{kill}}\label{kill}
+\section{\texttt{kill}}\label{kill}
 
 \begin{lstlisting}[language=C]
 #include <sys/types.h>
@@ -132,7 +132,7 @@ Envía una señal \code{sig} a un proceso de identificador \code{pid}, que puede
 	\item\code{> 0}\textbf{:} El proceso cuyo \code{PID} sea igual al valor de \code{pid}.
 \end{itemize}
 
-\subsection{\code{lskeek}}\label{lseek}
+\section{\texttt{lskeek}}\label{lseek}
 
 \begin{lstlisting}[language=C]
 #include <sys/types.h>
@@ -149,7 +149,7 @@ Reposiciona el offset del fichero especificado por su descriptor \code{fd} a \co
 	\item\code{SEEK\_SET}\textbf{:} Mover el offset a \code{offset} bytes.
 \end{itemize}
 
-\subsection{\code{mkfifo}}\label{mkfifo}
+\section{\texttt{mkfifo}}\label{mkfifo}
 
 \begin{lstlisting}[language=C]
 #include <sys/types.h>
@@ -162,7 +162,7 @@ Crea un cauce con nombre en \code{pathname} con permisos de acceso \code{mode}.
 En caso de éxito, devuelve \code{0}.
 En caso de fracaso, devuelve \code{-1} en el padre acompañado por el \code{errno}.
 
-\subsection{\code{mknod}}\label{mknod}
+\section{\texttt{mknod}}\label{mknod}
 
 \begin{lstlisting}[language=C]
 #include <sys/types.h>
@@ -187,7 +187,7 @@ El argumento \code{mode} puede ser uno de los siguientes:
 En caso de éxito, devuelve \code{0}.
 En caso de fracaso, devuelve \code{-1} en el padre acompañado por el \code{errno} apropiado.
 
-\subsection{\code{open}}\label{open}
+\section{\code{open}}\label{open}
 
 \begin{lstlisting}[language=C]
 #include <sys/types.h>
@@ -203,7 +203,7 @@ Abre el fichero especificado por \code{pathname}.
 Si no existe y se ha especificado \code{O\_CREAT} como \code{flag}, llama a \code{creat} para crearlo pasándole sus propios argumentos.
 Devuelve el descriptor del fichero abierto.
 
-\subsection{\code{pipe}}\label{pipe}
+\section{\texttt{pipe}}\label{pipe}
 
 \begin{lstlisting}[language=C]
 #include <unistd.h>
@@ -218,7 +218,7 @@ En caso de fracaso, devuelve \code{-1} acompañado por el \code{errno} apropiado
 
 \pagebreak
 
-\subsection{\code{read}}\label{read}
+\section{\texttt{read}}\label{read}
 
 \begin{lstlisting}[language=C]
 #include <unistd.h>
@@ -230,7 +230,7 @@ Lee los \code{count} primeros bytes de un fichero especificado por su descriptor
 En caso de éxito, devuelve el número de bytes leídos o \code{0} si se ha llegado el final del fichero, tras el cual nunca sigue leyendo.
 En caso de fracaso, devuelve \code{-1} acompañado por el \code{errno} apropiado.
 
-\subsection{\code{sigaction}}\label{sigaction}
+\section{\texttt{sigaction}}\label{sigaction}
 
 \begin{lstlisting}[language=C]
 #include <signal.h>
@@ -252,7 +252,7 @@ Si \code{oldact} es una estructura no nula, se guarda la acción sobreescrita en
 En caso de éxito, devuelve \code{0}.
 En caso de fracaso, devuelve \code{-1} acompañado por el \code{errno} apropiado.
 
-\subsection{\code{sigpending}}\label{sigpending}
+\section{\texttt{sigpending}}\label{sigpending}
 
 \begin{lstlisting}[language=C]
 #include <signal.h>
@@ -264,7 +264,7 @@ Examina el número de señales pendientes de recepción por parte de la hebra in
 En caso de éxito, devuelve \code{0}.
 En caso de fracaso, devuelve \code{-1} acompañado por el \code{errno} apropiado.
 
-\subsection{\code{sigprocmask}}\label{sigprocmask}
+\section{\texttt{sigprocmask}}\label{sigprocmask}
 
 \begin{lstlisting}[language=C]
 #include <signal.h>
@@ -287,7 +287,7 @@ Si no es un puntero nulo, el valor anterior de la máscara de señal se guarda e
 En caso de éxito, devuelve \code{0}.
 En caso de fracaso, devuelve \code{-1} acompañado por el \code{errno} apropiado.
 
-\subsection{\code{sigsuspend}}\label{sigsuspend}
+\section{\texttt{sigsuspend}}\label{sigsuspend}
 
 \begin{lstlisting}[language=C]
 #include <signal.h>
@@ -298,7 +298,7 @@ int sigsuspend(const sigset_t* mask);
 Reemplaza temporalmente la máscara de señal de la hebra invocante por la máscara \code{mask} y suspende la ejecución de la hebra hasta la recepción de una señal cuya acción sea invocar al receptor de señales o finalizar el proceso.
 Siempre devuelve \code{-1} acompañado por el \code{errno} apropiado, a menos que la señal finalize el proceso, en cuyo caso no devuelve ningún valor.
 
-\subsection{\code{stat}}\label{stat}
+\section{\texttt{stat}}\label{stat}
 
 \begin{lstlisting}[language=C]
 #include <sys/types.h>
@@ -318,7 +318,7 @@ En caso de fracaso, devuelve \code{-1} acompañado por el \code{errno} apropiado
 La variante \code{fstat} identifica el fichero por su descriptor \code{fd}.
 La variante \code{lstat} es idéntica a \code{stat}, pero si se le pasa un enlace simbólico devuelve su información y no la del fichero al que apunta.
 
-\subsection{\code{umask}}\label{umask}
+\section{\texttt{umask}}\label{umask}
 
 \begin{lstlisting}[language=C]
 #include <sys/types.h>
@@ -332,7 +332,7 @@ Devuelve que había antes de ser cambiada.
 
 \pagebreak
 
-\subsection{\code{unlink}}\label{unlink}
+\section{\texttt{unlink}}\label{unlink}
 
 \begin{lstlisting}[language=C]
 #include <unistd.h>
@@ -344,7 +344,7 @@ Elimina el fichero de ruta \code{pathname}.
 En caso de éxito, devuelve \code{0}.
 En caso de fracaso, devuelve \code{-1} acompañado por el \code{errno} apropiado.
 
-\subsection{\code{wait}}\label{wait}
+\section{\texttt{wait}}\label{wait}
 
 \begin{lstlisting}[language=C]
 #include <sys/types.h>
@@ -375,7 +375,7 @@ Esta variante también acepta tres opciones seleccionables con \code{OR} en \cod
 	\item\code{WUNTRACED}\textbf{:} Devolver valor adicionalmente si un hijo ha sido detenido.
 \end{itemize}
 
-\subsection{\code{write}}\label{write}
+\section{\texttt{write}}\label{write}
 
 \begin{lstlisting}[language=C]
 #include <unistd.h>

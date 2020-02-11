@@ -1,6 +1,6 @@
 \chapter{Rutinas comunes}
 
-\subsection{Ajuste de la posición de flujos de directorios}
+\section{Ajuste de la posición de flujos de directorios}
 
 Variables utilizadas:
 
@@ -17,7 +17,7 @@ loc = telldir(dir);
 seekdir(dir, loc);
 \end{lstlisting}
 
-\subsection{Apertura de directorios}
+\section{Apertura de directorios}
 
 Variables utilizadas:
 
@@ -33,7 +33,7 @@ if (dir = opendir("Directorio") == NULL) {
 }
 \end{lstlisting}
 
-\subsection{Apertura de ficheros}
+\section{Apertura de ficheros}
 
 Variables utilizadas:
 
@@ -51,7 +51,7 @@ if ((fd = open("./fichero", O_CREAT|O_WRONLY, S_IRUSR|S_IWUSR)) < 0) {
 
 \pagebreak
 
-\subsection{Borrado de ficheros}
+\section{Borrado de ficheros}
 
 \begin{lstlisting}[language=C]
 if (unlink("./fichero") < 0) {
@@ -61,7 +61,7 @@ if (unlink("./fichero") < 0) {
 }
 \end{lstlisting}
 
-\subsection{Cambio de permisos de ficheros}
+\section{Cambio de permisos de ficheros}
 
 Variables utilizadas:
 
@@ -85,7 +85,7 @@ if (fchmod(fd, 0750) < 0) {
 }
 \end{lstlisting}
 
-\subsection{Cambio del directorio de trabajo}
+\section{Cambio del directorio de trabajo}
 
 Variables utilizadas:
 
@@ -111,7 +111,7 @@ if (chdir(fd) < 0) {
 
 \pagebreak
 
-\subsection{Cierre de directorios}
+\section{Cierre de directorios}
 
 Variables utilizadas:
 
@@ -127,7 +127,7 @@ if (closedir(dir) < 0) {
 }
 \end{lstlisting}
 
-\subsection{Cierre de ficheros}
+\section{Cierre de ficheros}
 
 Variables utilizadas:
 
@@ -143,7 +143,7 @@ if (close(fd) < 0) {
 }
 \end{lstlisting}
 
-\subsection{Creación de cauces con nombre}
+\section{Creación de cauces con nombre}
 
 \begin{lstlisting}[language=C]
 if (mkfifo("./fifo", 0750) < 0) {
@@ -155,7 +155,7 @@ if (mkfifo("./fifo", 0750) < 0) {
 
 \pagebreak
 
-\subsection{Creación de cauces sin nombre}
+\section{Creación de cauces sin nombre}
 
 Variables utilizadas:
 
@@ -181,7 +181,7 @@ else {
 }
 \end{lstlisting}
 
-\subsection{Creación de proceso hijo}
+\section{Creación de proceso hijo}
 
 Variables utilizadas:
 
@@ -198,7 +198,7 @@ else
 	// Tareas ejecutadas por el padre
 \end{lstlisting}
 
-\subsection{Consulta de la posición de elementos en directorios}
+\section{Consulta de la posición de elementos en directorios}
 
 Variables utilizadas:
 
@@ -216,7 +216,7 @@ if (telldir(dir) < 0) {
 
 \pagebreak
 
-\subsection{Ejecución de órdenes externas al proceso}
+\section{Ejecución de órdenes externas al proceso}
 
 Variables utilizadas:
 
@@ -229,7 +229,7 @@ execlp("yay", "yay", "-S", "minecraft-launcher", NULL);
 execlp("./ejecutable", arg, NULL);
 \end{lstlisting}
 
-\subsection{Escritura de ficheros}
+\section{Escritura de ficheros}
 
 Variables utilizadas:
 
@@ -247,7 +247,7 @@ if (write(fd, buf, long_buf) != long_buf1) {
 }
 \end{lstlisting}
 
-\subsection{Lectura de datos de entrada estándar}
+\section{Lectura de datos de entrada estándar}
 
 Variables utilizadas:
 
@@ -261,7 +261,7 @@ scanf("%d", &numero);
 scanf("%s, cadena);
 \end{lstlisting}
 
-\subsection{Lectura del contenido de directorios}
+\section{Lectura del contenido de directorios}
 
 Variables utilizadas:
 
@@ -277,7 +277,7 @@ while ((dnt = readdir(dir)) != NULL)
 
 \pagebreak
 
-\subsection{Muestra de variables por salida estándar}
+\section{Muestra de variables por salida estándar}
 
 Variables utilizadas:
 
@@ -290,7 +290,7 @@ Variables utilizadas:
 printf("%s %d\n", cadena, numero);
 \end{lstlisting}
 
-\subsection{Posicionamiento sobre ficheros}
+\section{Posicionamiento sobre ficheros}
 
 Variables utilizadas:
 
@@ -306,7 +306,7 @@ if (lseek(fd, 40, SEEK_SET) < 0) {
 }
 \end{lstlisting}
 
-\subsection{Vuelta al inicio de directorios}
+\section{Vuelta al inicio de directorios}
 
 Variables utilizadas:
 

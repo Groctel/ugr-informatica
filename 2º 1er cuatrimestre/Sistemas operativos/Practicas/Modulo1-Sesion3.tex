@@ -2,7 +2,7 @@
 
 \subsection{Control y gestión de CPU}
 
-\subsubsection{\code{uptime}}
+\subsubsection{\texttt{uptime}}
 
 Esta orden muestra información sobre el tiempo que lleva el sistema encencido, el número de usuarios conectados y la carga media del mismo en los últimos uno, cinco y quince minutos.
 La carga del sistema se define como el número de procesos que están en espera ociosa de la CPU\@.
@@ -19,7 +19,7 @@ w
 # groctel  tty7  11:18   9:11m  11:00  7.30s  i3 -a --restart /run/user/1000/i3/restart-state.1608
 \end{lstlisting}
 
-\subsubsection{\code{time}}
+\subsubsection{\texttt{time}}
 
 Esta orden mide el tiempo de ejecución de un programa y muestra un resumen de los recursos utilizados por el mismo al acabar su ejecución.
 El tiempo total (\code{real}) que ha tardado en ejecutarse se computa como la suma del tiempo de ejecución en modo usuario (\code{user}), el tiempo de ejecución en modo kernel (\code{sys}) y el tiempo de espera, de forma que éste puede computarse de la siguiente manera:
@@ -36,7 +36,7 @@ time ls /
 # ls --color=tty /  0.00s user 0.00s system 82% cpu 0.001 total
 \end{lstlisting}
 
-\subsubsection{\code{nice} y \code{renice}}
+\subsubsection{\texttt{nice} y \texttt{renice}}
 
 Linux planifica el uso de los recursos del sistema mediante una jerarquía de prioridades llamadas \emph{niceness}.
 Los procesos de usuarios pueden tener valores \code{nice} de \code{0} a \code{19} mientras que los procesos de \code{root} pueden tener valores de \code{-1} a \code{-20}, siendo los números más bajos los que tienen mayor prioridad\footnote{Tras una vida aprendiendo a ser amables, resulta que se da prioridad a los procesos que le gritan a la pobre alma que les atiende en la ventanilla\ldots}.
@@ -53,7 +53,7 @@ Por su parte, la orden \code{renice} permite alterar el valor de uno o más proc
 renice 5 9030 # Aumenta en 5 el nice del proceso de PID 9030
 \end{lstlisting}
 
-\subsubsection{\code{pstree}}
+\subsubsection{\texttt{pstree}}
 
 Muestra los procesos en ejecución en forma de árbol.
 Acepta los siguientes argumentos:
@@ -88,7 +88,7 @@ pstree -A
 #         |         `-73*[{firefox}]
 \end{lstlisting}
 
-\subsubsection{\code{ps}}
+\subsubsection{\texttt{ps}}
 
 Esta orden se implementa usando el sistema de archivos \code{/proc} y muestra la siguiente información sobre los procesos en ejecución:
 
@@ -120,7 +120,7 @@ Esta orden se implementa usando el sistema de archivos \code{/proc} y muestra la
 Esta orden se ejecuta normalmente con el argumento \code{-ef}, siendo \code{e} la selección de todo procesos en el sistema y \code{f} la muestra de información completa de los procesos.
 Si se ejecuta sin argumentos muestra únicamente los procesos lanzados por el usuario que ejecuta la orden.
 
-\subsubsection{\code{top}}
+\subsubsection{\texttt{top}}
 
 Esta orden muestra información sobre la actividad del procesador y los procesos en ejecución de forma continuada e interactiva.
 Las cinco primeras líneas muestran, en orden, las estadísticas de \code{uptime}, estadísticas sobre los procesos del sistema el estado actual de la CPU, el estado actual de la  memoria y el estado actual del espacio \code{swap}.
@@ -156,7 +156,7 @@ top
 
 Como mejora a \code{top} existe \code{htop}, que ofrece más opciones de interacción y una interfaz más detallada.
 
-\subsubsection{\code{mpstat}}
+\subsubsection{\texttt{mpstat}}
 
 Para ejecutarla es necesario tener instalado el paquete \code{systat}.
 Esta orden muestra las siguientes estadísticas del procesador junto con la media global de las mismas:
@@ -189,7 +189,7 @@ mpstat 2 3
 
 \subsection{Control y gestión de memoria}
 
-\subsubsection{\code{free}}
+\subsubsection{\texttt{free}}
 
 Visualiza el uso actual de memoria, informando sobre el consumo de RAM y \code{swap}.
 
@@ -200,7 +200,7 @@ free
 # Swap:       8387580           0     8387580
 \end{lstlisting}
 
-\subsubsection{\code{vmstat}}
+\subsubsection{\texttt{vmstat}}
 
 Esa orden supervisa el sistema mostrando información sobre el uso de recursos del sistema aceptando los mismos argumentos que \code{mpstat}.
 Muestra la siguiente información:

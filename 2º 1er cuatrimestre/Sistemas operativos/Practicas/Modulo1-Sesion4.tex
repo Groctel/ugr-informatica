@@ -8,7 +8,7 @@ En muchos casos, los daemon están a la espera de un evento específico, por lo 
 También puede darse el caso de que el daemon esté realizando una labor periódicamente o que lance otros procesos que hagan el trabajo por él.
 En muchos casos de ejecutan con privilegio de superusuario (\code{UID=0}) y su padre es \code{init} (\code{PID=1}).
 
-\subsection{Ejecutar tareas a una hora determinada: daemon \code{atd}}
+\subsection{Ejecutar tareas a una hora determinada: daemon \texttt{atd}}
 
 Podemos usar \code{atd} para ejecutar órdenes en un momento de tiempo determinado.
 Para configurarlo usamos las siguientes órdenes:
@@ -20,7 +20,7 @@ Para configurarlo usamos las siguientes órdenes:
 	\item\code{batch}\textbf{:} Ordena la ejecución de órdenes que se ejecutarán cuando la carga del sistema sea baja.
 \end{itemize}
 
-\subsubsection{\code{at}}
+\subsubsection{\texttt{at}}
 
 Esta orden recibe los siguientes argumentos:
 
@@ -55,7 +55,7 @@ du -h | tail -1 1>>~/du_at 2>/dev/null
 pacman -Syyu 1>/dev/null 2>&1
 \end{lstlisting}
 
-\subsection{Ejecuciones periódicas: daemon \code{cron}}
+\subsection{Ejecuciones periódicas: daemon \texttt{cron}}
 
 Para ejecutar tareas de forma periódica usamos \code{cron}, que lee las órdenes a ejecutar de un fichero \code{crontab} que podemos especificar mediante la orden homónima o estar localizado en \code{/etc/cron.d}.
 Estos ficheros siguien la siguiente sintaxis por cada línea ejecutable, en la que \code{*} indica indiferencia en la restricción, un guión indica un rango de valores y se pueden separar valores por comas:
