@@ -2,7 +2,13 @@ HOME  = .
 BIN   = $(HOME)/bin
 
 C21   = $(HOME)/2º\ 1er\ cuatrimestre
+C22   = $(HOME)/2º\ 2º\ cuatrimestre
 
+AC    = $(C22)/Arquitectura\ de\ computadores
+ALG   = $(C22)/Algorítmica
+FBD   = $(C22)/Fundamentos\ de\ bases\ de\ datos
+FIS   = $(C22)/Fundamentos\ de\ la\ ingeniería\ del\ software
+IA    = $(C22)/Inteligencia\ artificial
 SO    = $(C21)/Sistemas\ operativos
 
 BC21  = $(BIN)/2º\ 1er\ cuatrimestre
@@ -43,19 +49,39 @@ define limpiatex
 	@printf "\n"
 endef
 
-all: saludo c21 despedida
+all: saludo c21 c22 despedida
 
 saludo:
 	@printf "\033[35;1m:: \033[0mComenzando compilación\n"
 	@rm -rf $(OUT) > /dev/null || printf ""
 
+despedida:
+	@printf "\033[1;32m:: \033[0mCompilación completada con éxito\n"
+
 c21: so
+c22: ac alg fbd fis ia
+
+ac:
+	@$(MAKE) -s -C $(AC)
+	$(call limpiatex, $(AC))
+
+alg:
+	@$(MAKE) -s -C $(ALG)
+	$(call limpiatex, $(ALG))
+
+fbd:
+	@$(MAKE) -s -C $(FBD)
+	$(call limpiatex, $(FBD))
+
+fis:
+	@$(MAKE) -s -C $(FIS)
+	$(call limpiatex, $(FIS))
+
+ia:
+	@$(MAKE) -s -C $(IA)
+	$(call limpiatex, $(IA))
 
 so:
 	@$(MAKE) -s -C $(SO)
 	$(call limpiatex, $(SO))
-
-despedida:
-	@printf "\033[1;32m:: \033[0mCompilación completada con éxito\n"
-
 
