@@ -1,0 +1,76 @@
+\chapter{Arquitecturas paralelas: Clasificación y prestaciones}
+
+\section{Clasificación del paralelismo implícito en una aplicación}
+
+A la hora de trabajar en un sistema informático es muy común encontrarnos con el caso de que hay tareas que podemos ejecutar paralelamente.
+Por ejemplo, si tenemos los vectores $\vec{A}$, $\vec{B}$, $\vec{C}$, $\vec{D}$, $\vec{E}$ y $\vec{F}$, podemos realizar paralelamente las operaciones $\vec{A}+\vec{B}=\vec{C}$ y $\vec{D}\times\vec{E}=\vec{F}$, ya que el resultado de una no afecta al resultado de la otra.
+A más bajo nivel, definimos un vector de dimensión $n$ en un sistema informático como una lista ordenada de $n$ elementos tal que \code{vector[n] = [0,1,2,\ldots,n-1]}, por lo que definimos la suma de dos vectores \code{v1[n]} y \code{v2[n]} de la siguiente forma:
+
+\begin{lstlisting}[language=C]
+for (int i=0; i<n; i++)
+	v3[i] = v1[i] + v2[i];
+\end{lstlisting}
+
+Para dos vectores de $n$ elementos y un sistema que permita $p$ cómputos paralelos, podemos dividir los vectores en $n/p$ secciones y calcularlas paralelamente.
+Por supuesto, no tiene sentido hablar de paralelismo si la máquina no tiene los recursos necesarios.
+
+Podemos clasificar el paralelismo implícito en un programa mediante tres criterios:
+
+\begin{itemize}
+	\item\textbf{Nivel:} El grado de abstracción sobre el cual existe paralelismo.
+	\item\textbf{Paralelismo de tareas/datos:} Parelelismo en diferentes tareas (suma y multiplicación) o datos (suma de vectores).
+	\item\textbf{Granularidad:} Conjunto de subtareas que conforman una tarea.
+\end{itemize}
+
+Decimos que una tarea tiene una granularidad más fina (o menos gruesa) cuantas menos operaciones sean necesarias para su ejecución.
+En orden descendiente de granularidad, podemos dividir los programas en rutinas formadas por bloques que ejecutan operaciones primitivas.
+
+El paralelismo viene determinado por la posible existencia de dependencias de datos.
+Decimos que dos bloques de un programa son dependientes si referencian una misma variable y, más específicamente, decimos que un bloque $B_2$ es dependiente con respecto a $B_1$ si $B_1$ aparece secuencialmente antes que $B_2$.
+Distinguimos entre tres tipos de dependencias de datos:
+
+\begin{itemize}
+	\item\textbf{\textit{RAW} (\textit{Read After Write}):} Dependencia verdadera. Se produce cuando un $B_2$ lee una variable después de que $B_1$ escriba sobre ella.
+	\item\textbf{\textit{WAW} (\textit{Write After Write}):} Dependencia de salida. Se produce cuando $B_1$ y $B_2$ escriben secuencialmente sobre la misma variable, afectando a la lectura de la misma por otros bloques.
+	\item\textbf{\textit{WAR} (\textit{Write After Read}):} Antidependencia. Se produce cuando $B_2$ escribe sobre una variable después de que $B_1$ la haya leído.
+\end{itemize}
+
+\pagebreak
+
+\begin{lstlisting}[language=C]
+// RAW
+a = b + c
+d = a + c
+// WAW
+a = b + c
+a = d + e
+// WAR
+b = a + c
+a = d + e
+\end{lstlisting}
+
+No tiene sentido hablar de una dependencia \textit{RAR}, ya que la lectura múltiple de una misma variable recoge siempre el mismo dato si ésta no se modifica en el proceso.
+
+Podemos distinguir entre dos tipos de paralelismos implícitos:
+
+\begin{itemize}
+	\item\textbf{Paralelismo de tareas o \textit{TLP} (\textit{Task Level Par.}):} Viene de extraer la estructura lógica de rutinas de un programa. Está relacionado con el paralelismo a nivel de función.
+	\item\textbf{Paralelismo de datos o \textit{DLP} (\textit{Data Level Par.}):} Viene implícito en las operaciones con estructuras de datos y se extrae de la representación matemática del programa. Está relacionado con el paralelismo a nivel de bucle
+\end{itemize}
+
+Un programa que se ejecute con una segmentación de cauce\footnote{Estructura de computadores, tema 4.}, es decir, que esté dividido en varios estadios secuenciales, puede ofrecer paralelismo a nivel de función de forma que, mientras el tercer estadio esté trabajando con el primer lote de datos, el segundo está trabajando con el segundo y el primero, con el tercero.
+
+A nivel de arquitecturas existe paralelismo debido a que un sistema puede ejecutar a la vez varios procesos que gestionan múltiples hebras para ejecutar instrucciones de forma paralela.
+Distinguimos aquí tres términos:
+
+\begin{itemize}
+	\item\textbf{Instrucciones:} Son las operaciones que puede gestionar la unidad de control del computador.
+	\item\textbf{Hebras\footnote{Sistemas operativos, tema 2.}:} Representan la menor unidad de ejecución gestionable por el SO, la menor secuencia de instrucciones ejecutables paralela o concurrentemente.
+	\item\textbf{Procesos:} Representan la mayor unidad de ejecución gestionable por el SO y constan de una o varias hebras.
+\end{itemize}
+
+A nivel de granularidad, las hebras son más finas que los procesos, ya que se tarda menos tiempo en crearlas, destruirlas, conmutar entre ellas y establecer canales de comunicación entre ellas que en hacer las mismas tareas con procesos.
+
+\section{Clasificación de arquitecturas paralelas}
+
+\section{Evaluación de prestaciones}
