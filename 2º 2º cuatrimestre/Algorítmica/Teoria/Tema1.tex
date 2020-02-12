@@ -1,0 +1,141 @@
+\chapter{La eficiencia de los algoritmos}
+
+\section{El concepto de algoritmo}
+
+Un algoritmo\footnote{La palabra \textit{algoritmo} proviene del nombre del matemático persa del siglo IX Abd Allah Muhhamad ibn Musa \textbf{al-Khwarizmi}.} es una \textit{secuencia finita ordenada de pasos exentos de ambigüedad tal que, al llevarse a cabo con fidelidad, dará como resultado la tarea para la que se ha diseñado}.
+De esta definición podemos extraer algunos términos clave:
+
+\begin{itemize}
+	\item\textbf{Secuencia:} Los algoritmos se componen de instrucciones que deben realizarse una detrás de otra.
+	\item\textbf{Finita:} Los algoritmos deben acabar en algún momento para poder producir un resultado.
+	\item\textbf{Ordenada:} Las instrucciones que componen un algoritmo deben respetar un orden para desempeñar correctamente su tarea asociada.
+	\item\textbf{Exentos de ambigüedad:} Los algoritmos no deben dejar ningún elemento a la libre interpretación del lector, ya que ésta cambiará su resultado.
+	\item\textbf{Fidelidad:} Los algoritmos deben ser deterministas, es decir, deben producir el mismo resultado con la misma entrada.
+\end{itemize}
+
+Los algoritmos no son programas informáticos, aunque éstos pueden incorporar algoritmos para su correcto funcionamiento.
+Los algoritmos deben cumplir necesariamente cinco propiedades:
+
+\begin{itemize}
+	\item\textbf{Ser nociones abstractas:} Los algoritmos no dependen del lenguaje en el que se implementen, sino que deben poder implementarse en varios lenguajes.
+	\item\textbf{Estar bien definidos:} Cada paso de los algoritmos debe estar claramente expresado y sin ambigüedades.
+	\item\textbf{Ser coherentes:} Los algoritmos deben producir el mismo resultado siempre que se le introduzcan los mismos datos iniciales.
+	\item\textbf{Ser finitos:} Los algoritmos deben terminar.
+	\item\textbf{Ser efectivos:} Los algoritmos deben resolver su problema asociado.
+\end{itemize}
+
+Un ejemplo de un mal algoritmo sería una receta de croquetas:
+
+\begin{enumerate}
+	\item $Echar\ aceite\ en\ la\ sartén$.
+	\item $Esperar\ a\ que\ el\ aceite\ esté\ caliente$.
+	\item $Echar\ croquetas\ en\ la\ sartén$.
+	\item $Mientras\ las\ croquetas\ no\ se\ hayan\ dorado,\ esperar$.
+	\item $Sacar\ las\ croquetas\ a\ un\ plato$:
+\end{enumerate}
+
+Aunque no cabe duda de que nos saldrían unas croquetas buenísimas siguiendo esta receta, falla como algoritmo por varios motivos.
+Primero, no está \textbf{bien definido}.
+¿Cuánto aceite echamos en la sartén?
+¿Una garrafa?
+¿Una pincelada?
+¿Cuántas croquetas echamos en la sartén?
+¿Qué nivel de dorado queremos que tengan las croquetas?
+¿A qué potencia debemos poner el fuego?
+¿En qué orden sacamos las croquetas?
+Tampoco es \textbf{coherente}, ya que no siempre proporciona el mismo resultado.
+En función del orden en que saquemos las croquetas algunas saldrán más hechas que otras en distintas iteraciones.
+Por último, tampoco es \textbf{finito}.
+Como no hemos especificado que ha de encenderse el fuego, ¡estaremos esperando eternamente a que el aceite esté caliente!
+
+Siguiendo con analogías culinarias, esta receta de masa de pizza sí sería un buen algoritmo\footnote{Las medidas imperiales basadas en cucharas tienen equivalencias en el sistema métrico. Es una receta que sale muy rica.}:
+
+\begin{enumerate}
+	\item $Introducir\ 200g\ de\ agua\ a\ 20\ ^{\circ}C\ en\ la\ panificadora$.
+	\item $Introducir\ 350g\ de\ harina\ de\ fuerza\ en\ la\ panificadora$.
+	\item $Introducir\ una\ cucharada\ sopera\ de\ aceite\ en\ la\ panificadora$.
+	\item $Introducir\ una\ cucharadita\ de\ sal$.
+	\item $Introducir\ media\ cucharadita\ de\ azúcar\ moreno$.
+	\item $Introducir\ 7\ gramos\ de\ levadura\ en\ polvo$.
+	\item $Programar\ la\ panificadora\ para\ trabajar\ en\ modo\ \text{masa}\ durante\ 45\ minutos$.
+	\item $Iniciar\ la\ panificadora$.
+	\item $Esperar\ 45\ minutos$.
+	\item $Extraer\ la\ masa\ de\ la\ panificadora$.
+\end{enumerate}
+
+\section{La eficiencia de algoritmos: Problema, tamaño e instancia, principio de invarianza}
+
+Dado un problema, podemos encontrar diferentes algoritmos que lo resuelven.
+¿Cuál de todos es el mejor?
+¿En qué situaciones podemos afirmar que uno es mejor que otro?
+La eficiencia estudia la viabilidad de la implementación de un algoritmo para la resolución de un problema determinado.
+Podemos medirla en función de los recursos que consume mediante dos factores:
+
+\begin{itemize}
+	\item\textbf{Tiempo:} Demora del algoritmo en la resolución del problema.
+	\item\textbf{Espacio:} Recursos del sistema usados por el algoritmo.
+\end{itemize}
+
+A lo largo de esta asignatura nos centraremos en la dimensión temporal de la eficiencia.
+Para estudiarla, debemos definir previamente cuatro conceptos:
+
+\begin{itemize}
+	\item\textbf{Problema:} Problema general a resolver expresado sin especificar unidades. Por ejemplo, ordenar ascendentemente un vector.
+	\item\textbf{Instancia del problema:} Problema concreto derivado del problema general expresado con unidades. Por ejemplo, ordenar el vector \code{[3,5,1,2]}.
+	\item\textbf{Caso:} Conjunto de instancias con dificultad similar o idéntica
+	\begin{itemize}
+		\item\textbf{Caso peor:} Instancia en la que el algoritmo ejecuta el máximo de operaciones posible. Por ejemplo, ordenar ascendentemente por inserción un vector previamente ordenado descendentemente.
+		\item\textbf{Caso promedio:} Instancia en la que tarda un tiempo medio. Se da generalmente cuando los datos iniciales son aleatorios.
+		\item\textbf{Caso mejor:} Instancia en la que el algoritmo ejecuta el mínimo de posible. Por ejemplo, ordenar ascendentemente un vector previamente ordenado ascendentemente.
+	\end{itemize}
+	\item\textbf{Tamaño del caso:} tamaño de la instancia a resolver. Por ejemplo, el vector \code{[3,5,1,2]} es un caso de tamaño $n=4$.
+\end{itemize}
+
+Usaremos la notación $O(n)$ para indicar la eficiencia de un algoritmo en el caso peor y $\Omega(n)$ para su eficiencia en el caso mejor.
+Ambos casos peor y mejor lo son únicamente para instancias del mismo tamaño.
+
+\pagebreak
+
+Tomemos como ejemplo el siguiente algoritmo para ordenar un vector:
+
+\begin{lstlisting}[language=C++]
+void insertion (double* v, int a, int b) {
+	for (int i=a+1; i<=b; i++) {
+		for (int j=i; j>a && v[j]<v[j-1]; j--) {
+			double aux = v[j];
+
+			v[j]   = v[j-1];
+			v[j-1] = aux;
+		}
+	}
+}
+\end{lstlisting}
+
+Este algoritmo ordena ascendentemente un vector \code{v} desde la posición \code{a} hasta la posición \code{b}, ambas inclusive.
+Para ello, va comparando todos los valores desde la posición \code{a+1} hasta la posición \code{b} con el valor inmediatamente anterior a ellos (por ejemplo, cuando \code{i=1}, comparamos \code{a+1} con \code{a}) y lo intercambiamos con éste tantas veces como sea necesario hasta que el valor que estamos ordenando sea mayor que el anterior o esté en la primera posición a ordenar.
+Éste es un caso de tamaño $n=a-b+1$ cuyo mejor caso es cuando \code{v} se introduce ordenado ascendentemente y cuyo peor caso es cuando \code{v} se introduce ordenado descendentemente.
+
+A la hora de medir la eficiencia de un algoritmo podemos usar tres métodos:
+
+\begin{itemize}
+	\item\textbf{Método empírico:} Implementar el algoritmo y medir el tiempo de ejecución.
+	\item\textbf{Método teórico:} Calcular una función que indique la evolución del algoritmo con respecto al tamaño del caso.
+	\item\textbf{Método híbrido:} Una mezcla de ambos métodos.
+\end{itemize}
+
+Al igual que un algoritmo debe ser independiente de un lenguaje, su eficiencia también lo es.
+Llamamos a esta propiedad \textbf{Prinicpio de Inviarianza}:
+
+\begin{displayquote}
+		  \textit{Dadas dos implementaciones $I_1$ e $I_2$ de un mismo algoritmo, el tiempo de ejecución para una misma instancia de tamaño $n$, $T_{I_1}(n)$ y $T_{I_2}(n)$ no diferirá en más de una constante multiplicativa. Es decir, existe una constante positiva $K$ que verifica $T_{I_1}(n)\leq K\cdot T_{I_2}(n)$.}
+\end{displayquote}
+
+Teóricamente, esta constante $K$ es siempre igual para distintas ejecuciones del algoritmo, aunque en la práctica puede variar ligeramente debido a la carga del procesador a la hora de ejecutar el programa.
+Lo que siembre será cierto es que, aunque dos lenguajes tarden tiempos diferentes en realizar la misma tarea, sus gráficas espacio-temporales tendrán la misma forma.
+Por ejemplo, dos programas que ejecuten un algoritmo de eficiencia $O(n^2)$ en el peor caso mostrarán gráficas de curvatura $k\cdot n^2$.
+
+\section{La notación asintótica, órdenes peor, mejor y exacto}
+
+\section{Análisis de algoritmos}
+
+\section{Resolución de recurrencias}
