@@ -1,0 +1,100 @@
+\chapter{Introducción a la inteligencia artificial}
+
+\section{¿Qué significa ser inteligente?}
+
+La inteligencia es un concepto muy difícil de definir, tanto que no existe una definición precisa de ella, ya que los problemas que precisan de su uso no están claramente delimitados.
+El DRAE recoge siete acepciones para este término:
+
+\begin{itemize}
+	\item Capacidad de entender o comprender.
+	\item Capacidad de resolver problemas.
+	\item Conocimiento, comprensión, acto de entender.
+	\item Sentido en que se puede tomar una proposición, un dicho o una expresión.
+	\item Habilidad, destreza y experiencia.
+	\item Trato y correspondencia secreta de dos o más personas o naciones entre sí.
+	\item Sustancia puramente espiritual.
+\end{itemize}
+
+También recoge una acepción sobre la inteligencia artificial:
+
+\begin{displayquote}
+\textit{Disciplina científica que se ocupa de crear programas informáticos que ejecutan operaciones comparables a las que realiza la mente humana, como el aprendizaje o el razonamiento lógico.}
+\end{displayquote}
+
+Pero, ¿qué es la IA cuando no nos referimos a la disciplina?
+Por lo general, nos referimos a que una máquina hace uso de IA si tiene alguna de las capacidades que definen la inteligencia según el DRAE (u otros diccionarios).
+
+A pesar de ser un término tan complejo, cuyas implicaciones estos párrafos hacen poco más que arañar, la IA es, indubitablemente, una idea abstracta presente en el imaginario colectivo.
+Artes como la literatura o el cine muestran ejemplos de sistemas superinteligentes en obras como *El Hombre Bicentenario* o *2001, Una Odisea En El Espacio*.
+Sin ambargo, esta idea de IA está extremadamente lejos de la realidad, ya que no existen (y no se expera que existan en el futuro próximo) sistemas inteligente capaces de resolver cualquier problema y almacenar toda la información conocida por el ser humano.
+
+En 1999, Howard Gardner da una definición de ``inteligencia'' en la que menciona la existencia de diferentes inteligencias:
+
+\begin{displayquote}
+\textit{La inteligencia es la capacidad de ordenar los pensamientos y coordinarlos con las acciones.
+La inteligencia no es una sola, sino que existen tipos distintos.}
+\end{displayquote}
+
+Según su \textbf{teoría de las inteligencias múltiples}, el ser humano no posee una única inteligencia, sino varias, clasificables por disciplinas, sobre las que cada individuo tiene un mayor o menor dominio:
+
+\begin{itemize}
+	\item\textbf{Lingüística:} Dominio del lenguaje.
+	\item\textbf{Lógico-matemática:} Conceptualización de las relaciones lógicas entre acciones y símbolos.
+	\item\textbf{Corporal y cinética:} Coordinadión de movimientos corporales.
+	\item\textbf{Visual y espacial:} Reconocimiento de objetos e inferencia de sus características a partir de imágenes.
+	\item\textbf{Musical:} Producción de piezas musicales.
+	\item\textbf{Interpersonal o social:} Capacidad de empatía y elección de círculos sociales.
+	\item\textbf{Intrapersonal:} Capacidad de autocrítica, análisis de las emociones y pensamientos propios.
+	\item\textbf{Emocional:} Una mezcla entre la interpersonal y la intrapersonal.
+	\item\textbf{Naturalista:} Sensibilidad hacia el mundo natural.
+	\item\textbf{Existencial:} Meditación sobre la existencia, el sentido de la vida y la muerte.
+	\item\textbf{Creativa:} Innovación y creación.
+	\item\textbf{Colaborativa:} Capacidad de elección de la mejor opción para alcanzar una meta trabajando en equipo.
+\end{itemize}
+
+Cuando creamos sistemas inteligentes, los diseñamos para ser proficientes en un tipo de inteligencia.
+Crear una máquina que tuviera un dominio perfecto en todos los tipos de inteligencia sería extremadamente complejo y podría dar lugar a que ésta experimentara confrontaciones entre las soluciones provistas por sus diferentes inteligencias.
+
+\section{Definición de la IA}
+
+A finales del siglo XIX se comienzan a formular diseños teóricos de computadores que, si bien realizaban cómputos no tan complejos como los actuales, se teorizaba que en el futuro podrían pensar y resolver problemas complejos.
+
+Desde los primeros computadores físicos creados a mediados del siglo XX, que se utilizaban para operaciones matemáticas complejas, las máquinas han ido consiguiendo la capacidad de razonar.
+Nos referimos al razonamiento como el proceso que lleva a una máquina a tomar decisiones complejas, reconocer objetos en imágenes, conducir vehículos sin entrada humana u otras actividades asociadas popularmente con la IA\@.
+
+Existen cuatro escuelas de pensamiento sobre \textit{qué es} la IA, diferenciándose en su funcionalidad (\textit{actuar} vs \textit{pensar}) y su modo de funcionar (\textit{como humanos} vs \textit{racionalmente}):
+
+\begin{center}
+\begin{tabular}{C{6.5cm} | C{6.5cm}}
+\textbf{Sistemas que piensan como humanos} & \textbf{Sistema sque piensan racionalmente} \\
+Modelos cognitivos                         & Leyes del pensamiento                       \\
+                                           &                                             \\
+``\textit{El estudio de cómo hacer computadoras que hagan cosas que, de momento, la gente hace mejor.}'' (Rich y Knight, 1991) &
+``\textit{El esfuerzo por hacer a las ocmputadoras pensar \ldots máquinas con mentes en el sentido amplio y literal.}'' (Haugeland, 1985) \\
+\midrule
+\textbf{Sistemas que actúan como humanos} & \textbf{Sistemas que actúan racionalmente} \\
+Test de Turing                            & Agentes racionales                         \\
+                                          &                                            \\
+\textit{Un campo de estudio que busca explicar y emular el comportamiento inteligente en términos de procesos computacionales.} (Schalkoff, 1990) &
+\textit{El estudio de las facultades mentales a través del estudio de modelos computacionales.} (Charniak y McDermott, 1985) \\
+\end{tabular}
+\end{center}
+
+Los \textbf{sistemas que piensan como humanos} parten del modelo de funcionamiento de la mente humana, intentando establecer una teoría sobre el mismo mediante experimentación psicológica.
+A partir de esta teoría formulada, se busca establecer modelos computacionales.
+Ocupa el campo de las ciencias cognitivas.
+
+Los \textbf{sistemas que piensan racionalmente} parten de que las leyes del pensamiento racional se fundamentan en la lógica, estando la lógica en la base de los programas inteligentes.
+Llamamos \textit{logicismo} a esta corriente de pensamiento.
+Sin embargo, este enfoque encuentra obstáculos en la gran dificultad de formalizar el conocimiento y el salto que existe entre la capacidad teórica de la lógica y su realización práctica.
+
+Los \textbf{sistemas que actúan como seres humanos} busca resolver problemas no resolubles por algoritmos exactos.
+Estos problemas son los presentados por la emulación de trabajos de la vida diaria de las personas, como percibir objetos o utilizar el lenguaje natural.
+Las tareas más complejas realizadas por expertos son las más sencillas de programar, ya que son las más mecánicas.
+
+\section{Bases de la IA}
+
+\section{Historia de la IA}
+
+\section{Áreas de trabajo de la IA}
+
