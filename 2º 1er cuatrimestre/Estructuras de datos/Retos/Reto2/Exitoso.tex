@@ -1,0 +1,274 @@
+\chapter{Ejemplo de cálculo exitoso}
+
+Detallamos aquí el funcionamiento del algoritmo para hallar la solución del enunciado, con candidatos $C={4,6,8,9,10,75}$ y número objetivo $835$.
+
+\section{Cálculo de las matrices iniciales}
+
+\begin{center}
+$\begin{matrix}
+[4]  & \times  & \times  & \times  & \times  & \times  & \times \\
+[6]  & 10      & \times  & \times  & \times  & \times  & \times \\
+[8]  & 12      & 14      & \times  & \times  & \times  & \times \\
+[9]  & 13      & 15      & 17      & \times  & \times  & \times \\
+[10] & 14      & 16      & 18      & 19      & \times  & \times \\
+[75] & 79      & 81      & 83      & 84      & 85      & \times \\
+     &   [4]   &   [6]   &   [8]   &   [9]   &  [10]   &  [75]  \\
+\end{matrix}
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \begin{matrix}
+[4]  & \times  & \times  & \times  & \times  & \times  & \times \\
+[6]  & 2       & \times  & \times  & \times  & \times  & \times \\
+[8]  & 4       & 2       & \times  & \times  & \times  & \times \\
+[9]  & 5       & 3       & 1       & \times  & \times  & \times \\
+[10] & 6       & 4       & 2       & 1       & \times  & \times \\
+[75] & 71      & 69      & 67      & 66      & 65      & \times \\
+     &   [4]   &   [6]   &   [8]   &   [9]   &  [10]   &  [75]  \\
+\end{matrix}$
+
+$\begin{matrix}
+[4]  & \times  & \times  & \times  & \times  & \times  & \times \\
+[6]  & 24      & \times  & \times  & \times  & \times  & \times \\
+[8]  & 32      & 48      & \times  & \times  & \times  & \times \\
+[9]  & 36      & 54      & 72      & \times  & \times  & \times \\
+[10] & 40      & 60      & 80      & 90      & \times  & \times \\
+[75] & 300     & 450     & 600     & 675     & 750     & \times \\
+     &   [4]   &   [6]   &   [8]   &   [9]   &  [10]   &  [75]  \\
+\end{matrix}$
+
+Matrices de sumas (sup.\ izq.), diferencias (sup.\ dch.) y productos (inf.)
+
+$\begin{matrix}
+[4]  & \times       & \times       & \times       & \times       & \times        & \times \\
+[6]  & \frac{6}{4}  & \times       & \times       & \times       & \times        & \times \\
+[8]  & \frac{8}{4}  & \frac{8}{6}  & \times       & \times       & \times        & \times \\
+[9]  & \frac{9}{4}  & \frac{9}{6}  & \frac{9}{8}  & \times       & \times        & \times \\
+[10] & \frac{10}{4} & \frac{10}{6} & \frac{10}{8} & \frac{10}{9} & \times        & \times \\
+[75] & \frac{75}{4} & \frac{75}{6} & \frac{75}{8} & \frac{75}{9} & \frac{75}{10} & \times \\
+     &      [4]     &      [6]     &      [8]     &      [9]     &      [10]     &  [75]  \\
+\end{matrix}
+\ \ \ \ \ \ \ \ \ \ \ \rightarrow\ \ \ \ \ \ \ \ \ \ \ \begin{matrix}
+[4]  & \times & \times & \times & \times & \times & \times \\
+[6]  & \times & \times & \times & \times & \times & \times \\
+[8]  & 2      & \times & \times & \times & \times & \times \\
+[9]  & \times & \times & \times & \times & \times & \times \\
+[10] & \times & \times & \times & \times & \times & \times \\
+[75] & \times & \times & \times & \times & \times & \times \\
+     &  [4]   &  [6]   &  [8]   &  [9]   &  [10]  &  [75]  \\
+\end{matrix}$
+
+Matriz de cocientes con resultados inválidos (izquierda) y sin ellos (derecha)
+\end{center}
+
+\pagebreak
+
+\section{Ordenación de las aproximaciones obtenidas}
+
+De las operaciones anteriores obtenemos las siguientes aproximaciones, que representamos esquemáticamente como $valor[candidatos]$:
+
+\textbf{Sumas:}
+
+\begin{center}
+\begin{tabular}{c c c c c}
+ $10[4,6]$ &  $12[4,8]$ &  $13[4,9]$ & $14[4,10]$ &  $79[4,75]$ \\
+ $14[6,8]$ &  $15[6,9]$ &  $16[6,9]$ & $81[6,75]$ &  $17[8,10]$ \\
+$18[8,10]$ & $83[8,75]$ & $19[9,10]$ & $84[9,75]$ & $85[10,75]$ \\
+\end{tabular}
+\end{center}
+
+Ordenados localmente: $\{85,84,83,81,79,19,18,17,16,15,14,14,13,12,10\}$
+
+\textbf{Diferencias:}
+
+\begin{center}
+\begin{tabular}{c c c c c}
+$2[4,6]$  & $4[4,8]$   & $5[4,9]$  & $6[4,10]$  & $71[4,75]$  \\
+$2[6,8]$  & $3[6,9]$   & $4[6,10]$ & $69[6,75]$ & $1[8,9]$    \\
+$2[8,10]$ & $67[8,75]$ & $1[9,10]$ & $66[9,75]$ & $65[10,75]$ \\
+\end{tabular}
+\end{center}
+
+Ordenados localmente: $\{71,69,67,66,65,6,5,4,4,3,2,2,2,1,1\}$
+
+\textbf{Productos:}
+
+\begin{center}
+\begin{tabular}{c c c c c}
+$24[4,6]$  & $32[4,8]$   & $36[4,9]$  & $40[4,10]$  & $300[4,75]$  \\
+$48[6,8]$  & $54[6,9]$   & $60[6,10]$ & $450[6,75]$ & $72[8,9]$    \\
+$80[8,10]$ & $600[8,75]$ & $90[9,10]$ & $675[9,75]$ & $750[10,75]$ \\
+\end{tabular}
+\end{center}
+
+Ordenados localmente: $\{750,675,600,450,300,90,80,72,60,54,48,40,36,32,24\}$
+
+\textbf{Cocientes:} $2[4,8]$
+
+\textbf{Ordenación de todas las aproximaciones:}
+
+\begin{center}
+$\{750,675,600,450,300,90,85,84,83,81,80,79,72,71,69,67,66,65,60,54$,
+
+$48,40,36,32,24,19,18,17,16,15,14,14,13,12,10,6,5,4,4,3,2,2,2,2,1,1\}$
+\end{center}
+
+\section{Iteraciones posteriores}
+
+Tras muchos cálculos infructuosos, se llega al \code{Aprox} $2[4,8]$, el único \code{Aprox} obtenido de la matriz de cocientes.
+Con esta aproximación, recuperamos las matrices anteriores sin las filas ni columnas de los candidatos $4$ y $8$:
+
+\begin{center}
+$\begin{matrix}
+[6]  & \times & \times & \times & \times \\
+[9]  & 15     & \times & \times & \times \\
+[10] & 16     & 19     & \times & \times \\
+[75] & 81     & 84     & 85     & \times \\
+     &   [6]  &   [9]  &  [10]  &  [75]  \\
+\end{matrix}
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \begin{matrix}
+[6]  & \times & \times & \times & \times \\
+[9]  & 3      & \times & \times & \times \\
+[10] & 4      & 1      & \times & \times \\
+[75] & 69     & 66     & 65     & \times \\
+     &   [6]  &   [9]  &  [10]  &  [75]  \\
+\end{matrix}
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \begin{matrix}
+[6]  & \times & \times & \times & \times \\
+[9]  & 54     & \times & \times & \times \\
+[10] & 60     & 90     & \times & \times \\
+[75] & 450    & 675    & 750    & \times \\
+     &   [6]  &   [9]  &  [10]  &  [75]  \\
+\end{matrix}$
+
+Matrices de sumas (izquierda), diferencias (centro) y productos (derecha) de la primera iteración
+\end{center}
+
+Relacionamos ahora estos números y el resto de candidatos con el $2$ mediante la suma, diferencia, producto y cociente para generar nuevas aproximaciones.
+Para simplificar, se muestran únicamente las relaciones brutas, sin simplificar las fracciones ni desechar los resultados fraccionarios o negativos.
+A pesar de ello, se sigue teniendo en cuenta que no son resultados válidos para este ejercicio.
+
+\pagebreak
+
+\begin{center}
+\textbf{Relaciones con los resultados de la matriz de sumas:}
+
+\begin{tabular}{c c c c c c c}
+$x$  & $2+x$ & $2-x$ & $x-2$ & $2x$  & $\frac{2}{x}$  & $\frac{x}{2}$  \\
+\midrule
+$15$ & $17$  & $-13$ & $13$  & $30$  & $\frac{2}{15}$ & $\frac{15}{2}$ \\
+$16$ & $18$  & $-14$ & $14$  & $32$  & $\frac{2}{16}$ & $\frac{16}{2}$ \\
+$19$ & $21$  & $-17$ & $17$  & $38$  & $\frac{2}{19}$ & $\frac{19}{2}$ \\
+$81$ & $83$  & $-79$ & $79$  & $162$ & $\frac{2}{81}$ & $\frac{81}{2}$ \\
+$84$ & $86$  & $-82$ & $82$  & $168$ & $\frac{2}{84}$ & $\frac{84}{2}$ \\
+$85$ & $87$  & $-83$ & $83$  & $170$ & $\frac{2}{85}$ & $\frac{85}{2}$ \\
+\end{tabular}
+\end{center}
+
+\begin{center}
+\textbf{Relaciones con los resultados de la matriz de diferencias:}
+
+\begin{tabular}{c c c c c c c}
+$x$  & $2+x$ & $2-x$ & $x-2$ & $2x$  & $\frac{2}{x}$  & $\frac{x}{2}$  \\
+\midrule
+$1$  & $3$   & $1$   & $-1$  & $2$   & $\frac{2}{1}$  & $\frac{1}{2}$  \\
+$3$  & $5$   & $-1$  & $1$   & $3$   & $\frac{2}{3}$  & $\frac{3}{2}$  \\
+$4$  & $6$   & $-2$  & $2$   & $8$   & $\frac{2}{4}$  & $\frac{4}{2}$  \\
+$65$ & $67$  & $-63$ & $63$  & $130$ & $\frac{2}{65}$ & $\frac{65}{2}$ \\
+$66$ & $68$  & $-64$ & $64$  & $132$ & $\frac{2}{66}$ & $\frac{66}{2}$ \\
+$69$ & $71$  & $-67$ & $67$  & $138$ & $\frac{2}{69}$ & $\frac{69}{2}$ \\
+\end{tabular}
+\end{center}
+
+\begin{center}
+\textbf{Relaciones con los resultados de la matriz de productos:}
+
+\begin{tabular}{c c c c c c c}
+$x$   & $2+x$  & $2-x$  & $x-2$  & $2x$   & $\frac{2}{x}$   & $\frac{x}{2}$   \\
+\midrule
+$54$  & $56$   & $-52$  & $52$   & $108$  & $\frac{2}{54}$  & $\frac{54}{2}$  \\
+$60$  & $62$   & $-58$  & $58$   & $120$  & $\frac{2}{60}$  & $\frac{60}{2}$  \\
+$90$  & $92$   & $-88$  & $88$   & $180$  & $\frac{2}{90}$  & $\frac{90}{2}$  \\
+$450$ & $452$  & $-448$ & $448$  & $900$  & $\frac{2}{450}$ & $\frac{450}{2}$ \\
+$675$ & $677$  & $-673$ & $673$  & $1350$ & $\frac{2}{675}$ & $\frac{675}{2}$ \\
+$750$ & $752$  & $-748$ & $748$  & $1500$ & $\frac{2}{750}$ & $\frac{750}{2}$ \\
+\end{tabular}
+\end{center}
+
+\begin{center}
+\textbf{Relaciones con el resto de candidatos:}
+
+\begin{tabular}{c c c c c c c}
+$x$  & $2+x$ & $2-x$ & $x-2$  & $2x$  & $\frac{2}{x}$   & $\frac{x}{2}$   \\
+\midrule
+$6$  & $8$   & $-4$  & $4$    & $12$  & $\frac{2}{6}$   & $\frac{6}{2}$   \\
+$9$  & $11$  & $-7$  & $7$    & $18$  & $\frac{2}{8}$   & $\frac{8}{2}$   \\
+$10$ & $12$  & $-8$  & $8$    & $20$  & $\frac{2}{10}$  & $\frac{10}{2}$  \\
+$75$ & $77$  & $-73$ & $73$   & $150$ & $\frac{2}{75}$  & $\frac{75}{2}$  \\
+\end{tabular}
+\end{center}
+
+Obtenidos todos estos resultados, los ordenamos igual que en el paso anterior e iteramos por ellos hasta llegar al \code{Aprox} $11[4,8,9]$, obtenido mediante la siguiente secuencia:
+
+\begin{center}
+\[\frac{8}{4}+9\]
+\end{center}
+
+En esta iteración, operamos con las siguientes matrices:
+
+\begin{center}
+$\begin{matrix}
+[6]  & \times & \times & \times \\
+[10] & 16     & \times & \times \\
+[75] & 81     & 85     & \times \\
+     &   [6]  &  [10]  &  [75]  \\
+\end{matrix}
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \begin{matrix}
+[6]  & \times & \times & \times \\
+[10] & 4      & \times & \times \\
+[75] & 69     & 65     & \times \\
+     &   [6]  &  [10]  &  [75]  \\
+\end{matrix}
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \begin{matrix}
+[6]  & \times & \times & \times \\
+[10] & 60     & \times & \times \\
+[75] & 450    & 750    & \times \\
+     &   [6]  &  [10]  &  [75]  \\
+\end{matrix}$
+
+Matrices de sumas (izquierda), diferencias (centro) y productos (derecha) de la segunda iteración
+\end{center}
+
+Con las relaciones de los valores de estas matrices y de los candidatos restantes, obtenemos el \code{Aprox} $825[4,8,9,11]$, obtenido mediante la siguiente secuencia:
+
+\begin{center}
+\[\bigg(\frac{8}{4}+9\bigg)\cdot11\]
+\end{center}
+
+\pagebreak
+
+Por último, trabajamos con las siguientes matrices:
+
+\begin{center}
+$\begin{matrix}
+[6]  & \times & \times \\
+[10] & 16     & \times \\
+     &   [6]  &  [10]  \\
+\end{matrix}
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \begin{matrix}
+[6]  & \times & \times \\
+[10] & 4      & \times \\
+     &   [6]  &  [10]  \\
+\end{matrix}
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \begin{matrix}
+[6]  & \times & \times \\
+[10] & 60     & \times \\
+     &   [6]  &  [10]  \\
+\end{matrix}$
+
+Matrices de sumas (izquierda), diferencias (centro) y productos (derecha) de la última iteración
+\end{center}
+
+Con las relaciones de los valores de estas matrices y de los candidatos restantes, finalizamos el ejercicio obteniendo el \code{Aprox} $825[4,8,9,10,11]$, obtenido mediante la siguiente secuencia:
+
+\begin{center}
+\[\bigg(\frac{8}{4}+9\bigg)\cdot11+10\]
+\end{center}
+

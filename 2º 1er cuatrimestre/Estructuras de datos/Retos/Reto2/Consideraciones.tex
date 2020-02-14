@@ -1,0 +1,14 @@
+\chapter{Consideraciones preambulares}
+
+Dados seis números aleatorios tomados de una reserva formada por nueve números de una cifra, cuatro de dos y uno de tres, buscamos encontrar, mediante las cuatro operaciones elementales, un número de 3 cifras.
+Debido a que 9 de cada 14 números ($\~{}64.28\%$) tomados en cada caso van a ser de una cifra, parece sensato comenzar buscando los valores más aproximados a la solución.
+
+Dado un valor obtenido como aproximación al valor objetivo de tres cifras, no importa si la diferencia entre ambos es positiva o negativa, por lo que la definiremos como $\lvert objetivo-valor\rvert$.
+
+Dados dos valores iguales, es posible que para llegar a uno se hayan utilizado más cifras que para el otro ($4=2\cdot2$ y $4=2+1\cdot2$).
+Consideraremos más cercano a la solución el valor que menos valores haya utilizado para ser calculado, ya que la mayor cantidad de valores restantes le ofrece una mayor probabilidad de llegar al número objetivo.
+
+Tras la primera aproximación obtenemos una diferencia entre el valor objetivo y el valor aproximado.
+Para simplificar los cálculos operaremos con esta diferencia y los valores restantes.
+Es importante tener en cuenta que, tras la primera aproximación, sí se pueden obtener valores negativos.
+

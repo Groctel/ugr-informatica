@@ -1,0 +1,18 @@
+\chapter{Ejemplo de un cálculo no exitoso}
+
+Como ejemplo simple de un cálculo no exitoso, supongamos los siguientes datos:
+
+\begin{itemize}
+	\item\textbf{Candidatos:} $C=\{1,1,2,3,4,5\}$.
+	\item\textbf{Objetivo:} $O=500$.
+\end{itemize}
+
+Sabemos que el valor más cercano alcanzable con estos candidatos es $122=2\cdot3\cdot4\cdot5+1+1$.
+
+Como primera y más cercana aproximación al objetivo, obtenemos $4\cdot5=20$.
+Buscando aproximar en la primera iteración, el algoritmo llega a $3\cdot2\cdot aproximaci\acute on=120$.
+Registrado este \code{valor} como el más alto conseguido hasta el momento, se intenta aproximar en una nueva iteración sumando $1$ a la aproximación, consiguiendo $121$.
+Una última vez más, sumamos $1$ y obtenemos $122$, siendo éste el valor más cercano alcanzable por el algoritmo.
+
+Dado que no tenemos un sistema de control del algoritmo, éste continuará hasta agotar el resto de valores sin éxito.
+
