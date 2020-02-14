@@ -6,12 +6,11 @@ C22   = $(HOME)/2º\ 2º\ cuatrimestre
 
 AC    = $(C22)/Arquitectura\ de\ computadores
 ALG   = $(C22)/Algorítmica
+ED    = $(C21)/Estructuras\ de\ datos
 FBD   = $(C22)/Fundamentos\ de\ bases\ de\ datos
 FIS   = $(C22)/Fundamentos\ de\ la\ ingeniería\ del\ software
 IA    = $(C22)/Inteligencia\ artificial
 SO    = $(C21)/Sistemas\ operativos
-
-BC21  = $(BIN)/2º\ 1er\ cuatrimestre
 
 # =======================
 # Creación de directorios
@@ -58,7 +57,7 @@ saludo:
 despedida:
 	@printf "\033[1;32m:: \033[0mCompilación completada con éxito\n"
 
-c21: so
+c21: ed so
 c22: ac alg fbd fis ia
 
 ac:
@@ -68,6 +67,10 @@ ac:
 alg:
 	@$(MAKE) -s -C $(ALG)
 	$(call limpiatex, $(ALG))
+
+ed:
+	@$(MAKE) -s -C $(ED)
+	$(call limpiatex, $(ED))
 
 fbd:
 	@$(MAKE) -s -C $(FBD)
