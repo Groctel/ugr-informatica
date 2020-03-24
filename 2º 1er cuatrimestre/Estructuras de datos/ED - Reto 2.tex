@@ -1,22 +1,31 @@
-\RequirePackage[title=Estructuras\ de\ datos,
-                subtitle=Reto\ 2:\ Cifras\ y\ letras,
-                author=Atanasio\ José\ Rubio\ Gil,
-                organization=Grado\ en\ Ingeniería\ Informática,
-                repository=https://github.com/Groctel/ugr-informatica,
-                chapter=Parte,
-                section=Sección,
-                achapter=Apéndice,
-                language=spanish,
-                license,
-                showsubtitle,
-                toc
-               ]{aqademia}
+\documentclass[10pt]{report}
+\usepackage[spanish]{babel}
+
+% Document settings
+
+\usepackage{titling}
+	\author{Atanasio José Rubio Gil}
+	\title{Estructuras de datos}
+	\date{\today}
+
+\usepackage[title=\thetitle]{aqademia}
+
+\aqchap{Tema }
+\aqssec{}
+
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+
+\graphicspath{{img/}}
 
 % Document composition
 
 \begin{document}
 
-\aqtitle%
+\aqtitlepage{Grado en Ingeniería Informática}
+            {Reto 2: Cifras y letras}
+            {https://github.com/Groctel/ugr-informatica}
+\tableofcontents
 
 \input{Retos/Reto2/Enunciado.tex}       \pagebreak
 \input{Retos/Reto2/Consideraciones.tex} \pagebreak
@@ -25,4 +34,3 @@
 \input{Retos/Reto2/NoExitoso.tex}
 
 \end{document}
-

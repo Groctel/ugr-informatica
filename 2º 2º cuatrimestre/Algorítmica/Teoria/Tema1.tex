@@ -31,7 +31,7 @@ Un ejemplo de un mal algoritmo sería una receta de croquetas:
 	\item $Esperar\ a\ que\ el\ aceite\ esté\ caliente$.
 	\item $Echar\ croquetas\ en\ la\ sartén$.
 	\item $Mientras\ las\ croquetas\ no\ se\ hayan\ dorado,\ esperar$.
-	\item $Sacar\ las\ croquetas\ a\ un\ plato$:
+	\item $Sacar\ las\ croquetas\ a\ un\ plato$.
 \end{enumerate}
 
 Aunque no cabe duda de que nos saldrían unas croquetas buenísimas siguiendo esta receta, falla como algoritmo por varios motivos.
@@ -412,7 +412,7 @@ for (unsigned i=0; i<n; i++) {
 }
 \end{lstlisting}
 
-Este algoritmo tiene eficiencia $O(n\cdot\surd n)$, ya que aquí la eficiencia de llamada a \code{EsPrimo(i)} sí depende del tamaño del caso.
+Este algoritmo tiene eficiencia $O(n\surd n)$, ya que aquí la eficiencia de llamada a \code{EsPrimo(i)} sí depende del tamaño del caso.
 
 \begin{lstlisting}[language=C]
 for (unsigned i=0; i<2000; i++) {
@@ -436,4 +436,21 @@ Por último, este algoritmo tiene eficiencia $O\big(\log(n)\cdot\surd n\big)$, y
 
 \subsection{Llamadas a funciones recursivas}
 
+Las funciones recursivas son aquellas que se llaman a sí mismas durante su ejecución, por lo que su eficiencia está sujeta a múltiples ejecuciones de la misma tarea.
+
+Pasos
+	Identificar variables del tamaño del problema
+	Expresar el tiempo de ejecución como una recurrencia
+
+Ejemplo factorial:
+	T(n) -> Tiempo del algoritmo para resolver tamaño N
+	T(n) = 1 + T(n-1)
+	Caso base: T(1) = 1
+	T(n-1) = 1 + T(n-2)
+		Por tanto T(n) = 1 + 1 + T(n-2)
+	T(n-i) = i + T(n-i)
+
+
+
 \section{Resolución de recurrencias}
+

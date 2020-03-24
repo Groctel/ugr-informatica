@@ -1,21 +1,26 @@
-\RequirePackage[title=Sistemas\ operativos,
-                subtitle=Prácticas,
-                author=Atanasio\ José\ Rubio\ Gil,
-                organization=Grado\ en\ Ingeniería\ Informática,
-                repository=https://github.com/Groctel/ugr-informatica,
-                chapter=Módulo,
-                section=Sesión,
-                achapter=Apéndice,
-                license,
-                showsubtitle,
-                toc
-               ]{aqademia}
+\documentclass[10pt]{report}
+\usepackage[spanish]{babel}
+
+% Document settings
+
+\usepackage{titling}
+	\author{Atanasio José Rubio Gil}
+	\title{Sistemas\ operativos}
+	\date{\today}
+
+\usepackage[title=\thetitle]{aqademia}
+
+\aqchap{Módulo }
+\aqsec{Sesión }
 
 % Document composition
 
 \begin{document}
 
-\aqtitle%
+\aqtitlepage{Grado en Ingeniería Informática}
+            {Ejercicios}
+            {https://github.com/Groctel/ugr-informatica}
+\tableofcontents
 
 \chapter{Administración de Linux}
 \input{Practicas/Modulo1-Sesion1.tex} \pagebreak
@@ -30,7 +35,9 @@
 \input{Practicas/Modulo2-Sesion4.tex} \pagebreak
 \input{Practicas/Modulo2-Sesion5.tex}
 
-\aqappendices%
+\aqapp{Apéndice }
+\aqsec{\S}
+\aqssec{}
 
 \input{Practicas/Apendice-Llamadas.tex} \pagebreak
 \input{Practicas/Apendice-Dirent.tex}   \pagebreak
@@ -38,4 +45,3 @@
 \input{Practicas/Apendice-RutinasComunes.tex}
 
 \end{document}
-

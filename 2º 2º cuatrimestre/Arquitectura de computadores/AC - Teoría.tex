@@ -1,23 +1,29 @@
-\RequirePackage[title=Arquitectura\ de\ computadores,
-                subtitle=Teoría,
-                author=Atanasio\ José\ Rubio\ Gil,
-                organization=Grado\ en\ Ingeniería\ Informática,
-                repository=https://github.com/Groctel/ugr-informatica,
-                chapter=Tema,
-                section=Apartado,
-                achapter=Apéndice,
-                language=spanish,
-                license,
-                showsubtitle,
-                toc
-               ]{aqademia}
+\documentclass[10pt]{report}
+\usepackage[spanish]{babel}
+
+% Document settings
+
+\usepackage{titling}
+	\author{Atanasio José Rubio Gil}
+	\title{Arquitectura de computadores}
+	\date{\today}
+
+\usepackage[title=\thetitle]{aqademia}
+
+\aqchap{Tema }
+\aqssec{}
+
+\usepackage{tikz}
 
 % Document composition
 
 \begin{document}
 
-\aqtitle%
+\aqtitlepage{Grado en Ingeniería Informática}
+            {Teoría}
+            {https://github.com/Groctel/ugr-informatica}
+\tableofcontents
+
 \input{Teoria/Tema1.tex}
 
 \end{document}
-
