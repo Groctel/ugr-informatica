@@ -1,0 +1,155 @@
+\chapter{Arquitectura de un SGBD}
+
+\section{Una arquitectura con tres niveles}
+
+La organización en niveles de una BD permite a los usuarios acceder a los mismos datos desde distintas perspectivas, de forma que si un usuario cambia la forma de visualización de los datos ésta se cambie localmente y no afecte al resto.
+Lo mismo ocurre con la organización global de los datos y con su representación física, ya que el administrador debe poder cambiar la forma de representación de los datos in influir en los usuarios.
+
+Por esto, dividimos la percepción de los datos en un SGBD en tres niveles de abstracción siguiendo el modelo ANSI/SPARC\@:
+
+\begin{itemize}
+	\item\textbf{Nivel interno:} Es la representación de la BD más cercana a la estructura de almacenamiento físico. En esta capa se establece la implantación de las estructuras de datos que organizan los niveles superiores.
+	\item\textbf{Nivel conceptual:} Es una astracción global de la BD que integra y contiene todas las percepciones que los usuarios tienen de ella.
+	\item\textbf{Nivel externo:} Es la capa más abstracta. En ella se definen todas las percepciones particulares de la BD por los usuarios, pudiendo tener cada uno su propia visión de la misma.
+\end{itemize}
+
+\subsection{Nivel interno}
+
+Contiene la representación física de la BD en el computador donde se aloja, conformada por el modo de almacenamiento de los datos.
+En este nivel se busca el rendimiento óptimo del sistema y está formado por las estructuras de datos de la BD, su organizaciónen ficheros, la comunicación con el SO, la compresión de los datos, su cifrado\ldots
+
+No existe una división clara entre qué responsabilidades a este nivel deben asignarse al SGBD y al SO, por lo que ésta dependen del funcionamiento de ambos.
+
+\subsection{Nivel conceptual}
+
+Ofrece una visión global de los datos y muestra su estructura lógica, indicando qué datos están almacenados en la BD y la relación entre ellos.
+En este nivel se encuentran representadas todas las entreidades, atributos y relaciones, las restricciones de los datos, y la información semántica, de seguridad y de integridad de los mismos.
+
+Este nivel da soporte a cada una de las diferentes vistas externas y no contiene ningún detalle de almacenamiento.
+
+\subsection{Nivel externo}
+
+Es la parte de la BD relevanta para cada usuario, formada por las entidades, relaciones y atributos que le son de interés y representadas de forma útil para éste.
+También contiene datos calculados a partir de los datos ya existentes.
+
+\begin{center}
+\begin{tabular}{| l | l | l |}
+\midrule
+Nombre & Apellidos & Fecha de nacimiento \\
+\midrule
+\end{tabular}
+\[Edad=Fecha\ actual\ -\ Fecha\ de\ nacimiento\]
+\end{center}
+
+\section{Correspondencias entre niveles}
+
+La transformación o correspondencia entre niveles es un conjunto de normas que establece las definiciones de los datos de un nivel en términos de otro.
+Es un mecanismo fundamental para las independencias lógica y física de la BD\@.
+
+\subsection{Transformación conceptual/interna}
+
+Establece cómo se organizan las entidades lógicas del nivel conceptual en términos de registros y campos almacenados en el nivel interno.
+Mediante esta correspondencia se garantiza la independencia física de forma que los cambios producidos en el nivel iterno cambien las normas de correspondencia pero nunca el contenido del nivel conceptual.
+
+\subsection{Transformación externa/conceptual}
+
+Describe un esquema externo en términos del esquema conceptual subyacente.
+Mediante esta correspondencia se garantiza la independencia lógica de forma que los cambios producidos en el nivel conceptual cambien las normas de correspondencia pero nunca el nivel externo.
+Sin embargo, esto no es siempre posible, ya que pueden darse cambios drásticos en el diseño conceptual que impliquen necesariamente cambios tanto a nivel externo como interno por parte del DBA\@.
+
+\subsection{Transformación externa/externa}
+
+Algunos SGBD permiten describir esquemas externos en términos de otros.
+Mediante esta correspondencia se garantiza la independencia lógica de forma que los cambios en el esquema externo subyacente cambien las normas de correspondenia pero nunca el esquema externo dependiente.
+
+\subsection{Catálogo de una BD}
+
+El catálogo de una BD es una BD propia del SGBD que permite almacenar metadatos sobre las BDs existentes en el sistema a los los usuarios pueden acceder para recoger información sobre la BD\@.
+Estos metadatos están formados por tablas, tipos de atributos de una tabla, número de atributos\ldots
+Los permisos de acceso al catálogo son gestionados por el DBA\@.
+
+\section{Lenguajes en una BD}
+
+En el SGBD se implementa como lenguaje anfitrión un sublenguaje de datos o DSL compuesto por distintas partes:
+
+\begin{itemize}
+	\item\textbf{DDL:} \textit{Dara Definition Language}. Destinado a la definición de estructuras de datos y esquemas en la BD\@.
+	\item\textbf{DCL:} \textit{Data Coltrol Language}. Permite gestionar los requisitos de acceso a los datos y otras tareas administrativas.
+	\item\textbf{DML:} \textit{Data Manipulation Language}. Permite introducir datos en los esquemas, modificarlos, eliminarlos y consultarlos, así como consultar la estructura de los esquemas definidos en la BD\@.
+\end{itemize}
+
+El estándar ANSI/SPARC recomienda disponer de un DDL, un DMP y un DCL para cada nivel de la arquitectura de la BD\@.
+En la práctica todos estos sublenguajes se presentan bajo una implementación única, de forma que cada instancia trabaja sobre uno o varios niveles y se discrimina quién puede ejecutar qué en qué nivel mediante un sistema de privilegios.
+
+A lo largo de la historia se ha trabajado con lenguajes de datos diferentes y se han intentado estandarizar algunos de ellos.
+Un ejemplo notable de esta estandarización es SQL y estandarizaciones como SQL89, SQL92 o SQL3.
+
+Para los programas que trabajan con la BD se pueden utilizar lenguajes de propósito general como C, C++, Java o Haskell o herramientas de desarrollo espefícas como Oracle Developer.
+Estos lenguajes y herramientan proporcionan facilidades en el procesamiento avanzado de datos y en la gestión de la interfaz de usuario.
+
+\subsection{Acoplamiento de lenguajes}
+
+A la hora de trabajar con una BD debemos establecer un mecanismo que nos permita trasladar estructuras de datos y operaciones de la misma al programa externo que esté trabajando con ella.
+Para ello podemos trabajar con lenguajes de acoplamiento débil y fuerte.
+
+\subsubsection{Lenguajes débilmente acoplados}
+
+Son los lenguajes de propósito general.
+En ellos, el programador puede distinguir entre sentencias propias del lenguaje anfitrión y sentencias dispuestas para acceder a la BD a través del DSL\@.
+
+Para implementar con lenguajes de acoplamiento débil existen APIs de acceso a BDs como ODBC (\textit{Open Database Connectivity}) o JDBC (\textit{Java Database Connectivity}).
+También se puede hacer uso de DSL inmerso en el código fuente del lenguaje anfitrión.
+Para esto, el programador debe escribir un código híbrido entre el lenguaje anfitrión y el DSL, pasarlo por un preprocesador que lo transforme en código fuente del lenguaje anfitrión con llamadas a una API de acceso a la BD y compilarlo y enlazarlo con la biblioteca de acceso a la BD\@.
+Un ejemplo de esto sería SQL inmerso en C.
+
+\subsubsection{Lenguajes fuertemente acoplados}
+
+Son los lenguajes y de propósito específico y herramientas del mismo tipo.
+Éstos parten del DSL como elemento central e incorporan características procedimentales para facilitar el desarrollo de programas.
+
+Para implementar estos lenguajes existen diversas propuestas (mayoritariamente privativas) como PL/SQL de Oracle, que es una extensión procedural para SQL\@.
+También puede ejecutarse Java sobre una máquina virtual implantada en el propio SGBD si éste lo permite.
+
+\section{Enfoques para la arquitectura de un SGBD}
+
+\subsection{Evolución de los SGBDs}
+
+Los SGBD han evolucionado junto con la informática ofreciendo una forma de gestionar información, ejecutar programas e interactuar con los usuarios.
+
+Inicialmente seguían un \textbf{esquema centralizado} en el que toda la carga de gestión y procesamiento recaía en un solo computador en el que se encontraba el SGBD y los programas que trabajaban con la BD\@.
+El usuario accedía a la BD mediante terminales.
+
+Sin embargo, este sistema contaba con el problema del elevado coste de los computadores centrales.
+Esto cambió con la aparición del PC, ya que se pudo desplazar la ejecución de los programas de usuario y la interacción hacia ellos, reduciendo así los costes de hardware para los administradores.
+Esta \textbf{aproximación cliente/servidor} dividía la carga en dos partes: mientras que el servidor almacenaba la Bd y gestionaba las peticiones, los PCs, conectados en red con el servidor, hacían sus funciones de cliente ejecutando sus propios programas y contando con un servicio de enlace que interactuaba con el servicio de escucha de peticiones del servidor.
+
+Con el desarrollo de las redes de telecomunicaciones de comenzó a implementar los servidores con un enfoque distribuido, de forma que la BD dejaba de encontrarse en un único servidor.
+Con todo esto seguía habiendo un problema: el coste de instalación, configuración y actualización de los PCs era demasiado elevado.
+Para solucionarlo, se separó en los programas la parte que interactúa con el usuario, la interfaz, y la parte que realiza la ejecución lógica del programa.
+
+\subsection{Los SGBD en la actualidad}
+
+Actualmente, los SGBD cuentan con una arquitectura articulada en tres niveles de procesamiento:
+
+\begin{itemize}
+	\item\textbf{Nivel de servidor de datos:} Es un sistema posiblemente distribuido en el que el SGBD permite organizar la información como una BD global. Las peticiones de datos formuladas desde una sede de la BD se traducen de forma transparente a peticiones en las sedes donde se encuentran estos datos.
+	\item\textbf{Nivel de servidor de aplicaciones:} Son evoluciones de servidores web que proporcionan programas a clientes ligeros y disponen de entornos de ejecución mediante estándares, protocolos de red TCP/IP, protocolos HTTPS y otras herramientas.
+	\item\textbf{Nivel del cliente:} Son computadores ligeros con configuraciones basadas en estándares abiertos que pueden ejecutar programas desplegados en interfaces web. Están basados en la portabilidad de los PCs y en la baja independencia del hardware y el SO para ejecutar los programas, que pueden actualizarse mucho más fácilmente gracias a su bajo tamaño.
+\end{itemize}
+
+Este sistema tiene como ventaja una reducción significativa de los costes de mantenimiento de los clientes y una mayor facilidad y flexibilidad para el usuario, que peude acceer desde casi cualquier lugar gracias a los diferentes dispositivos portátiles que posee.
+Sin embargo, presentan una mayor complejidad en la configuración y administrador de los servidores de aplicaciones y en el desarrollo de los programas conforme a este modelo distribuido.
+
+\section{El administrador de la BD}
+
+El DBA es una figura de primordial relevancia en el contexto de los SGBD, ya que es el máxmo encargado de mantenerla a lo largo del tiempo.
+Para ello, utiliza las herramientas de gestión del SGBD para gestionar todos los aspectos de la BD a nivel conceptual e interno.
+También elabora el esquema conceptual de la BD analizando las necesidades de información de la empresa, identificando los datos oeprativos, elaborando el esquema lógico e implantando el esquema conceptual.
+A nivel interno decide la estructura de almacenamiento y su esquema y correspondencia conceptual/interna asociada.
+
+El DBA debe encargarse de la conexión de la BD con los usuarios, haciendo análisis de requerimiento, implementando el diseño lógico y codificando el esquema externo y las correspondencias externa/conceptual.
+También debe definir las restricciones de integridad de la BD, estableciendo reglas genéricas y específicas e incluyendo en la medida de lo posible la integridad en el esquema conceptual.
+De la misma forma, debe definir e implantar la estrategia de recuperación ante fallos contando con la ayuda de las herramientas que aportan los SOs y los SGBDs como SGBDs redundantes o RAID (\textit{Redundant Array of Inexpensive Disks}), haciendo copias de seguridad regulares y estableciendo políticas de gestión de transacciones.
+También debe implantar la política de seguridad para gestionar a los usuarios y sus privilegios.
+
+Por último, el DBA debe optimizar el rendimiento de la BD liberando el espacio que no utilize, reorganizando las operaciones para que se ejecuten de la forma más rápida posible, determinando la necesidad de nuevos recursos hardware y estableciendo prioridades en el uso de recursos; y monitorizar el SGBD mediante un seguimiento continuo de la actividad del sistema auditando el acceso de los usuarios a los recursos de la BD, comprobando los niveles de uso de los sistemas de almacenamiento y evaluando la eficiencia con la que se realizan las operaciones.

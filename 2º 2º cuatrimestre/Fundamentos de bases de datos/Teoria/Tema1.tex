@@ -30,10 +30,10 @@ Definimos una \textbf{BD} como un \textit{conjunto de datos comunes a un proyect
 Los SGBD debe permitir, como mínimo, definir estructuras de almacenamiento, acceder a los datos de su BD de forma eficiente y segura, organizar la actualización de los datos y el acceso multiusuario y otras funcionalidades que se verán a lo largo de la asignatura. Las operaciones que se pueden realizar sobre los SGBD son referidos como \code{CRUD}:
 
 \begin{itemize}
-	\item\code{Create}\textbf{:} Insertar datos en la BD.
-	\item\code{Read}\textbf{:} Obtener datos previamente insertados en la BD.
-	\item\code{Update}\textbf{:} Modificar los datos existenten en la BD.
-	\item\code{Delete}\textbf{:} Borrar datos existenten en la BD.
+	\item\code{Create}\textbf{:} Insertar datos en la BD\@.
+	\item\code{Read}\textbf{:} Obtener datos previamente insertados en la BD\@.
+	\item\code{Update}\textbf{:} Modificar los datos existenten en la BD\@.
+	\item\code{Delete}\textbf{:} Borrar datos existenten en la BD\@.
 \end{itemize}
 
 Todas estas operaciones se realizan de forma transparente al usuario, es decir, éste no tiene que programar código adicional para manejar los ficheros que la conforman.
@@ -42,6 +42,63 @@ En resumen, una BD es un fondo común de información almacenada en un computado
 
 \section{Bases de Datos y Sistemas de Gestión de Bases de Datos}
 
+En una BD trabajamos con los siguientes elementos:
+
+\begin{itemize}
+	\item\textbf{Datos:} Deben representarse sin redundancia y ser compartidos de forma útil para múltiples programas que accedan a la BD\@.
+	\item\textbf{Hardware:} La BD puede encontrarse en una sola máquina o ser una BD distribuida.
+	\item\textbf{Software SGBD:} Los Sistemas de Gestión de Bases de Datos (DBMS, \textit{DataBase Management System}) son programas utilizados para describir las estructuras y gestionar la información de la BD\@.
+	\item\textbf{Usuarios:} Distinguimos entre el usuario final, el programador de aplicaciones que acceden a la BD y el administrador, también llamado DBA o DBM (\textit{DataBase Administrator}/\textit{Manager}).
+\end{itemize}
+
+\subsection{Datos operativos}
+
+Los datos operativos (referidos comunmente como \textbf{campos}) son piezas de información básica que necesita un proyecto (empresarial, de software\ldots) para su funcionamiento.
+Distinguimos entre tres tipos de datos operativos:
+
+\begin{itemize}
+	\item\textbf{Ítem básico:} Sustantivos. Son elementos sobre los que se puede pedir información. \textit{Usuario}, \textit{Coche}.
+	\item\textbf{Relaciones:} Verbos. Conexiones lógicas entre ítems. \textit{Usuario compra Coche}.
+	\item\textbf{Atributos:} Adjetivos y adverbios. Características de los ítems básicos y las relaciones. \textit{Coche con \textbf{matrícula}}, \textit{compra por \textbf{una cantidad de euros}}.
+\end{itemize}
+
+De la determinación y clasificación de estos datos operativos se obtiene el esquema lógico de la BD, sobre el cual trabajaremos.
+
 \section{Concepto de independencia}
 
-\section{Objetivos de un SGDB}
+En una BD los datos deben organizarse siempre independientemente de los programas que se espera que la usen y de los ficheros en los que se almacenen, ya que debe reflejar la realidad de la forma más fiel posible.
+
+\subsection{Independencia física}
+
+El diseño de la BD debe ser siempre independiente del almacenamiento físico de los datos.
+De esta forma se podrán realizar cambios futuros en la estructura física de la BD sin alterar la lógica de la misma.
+De la misma forma, esta independencia libera a los programas que accedan a ella de gestionar su almacenamiento.
+
+\subsection{Independencia lógica}
+
+En una BD distinguimos entre dos tipos de estructuras lógicas:
+
+\begin{itemize}
+	\item\textbf{Esquema lógico general:} Visión global de la BD a la que tienen acceso los administradores y desarrolladores.
+	\item\textbf{Vistas de usuario:} Porción de los datos de la BD a los que los usuarios y programas externos tienen permisos de acceso.
+\end{itemize}
+
+Decimos que una BD goza de independencia lógica cuando los cambios en el esquema lógico general no implican necesariamente la actualización de las vistas de usuario.
+De esta forma aumenta la seguridad y fiabilida de la BD, su actualización implica menos problemas para los programas externos y aumentan las posibilidades de cambios en los esquemas de los desarrolladores de programas y de los administradores.
+Esta independencia no es siempre posible, ya que se pueden producir cambios en la estructura de tal magnitud que necesiten de actualizaciones en las vistas de usuario.
+
+\section{Objetivos de un SGBD}
+
+Los SGBD buscan la independencia física y lógica de los datos de la BD de forma que estos datos estén centralizados, gestionándose independientemente de los programas externos.
+
+Mediante sistemas de gestión de accesos concurrentes se busca eliminar la redundancia de los datos.
+También se busca que sea consistente, de forma que todas las copias de la información de un objeto en la misma sean idénticas, y que sea íntegra, de forma que todos los datos almacenados se correspondan lo máximo posible con la realidad que representan.
+
+Otras dos características importentes de una BD aportadas por los SGBD son la fiabilidad y la seguridad.
+La primera garantiza que los datos estén protegidos contra fallos catastróficos mediante mecanismos de mantenimiento, recuperación y relanzamiento de transiciones.
+La segunda garantiza que no todos los datos sean accesibles por todos los usuarios mediante mecanimos de gestión de usuarios y privilegios y de protección de información.
+
+Para los usuarios, los datos y programas deben ser accesibles de forma amigable para dar soporte a un modelo de datos teórico, facilidades de definición y lenguajes de acceso y modificación.
+De esta forma, el usuario final puede acceder a los datos de la BD y el programador no tiene que lidiar con problemas de diseño lógico y físico, depuración de errores y mantenimiento.
+
+Para el sistema, los SGBD buscan centralizar el control de la BD, crear criterior de uniformización, permitir crear nuevos programas que accedan a ella y encontrar un equilibro entre requerimientos conflictivos.
