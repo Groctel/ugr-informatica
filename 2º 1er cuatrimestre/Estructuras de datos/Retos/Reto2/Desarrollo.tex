@@ -159,12 +159,12 @@ Donde $k$ es el número de candidatos y $x$, el número de aproximaciones no vá
 
 Si durante el cálculo de los elementos de la matriz se llegara al objetivo, damos por finalizado el ejercicio.
 
-\pagebreak
-
 \section{Ordenación de todas las aproximaciones por cercanía a la solución}
 
 Obtenido el vector completo del paso anterior con las primeras aproximaciones, procedemos a ordenarlas por cercanía a la solución.
 Para ello, definimos la diferencia de cada \code{Aprox} al objetivo como $|valor-objetivo|$ y los ordenamos de menor a mayor diferencia.
+
+\pagebreak
 
 Como consideramos antes de comenzar el ejercicio, si dos \code{Aprox} tuvieran la misma diferencia al objetivo, se considerará más cercano aquél cuyo vector de candidatos sea de menor tamaño.
 En caso de que dos \code{Aprox} tuvieran el mismo \code{valor} y el mismo \code{candidatos} **no** se eliminan por considerarse duplicados, ya que existe la posibilidad de que se elijan varios candidatos iguales al inicio del ejercicio.
@@ -192,4 +192,3 @@ $\begin{matrix}
 En estos pasos debemos tener en cuenta que los valores obtenidos en las matrices aritméticas no son válidos hasta que no se hayan sumado o restestado a, multiplicado por o dividido entre el \code{valor} de la aproximación de la que partimos.
 
 De forma recursiva, vamos realizando los mismo productos, sumas, diferencias y divisiones hasta obtener el valor objetivo o crear un nuevo vector de \code{Aprox}, que iremos recorriendo secuencialmente haciendo lo mismo hasta quedarnos sin aproximaciones.
-
