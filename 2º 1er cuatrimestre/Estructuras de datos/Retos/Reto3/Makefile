@@ -4,6 +4,8 @@ DOC  = $(HOME)/doc
 INC  = $(HOME)/include
 SRC  = $(HOME)/src
 
+CXXFLAGS = -std=c++11 -O2 -Wall -I$(INC)
+
 instrucciones:
 	@printf "%s\
 	        \n\033[1;34m%s \033[0m%s\
@@ -17,9 +19,9 @@ instrucciones:
 all: build docs
 
 build:
-	g++ -g $(SRC)/test.cpp -o $(BIN)/test -I$(INC)
+	$(CXX) $(CXXFLAGS) $(SRC)/test.cpp -o $(BIN)/test
 
 docs:
-	@rm -rf $(DOC) 1>/dev/null 2>&1 || printf ""
 	@mkdir -p $(DOC)
+	@rm -rf $(DOC)/*
 	@doxygen

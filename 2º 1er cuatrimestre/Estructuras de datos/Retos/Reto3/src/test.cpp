@@ -2,7 +2,7 @@
   */
 
 #include <cstdio>
-#include "cola.hpp"
+#include "cola.tpp"
 
 /** @brief Impresor de elementos
   *
@@ -96,10 +96,10 @@ int main () {
   *
   * El reto 3 tiene un planteamiento muy sencillo. Se trata de implementar la
   * clase `Cola` a partir de la clase `Pila`. La idea es que disponéis de la
-  * clase pila con toda laimplementación ya hecha y tenéis que construir la
-  * clase cola a partir de esa implementación sin tener que implementar nuevo
+  * clase `Pila` con toda la implementación ya hecha y tenéis que construir la
+  * clase `Cola` a partir de esa implementación sin tener que implementar nuevo
   * código, es decir que la implementación de las funciones se hará simplemente
-  * llamando a funciones ya implementadas delas pilas.
+  * llamando a funciones ya implementadas de las pilas.
   *
   * P.ej. la función `quitar` de la cola se podría construir a partir de la
   * función `quitar` de las pilas. Para la función `poner` de las colas,

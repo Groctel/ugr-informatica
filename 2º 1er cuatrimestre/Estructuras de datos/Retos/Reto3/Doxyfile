@@ -1,5 +1,5 @@
 DOXYFILE_ENCODING      = UTF-8
-PROJECT_NAME           = "Reto 3 - TDA lineales"
+PROJECT_NAME           = "Reto 3 - T.D.A. lineales"
 PROJECT_NUMBER         =
 PROJECT_BRIEF          = "Construir una cola usando una pila como contenedor subyacente"
 PROJECT_LOGO           =
@@ -41,7 +41,7 @@ OPTIMIZE_OUTPUT_JAVA   = NO
 OPTIMIZE_FOR_FORTRAN   = NO
 OPTIMIZE_OUTPUT_VHDL   = NO
 OPTIMIZE_OUTPUT_SLICE  = NO
-EXTENSION_MAPPING      =
+EXTENSION_MAPPING      = tpp=C++
 MARKDOWN_SUPPORT       = YES
 TOC_INCLUDE_HEADINGS   = 5
 AUTOLINK_SUPPORT       = YES
@@ -108,6 +108,7 @@ FILE_PATTERNS          = *.c \
                          *.cc \
                          *.cxx \
                          *.cpp \
+                         *.tpp \
                          *.c++ \
                          *.java \
                          *.ii \
