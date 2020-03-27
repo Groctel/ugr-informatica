@@ -30,9 +30,9 @@ Una posible solución (que no tiene por qué ser única) es ésta:
 >
 > `9+2 = 11`
 >
-> 75*11 = 825`
+> `75*11 = 825`
 >
-> 825+10 = 835`
+> `825+10 = 835`
 
 Como veis, se han usado sólo 5 de los 6 números y sin usar ninguno más de una vez (el dígito `6` no ha hecho falta en esta solución) y sólo operaciones de `+`, `*` y `/` (la resta en este caso tampoco ha hecho falta) para conseguir llegar al número exacto.
 No pueden tenerse resultados temporales negativos, es decir, pasos intermedios como `4-8=-4` y usar ese `-4` no están permitidos, como tampoco está permitido hacer una división no exacta, es decir, no puede hacerse `75/11` y redondear.
