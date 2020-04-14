@@ -1,0 +1,85 @@
+\chapter{Modelos de datos}
+
+\begin{displayquote}
+El modelo de datos es un mecanismo formal para representar y manipular información de manera general y sistemática.
+Debe constar de una notación para describir datos, una notación para describir operaciones y una notación para describir reglas de integridad.
+\end{displayquote}
+
+En el proceso de creación de una BD, una vez hemos finalizado el esquema conceptual de la misma, la implementamos mediante un proceso de diseño que nos permite trasladar la estructura conceptual a un modelo de datos implementable.
+El modelado lógico nos permite trasladar este esquema conceptual a un esquema lógico basado en una estructura implementable.o
+
+\begin{lstlisting}[language=SQL]
+CREATE TABLE Libros (
+	isbn      char(10)     PRIMARY KEY,
+	titulo    varchar(100) NOT NULL,
+	editorial varchar(30) /* ... */
+);
+\end{lstlisting}
+
+Los modelos de datos surgen de la necesidad de utilizar mecanismos que operen a un nivel superior del del SGBD para poder describir los datos sin ambigüedades y de forma entendible por los usuarios implicados en el proceso de implantación de la BD\@.
+El primer modelo de datos propuesto fue el modelo relacional de Edgar F. Codd en 1969.
+En 1974 se recuperaron los modelos basados en grafos, que permitió a Peter Chen desarrollar su modelo Entidad/Relación en 1976.
+En la primera mitad de los ochenta aparecieron los modelos orientados a objetos y, en la segunda, los modelos lógicos.
+
+Podemos clasificarlos en función de si están basados en registros, en objetos o sin son físicos, siendo los dos primeros aplicables al nivel externo y conceptual y el último al nivel interno.
+Distinguimos tres modelos de datos basados en regitros: el jerárquico, el modelo en red y el relacional.
+
+\section{Modelo jerárquico}
+
+Éste fue el primer modelo en implementarse físicamente, permitiendo el acceso a nivel externo mediante programas Cobol.
+Sin embargo, la carencia de un lenguaje de consulta no permitía la interactividad con el modelo.
+Su estructura de datos es un árbol con en la que cada nodo cuenta con varios hijos pero sólo puede tener un padre, de forma que la BD es una colección de instancias de árboles.
+En esta estructura se pueden plasmar fácilmente las relaciones \textit{uno a uno} y \textit{muchos a uno}, pero las relaciones \textit{muchos a muchos} obligan a duplicar toda la información sobre las identidades involucradas a causa de la existencia de un único padre.
+
+Este modelo tiene de inconvenientes la dificultad de almacenar árboles en ficheros y de implementar y usar el DML\@.
+También existe una dependencia existencial obligatoria entre los datos que figuran como nodos hijo con los datos que figuran como nodo raíz y la anteriormente mencionada redundancia en las relaciones \textit{muchos a muchos}, que hace costoso el mantenimiento de la integridad de los datos.
+
+\section{Modelo en red}
+
+Se basa en una estructura basada en grafos implementados mediante registros y ficheros cuya topología depende de las conexiones existentes entre las entiedades.
+En estos grafos, cada nodo es un registro, cada arco es un enlace entre registros (un puntero) y las relaciones entre conjuntos de entidades se implementan mediante conectores, registros especiales con atributos propios de la relación, de forma que cada ocurrencia de un conector representa una asociación distinta.
+En este modelo cada registro puede relacionarse con cualquier otro.
+
+La BD es una colección de instancias de grafos con una estructura muy genérica, ya que permite plasmar todo tipo de relaciones e implementa directamente las relaciones \textit{muchos a muchos}.
+
+Este sistema tieme como ventaja que la estructura es algo más homogénea que en el modelo jerárquico y permite insertar nuevas entidades en un conjunto de forma independiente.
+Sin embargo, la existencia de enlaces entre los registros hace que las operaciones del DDL y el DML sigan siendo complejas de implementar y utilizar.
+
+\section{Modelo relacional}
+
+Este modelo de datos organiza y representa los datos en forma de tablas (relaciones), de forma que la BD es una colección de tablas cada una con nombre único.
+
+El \textbf{esquema} de una BD relacional es la colección de esquemas de relaciones junto con las restricciones de integridad.
+La \textbf{instancia} o estado de la BD es la colección de instancias de relaciones que verifican las restricciones de integridad.
+La \textbf{BD relacional} es una instancia de una BD junto con su esquema.
+
+En este modelo identificamos dos tipos de clave:
+
+\begin{itemize}
+	\item\textbf{Superclave:} Conjunto de atributos que identifica unívocamente a cada tupla de una relación.
+	\item\textbf{Clave candidata:} Superclave minimal, que contiene el mínimo número de atributos (por ejemplo, la superclave trivial compuesta por todos los atributos de una tupla no puede ser minimal).
+\end{itemize}
+
+De entre todas las claves candidatas se toma una clave como prinicipal y la denominamos \textbf{clave primaria}.
+Para elegirla tomamos como criterio su tamaño, significado, capacidad para recordarla, capacidad de fusión con otras tablas\ldots
+
+Tomemos como ejemplo la siguiente BD, en la que representamos cada tabla mediante su esquema expresado como \code{Tabla (Atr1, Atr2, ...)}:
+
+\begin{lstlisting}[language=SQL]
+Trabajadores (id_trabajador, nombre, trf_h, tipo_de_oficio, id_supv);
+Edificios    (id_edificio, dir_edificio, tipo, nivel_calidad, categoria);
+Asignaciones (id_trabajador, id_edificio, fecha_inicio, num_dias);
+Oficios      (tipo_de_oficio, prima, horas_por_semana);
+\end{lstlisting}
+
+En esta BD podemos identificar las siguientes claves primarias:
+
+\begin{itemize}
+	\item\code{Trabajador}\textbf{:} \code{id\_trabajador}
+	\item\code{Edificios}\textbf{:} \code{id\_edificio}
+	\item\code{Asignaciones}\textbf{:} \code{id\_trabajador, id\_edificio}
+	\item\code{Oficio}\textbf{:} \code{tipo\_de\_oficio}
+\end{itemize}
+
+Este modelo tiene como ventaja con respecto al modelo basado en grafos que sólo requiere de un elemento para la representación de los datos, que se relacionan mediante conexiones lógicas con representación de relaciones \textit{muchos a muchos} simétrica, dando identidad a los elementos por su valor.
+En cuanto a la representación, las consultas son simétricas en jerarquías, se obtienen como resultado global y utilizan lenguajes declarativos.
