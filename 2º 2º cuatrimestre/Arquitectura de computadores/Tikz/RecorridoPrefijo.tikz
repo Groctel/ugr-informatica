@@ -1,0 +1,47 @@
+\begin{tikzpicture}[scale=0.1, every node/.style={scale=0.6}]
+\tikzstyle{every node}+=[inner sep=0pt]
+\draw [black] (26.1,-3.2) circle (3);
+\draw (26.1,-3.2) node {$P_0$};
+\draw [black] (7.1,-3.2) circle (3);
+\draw (7.1,-3.2) node {$P_0$};
+\draw [black] (7.1,-16.7) circle (3);
+\draw (7.1,-16.7) node {$P_2$};
+\draw [black] (7.1,-23.3) circle (3);
+\draw (7.1,-23.3) node {$P_3$};
+\draw [black] (26.1,-10) circle (3);
+\draw (26.1,-10) node {$P_1$};
+\draw [black] (26.1,-16.7) circle (3);
+\draw (26.1,-16.7) node {$P_2$};
+\draw [black] (26.1,-23.3) circle (3);
+\draw (26.1,-23.3) node {$P_3$};
+\draw [black] (7.1,-10) circle (3);
+\draw (7.1,-10) node {$P_1$};
+\draw (31.8,-3.2) node {$f(x_0)$};
+\draw (35.6,-16.7) node {$f(x_0,\mbox{ }x_1,\mbox{ }x_2)$};
+\draw (1.1,-3.2) node {$x_0$};
+\draw (1.1,-10) node {$x_1$};
+\draw (1.1,-16.7) node {$x_2$};
+\draw (1.1,-23.3) node {$x_3$};
+\draw (37.5,-23.3) node {$f(x_0,\mbox{ }x_1,\mbox{ }x_2,\mbox{ }x_3)$};
+\draw (33.7,-10) node {$f(x_0,\mbox{ }x_1)$};
+\draw [black] (10.1,-3.2) -- (23.1,-3.2);
+\fill [black] (23.1,-3.2) -- (22.3,-2.7) -- (22.3,-3.7);
+\draw [black] (9.92,-4.21) -- (23.28,-8.99);
+\fill [black] (23.28,-8.99) -- (22.69,-8.25) -- (22.35,-9.19);
+\draw [black] (9.55,-4.94) -- (23.65,-14.96);
+\fill [black] (23.65,-14.96) -- (23.29,-14.09) -- (22.71,-14.91);
+\draw [black] (9.16,-5.38) -- (24.04,-21.12);
+\fill [black] (24.04,-21.12) -- (23.85,-20.2) -- (23.13,-20.88);
+\draw [black] [dashed] (10.1,-10) -- (23.1,-10);
+\fill [black] (23.1,-10) -- (22.3,-9.5) -- (22.3,-10.5);
+\draw [black] [dashed] (9.93,-11) -- (23.27,-15.7);
+\fill [black] (23.27,-15.7) -- (22.68,-14.96) -- (22.35,-15.91);
+\draw [black] [dashed] (9.56,-11.72) -- (23.64,-21.58);
+\fill [black] (23.64,-21.58) -- (23.27,-20.71) -- (22.7,-21.53);
+\draw [black] [densely dotted] (10.1,-16.7) -- (23.1,-16.7);
+\fill [black] (23.1,-16.7) -- (22.3,-16.2) -- (22.3,-17.2);
+\draw [black] [densely dotted] (9.93,-17.68) -- (23.27,-22.32);
+\fill [black] (23.27,-22.32) -- (22.67,-21.58) -- (22.35,-22.53);
+\draw [black] [dotted] (10.1,-23.3) -- (23.1,-23.3);
+\fill [black] (23.1,-23.3) -- (22.3,-22.8) -- (22.3,-23.8);
+\end{tikzpicture}

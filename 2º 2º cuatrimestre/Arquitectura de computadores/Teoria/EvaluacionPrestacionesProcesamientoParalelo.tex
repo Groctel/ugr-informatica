@@ -1,0 +1,56 @@
+\section{Evaluación de prestaciones en procesamiento paralelo}\label{evaluacion-prestaciones}
+
+\subsection{Ganancia en prestaciones y escalabilidad}\label{ganancia-prestaciones-escalabilidad}
+
+Podemos evaluar las prestaciones de un sistema de procesamiento paralelo en función de su tiempo de respuesta y productividad como vimos en \S\ref{evaluacion-prestaciones-arq} y según su escalabilidad y eficiencia.
+Para esta última podemos tener en cuenta las siguientes razones:
+
+\[Eficiencia=\frac{Prestaciones}{Prestaciones\ m\acute{a}ximas}\ \ \ \ \ Rendimiento=\frac{Prestaciones}{N^{\circ}\ recursos}\ \ \ \ \ \frac{Prestaciones}{Consumo\ potencia}\ \ \ \ \ \frac{Prestaciones}{\acute{A}rea\ ocupada}\]
+
+\subsubsection{Escalabilidad}
+
+Definimos la \textbf{gananancia en prestaciones} $S(p)$ (\textit{speed-up}) para $p$ procesadores como la razón entre el tiempo de ejecución secuencial $T_s$ del programa y el tiempo de ejecución paralela $T_p(p)$ para $p$ procesadores.
+Este tiempo de ejecución paralela podemos calcularlo como la suma del tiempo de cómputo paralelo $T_c(p)$ y el \textbf{tiempo de sobrecarga} (\textit{overhead}) $T_o(p)$ introducido por el coste de paralelizar el programa para $p$ procesadores.
+Esta sobrecarga se debe al tiempo sumado por la sincronización y comunicación de las hebras, así como su creación y finalización, los cómputos añadidos necesariamente en la versión paralela y el déficit de equilibrado de la versión paralela.
+
+\[S(p)=\frac{T_s}{T_p(p)}\ \ \ \ \ T_p(p)=T_c(p)+T_o(p)\]
+
+Distinguimos cuatro tipos de escalabilidad de un programa paralelo:
+
+\textbf{Lineal}
+
+Se da cuando todos los bloques son paralelizables ($T_s=0$) y la sobrecarga es nula, de forma que $S(p)=p$.
+Si tenemos un bloque secuencial que ocupa una fracción $s\leq1$ no paralelizable en el código, debemos tener en cuenta que la escalabilidad se ve reducida por la presencia del mismo:
+
+\[S(p)=\lim_{p\to\infty}\frac{1}{s+\frac{1-s}{p}}=\frac{1}{s}\]
+
+Existe el caso de que la ganancia sea \textbf{superlineal}, de forma que $S(p)>p$.
+
+\textbf{Limitada en el aprovechamiento del grado de paralelismo}
+
+Se produce cuando el sistema únicamente puede aprovechar hasta un número $n$ de prestaciones, de forma que la ganancia queda maximada:
+
+\[S(p)=\lim_{p\to n}\frac{1}{s+\frac{1-s}{p}}=\frac{1}{s+\frac{1-s}{n}}\]
+
+\textbf{Reducida debido a sobrecarga}
+
+Se produce cuando la sobrecarga incrementa linealmente con $p$, de forma que en algún punto comienza a afectar negativamente al tiempo de ejecución paralelo:
+
+\[S(p)=\lim_{p\to\infty}\frac{1}{s+\frac{1-s}{p}+\frac{T_o(p)}{T_s}}=0\]
+
+Podemos calcular el número máximo de prestaciones igualando tiempo de cálculo $T_c(p)=O\big(\frac{1}{p}\big)$ al tiempo de sobrecarga $T_o(p)=O(p)$ añadido para una función $O$ de variacón del tiempo de ejecución.
+
+\subsection{Ley de Amdahl}\label{amdahl-prestaciones}
+
+Como ya vimos en~\ref{ganancia-prestaciones}, la ganancia está limitada por una fracción del código que no podemos paralelizar.
+Como consecuencia lógica de esto, cuanto más pequeña es esta fracción, mayor es la ganancia en prestaciones al paralelizar el programa.
+Sin embargo, esta ley no tiene en cuenta la sobrecarga introducida en la paralelización del programa.
+Dado que esta sobrecarga es inversamente proporcional al tamaño del problema ejecutado por un determinado número de núcleos, podemos incrementar la ganancia aumentando el número de cómputos.
+
+\subsection{Ganancia escalable (ley de Gustafson)}\label{gustafson}
+
+De forma contraria a la ley de Amdahl, la ley de Gustafson plantea que cualquier programa suficientemente grande puede ser eficientemente paralelizado.
+Mientras que Amdahl no escala la disponibilidad del poder de cómputo junto con el aumento del número de máquinas, Gustafson propone que, con la mayor potencia de cómputo disponible, se podrán resolver problemas mayores en el mismo tiempo debido a la reducción de la parte secuencial no paralelizable.
+Para un programa con $p$ prestaciones y una porción secuencial $s$, Gustafson define la escalabilidad de la siguiente manera:
+
+\[S(p)=p-s\cdot(p-1)\]

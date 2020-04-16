@@ -5,7 +5,7 @@
 
 \usepackage{titling}
 	\author{Atanasio José Rubio Gil}
-	\title{Arquitectura de computadores}
+	\title{Arquitectura~de~computadores}
 	\date{\today}
 
 \usepackage[title=\thetitle]{aqademia}
@@ -13,6 +13,13 @@
 \aqchap{Tema }
 \aqssec{}
 
+\usepackage{array}
+	\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+\usepackage{graphicx}
+	\graphicspath{{img/}}
+\usepackage{multirow}
+\usepackage{tabu}
+	\tabulinesep=1mm
 \usepackage{tikz}
 
 % Document composition
@@ -24,6 +31,18 @@
             {https://github.com/Groctel/ugr-informatica}
 \tableofcontents
 
-\input{Teoria/Tema1.tex}
+\chapter{Arquitecturas paralelas: Clasificación y prestaciones}\label{arqpar-clasificacion-prestaciones}
+\input{Teoria/ClasificacionParalelismoImplicito.tex}
+\input{Teoria/ClasificacionArquitecturasParalelas.tex}
+\input{Teoria/EvaluacionPrestacionesArquitectura.tex}
+
+\chapter{Programación paralela}\label{progpar}
+\input{Teoria/HerramientasProgramacionParalela.tex}
+\input{Teoria/ProcesoDeParalelizacion.tex}
+\input{Teoria/EvaluacionPrestacionesProcesamientoParalelo.tex}
+
+\chapter{Arquitecturas con paralelismo a nivel de hebra (\textit{TLP})}\label{tlp}
+
+\chapter{Arquitecturas con paralelismo a nivel de instrucción (\textit{ILP})}\label{ilp}
 
 \end{document}

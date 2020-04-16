@@ -1,0 +1,33 @@
+\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+%uncomment if require: \path (0,235); %set diagram left start at 0, and has height of 235
+
+%Shape: Rectangle [id:dp7536045366950691]
+\draw   (90.33,80.33) -- (130.33,80.33) -- (130.33,120.33) -- (90.33,120.33) -- cycle ;
+%Shape: Rectangle [id:dp09644128938666119]
+\draw   (160.33,70) -- (181,70) -- (181,91) -- (160.33,91) -- cycle ;
+%Shape: Rectangle [id:dp2241873458228455]
+\draw   (159.67,109.67) -- (180.33,109.67) -- (180.33,130.67) -- (159.67,130.67) -- cycle ;
+%Straight Lines [id:da17387488972120801]
+\draw    (181,120.33) -- (190.33,120.39) -- (190.33,139.94) -- (110.56,139.94) -- (110.37,123.61) ;
+\draw [shift={(110.33,120.61)}, rotate = 449.34] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+%Straight Lines [id:da8399493952704167]
+\draw    (130.33,120.33) -- (156,120.18) ;
+\draw [shift={(159,120.17)}, rotate = 539.6700000000001] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+%Straight Lines [id:da49329600167598175]
+\draw    (170.11,91.5) -- (169.93,106.72) ;
+\draw [shift={(169.89,109.72)}, rotate = 270.7] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+%Straight Lines [id:da8478353646832082]
+\draw    (109.89,80.17) -- (109.89,60.61) -- (170.33,60.61) -- (170.33,67.61) ;
+\draw [shift={(170.33,70.61)}, rotate = 270] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+
+% Text Node
+\draw (110.33,100.67) node   [align=left] {M};
+% Text Node
+\draw (170.67,80.5) node   [align=left] {{\small UC}};
+% Text Node
+\draw (170,120.17) node   [align=left] {{\small UP}};
+% Text Node
+\draw (140.89,112.89) node   [align=left] {{\small FD}};
+% Text Node
+\draw (118.44,70) node   [align=left] {{\small FI}};
+\end{tikzpicture}

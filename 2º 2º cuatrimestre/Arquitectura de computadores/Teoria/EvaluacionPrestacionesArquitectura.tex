@@ -1,0 +1,123 @@
+\section{Evaluación de prestaciones de una arquitectura}\label{evaluacion-prestaciones-arq}
+
+\subsection{Medidas usuales para evaluar prestaciones}\label{medidas-usuales-evaluar-prestaciones}
+
+\subsubsection{Tiempo de respuesta}
+
+El tiempo de respuesta de un programa está compuesto por la suma de tres tiempos:
+
+\begin{itemize}
+	\item\textbf{Tiempo de usuario:} Tiempo en ejecución en el espacio del usuario.
+	\item\textbf{Tiempo de sistema:} Tiempo de ejecución en el epsacio del kernel.
+	\item\textbf{Tiempo en espera:} Tiempo que el programa está esperando a operaciones de E/S o a que finalice otro proceso.
+\end{itemize}
+
+\[Tiempo\ de\ respuesta=tCPU_{user}+tCPU_{sys}+t_{espera}\]
+
+Tenemos varias formas de obtener el tiempo de ejecución de un programa:
+
+\begin{center}
+\begin{tabular}{l l c r}
+	\textbf{Función}         & \textbf{Fuente}      & \textbf{Tipo}         & \textbf{Precisión (ms)} \\
+	\toprule
+	\code{time}              & \code{/usr/bin/time} & elapsed, user, system & 10000 \\
+	\code{clock()}           & \code{time.h}        & CPU                   & 10000 \\
+	\code{gettimeofday()}    & \code{sys/time.h}    & elapsed               & 1 \\
+	\code{clock\_gettime()}  & \code{time.h}        & elapsed               & 0.001 \\
+	\code{omg\_get\_wtime()} & \code{omp.h}         & elapsed               & 0.001 \\
+	\code{SYSTEM\_CLOCK()}   & Fortran              & elapsed               & 1 \\
+\end{tabular}
+\end{center}
+
+\subsubsection{Tiempo de CPU}
+
+El \textbf{tiempo de CPU} ($T_{CPU}$) de un programa se calcula como el producto del número de ciclos del mismo y el tiempo que tarda el procesador en ejecutar cada ciclo.
+Podemos expresarlo tambien como el cociente entre el número de ciclos y la frecuencia de reloj del procesador, que es inversamente proporcinal al tiempo de ciclo.
+
+\[T_{CPU}=Ciclos\cdot T_{ciclo}=\frac{Ciclos\ del\ programa}{Frecuencia\ del\ reloj}\]
+
+También podemos calcular el tiempo de CPU de un programa como el producto entre el número de instrucciones del mismo, el número de \textbf{ciclos por instrucción} ($CPI$) y el tiempo por ciclo.
+Trivialmente, se tiene que el $CPI$ de un programa es el cociente entre los ciclos del mismo y el número de instrucciones por las que está compuesto.
+
+\[T_{CPU}=NI\cdot CPI\cdot T_{ciclo}\]
+\[\text{Ciclos por instrucción}\ (CPI)=\frac{Ciclos\ del\ programa}{N\acute{u}mero\ de\ instrucciones\ (NI)}\]
+
+Dado un programa cualquiera, éste está compuesto por un número $I_i$ de instrucciones del tipo $i\forall i\in\mathbb{N}$.
+Si cada instrucción del tipo $i$ consume $CPI_i$ ciclos y hay $k$ tipos de instrucciones distintos, podemos expresar el número de ciclos del programa y, por consiguiente, el CPI de la siguiente manera:
+
+\[Ciclos\ del\ programa=\sum_{i=0}^{k}CPU_i\cdot I_k\]
+\[CPI=\frac{\sum_{i=0}^{k}CPI_i\cdot I_i}{N\acute{u}mero\ de\ instrucciones}\]
+
+Otra forma de obtener el $CPI$ es mediante el cociente entre los \textbf{ciclos por emisión} ($CPE$) e \textbf{instrucciones por emisión}, que son el número mínimo de ciclos transcurridos entre los instantes en los que el procesador puede emitir instrucciones y el número de instrucciones emitibles cada vez que se produce una emisión, respectivamente.
+
+\[CPI=\frac{CPE}{IPE}\]
+
+Distinguimos cinco segmentos en el cauce de un procesador\footnote{Estructura de computadores, tema 4.}.
+Un procesador no segmentado ejecutará dos instrucciones de forma secuencial ocupando cada una los cinco segmentos cada vez, de forma que cada instrucción deberá emitirse una a una y tardará cinco ciclos en completarse.
+Un procesaador segmentado ejecutará las instrucciones superpuestas entre sí de forma que mientras una instrucción $I_i$ esté ejecutando en el segmento $n_i$, la instrucción $I_{i-1}$ estará ejecutando en el segmento $n_{i-1}$.
+Por último, un procesador superescarlar podrá ejecutar varias instrucciones en un solo segmento ($I_i$ e $I_{i-1}$ ejecutándose paralelamente en $n_i$).
+
+Para un modelo no segmentado, uno segmentado sin riesgos y uno superescalar sin riesgos y capaz de ejecutar dos instrucciones paralelamente obtendríamos los siguientes valores:
+
+\begin{center}
+\begin{tabular}{l r r r}
+	                                  & \textbf{CPE} & \textbf{IPE} & \textbf{CPI} \\
+	\textbf{Procesador no segmentado} & 5            & 1            & 5 \\
+	\textbf{Procesador segmentado}    & 1            & 1            & 1 \\
+	\textbf{Procesador superescalar}  & 1            & 2            & 0.5 \\
+\end{tabular}
+\end{center}
+
+El número de instrucciones es calculable como el cociente entre el \textbf{número de operaciones} ($N_{op}$) que realiza el programa y el \textbf{número de operaciones codificables en una instrucción} ($OP_{instr}$).
+
+\[NI=\frac{N_{op}}{OP_{instr}}\]
+
+A la hora de mejorar el tiempo de CPU, las mejoras en la tecnología y en la estructura y organización del computador afectan al $CPI$ y al tiempo por ciclo, mientras que las mejoras en el repertorio de instrucciones y del compilador afectan al $CPI$ y al número de instrucciones.
+
+\subsubsection{Productividad: MIPS y MFLOPS}
+
+\subsubsection{MIPS}
+
+El número de instrucciones que un procesador puede ejecutar en un segundo se mide en $\boldsymbol{MIPS}$\footnote{\textit{Meaningless Indication of Processor Speed}.} (\textit{Millions of Instructions Per Second}).
+El valor de los $MIPS$ depende del repertorio de instrucciones, por lo que es difícil comparar máquinas con repertorios distintos, y puede variar en función del programa ejecutado, por lo que no sirve para caracterizar la máquina que se evalúa.
+Un mayor valor de $MIPS$ corresponde a peores prestaciones de la máquina.
+
+\[MIPS=\frac{NI}{T_{CPU}\cdot10^6}=\frac{Frecuencia\ del\ reloj}{CPI\cdot10^6}\]
+
+\subsubsection{MFLOPS}
+
+Por otro lado tenemos los $\boldsymbol{MFLOPS}$ (\textit{Millions of FLoating Operations Per Second}).
+Ésta no es una medida adecuada para todos los programas, ya que algunos pueden no realizar operaciones en coma flotante, ni es directamente desplazable a todas las máquinas, ya que el conjunto de operaciones en coma flotante no es constante en máquinas diferentes y la potencia de las operaciones no es igual en todas ellas.
+Se hace necesaria una normalización de las instrucciones en coma flotante para poder calcular correctamente los $MFLOPS$.
+
+\[MFLOPS=\frac{Operaciones\ en\ coma\ flotante}{T_{CPU}\cdot10^6}\]
+
+\subsection{Conjunto de programas de prueba (\textit{Benchmark})}\label{benchmark}
+
+Los \textbf{\textit{benchmarks}} son programas que analizan las prestaciones de los procesadores para comparar diferentes sistemas o realizaciones de un mismo sistema con un método fiable y reproducible.
+Distinguimos diferentes tipos de \textit{benchmarks}:
+
+\begin{itemize}
+	\item\textbf{De bajo nivel (\textit{microbenchmark}):} Evaluación de operaciones con números enteros o de coma flotante.
+	\item\textbf{Kernels:} Resolución de sistemas de ecuaciones, factorización y multiplicación de matrices\ldots
+	\item\textbf{Sintéticos:} Programas como Dhrystone o Whetstone utilizados para poner a prueba las capacidades de cálculo de las arquitecturas.
+	\item\textbf{Programas reales:} Puede usarse como \textit{benchmark} el rendimiento de \code{gcc}, \code{zip} u otros programas que realicen trabajos pesados con una gran cantidad de datos.
+	\item\textbf{Aplicaciones diseñadas:} Programas de predicción de tiempo o simulación de terremotos, entre otros, pueden utilizarse para evaluar las prestaciones del computador debido a la inmensa cantidad de datos que manejan.
+\end{itemize}
+
+\subsection{Ganancia en prestaciones}\label{ganancia-prestaciones}
+
+Al incrementar las prestaciones de un recurso de un procesador haciendo que su velocidad sea $n$ veces mayor (usando $n$ procesadores en lugar de uno, realizando la ALU las operaciones en un tiempo $n$ veces menor\ldots), se tiene que el incremento de velocidad alcanzable en la nueva situación con respecto a la previa (la máquina base), se expresa como el cociente entre la velocidad de la máquina mejorada $V_n$ y la velocidad de la máquina base $V_0$ o como el cociente entre el tiempo de ejecución en la máquina mejorada $T_n$ y el tiempo de ejecución en la máquina base $T_0$.
+Llamamos a este incremento la \textbf{ganancia de velocidad} o \textit{speed-up} $S_n$.
+
+\[S_n=\frac{V_n}{V_0}=\frac{T_0}{T_n}\]
+
+\subsubsection{Ley de Amdahl}
+
+La ley de Amdahl afirma que la mejora de velocidad $S$ que se puede obtener cuando se mejora un recurso de una máquina en un factor $n$ está limitada por la fracción del tiempo de ejecución en la máquina sin la mejora durante el tiempo que dicha mejora es inaplicable:
+
+\[S\leq\frac{n}{1+f\cdot(n-1)}\]
+
+Por ejemplo, si un programa pasa el $25\%$ de su tiempo de ejecución realizando instrucciones de coma flotante y se mejora la máquina de forma que estas instrucciones se realicen en la mitad de tiempo, tenemos que $n=2$, $f=0.75$.
+
+\[S\leq\frac{2}{1+0.75\cdot(1-1)}=1.14\]

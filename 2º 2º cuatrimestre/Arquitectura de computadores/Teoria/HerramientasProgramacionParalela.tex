@@ -1,0 +1,252 @@
+\section{Herramientas, estilos y estructuras en programación paralela}\label{herramientas-progpar}
+
+\subsection{Problemas que plantea la programación paralela al programador}\label{problemas-progpar}
+
+La programación paralela plantea problemas inherentes a la misma que no se dan en la programación secuencial, como la división del cómputo total en tareas independientes, la agrupación de dichas tareas en procesos o hebras, la asignación de estos procesos y hebras a los procesadores y la sincronización y comunicación entre estos procesos.
+Estos problemas deben ser abordados tanto por la herramienta de programación como por el programador.
+
+Para escribir un programa de forma paralela partimos de su versión secuencial y lo dividimos en bloques sin dependencias de datos.
+También podemos utilizar versiones optimizadas para la programación paralela de las bibliotecas que importemos.
+
+Al trabajar con programación paralela en arquitecturas MIMD podemos hacerlo de forma \textbf{SPMD}, paralelizando un solo programa, (\textit{Single Program Multiple Data}) y \textbf{MPMD} (\textit{Multiple Program Multiple Data}), paralelizando la ejecución de varios programas que a su vez están programados de forma paralela.
+
+\subsection{Herramientas para obtener código paralelo}\label{herramientas-codigo-par}
+
+Para crear programas de ejecución paralela podemos utilizar las tres técnicas ordenadas de menor a mayor abstracción:
+
+\begin{itemize}
+	\item\textbf{Compiladores paralelos:} Extraen automáticamente el paralelismo de los programas que compilan, de forma que el programador no tiene que explicitarla.
+	\item\textbf{Lenguajes paralelos y API de directivas:} La sintáxis de los lenguajes paralelos como Occam, Ada o Haskell o las directivas de OpenMP permiten indicar cómo paralelizar el programa en el código a gusto del programador.
+	\item\textbf{API de funciones:} Las APIs de alto nivel como OpenMPI permiten paralelizar la programación mediante paso de mensajes y otras técnicas de abstracción alta.
+\end{itemize}
+
+Las herramientas de paralelización permiten, implícita o explícitamente, localizar el paralelismo de los programas dividiéndolos en tareas independientes, asignar tareas a los procesos y hebras, crear y terminar estos procesos y hebras y comunicarlos y sincronizarlos.
+El \textbf{\textit{mapping}}, la asignación de las diferentes tareas a procesos y threads, puede hacerlo el programador, la herramienta de programación paralela o el propio sistema operativo.
+
+\pagebreak
+
+Por ejemplo, así se haría un cálculo de el número $\pi$ con OpenMP\@:
+
+\begin{lstlisting}[language=C]
+#include <opm.h>
+#include <stdlib.h>
+#define NUM_THREADS 4
+
+int main (int argc, char ** argv) {
+	double ancho,
+	       sum = 0,
+	       x;
+	int intervalos;
+
+	intervalos = atoi(argv[1]);
+	ancho      = 1.0 / (double) intervalos;
+
+	omp_set_num_threads(NUM_THREADS);
+
+	#pragma omp parallel
+	{
+		#pragma omp for reduction(+:sum) private(x) schedule(dynamic)
+		for (int i=0; i<intervalos; i++) {
+			x    = (i + 0.5) * ancho;
+			sum += 4.0 / (1.0 + x * x);
+		}
+	}
+
+	sum *= ancho;
+}
+\end{lstlisting}
+
+Y así se haría el mismo cómputo con MPI\@:
+
+\begin{lstlisting}[language=C]
+#include <mpi.h>
+#include <stdlib.h>
+
+int main (int argc, char ** argv) {
+	double ancho,
+	       lsum,
+	       sum = 0,
+	       x;
+	int intervalos
+	    iproc,
+	    nproc;
+
+	if (MPI_Init(&argc, &argv) != MPI_SUCCESS)
+		exit (1);
+
+	MPI_Comm_size(MPI_COMM_WORLD, &nproc);
+	MPI_Comm_rank(MPI_COMM_WORLD, &iproc);
+
+	intervalos = atoi(argv[1]);
+	ancho = 1.0 / (double) intervalos;
+
+	for (int i=iproc; i<intervalos; i=nproc) {
+		x = (i + 0.5) * ancho;
+		sum += 4.0 / (1.0 + x * x);
+	}
+
+	lsum *= ancho;
+
+	MPI_Reduce(&lsum, &sum, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+
+	MPI_Finalize();
+}
+\end{lstlisting}
+
+\subsubsection{Comunicaciones colectivas}
+
+Distinguimos entre diferentes tipos de comunicaciones entre procesos y hebras:
+
+\textbf{Comunicación \textit{uno a todos}}
+
+Se caracterizan porque un único proceso envía un mensaje a varios procesos al mismo tiempo.
+Esto puede conseguirse mediante una \textbf{difusión} (\textit{broadcast}) del mensaje, que envía un mensaje $x$ a todos los procesos a la vez, o mediante una \textbf{dispersión} (\textit{scatter}), que envía envía un mensaje $x_i$ a cada proceso $i$.
+
+\begin{figure}[h]
+\begin{center}
+\input{Tikz/Difusion.tikz}
+\input{Tikz/Dispersion.tikz}
+\end{center}
+\caption{Difusión y dispersión de mensajes}
+\end{figure}
+
+\textbf{Comunicación \textit{todos a uno}}
+
+Se caracterizan porque un único proceso recibe un mensaje a partir de los mensajes enviados por varios procesos.
+Esta recepción puede hacerse mediante \textbf{reducción} cuando los mensajes recibidos son argumentos de una función o mediante \textbf{acumulación} (\textit{gather}), cuando se recogen indistintamente todos los mensajes.
+
+\begin{figure}[h]
+\begin{center}
+\input{Tikz/Reduccion.tikz}
+\input{Tikz/Acumulacion.tikz}
+\end{center}
+\caption{Reducción y acumulación de mensajes}
+\end{figure}
+
+\textbf{Comunicación \textit{todos a todos}}
+
+En este tipo de comunicación todos los procesos se comunican con todos.
+Esto se puede hacer mediante un sistema en el que \textbf{todos difunden} (\textit{all-broadcast}), también conocido como chismorreo (\textit{gossiping}), o mediante un sistema en el que \textbf{todos dispersan} (\textit{all-scatter}).
+
+\begin{figure}[h]
+\begin{center}
+\input{Tikz/TodosDifunden.tikz}
+\input{Tikz/TodosDispersan.tikz}
+\end{center}
+\caption{Todos difunden y todos dispersan (matriz de filas $f_i$ y columnas $c_i$)}
+\end{figure}
+
+\textbf{Comunicación \textit{múltiple uno a uno}}
+
+Se produce cuando varios procesos ejecutándose paralelamente se comunican \textit{uno a uno} entre sí.
+Esta comunicación puede hacerse por permutaciones de \textbf{rotación} o por permutaciones de \textbf{baraje-}$\boldsymbol{x}$, en las que cada proceso $i$ manda su mensaje al proceso $i\cdot k\ m\acute{o}d\ x$ para un total de $k$ procesos.
+
+\begin{figure}[h]
+\begin{center}
+\input{Tikz/PermutacionRotacion.tikz}
+\input{Tikz/Baraje2.tikz}
+\end{center}
+\caption{Permutación por rotación y por baraje-2}
+\end{figure}
+
+\textbf{Comunicaciones \textit{compuestas}}
+
+Las comunicaciones compuestas se definen por diferentes modos de reducción de los mensajes enviados por los procesos en los que \textbf{todos combinan} o re realizan por un \textbf{recorrido} (\textit{scan}) paralelo que puede ser \textbf{prefijo} o \textbf{sufijo} en función de si los mensajes se recogen en orden de índice ascendente o descendente respectivamente.
+
+\begin{figure}
+\begin{center}
+\input{Tikz/TodosCombinan.tikz}
+\input{Tikz/RecorridoPrefijo.tikz}
+\input{Tikz/RecorridoSufijo.tikz}
+\end{center}
+\caption{Todos combinan, recorrido prefijo paralelo y recorrido sufijo paralelo}
+\end{figure}
+
+En OpenMP podemos utilizar las siguientes directivas y cláusulas para crear sistemas de comunicación colectiva:
+
+\begin{center}
+\begin{tabular}{l l l}
+	\textbf{Servicio} & \textbf{Tipo} & \textbf{Directivas} \\
+	\toprule
+	\multirow{3}{*}{\textit{uno a todos}} &          & Cláusula \code{firstprivate} desde la hebra 0 \\
+	                                      & Difusión & Directiva \code{single} con cláusula \code{copyprivate} \\
+	                                      &          & Directiva \code{threadprivate} y cláusula \code{copyin} en directiva \code{parallel} \\
+	\midrule
+	\textit{todos a uno} & Reducción & Cláusula \code{reduction} \\
+	\midrule
+	\textit{servicios compuestos} & Barreras & Directiva \code{barrier}
+\end{tabular}
+\end{center}
+
+En MPI podemos usar las siguientes funciones:
+
+\begin{center}
+\begin{tabular}{l l l}
+	\textbf{Servicio} & \textbf{Tipo} & \textbf{Función} \\
+	\toprule
+	\textit{uno a uno} & Asíncrona & \code{MPI\_Send()} o \code{MPI\_Receive()} \\
+	\midrule
+	\multirow{2}{*}{\textit{uno a todos}} & Difusión   & \code{MPI\_Bcast()} \\
+	                                      & Dispersión & \code{MPI\_Scatter()} \\
+	\midrule
+	\multirow{2}{*}{\textit{todos a uno}} & Reducción   & \code{MPI\_Reduce()} \\
+	                                      & Acumulación & \code{MPI\_Gather()} \\
+	\midrule
+	\textit{todos a todos} & Todos difunden & \code{MPI\_Allgather()} \\
+	\midrule
+	\multirow{3}{*}{\textit{todos a uno}} & Todos combinan & \code{MPI\_Allreduce()} \\
+	                                      & Barreras       & \code{MPI\_Barrier()} \\
+	                                      & Recorrido      & \code{MPI\_Scan()} \\
+\end{tabular}
+\end{center}
+
+\subsection{Paradigmas de programación paralela}\label{paradigmas-progpar}
+
+Dependiendo de la arquitectura con la que estemos trabajando, podemos utilizar diferentes formas de programación paralela:
+
+\subsubsection{Paso de mensajes}
+
+Es el paradigma utilizado en las arquitecturas multicomputador, que necesitan que el computador emisor envíe al receptor los datos con los que necesita trabajar.
+Estos sistemas se pueden programar con lenguajes como Ada u Occam y APIs como MPI o PVM\@.
+
+\subsubsection{Variables compartidas}
+
+En los sistemas multiprocesador las variables compartidas pueden alojarse en la memoria compartida y ser accesible por todos los procesadores al mismo tiempo (con sus consecuentes problemas de concurrencia).
+Lenguajes como Ada o Java trabajan en este paradigma, así como APIs como OpenMP, Intel TBB (\textit{Threading Building Blocks}) y las hebras POSIX\@.
+
+\subsubsection{Paralelismo de datos}
+
+Es la forma de trabajar de los procesadores matriciales, que requieren una gran potencia de procesamiento.
+Se implementa con lenguajes como HPF (\textit{High Performance Fortran}) o Fortran 95, en el que los bloques \code{forall} permiten paralelizar operaciones con matrices y vectores, y con APIs como Nvidia CUDA\@.
+
+\subsection{Estructuras típicas de códigos paralelos}\label{estructuras-codigos-paralelos}
+
+\subsubsection{\textit{Maestro-Esclavo} o granja de tareas}
+
+El proceso \textit{maestro} reparte el trabajo a varios procesos \textit{esclavos}\footnote{Es curioso que teniendo el término \textit{granja de tareas} se siga utilizando la notación \textit{Maestro-Esclavo} en lugar de algo más humanitario como \textit{Granjero-Plantación}. El proceso granjero \textit{planta} una serie de subprocesos hijos y espera para cosechar los resultados.}, que realizan su cómputo individualmente y envían el resultado al proceso \textit{maestro} para que éste haga un cómputo final con todos los resultados recolectados.
+
+\subsubsection{Cliente/servidor}
+
+Varios procesos \textit{cliente} mandan peticiones a un proceso \textit{servidor}, que las gestiona y envia respuestas a los procesos \textit{cliente} con el resultado de los cómputos.
+
+\subsubsection{Descomposición de dominio o datos}
+
+Cada proceso adquiere una parte de la computacióna a realizar y entre todos resuelven el problema dividiéndolo en partes equitativas.
+Un ejemplo de esto sería el uso de la directiva \code{omp for}:
+
+\begin{lstlisting}[language=C]
+omp_set_num_threads(hebras)
+
+#pragma omp for
+for (int i=0; i<hebras; i++)
+	// Acción a realizar individualmente por cada hebra
+\end{lstlisting}
+
+\subsubsection{Segmentación o flujo de datos}
+
+Los procesos se organizan de la misma forma que un procesador segmentado de forma que, para cada segmento $i$, éste pueda ejecutarse mientras el resto de segmentos están procesando otra información que llegará al procesador $i$ o de éste.
+
+\subsubsection{Divide y vencerás, descomposición recursiva}
+
+El problema se divide en subproblemas recursivos más pequeños y cada uno de los procesos ejecuta los cómputo de cada uno de los subproblemas.
+Cuando dos subproblemas llegan a su caso ancestro común, uno de los procesos se elimina y se continúan los cómputos con el proceso restante.

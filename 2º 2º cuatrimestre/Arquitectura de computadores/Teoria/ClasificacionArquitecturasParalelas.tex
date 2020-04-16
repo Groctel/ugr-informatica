@@ -1,0 +1,184 @@
+\section{Clasificación de arquitecturas paralelas}\label{clasificacion-arq-paralelas}
+
+\subsection{Computación paralela y computación distribuida}\label{computacion-par-distribuida}
+
+La \textbf{computación paralela} estudia los aspectos hardware y sofrware relacionados con el desarrollo y ejecución de aplicaciones en un sistema de cómputo compuesto por múltiples núcleos, procesadores o computadores que es visto externamente como una unidad autónoma.
+Por otro lado, la \textbf{computación distribuida} estudia los aspectos hardware y software relacionados con el desarrollo y ejecución de aplicaciones en un sistema distribuido, que es una colección de recursos autónomos situados en distintas localizaciones físicas.
+En general, nos referimos a computación paralela cuando el trabajo es realizado por un único computador y a computación distribuida cuando es realizado por varios.
+
+\subsubsection{Computación grid y \textit{cloud}}
+
+La \textbf{computación distribuida a baja escala} estudia los aspectos relacionados con el desarrollo y ejecución de aplicaciones en un conjunto de computadores de un único dominio situados en distintas localizaciones físicas conectadas a través de una infraestructura de red local
+Por su parte, la \textbf{computación grid} estudia los aspectos relacionados con el desarrolo y ejecución de aplicaciones en un conjunto de computadores de varios dominios geográficamente distribuidos conectados con una infraestructura de telecomunicaciones.
+
+La computación \textbf{\textit{cloud}} estudia los aspectos relacionados con el desarrollo y ejecución de aplicaciones en un sistema \textit{cloud}, que es un sistema que ofrece servicios de infraestructura, plataforma y/o software a los que se accede normalmente mediante una interfaz de auto-servicio.
+Estos servicios son de pago (\textit{pay-per-use}) y ofrece recursos virtuales que, al ser una abstracción de los físicos, parecen ilimitados en número y capacidad y son gestionados de forma inmediata sin interacción con el proveedor.
+Estos recursos soportan el acceso de múltiples clientes y están conectdos con métodos estándar independientes de la plataforma de acceso.
+
+\subsection{Clasificaciones de arquitecturas y sistemas paralelos}\label{clasificaciones-arq-sistemas-paralelos}
+
+\subsubsection{Clasificación comercial: Segmento de mercado}
+
+En función del consumidor objetivo de los computadores podemos clasificarlos de mayor a menor precio y prestaciones:
+
+\begin{center}
+\begin{tabular}{l r r}
+\textbf{Computador}       & \textbf{Núcleos} & \textbf{Precio (€)} \\
+\toprule
+Supercomputadores         & $128<x$          & $5000000<x$         \\
+Servidores de gama alta   & $4<x<256$        & $750000<x<10000000$ \\
+Servidores de gama media  & $2<x<64$         & $50000<x<1000000$   \\
+Servidores de gama baja   & $2<x<16$         & $1000<x<10000$      \\
+PCs y WorkStations        & $x<4$            & $x<10000$           \\
+Computadores empotrados   & $---$            & $---$               \\
+\end{tabular}
+\end{center}
+
+Los computadores externos (de escritorio, portátiles, servidores, clústers\ldots) se utilizan para todo tipo de aplicaciones, ya sean de oficina, entretenimiento, procesamiento de trasacciones (OLTP), sistemas de soporte de decisiones (DSS), científicas, animación\ldots
+Por su parte, los computadores empotrados se utilizan para aplicaciones de propósito específico, como videojuegos, coches, teléfonos, electrodomésticos\ldots
+Estos últimos tienen restricciones como un consumo de potencia, precio y tamaño reducidos y que deben realizar cómputos en tiempo real.
+
+\subsubsection{Clasificación de Flynn de arquitecturas}
+
+En 1972, Michael J. Flynn propone el siguiente esquema de clasificación de arquitecturas en función del flujo de instrucciones y datos:
+
+\begin{figure}
+\begin{center}
+\begin{tabular}{C{6.5cm} | C{6.5cm}}
+\textbf{SISD}                              & \textbf{MISD}                                    \\
+\textit{Single Instruction, Single Data}   & \textit{Multiple Instruction, Single Data}       \\
+Un núcleo procesador                       &                                                  \\
+\input{Tikz/SISD.tikz}                     & \input{Tikz/MISD.tikz}                           \\
+\hline
+\textbf{SIMD}                              & \textbf{MIMD}                                    \\
+\textit{Single Instruction, Multiple Data} & \textit{Multiple Instruction, Multiple Data}     \\
+GPU, procesadores matriciales              & Multicores, multiprocesadores, multicomputadores \\
+\input{Tikz/SIMD.tikz}                     & \input{Tikz/MIMD.tikz}                           \\
+\end{tabular}
+\end{center}
+\caption{Clasificación de Flynn de arquitecturas}
+\end{figure}
+
+\pagebreak
+
+\textbf{Arquitecturas SISD}
+
+Corresponden a computadores uni-procesador, en los que se evalúa una instrucción y un dato cada vez.
+Siguen una estructura puramente secuencial y no permiten paralelismo.
+
+\begin{lstlisting}[language=Pascal]
+for i in 1 to 4 do
+	C[i] = A[i] + B[i]
+	F[i] = D[i] - E[i]
+	K[i] = H[i] * G[i]
+done
+\end{lstlisting}
+
+\textbf{Arquitecturas SIMD}
+
+Aprovechan el paralelismo de datos para poder procesar un número de datos mayor en cada operación.
+Es el caso de los operadores vectoriales, que permiten trabajar con vectores mediantes instrucciones como \code{ADDV}, \code{SUBV} o \code{MULV}.
+Estas instrucciones permiten trabajar directamente con elementos de vectores con mayor rendimiento.
+Por su parte, los procesadores matriciales permiten trabajar con vectorialmente con múltiples vectores (por ejemplo, con matrices $EP_i$).
+
+\begin{lstlisting}[language=Pascal]
+for all EPi(i in 1 to 4) do
+	C[i] = A[i] + B[i]
+	F[i] = D[i] - E[i]
+	K[i] = H[i] * G[i]
+done
+\end{lstlisting}
+
+En este caso, el procesador vectorial ejecutará el bucle \code{for all} cuatro veces, aprovechando en cada una el paralelismo de las instrucciones \code{ADDV}, \code{SUBV} y \code{MULV}.
+
+\textbf{Arquitecturas MISD}
+
+Aunque podemos simular este modelo en un código para programas que procesan secuencias o flujos de datos, no sexisten computadores que funcionen con esta arquitectura.
+
+\textbf{Arquitecturas MIMD}
+
+Es la arquitectura de las máquinas multinúcleo, multiprocesador y multicomputador.
+Esta multitud de componentes hace que puedan aprovechar el paralelismo a nivel de procesos.
+
+\pagebreak
+
+\begin{lstlisting}[language=Pascal]
+{Proceso 1}
+for i in 1 to 4 do
+	C[i] = A[i] + B[i]
+done
+{Proceso 2}
+for i in 1 to 4 do
+	F[i] = D[i] - E[i]
+done
+{Proceso 3}
+for i in 1 to 4 do
+	K[i] = H[i] * G[i]
+done
+\end{lstlisting}
+
+\subsubsection{Clasificación según el sistema de memoria}
+
+\textbf{Multiprocesadores}
+
+\begin{figure}[h]
+\begin{center}
+\input{Tikz/MultiprocesadorSMP.tikz}
+\end{center}
+\caption{Arquitectura multiprocesador con memoria centralizada (SMP)}
+\end{figure}
+
+Son aquellos en los que todos los procesadores comparten el mismo espacio de direcciones, permitiendo al programador trabajar sin necesitar conocer dónde están almacenados los datos.
+La comunicación entre procesos se hace explícita mediante variables compartidas, de forma que no existe varias instancias del mismo dato en memoria principal.
+Sin enbargo, la latencia de las operaciones es alta y el sistema es poco escalable, ya que requiere aumentar la caché dle procesador, usar redes de menor latencia y ancho de banda que un bus y distribuir físicamente los módulos de memoria entre los procesadores sin dejar de compartir el espacio de direcciones.
+
+Debido a que la distribución de código y datos entre procesadores no es necesaria en estas arquitecturas y que la sincronización se implementa mediante primitivas, programar en arquitecturas SMP es, generalmente, más sencillo que en arquitecturas multicomputador.
+
+\textbf{Multicomputadores}
+
+\begin{figure}[h]
+\begin{center}
+\input{Tikz/Multicomputador.tikz}
+\end{center}
+\caption{Arquitectura multicomputador}
+\end{figure}
+
+Son aquellos en los que cada procesador tiene un espacio de direcciones propio, por lo que el programador debe conocer dónde están almacenados los datos con los que opera.
+La comunicación entre procesos se hace explícita mediante programas de paso de mensajes, de forma que eisten múltiples instancias de los datos en memoria principal, ya que tienen que leerse por la memoria de cada computador individual.
+Como contrapartida a esta complejidad, la latencia de las operaciones es baja y el sistema es más escalable, ya que únicamente requiere conectar más computadores al sistema de paso de mensajes.
+
+Debido a que la distribución de código y datos entre los procesadores es necesaria, lo que conlleva a usar herramientas de programación más sofisticadas, y que la sincronización entre procesos se hace mediante programas de comunicación, la programación en arquitecturas multicomputador es, generalmente, más difícil que en arquitecturas SMP\@.
+
+\textbf{Comunicación \textit{uno a uno} en SMP y multicomputador}
+
+En las arquitecturas SMP, la comunicación \textit{uno a uno}, que se abordará en~\ref{herramientas-codigo-par}, se da mediante accesos concurrentes a la memoria principal, de forma que un nodo fuente esnvía una dirección a un nodo destino y esperan a una respuesta del otro para poder seguir operando.
+Esta sincronización se conoce como el \textbf{problema del productor-consumidor}\footnote{Sistemas concurrentes y distribuidos, tema 1}.
+
+En las arquitecturas multicomputador, la red de comunicación es un búfer de datos gestionado por un programa de paso de mensajes que recibe peticiones de envío y recepción de datos y las coordina adecuadamente para garantizar que se cumplen las propiedades de seguridad y vivacidad del sistema.
+Debido a la estructura de esta red de comunicación, las funciones de recepción de mensajes son bloqueantes para el proceso receptor.
+
+\textbf{Incremento de escalabilidad en multiprocesadores}
+
+Las arquitecturas multiprocesador presentan un gran inconveniente en su escalabilidad con respecto a las arquitecturas multicomputador.
+Mientras las últimas requieren poco más que instalar un nuevo sistema en la red de comunicación, las primeras requieren que se realicen modificaciones estructurales sobre el sistema, como aumentar la cache de los procesadores, usar redes de menor latencia y ancho de banda que un bus y distribuir físicamente los módulos de memoria entre los procesadores asegurando que se siga compartiendo el espacio de direcciones.
+
+\subsubsection{Clasificación según el sistema de memoria}
+
+Debido a que las arquitecturas multicomputador están compuestas por diferentes máquinas con sus módulos de procesamiento, E/S y memoria independientes, éstas siguen el sistema de memoria \textbf{NORMA} (\textit{No Remote Memory Access}).
+
+Por otro lado, las arquitecturas multiprocesador sí comparten memoria en un único espacio de direcciones.
+Esta memoria puede ser uniforme (\textbf{NUMA}) o no (\textbf{UMA}).
+
+\textbf{NUMA (\textit{Non-Uniform Memory Access})}
+
+Este tipo de memoria, que también puede ser utilizada en redes multicomputador, se caracteriza porque el tiempo de acceso depende de la ubicación de la memoria relativa al procesador que realiza la petición de acceso, siendo el acceso a la memoria local al procesador más rápido que a las memorias externas.
+Una variante de esta memoria es \textbf{CC-NUMA} (\textit{Cache Coherent NUMA}).
+Aunque mantener coherencia en la caché en memorias NUMA lleva consigo una gran sobrecarga (\ref{ganancia-prestaciones-escalabilidad}), la escalabilidad de las memorias NUMA sin coherencia en caché son prohibitivamente complejas de gestionar, por lo que se prefiere utilizar memorias CC-NUMA por mucho que ofrezcan un muy bajo rendimiento cuando varios procesadores intentan acceder en sucesiones rápidas a la misma dirección de memoria.
+
+Como caso particular de las memorias NUMA, las memorias \textbf{COMA} (\textit{Cache-Only Memory Architecture}) sólo trabajan con cachés, de forma que un acceso a un dato en memoria puede hacer que éste migre a otra.
+Esto reduce el número de copias redundantes de los datos a lo largo del sistema, pero plantea problemas de ubicación de los datos y las acciones a realizar al llenarse el sistema mememoria, que suelen subsanarse mediante mecanismos de hardware de coherencia de memoria.
+
+\textbf{UMA (\textit{Uniform Memory Access})}
+
+En este sistema, todos los procesadores comparten uniformemente la misma memoria física, de forma que los accesos a la misma son de igual para todos los procesadores y no existe redundancia de datos en la memoria principal (aunque podría existirla en la caché de los procesadores).
+Es el tipo de memoria utilizada por las arquitecturas SMP\@.

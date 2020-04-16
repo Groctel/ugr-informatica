@@ -1,0 +1,26 @@
+\begin{tikzpicture}[scale=0.1, every node/.style={scale=0.6}]
+\tikzstyle{every node}+=[inner sep=0pt]
+\draw [black] (22.4,-14.4) circle (3);
+\draw (22.4,-14.4) node {$P_0$};
+\draw [black] (3.2,-3.2) circle (3);
+\draw (3.2,-3.2) node {$P_0$};
+\draw [black] (3.2,-10.4) circle (3);
+\draw (3.2,-10.4) node {$P_1$};
+\draw [black] (3.2,-17.6) circle (3);
+\draw (3.2,-17.6) node {$P_2$};
+\draw [black] (3.2,-24.7) circle (3);
+\draw (3.2,-24.7) node {$P_3$};
+\draw (22.1,-5.9) node {$x=f(x_0,\mbox{ }x_1,\mbox{ }x_2,\mbox{ }x_3)$};
+\draw [black] (6.14,-11.01) -- (19.46,-13.79);
+\fill [black] (19.46,-13.79) -- (18.78,-13.14) -- (18.58,-14.11);
+\draw (11.94,-13.03) node [below] {$x_1$};
+\draw [black] (5.79,-4.71) -- (19.81,-12.89);
+\fill [black] (19.81,-12.89) -- (19.37,-12.05) -- (18.87,-12.92);
+\draw (11.34,-9.3) node [below] {$x_0$};
+\draw [black] (6.16,-17.11) -- (19.44,-14.89);
+\fill [black] (19.44,-14.89) -- (18.57,-14.53) -- (18.73,-15.52);
+\draw (13.44,-16.64) node [below] {$x_2$};
+\draw [black] (5.84,-23.28) -- (19.76,-15.82);
+\fill [black] (19.76,-15.82) -- (18.82,-15.76) -- (19.29,-16.64);
+\draw (14.26,-20.05) node [below] {$x_3$};
+\end{tikzpicture}

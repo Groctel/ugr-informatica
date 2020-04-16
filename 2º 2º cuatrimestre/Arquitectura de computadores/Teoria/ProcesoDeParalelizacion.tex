@@ -1,0 +1,102 @@
+\section{Proceso de paralelización}\label{proceso-par}
+
+A la hora de paralelizar un programa seguimos cuatro pasos:
+
+\begin{itemize}
+	\item Descomponer el programa en tareas independientes.
+	\item Asignar tareas a procesos y hebras.
+	\item Redactar el código paralelo como vimos en \S\ref{herramientas-progpar}.
+	\item Evaluar las prestaciones que ofrece la paralelización.
+\end{itemize}
+
+Estos cuatro pasos deben seguirse secuencialmente, y de la evaluación podemos volver a cualquiera de los tres anteriores en función de los errores que hayamos detectado o dar por finalizada la paralelización del programa.
+
+\subsection{Descomposición en tareas independientes}\label{descomposicion-tareas-independientes}
+
+Para descomponer un programa secuencial en tareas independientes debemos llevar a cabo un análisis de dependencias de datos entre las diferentes funciones en las que se divide y, dentro de éstas, entre los diferentes bloques que las componen.
+Al hacer esto podemos crear un grafo de dependencias que ilustre qué funciones y bloques pueden ejecutarse paralelamente en cada momento.
+
+\begin{figure}[h]
+\begin{center}
+\input{Tikz/GrafoDependencias.tikz}
+\end{center}
+\caption{Grafo de dependencias entre las tareas de un programa}
+\end{figure}
+
+Por ejemplo, tengamos el siguiente código para aproximar el número pi:
+
+\begin{lstlisting}[language=C]
+int main (int argc, char ** argv) {
+	double ancho,
+	       sum = 0,
+	       x;
+	int intervalos;
+
+	intervalos = atoi(argv[1]);
+	ancho      = 1.0 / (double) intervalos;
+
+	for (int i=0; i<intervalos; i++) {
+		x    = (i + 0.5) * ancho;
+		sum += 4.0 / (1.0 + x * x);
+	}
+
+	sum *= ancho;
+}
+\end{lstlisting}
+
+En él, identificamos tres bloques principales:
+
+\begin{itemize}
+	\item Declaración e inicialización de variables.
+	\item Cálculo de la aproximación en bucle.
+	\item Ajuste final de la aproximación.
+\end{itemize}
+
+Mientras que el primer y último bloque son indivisibles, el segundo podemos dividirlo en $n$ tareas que se ejecuten paralelamente para $n$ intervalos usados en la aproximación, de forma que cada uno de los valores de \code{i} en el bucle se ejecute de forma paralela a los otros.
+
+\subsection{Asignación de tareas a procesos y hebras}\label{asignacion-tareas-procheb}
+
+En esta fase distinguimos dos tipos de asignación de las tareas:
+
+\begin{itemize}
+	\item\textbf{Planificación:} Agrupación de las tareas en hebras.
+	\item\textbf{\textit{Mapping}:} Asignación de las hebras a núcleos o procesadores.
+\end{itemize}
+
+La granularidad de la carga asignada a los procesos y hebras depende del número de núcleos o procesadores y del tiempo de comunicación y sincronización frente al tiempo de cálculo de cada hebra y procesador.
+Para que la ejecución de unas tareas no dependa de esperar el resultado de otras, se busca un \textbf{equilibrado de la carga} (\textit{load balancing}) teniendo en cuenta que todas trabajen con un número lo más equitativo posible de datos y ejecuten un código lo más similar posible.
+Este equilibrado depende de la homogeneidad y uniformidad de la arquitectura sobre la que se trabaja y sobre la descomposición del programa realizada anteriormente.
+
+La asignación de las tareas a cada una de las hebras se puede hacer de forma estática, asignando las hebras en tiempo de compilación, o dinámica, en cuyo caso la asignación se hace en tiempo de ejecución.
+En esta última diferentes ejecuciones del programa pueden dar lugar a asignaciones de las tareas sobre diferentes hebras o procesadores.
+Ambas asignaciones se pueden hacer de forma explícitas por el programador o de forma implícita por la herramienta de programación utilizada.
+
+El \textit{mapping} de las hebras se suele dejar al SO, que lo implementa mediante un sistema llamado \textit{light-weight process}.
+También puede hacerse por el entorno o el sistema en tiempo de ejecución (\textit{runtime system}) o explicitarse por el programador.
+
+Debemos tener en cuenta que dividir el programa en más tareas paralelas que procesadores requiere una carga de trabajo de cambio de contexto para los procesadores que ralentiza la ejecución global del programa y que la creación de hebras conlleva un tiempo de ejecución que puede ser mayor que el tiempo de ejecución secuencial al sumarlo a la ejecución paralela de las tareas.
+
+\begin{lstlisting}[language=C]
+void F1 () {
+	#pragma omp parallel for schedule(static)
+	for (int i=0; i<N; i++)
+		// Código para i
+}
+
+void F2 () { /* ... */ }
+void F3 () { /* ... */ }
+
+int main () {
+	#pragma omp parallel section
+	{
+		#pragma omp section
+			F1();
+		#pragma omp section
+			F2();
+		#pragma omp section
+			F3();
+	}
+}
+\end{lstlisting}
+
+En este ejemplo de asignación estática con OpenMP\footnote{En MPI la asignación estática se explicita mediante los índices de los procesos a los que se envían los mensajes, mientras que en OpenMP es el compilador quien implicita la asignación.}, cada función \code{F[1-3]} se ejecuta paralelamente con las otras y, dentro de ellas, los bucles \code{for} se ejecutan paralelamente en sus $N$ iteraciones.

@@ -1,0 +1,79 @@
+\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+%uncomment if require: \path (0,235); %set diagram left start at 0, and has height of 235
+
+%Shape: Rectangle [id:dp7536045366950691]
+\draw   (90.33,80.33) -- (130.33,80.33) -- (130.33,120.33) -- (90.33,120.33) -- cycle ;
+%Shape: Rectangle [id:dp09644128938666119]
+\draw   (160.33,70) -- (181,70) -- (181,91) -- (160.33,91) -- cycle ;
+%Shape: Rectangle [id:dp2241873458228455]
+\draw   (159.67,109.67) -- (180.33,109.67) -- (180.33,130.67) -- (159.67,130.67) -- cycle ;
+%Straight Lines [id:da17387488972120801]
+\draw    (240.49,133.61) -- (240.49,150.61) -- (100.04,150.61) -- (100.04,124.06) ;
+\draw [shift={(100.04,121.06)}, rotate = 450] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+\draw [shift={(240.49,130.61)}, rotate = 90] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+%Straight Lines [id:da8399493952704167]
+\draw    (130.52,124.44) -- (130.26,143.28) -- (170.26,143.28) -- (170.26,134.94) ;
+\draw [shift={(170.26,131.94)}, rotate = 450] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+\draw [shift={(130.56,121.44)}, rotate = 90.77] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+%Straight Lines [id:da49329600167598175]
+\draw    (170.11,91.5) -- (169.93,106.72) ;
+\draw [shift={(169.89,109.72)}, rotate = 270.7] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+%Straight Lines [id:da8478353646832082]
+\draw    (130.33,80.33) -- (130.33,60.61) -- (170.33,60.61) -- (170.33,67.61) ;
+\draw [shift={(170.33,70.61)}, rotate = 270] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+%Shape: Rectangle [id:dp901514594846435]
+\draw   (190.11,70) -- (210.78,70) -- (210.78,91) -- (190.11,91) -- cycle ;
+%Straight Lines [id:da27835153565454673]
+\draw    (199.89,91.5) -- (199.7,106.72) ;
+\draw [shift={(199.67,109.72)}, rotate = 270.7] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+%Straight Lines [id:da807958048653149]
+\draw    (119.89,80.83) -- (119.89,55.94) -- (200.11,55.94) -- (200.11,67.61) ;
+\draw [shift={(200.11,70.61)}, rotate = 270] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+%Shape: Rectangle [id:dp6400885094204286]
+\draw   (189.67,109.44) -- (210.33,109.44) -- (210.33,130.44) -- (189.67,130.44) -- cycle ;
+%Straight Lines [id:da8803237857270745]
+\draw    (180.54,119.83) -- (186.21,120.12) ;
+\draw [shift={(189.2,120.27)}, rotate = 182.94] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+%Shape: Rectangle [id:dp22681131917528252]
+\draw   (229.89,70) -- (250.56,70) -- (250.56,91) -- (229.89,91) -- cycle ;
+%Shape: Rectangle [id:dp6689432855617605]
+\draw   (229.89,109.78) -- (250.56,109.78) -- (250.56,130.78) -- (229.89,130.78) -- cycle ;
+%Straight Lines [id:da6654571954481253]
+\draw    (100.04,80.17) -- (100.26,50.39) -- (240.04,50.61) -- (240.23,67.17) ;
+\draw [shift={(240.26,70.17)}, rotate = 269.35] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+%Straight Lines [id:da8075897242742298]
+\draw    (120.52,124.22) -- (120.26,145.94) -- (199.82,146.17) -- (199.64,133.83) ;
+\draw [shift={(199.6,130.83)}, rotate = 449.17] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+\draw [shift={(120.56,121.22)}, rotate = 90.68] [fill={rgb, 255:red, 0; green, 0; blue, 0 }  ][line width=0.08]  [draw opacity=0] (8.93,-4.29) -- (0,0) -- (8.93,4.29) -- cycle    ;
+
+% Text Node
+\draw (110.33,100.67) node   [align=left] {M};
+% Text Node
+\draw (170.67,80.5) node   [align=left] {{\tiny UC\textsubscript{1}}};
+% Text Node
+\draw (170,120.17) node   [align=left] {{\tiny UP\textsubscript{1}}};
+% Text Node
+\draw (146,136.67) node   [align=left] {{\small FD\textsubscript{1}}};
+% Text Node
+\draw (140.22,69.56) node   [align=left] {{\small FI\textsubscript{1}}};
+% Text Node
+\draw (200.44,80.5) node   [align=left] {{\tiny UC\textsubscript{2}}};
+% Text Node
+\draw (220,75.67) node   [align=left] {...};
+% Text Node
+\draw (109.56,65.67) node   [align=left] {...};
+% Text Node
+\draw (200,119.94) node   [align=left] {{\tiny UP\textsubscript{2}}};
+% Text Node
+\draw (240.22,80.5) node   [align=left] {{\tiny UC\textsubscript{n}}};
+% Text Node
+\draw (240.22,120.28) node   [align=left] {{\tiny UP\textsubscript{n}}};
+% Text Node
+\draw (84.89,139.11) node   [align=left] {{\small FD\textsubscript{n}}};
+% Text Node
+\draw (90,69.11) node   [align=left] {{\small FI\textsubscript{n}}};
+% Text Node
+\draw (219.78,116.11) node   [align=left] {...};
+% Text Node
+\draw (109.56,135.89) node   [align=left] {...};
+\end{tikzpicture}

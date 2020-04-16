@@ -1,0 +1,73 @@
+\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1,xscale=1]
+%uncomment if require: \path (0,235); %set diagram left start at 0, and has height of 235
+
+%Shape: Rectangle [id:dp1388771205713386]
+\draw   (90.6,79.74) -- (274.09,79.74) -- (274.09,99.82) -- (90.6,99.82) -- cycle ;
+%Shape: Rectangle [id:dp7715938821633621]
+\draw   (90,39.98) -- (119.59,39.98) -- (119.59,70) -- (90,70) -- cycle ;
+%Shape: Rectangle [id:dp2149759037343656]
+\draw   (119.59,9.96) -- (149.17,9.96) -- (149.17,39.98) -- (119.59,39.98) -- cycle ;
+%Shape: Rectangle [id:dp48718644358649077]
+\draw   (149.17,39.98) -- (178.76,39.98) -- (178.76,70) -- (149.17,70) -- cycle ;
+%Straight Lines [id:da8737015330323414]
+\draw    (119.89,54.78) -- (149.29,54.78) ;
+%Straight Lines [id:da6056566302075724]
+\draw    (133.58,40.18) -- (133.58,79.6) ;
+%Shape: Rectangle [id:dp7215848085922171]
+\draw   (185.2,39.98) -- (214.79,39.98) -- (214.79,70) -- (185.2,70) -- cycle ;
+%Shape: Rectangle [id:dp38227489239846646]
+\draw   (214.79,9.96) -- (244.37,9.96) -- (244.37,39.98) -- (214.79,39.98) -- cycle ;
+%Shape: Rectangle [id:dp8117581367578898]
+\draw   (244.37,39.98) -- (273.96,39.98) -- (273.96,70) -- (244.37,70) -- cycle ;
+%Straight Lines [id:da5970149414950394]
+\draw    (215.09,54.78) -- (244.49,54.78) ;
+%Straight Lines [id:da5490790011884338]
+\draw    (228.78,40.18) -- (228.78,79.6) ;
+%Shape: Rectangle [id:dp2328821300848748]
+\draw   (90.6,108.98) -- (120.19,108.98) -- (120.19,139) -- (90.6,139) -- cycle ;
+%Shape: Rectangle [id:dp6525667710060407]
+\draw   (120.19,139) -- (149.77,139) -- (149.77,169.02) -- (120.19,169.02) -- cycle ;
+%Shape: Rectangle [id:dp25124533437909113]
+\draw   (149.77,108.98) -- (179.36,108.98) -- (179.36,139) -- (149.77,139) -- cycle ;
+%Straight Lines [id:da27708443377640635]
+\draw    (120.49,123.78) -- (149.89,123.78) ;
+%Straight Lines [id:da4001865768217636]
+\draw    (134.58,99.98) -- (134.58,139.4) ;
+%Shape: Rectangle [id:dp6873478861133927]
+\draw   (185.2,108.58) -- (214.79,108.58) -- (214.79,138.6) -- (185.2,138.6) -- cycle ;
+%Shape: Rectangle [id:dp009912235254289747]
+\draw   (214.79,138.6) -- (244.37,138.6) -- (244.37,168.62) -- (214.79,168.62) -- cycle ;
+%Shape: Rectangle [id:dp309969046128054]
+\draw   (244.37,108.58) -- (273.96,108.58) -- (273.96,138.6) -- (244.37,138.6) -- cycle ;
+%Straight Lines [id:da9264242146449485]
+\draw    (215.09,123.38) -- (244.49,123.38) ;
+%Straight Lines [id:da9097877564188441]
+\draw    (229.18,99.58) -- (229.18,139) ;
+
+% Text Node
+\draw (114.2,82.54) node [anchor=north west][inner sep=0.75pt]   [align=left] {\small Red de interconexión};
+% Text Node
+\draw (90.8,47) node [anchor=north west][inner sep=0.75pt]   [align=left] {\textbf{E/S}};
+% Text Node
+\draw (128.2,19) node [anchor=north west][inner sep=0.75pt]   [align=left] {\textbf{P}};
+% Text Node
+\draw (155.4,47.4) node [anchor=north west][inner sep=0.75pt]   [align=left] {\textbf{M}};
+% Text Node
+\draw (185.6,47) node [anchor=north west][inner sep=0.75pt]   [align=left] {\textbf{E/S}};
+% Text Node
+\draw (223.4,19) node [anchor=north west][inner sep=0.75pt]   [align=left] {\textbf{P}};
+% Text Node
+\draw (250.6,47.4) node [anchor=north west][inner sep=0.75pt]   [align=left] {\textbf{M}};
+% Text Node
+\draw (91,116) node [anchor=north west][inner sep=0.75pt]   [align=left] {\textbf{E/S}};
+% Text Node
+\draw (128.6,147) node [anchor=north west][inner sep=0.75pt]   [align=left] {\textbf{P}};
+% Text Node
+\draw (156,116.4) node [anchor=north west][inner sep=0.75pt]   [align=left] {\textbf{M}};
+% Text Node
+\draw (185.6,115.6) node [anchor=north west][inner sep=0.75pt]   [align=left] {\textbf{E/S}};
+% Text Node
+\draw (223.2,147) node [anchor=north west][inner sep=0.75pt]   [align=left] {\textbf{P}};
+% Text Node
+\draw (250.6,116) node [anchor=north west][inner sep=0.75pt]   [align=left] {\textbf{M}};
+\end{tikzpicture}

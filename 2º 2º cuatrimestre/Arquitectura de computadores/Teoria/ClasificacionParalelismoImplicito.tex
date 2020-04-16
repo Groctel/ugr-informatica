@@ -1,5 +1,3 @@
-\chapter{Arquitecturas paralelas: Clasificación y prestaciones}
-
 \section{Clasificación del paralelismo implícito en una aplicación}
 
 A la hora de trabajar en un sistema informático es muy común encontrarnos con el caso de que hay tareas que podemos ejecutar paralelamente.
@@ -12,7 +10,7 @@ for (int i=0; i<n; i++)
 \end{lstlisting}
 
 Para dos vectores de $n$ elementos y un sistema que permita $p$ cómputos paralelos, podemos dividir los vectores en $n/p$ secciones y calcularlas paralelamente.
-Por supuesto, no tiene sentido hablar de paralelismo si la máquina no tiene los recursos necesarios.
+Por supuesto, no tiene sentido hablar de \textbf{paralelismo} si la máquina no tiene los recursos necesarios.
 
 Podemos clasificar el paralelismo implícito en un programa mediante tres criterios:
 
@@ -25,7 +23,7 @@ Podemos clasificar el paralelismo implícito en un programa mediante tres criter
 Decimos que una tarea tiene una granularidad más fina (o menos gruesa) cuantas menos operaciones sean necesarias para su ejecución.
 En orden descendiente de granularidad, podemos dividir los programas en rutinas formadas por bloques que ejecutan operaciones primitivas.
 
-El paralelismo viene determinado por la posible existencia de dependencias de datos.
+El paralelismo viene determinado por la posible existencia de \textbf{dependencias de datos}.
 Decimos que dos bloques de un programa son dependientes si referencian una misma variable y, más específicamente, decimos que un bloque $B_2$ es dependiente con respecto a $B_1$ si $B_1$ aparece secuencialmente antes que $B_2$.
 Distinguimos entre tres tipos de dependencias de datos:
 
@@ -51,7 +49,7 @@ a = d + e
 
 No tiene sentido hablar de una dependencia \textit{RAR}, ya que la lectura múltiple de una misma variable recoge siempre el mismo dato si ésta no se modifica en el proceso.
 
-Podemos distinguir entre dos tipos de paralelismos implícitos:
+Podemos distinguir entre dos tipos de paralelismos \textbf{implícitos}:
 
 \begin{itemize}
 	\item\textbf{Paralelismo de tareas o \textit{TLP} (\textit{Task Level Par.}):} Viene de extraer la estructura lógica de rutinas de un programa. Está relacionado con el paralelismo a nivel de función.
@@ -69,8 +67,27 @@ Distinguimos aquí tres términos:
 	\item\textbf{Procesos:} Representan la mayor unidad de ejecución gestionable por el SO y constan de una o varias hebras.
 \end{itemize}
 
-A nivel de granularidad, las hebras son más finas que los procesos, ya que se tarda menos tiempo en crearlas, destruirlas, conmutar entre ellas y establecer canales de comunicación entre ellas que en hacer las mismas tareas con procesos.
+A nivel de granularidad, las hebras son más finas que los procesos, ya que se tarda menos tiempo en crearlas, destruirlas y conmutar y establecer canales de comunicación entre ellas que en hacer las mismas tareas con procesos.
 
-\section{Clasificación de arquitecturas paralelas}
-
-\section{Evaluación de prestaciones}
+\begin{figure}[h]
+\begin{center}
+\begin{tabu}{|M{2.5cm}|M{3cm}|M{3cm}|M{3cm}|M{3cm}|}
+\tabucline{-}
+\textbf{Detectable} a nivel de & \textbf{Programas} & \textbf{Funciones} & \textbf{Bloques} & \textbf{Operaciones} \\
+\tabucline{-}
+\multirow{4}{2.5cm}{\centering\textbf{Utilizado} (explícito) a nivel de} & \multicolumn{3}{p{9cm}|}{} & \multicolumn{1}{M{3cm}|}{Instrucciones} \\ \cline{4-5}
+                                                                         & \multicolumn{2}{p{6cm}|}{} & \multicolumn{1}{M{3cm}|}{IntraInstrucciones} & \multicolumn{1}{l}{} \\ \cline{3-4}
+                                                                         & \multicolumn{1}{p{3cm}|}{} & \multicolumn{2}{M{6cm}|}{Hebras} & \multicolumn{1}{l}{} \\ \cline{2-4}
+                                                                         & \multicolumn{3}{M{9cm}|}{Procesos} & \multicolumn{1}{l}{} \\ \cline{1-5}
+\multirow{5}{2.5cm}{\centering\textbf{Implementado} por arquitecturas aprovechando} & \multicolumn{3}{p{9cm}|}{} & \multicolumn{1}{M{3cm}|}{ILP} \\ \cline{4-5}
+                                                                                    & \multicolumn{2}{p{6cm}|}{} & \multicolumn{1}{M{3cm}|}{SIMD} & \multicolumn{1}{l}{} \\ \cline{3-4}
+                                                                                    & \multicolumn{1}{p{3cm}|}{} & \multicolumn{2}{M{6cm}|}{Multihebra} & \multicolumn{1}{l}{} \\ \cline{2-4}
+                                                                                    & \multicolumn{3}{M{9cm}|}{Multicomputador} & \multicolumn{1}{l}{} \\ \cline{2-4}
+                                                                                    & \multicolumn{3}{M{9cm}|}{Multiprocesador} & \multicolumn{1}{l}{} \\ \cline{1-5}
+\multirow{3}{2.5cm}{\centering\textbf{Extraído} por (implícito $\rightarrow$ explícito)} & \multicolumn{3}{p{9cm}|}{} & \multicolumn{1}{M{3cm}|}{Arquitectura} \\ \cline{4-5}
+                                                                                         & \multicolumn{2}{p{6cm}|}{} & \multicolumn{2}{M{6cm}|}{Herramienta de programación} \\ \cline{2-5}
+                                                                                         & \multicolumn{4}{M{12cm}|}{Usuario-Programador} \\ \cline{1-5}
+\end{tabu}
+\end{center}
+\caption{Detección, utilización, implementación y extracción del paralelismo a diferentes niveles}
+\end{figure}

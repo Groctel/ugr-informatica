@@ -1,0 +1,85 @@
+\begin{tikzpicture}[x=0.75pt,y=0.75pt,yscale=-1.25,xscale=1.25]
+%uncomment if require: \path (0,235); %set diagram left start at 0, and has height of 235
+
+%Shape: Rectangle [id:dp825388812202094]
+\draw   (170.03,80.45) -- (240.03,80.45) -- (240.03,100.6) -- (170.03,100.6) -- cycle ;
+%Shape: Rectangle [id:dp14864028902399207]
+\draw   (240.03,80.45) -- (310.03,80.45) -- (310.03,100.6) -- (240.03,100.6) -- cycle ;
+%Shape: Rectangle [id:dp7884559583685814]
+\draw   (310.03,80.45) -- (380.03,80.45) -- (380.03,100.6) -- (310.03,100.6) -- cycle ;
+%Shape: Rectangle [id:dp35134610552522016]
+\draw   (380.03,80.45) -- (450.03,80.45) -- (450.03,100.6) -- (380.03,100.6) -- cycle ;
+%Shape: Rectangle [id:dp4861422647723048]
+\draw  [line width=1.5]  (90.3,100.6) -- (170.03,100.6) -- (170.03,140.1) -- (90.3,140.1) -- cycle ;
+%Shape: Rectangle [id:dp6944945627663905]
+\draw   (170.03,130.35) -- (330.4,130.35) -- (330.4,140.1) -- (170.03,140.1) -- cycle ;
+%Shape: Rectangle [id:dp9251694720176761]
+\draw   (240.4,120.6) -- (330.4,120.6) -- (330.4,130.35) -- (240.4,130.35) -- cycle ;
+%Shape: Rectangle [id:dp6250427203046308]
+\draw   (330.15,100.6) -- (380.03,100.6) -- (380.03,110.35) -- (330.15,110.35) -- cycle ;
+%Shape: Rectangle [id:dp9881839503063642]
+\draw   (380.15,110.2) -- (449.95,110.2) -- (449.95,119.95) -- (380.15,119.95) -- cycle ;
+%Shape: Rectangle [id:dp32349001909502306]
+\draw  [line width=1.5]  (90.3,140.1) -- (170.03,140.1) -- (170.03,189.97) -- (90.3,189.97) -- cycle ;
+%Shape: Rectangle [id:dp3901158710282183]
+\draw  [line width=1.5]  (90.3,189.97) -- (170.03,189.97) -- (170.03,220.55) -- (90.3,220.55) -- cycle ;
+%Shape: Rectangle [id:dp34291500733681257]
+\draw  [line width=1.5]  (90.3,70.15) -- (170.03,70.15) -- (170.03,100.6) -- (90.3,100.6) -- cycle ;
+%Shape: Rectangle [id:dp3531165813736393]
+\draw   (170.03,210.8) -- (450.43,210.8) -- (450.43,220.55) -- (170.03,220.55) -- cycle ;
+%Shape: Rectangle [id:dp5600105222455607]
+\draw   (309.83,201.05) -- (450.43,201.05) -- (450.43,210.8) -- (309.83,210.8) -- cycle ;
+%Shape: Rectangle [id:dp3358189403609142]
+\draw   (380.43,191.3) -- (450.43,191.3) -- (450.43,201.05) -- (380.43,201.05) -- cycle ;
+%Shape: Rectangle [id:dp06740844627476983]
+\draw   (170.03,180.22) -- (320.23,180.22) -- (320.23,189.97) -- (170.03,189.97) -- cycle ;
+%Shape: Rectangle [id:dp3568047812502442]
+\draw   (170.03,170.47) -- (320.23,170.47) -- (320.23,180.22) -- (170.03,180.22) -- cycle ;
+%Shape: Rectangle [id:dp6136812572325581]
+\draw   (240.03,160.72) -- (320.23,160.72) -- (320.23,170.47) -- (240.03,170.47) -- cycle ;
+%Shape: Rectangle [id:dp10550778488238388]
+\draw   (330.55,140.4) -- (380.43,140.4) -- (380.43,150.15) -- (330.55,150.15) -- cycle ;
+%Shape: Rectangle [id:dp42048124539741105]
+\draw   (380.55,150) -- (450.35,150) -- (450.35,159.75) -- (380.55,159.75) -- cycle ;
+
+% Text Node
+\draw (205.03,90.53) node   [align=left] {{\footnotesize Programas}};
+% Text Node
+\draw (275.03,90.53) node   [align=left] {{\footnotesize Funciones}};
+% Text Node
+\draw (345.03,90.53) node   [align=left] {{\footnotesize Bloques}};
+% Text Node
+\draw (415.03,90.53) node   [align=left] {{\footnotesize Operaciones}};
+% Text Node
+\draw (130.16,85.38) node   [align=left] {{\small \textbf{Detectable}}};
+% Text Node
+\draw (250.21,135.23) node   [align=left] {{\tiny Procesos}};
+% Text Node
+\draw (285.4,125.48) node   [align=left] {{\tiny Hebras}};
+% Text Node
+\draw (355.09,105.48) node   [align=left] {{\tiny IntraInstr.}};
+% Text Node
+\draw (415.05,115.08) node   [align=left] {{\tiny Instrucciones}};
+% Text Node
+\draw (130.16,120.35) node   [align=left] {{\small \textbf{Utilizado}}};
+% Text Node
+\draw (130.16,165.04) node   [align=left] {{\small \textbf{Implementado}}};
+% Text Node
+\draw (130.16,205.26) node   [align=left] {{\small \textbf{Extraído}}};
+% Text Node
+\draw (310.23,215.68) node   [align=left] {{\tiny Usuario - Programador}};
+% Text Node
+\draw (380.13,205.93) node   [align=left] {{\tiny Herramienta programación}};
+% Text Node
+\draw (415.43,196.18) node   [align=left] {{\tiny Arquitectura}};
+% Text Node
+\draw (280.13,165.59) node   [align=left] {{\tiny Multihebra}};
+% Text Node
+\draw (245.13,175.34) node   [align=left] {{\tiny Multiprocesador}};
+% Text Node
+\draw (245.13,185.09) node   [align=left] {{\tiny Multicomputador}};
+% Text Node
+\draw (355.49,145.28) node   [align=left] {{\tiny SIMD}};
+% Text Node
+\draw (415.45,154.88) node   [align=left] {{\tiny ILP}};
+\end{tikzpicture}
