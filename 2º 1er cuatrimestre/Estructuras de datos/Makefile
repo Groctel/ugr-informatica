@@ -21,7 +21,7 @@ reto2:
 reto3:
 	@printf "\033[1;33m-> \033[34mCopiando\033[0m \"%s\"...\n" \
 	        "Reto 3"
-	@cp -r "Retos/Reto3" $(OUT)
+	@cp -r "Retos/Reto 3" $(OUT)
 
 relocalizacion:
 	@printf "\033[1;33m-> \033[33mRelocalizando ficheros de salida\033[0m...\n"
