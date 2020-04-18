@@ -52,7 +52,7 @@ all: saludo c21 c22 despedida
 
 saludo:
 	@printf "\033[35;1m:: \033[0mComenzando compilación\n"
-	@rm -rf $(OUT) > /dev/null || printf ""
+	@rm -rf $(BIN) > /dev/null || printf ""
 
 despedida:
 	@printf "\033[1;32m:: \033[0mCompilación completada con éxito\n"
