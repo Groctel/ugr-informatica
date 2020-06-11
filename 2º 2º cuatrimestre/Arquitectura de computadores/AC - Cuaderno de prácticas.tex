@@ -1,0 +1,30 @@
+\documentclass[10pt]{report}
+\usepackage[spanish]{babel}
+
+% Document settings
+
+\usepackage{titling}
+	\author{Atanasio José Rubio Gil}
+	\title{Arquitectura~de~computadores}
+	\date{\today}
+
+\usepackage[title=\thetitle]{aqademia}
+	\aqchap{Bloque práctico }
+	\aqsec{Ejercicio }
+
+\usepackage{gensymb}
+\usepackage{pgfplots}
+
+% Document composition
+
+\begin{document}
+
+\aqtitlepage{Grado en Ingeniería Informática}
+            {Cuaderno de prácticas}
+            {https://github.com/Groctel/ugr-informatica}
+\tableofcontents
+
+\setcounter{chapter}{-1}
+\input{CuadernoDePracticas/EntornoDeProgramacion.tex}
+
+\end{document}

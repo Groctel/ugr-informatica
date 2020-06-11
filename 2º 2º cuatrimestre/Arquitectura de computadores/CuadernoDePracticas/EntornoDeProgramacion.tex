@@ -1,0 +1,441 @@
+\chapter{Entorno de programación}\label{entorno-de-programacion}
+
+\section{}\label{ej1-1}
+
+\subsubsection{Enunciado}
+
+Ejecutar \code{lscpu} en el PC y en un nodo de cómputo de \textit{atcgrid}.
+
+\begin{itemize}
+	\item Mostrar el resultado de estas ejecuciones.
+	\item ¿Cuántos núcleos físicos y cuántos núcleos lógicos tienen los nodos de cómputo de \textit{atcgrid} y el PC\@? Razonar las respuestas.
+\end{itemize}
+
+\subsubsection{Solución}
+
+Ejecución de \code{lscpu} en el PC:
+
+\begin{lstlisting}[language=sh]
+lscpu
+# Architecture:                    x86_64
+# CPU op-mode(s):                  32-bit, 64-bit
+# Byte Order:                      Little Endian
+# Address sizes:                   39 bits physical, 48 bits virtual
+# CPU(s):                          12
+# On-line CPU(s) list:             0-11
+# Thread(s) per core:              2
+# Core(s) per socket:              6
+# Socket(s):                       1
+# NUMA node(s):                    1
+# Vendor ID:                       GenuineIntel
+# CPU family:                      6
+# Model:                           158
+# Model name:                      Intel(R) Core(TM) i7-8750H CPU @ 2.20GHz
+# Stepping:                        10
+# CPU MHz:                         900.075
+# CPU max MHz:                     4100.0000
+# CPU min MHz:                     800.0000
+# BogoMIPS:                        4401.32
+# Virtualization:                  VT-x
+# L1d cache:                       192 KiB
+# L1i cache:                       192 KiB
+# L2 cache:                        1.5 MiB
+# L3 cache:                        9 MiB
+# NUMA node0 CPU(s):               0-11
+# ...
+\end{lstlisting}
+
+\pagebreak
+
+Ejecución de \code{lscpu} en el \textit{atcgrid}:
+
+\begin{lstlisting}[language=sh]
+lscpu
+# Architecture:          x86_64
+# CPU op-mode(s):        32-bit, 64-bit
+# Byte Order:            Little Endian
+# CPU(s):                24
+# On-line CPU(s) list:   0-23
+# Thread(s) per core:    2
+# Core(s) per socket:    6
+# Socket(s):             2
+# NUMA node(s):          2
+# Vendor ID:             GenuineIntel
+# CPU family:            6
+# Model:                 44
+# Model name:            Intel(R) Xeon(R) CPU           E5645  @ 2.40GHz
+# Stepping:              2
+# CPU MHz:               1600.000
+# CPU max MHz:           2401,0000
+# CPU min MHz:           1600,0000
+# BogoMIPS:              4799.93
+# Virtualization:        VT-x
+# L1d cache:             32K
+# L1i cache:             32K
+# L2 cache:              256K
+# L3 cache:              12288K
+# NUMA node0 CPU(s):     0-5,12-17
+# NUMA node1 CPU(s):     6-11,18-23
+\end{lstlisting}
+
+El PC tiene $12$ núcleos lógicos y el \textit{atcgrid} tiene $24$ núcleos lógicos:
+
+\[\begin{split}
+           & \text{nº núcleos lógicos}=\text{sockets}\cdot\text{cores per socket}\cdot\text{threads per core}\\
+PC\ \      & 1\cdot6\cdot2=12 \\
+\textit{atcgrid}\ \ & 2\cdot6\cdot2=24
+\end{split}\]
+
+\section{}\label{ej1-2}
+
+\subsubsection{Enunciado}
+
+Compilar y ejecutar en el PC el código \code{HelloOMP.c} del seminario.
+
+\begin{itemize}
+	\item Mostar la compilación y ejecución en el PC\@.
+	\item Justificar el número de ``Hello world'' que se imprimen en pantalla teniendo en cuenta la salida que devuelve \code{lscpu}.
+\end{itemize}
+
+\pagebreak
+
+\subsubsection{Solución}
+
+\begin{lstlisting}[language=sh]
+gcc -O2 -fopenmp HelloOMP.c -o HelloOMP
+./HelloOMP
+# (9:Hello, World!!!)
+# (7:Hello, World!!!)
+# (10:Hello, World!!!)
+# (2:Hello, World!!!)
+# (4:Hello, World!!!)
+# (5:Hello, World!!!)
+# (3:Hello, World!!!)
+# (8:Hello, World!!!)
+# (1:Hello, World!!!)
+# (0:Hello, World!!!)
+# (11:Hello, World!!!)
+# (6:Hello, World!!!)
+\end{lstlisting}
+
+Se imprimen $12$ ``Hello World'', uno por cada hebra (o núcleo lógico) del sistema identificado por un número en el rango $[0-11]$ mediante la llamada \code{omp\_get\_thread\_num()}.
+
+\section{}\label{ej1-3}
+
+\subsubsection{Enunciado}
+
+Copiar el ejecutable de \code{HelloOMP.c} que ha generado en~\ref{ej1-2} y que se encuentra en su directorio del PC al directorio de su \code{\$HOME} en el \textit{front-end} de \textit{atcgrid}.
+Ejecutar este código en un nodo de cómputo de \textit{atcgrid} a través de cola \code{ac} del gestor de colas (no use ningún script) utilizando directamente en la línea de comandos:
+
+\begin{lstlisting}[language=sh]
+srun -p ac -n1 --cpus-per-task=12 --hint=nomultithread HelloOMP
+srun -p ac -n1 --cpus-per-task=24 HelloOMP
+srun -p ac -n1 HelloOMP
+\end{lstlisting}
+
+Mostrar el envío a la cola de la ejecución y el resultado de esta ejecución tal y como la devuelve el gestor de colas.
+
+¿Qué orden \code{srun} usaría para que \code{HelloOMP} utilice los $12$ núcleos físicos de un nodo de cómputo de \textit{atcgrid} (se debe imprimir un único mensaje desde cada uno de ellos, $12$ en total)?
+
+\subsubsection{Solución}
+
+\begin{lstlisting}[language=sh]
+srun -p ac -n1 --cpus-per-task=12 --hint=nomultithread HelloOMP
+# (6:Hello, World!!!)
+# (0:Hello, World!!!)
+# (3:Hello, World!!!)
+# (8:Hello, World!!!)
+# (5:Hello, World!!!)
+# (11:Hello, World!!!)
+# (1:Hello, World!!!)
+# (9:Hello, World!!!)
+# (2:Hello, World!!!)
+# (10:Hello, World!!!)
+# (4:Hello, World!!!)
+# (7:Hello, World!!!)
+\end{lstlisting}
+
+\pagebreak
+
+\begin{lstlisting}[language=sh]
+srun -p ac -n1 --cpus-per-task=24 HelloOMP
+# (0:Hello, World!!!)
+# (21:Hello, World!!!)
+# (17:Hello, World!!!)
+# (1:Hello, World!!!)
+# (9:Hello, World!!!)
+# (18:Hello, World!!!)
+# (13:Hello, World!!!)
+# (15:Hello, World!!!)
+# (22:Hello, World!!!)
+# (16:Hello, World!!!)
+# (5:Hello, World!!!)
+# (8:Hello, World!!!)
+# (23:Hello, World!!!)
+# (19:Hello, World!!!)
+# (14:Hello, World!!!)
+# (2:Hello, World!!!)
+# (12:Hello, World!!!)
+# (4:Hello, World!!!)
+# (10:Hello, World!!!)
+# (20:Hello, World!!!)
+# (11:Hello, World!!!)
+# (7:Hello, World!!!)
+# (6:Hello, World!!!)
+# (3:Hello, World!!!)
+\end{lstlisting}
+
+\begin{lstlisting}[language=sh]
+srun -p ac -n1 HelloOMP
+# (1:Hello, World!!!)
+# (0:Hello, World!!!)
+\end{lstlisting}
+
+Para que \code{HelloOMP} utilize los $12$ núcleos físicos de un nodo de cómputo de \textit{atcgrid} se debe usar la siguiente orden:
+
+\begin{lstlisting}[language=sh]
+srun -p ac -n1 --cpus-per-task=12 --hint=nomultithread HelloOMP
+\end{lstlisting}
+
+\section{}\label{ej1-4}
+
+\subsubsection{Enunciado}
+
+Modificar en su PC \code{HelloOMP.c} para que se imprima ``world'' en un \code{printf} distinto al usado para ``Hello''.
+En ambos \code{printf} se debe imprimir el identificador de la hebra que escribe en pantalla.
+Nombrar al código resultante \code{HelloOMP2.c}.
+Compilar este nuevo código en el PC y ejecutarlo.
+Copiar el fichero ejecutable resultante al \textit{front-end} de \textit{atcgrid}.
+Ejecutar el código en un nodo de cómputo de \textit{atcgrid} usando el script \code{script\_helloomp.sh} del seminario.
+
+Utilizar la siguiente orden\footnote{%
+	Utilizar siempre con \code{sbatch} las opciones \code{-n1}, \code{--cpus-per-task}, \code{--exclusive} y, para usar núcleos físicos y no lógicos, no olvidar incluir \code{--hint=nomultithread}.
+	Utilizar siempre con \code{srun}.
+	Si lo usa fuera de un script, usar las mismas opcioens que con \code{sbatch} a excepción de \code{--exclusive}.
+	Recordar que los \code{srun} dentro de un script heredan las opciones utilizadas en el \code{sbatch} que se usa para enviar el script a la cola \code{slurm}.
+	Se recomienda usar \code{sbatch} en lugar de \code{srun} para enviar trabajos a ejecutar a través \code{slurm} porque éste último deja bloqueada la ventana hasta que termina la ejecución, mientras que usando \code{sbatch} la ejecución se realiza en segundo plano.
+}:
+
+\begin{lstlisting}[language=sh]
+sbatch -p ac -n1 --cpus-per-task=12 --hint=nomultithread script_helloomp.sh
+\end{lstlisting}
+
+Mostrar el nuevo código, la compilación, el envío a la cola de la ejecución y el resultado de esta ejecución tal y como la devuelve el gestor de colas.
+
+¿Qué nodo de cómputo de \textit{atcgrid} ha ejecutado el script?
+Explicar cómo ha obtenido esta información.
+
+\subsubsection{Solución}
+
+\code{HelloOMP2.c}:
+\lstinputlisting[language=C]{CuadernoDePracticas/Ej1.4/HelloOMP2.c}
+
+Ejecución en el PC\@:
+\begin{lstlisting}[language=sh]
+gcc -O2 -fopenmp HelloOMP2.c -o HelloOMP2
+./HelloOMP2
+# (2:Hello)(0:Hello)(9:Hello)(6:Hello)(11:Hello)(5:Hello)(3:Hello)(4:Hello)(10:Hello)(1:Hello)(7:Hello)(8:Hello)(0:World)
+\end{lstlisting}
+
+Ejecución en \textit{atcgrid}:
+
+\begin{lstlisting}[language=sh]
+sbatch -p ac -n1 --cpus-per-task=12 --hint=nomultithread script_helloomp.sh
+# Submitted batch job 54390
+cat slurm-54392.out
+# Id. usuario del trabajo: d1estudiante24
+# Id. del trabajo: 54392
+# Nombre del trabajo especificado por usuario: script_helloomp.sh
+# Directorio de trabajo (en el que se ejecuta el script): /home/d1estudiante24/bp0/ejer3
+# Cola: ac
+# Nodo que ejecuta este trabajo:atcgrid.ugr.es
+# Nº de nodos asignados al trabajo: 1
+# Nodos asignados al trabajo: atcgrid1
+# CPUs por nodo: 24
+#
+# 1. Ejecución helloOMP una vez sin cambiar nº de threads (valor por defecto):
+# (8:Hello)(3:Hello)(5:Hello)(7:Hello)(11:Hello)(6:Hello)(1:Hello)(9:Hello)(4:Hello)(0:Hello)(2:Hello)(10:Hello)(0:World)
+# 2. Ejecución helloOMP varias veces con distinto nº de threads:
+#
+#   - Para 12 threads:(1:Hello)(8:Hello)(2:Hello)(11:Hello)(10:Hello)(9:Hello)(0:Hello)(7:Hello)(5:Hello)(4:Hello)(6:Hello)(3:Hello)(0:World)
+#   - Para 6 threads:(3:Hello)(0:Hello)(5:Hello)(4:Hello)(2:Hello)(1:Hello)(0:World)
+#   - Para 3 threads:(1:Hello)(2:Hello)(0:Hello)(0:World)
+#   - Para 1 threads:(0:Hello)(0:World)[AtanasioRubioGil d1estudiante24@atcgrid:~/bp0/ejer3] 2020-06-11 jueves
+\end{lstlisting}
+
+El script se ha ejecutado por el nodo \code{atcgrid1}, como indica la línea \code{Nodos asignados al trabajo}.
+
+\pagebreak
+
+\section{}\label{ej1-5}
+
+\subsubsection{Enunciado}
+
+Generar en el PC el ejecutable del código fuente C del \textit{Listado 1} para vectores locales (para ello, antes de compilar, debe descomentar la definición de \code{VECTOR\_LOCAL} y comentar las definiciones de \code{VECTOR\_GLOBAL} y \code{VECTOR\_DYNAMIC}).
+El comentario inicial del código muestra la orden para compilar (siempre hay que usar \code{-O2} al compilar como se indica en las normas de prácticas).
+Mostrar la compilación y la ejecución correcta del código en el PC\@.
+
+\subsubsection{Solución}
+
+\begin{lstlisting}[language=sh]
+gcc -O2 SumaVectores.c -o SumaVectores -lrt
+./SumaVectores 9
+# Tamaño Vectores: 9 (4B)
+# Tiempo: 0.000000268 --- Tamaño Vectores: 9
+#  - V1[0]+V2[0] = V3[0] (0.900000+0.900000 = 1.800000)
+#  - V1[1]+V2[1] = V3[1] (1.000000+0.800000 = 1.800000)
+#  - V1[2]+V2[2] = V3[2] (1.100000+0.700000 = 1.800000)
+#  - V1[3]+V2[3] = V3[3] (1.200000+0.600000 = 1.800000)
+#  - V1[4]+V2[4] = V3[4] (1.300000+0.500000 = 1.800000)
+#  - V1[5]+V2[5] = V3[5] (1.400000+0.400000 = 1.800000)
+#  - V1[6]+V2[6] = V3[6] (1.500000+0.300000 = 1.800000)
+#  - V1[7]+V2[7] = V3[7] (1.600000+0.200000 = 1.800000)
+#  - V1[8]+V2[8] = V3[8] (1.700000+0.100000 = 1.800000)
+./SumaVectores 100000
+# Tamaño Vectores: 100000 (4B)
+# Tiempo: 0.000520104 --- Tamaño Vectores: 100000
+# V1[0]+V2[0] = V3[0] (10000.000000+10000.000000 = 20000.000000)
+# V1[99999]+V2[99999] = V3[99999] (19999.900000+0.100000 = 20000.000000)
+./SumaVectores 1000000
+# Tamaño Vectores: 1000000 (4B)
+# [1]    32567 segmentation fault (core dumped)  ./SumaVectores 1000000
+\end{lstlisting}
+
+\section{}\label{ej1-6}
+
+\subsubsection{Enunciado}
+En el código del \textit{Listado 1} se utiliza la función \code{clock\_gettime()} para obtener el tiempo de ejecución del trozo de código que calcula la suma de vectores.
+El código se imprime la variable \code{ncgt}.
+¿Qué contiene esta variable?
+
+¿En qué estructura de datos devuelve \code{clock\_gettime()} la información de tiempo?
+Indicar el tipo de estructura de datos, describir la estructura de datos, e indicar los tipos de datos que usa.
+¿Qué información devuelve exactamente esta función en su estructura de datos?
+¿Qué representan los valores numéricos que devuelve?
+
+\subsubsection{Solución}
+
+La variable \code{ncgt} contiene el tiempo que tarda el programa en realizar los cómputos con los tres vectores.
+
+La llamada a \code{clock\_gettime()} devuelve el tiempo en una estructura \code{timespec}, que es una estructura definida en \code{<time.h>} y que está compuesta por un dato \code{time\_t} que contiene el número de segundos desde el 1 de enero de 1970 y un dato \code{long} que contiene el número de nanosegundos pasados desde el último segundo.
+
+\section{}\label{ej1-7}
+
+\subsubsection{Enunciado}
+
+Rellenar una tabla con los tiempos de ejecución del código del \textit{Listado 1} para vectores locales, globales y dinámicos.
+Obtener estos resultados usando scripts (partir del script que hay en el seminario).
+Debe haber una tabla para \textit{atcgrid} y otra para su PC\@.
+En la columna ``Bytes de un vector'' hay que poner el total de bytes reservado para un vector.
+
+\subsubsection{Solución}
+
+\begin{center}
+\begin{table}[!h]
+\begin{tabular}{r r r r r}
+\textbf{Componentes} & \textbf{Bytes por vector} & \textbf{Tº vect. locales} & \textbf{Tº vect. globales} & \textbf{Tº vect. dinámicos} \\
+\toprule
+65536                   & 524288                      & 0                         & 0                          & 0                           \\
+131072                  & 1048576                     & 0                         & 0                          & 0                           \\
+262144                  & 2097152                     & 0                         & 0                          & 0                           \\
+524288                  & 4194304                     & core dumped               & 0                          & 0                           \\
+1048576                 & 8388608                     & core dumped               & 0.01                       & 0                           \\
+2097152                 & 16777216                    & core dumped               & 0.01                       & 0.01                        \\
+4194304                 & 33554432                    & core dumped               & 0.02                       & 0.02                        \\
+8388608                 & 67108864                    & core dumped               & 0.03                       & 0.03                        \\
+16777216                & 134217728                   & core dumped               & 0.07                       & 0.06                        \\
+33554432                & 268435456                   & core dumped               & 0.13                       & 0.11                        \\
+67108864                & 536870912                   & core dumped               & 0.13                       & 0.22                        \\
+\end{tabular}
+\caption{Resultados de \code{SumaVectores.c} en mi PC}
+\end{table}
+
+\begin{table}[!h]
+\begin{tabular}{r r r r r}
+\textbf{Componentes} & \textbf{Bytes por vector} & \textbf{Tº vect. locales} & \textbf{Tº vect. globales} & \textbf{Tº vect. dinámicos} \\
+\toprule
+65536                & 524288                    & 0                         & 0                          & 0                           \\
+131072               & 1048576                   & 0                         & 0                          & 0                           \\
+262144               & 2097152                   & 0                         & 0                          & 0                           \\
+524288               & 4194304                   & core dumped               & 0                          & 0                           \\
+1048576              & 8388608                   & core dumped               & 0.01                       & 0.01                        \\
+2097152              & 16777216                  & core dumped               & 0.01                       & 0.01                        \\
+4194304              & 33554432                  & core dumped               & 0.02                       & 0.02                        \\
+8388608              & 67108864                  & core dumped               & 0.03                       & 0.03                        \\
+16777216             & 134217728                 & core dumped               & 0.07                       & 0.06                        \\
+33554432             & 268435456                 & core dumped               & 0.13                       & 0.13                        \\
+67108864             & 536870912                 & core dumped               & 0.13                       & 0.25                        \\
+\end{tabular}
+\caption{Resultados de \code{SumaVectores.c} en el \textit{atcgrid}}
+\end{table}
+\end{center}
+
+\section{}\label{ej1-8}
+
+\subsubsection{Enunciado}
+
+Representar en una misma gráfica los tiempos de ejecución obtenidos en \textit{atcgrid} y en su PC para vectores locales, globales y dinámicos (eje $y$) en función del tamaño en bytes de un vector (por tanto, los valores de la segunda columna de la tabla, que están en escala logarítmica, deben estar en el eje $x$).
+Utilizar escala logarítmica en el eje de ordenadas (eje $y$).
+¿Hay diferencias en los tiempos de ejecución?
+
+\subsubsection{Solución}
+
+TODO\@: Escribir esta solución.
+
+\section{}\label{ej1-9}
+
+\subsubsection{Enunciado}
+
+Cuando se usan vectores locales, globales y dinámicos, ¿se obtiene error para alguno de los tamaños?
+¿A qué cree que es debido lo que ocurre?
+
+\subsubsection{Solución}
+
+La violación de segmento al usar vectores locales se produce porque el programa trata de acceder a valores de la pila superiores al espacio reservado.
+
+No se produce ningún error usando vectores globales porque el tamaño de los vectores viene indicado en tiempo de compilación, por lo que se reserva espacio suficiente para trabajar con ellos.
+
+Con vectores dinámicos no se obtiene error en los tamaños porque la reserva de memoria se hace de forma dinámica en el \textit{heap}.
+La única forma de que no se pudisese reservar memoria sería que no quedara espacio disponible en memoria principal.
+
+\section{}\label{ej1-10}
+
+\subsubsection{Enunciado}
+
+¿Cuál es el máximo valor que se puede almacenar en la variable \code{N} teniendo en cuenta su tipo?
+Razonar la respuesta.
+
+Modificar el código fuente C (en el PC) para que el límite de los vectores cuando se declaran como variables globales sea igual al máximo número que se puede almacenar en la variable \code{N} y generar el ejecutable.
+¿Qué ocurre?
+¿A qué es debido?
+Mostrar lo que ocurre.
+
+\pagebreak
+
+\subsubsection{Solución}
+
+El máximo valor almacenable en \code{N} es $2^{32}-1 = 4294967295$, definido en la constante \code{UINT\_MAX} de \code{<limits.h>}.
+Es el valor máximo almacenable en un \code{unsigned} en x86\_64.
+
+\begin{lstlisting}[language=sh]
+gcc -O2 SumaVectores.c -o SumaVectores -lrt
+# SumaVectores.c: In function ‘main’:
+# SumaVectores.c:98:18: warning: iteration 2147483647 invokes undefined behavior [-Waggressive-loop-optimizations]
+#    98 |  for (i=0; i<N; i++) {
+#       |                 ~^~
+# SumaVectores.c:98:2: note: within this loop
+#    98 |  for (i=0; i<N; i++) {
+#       |  ^~~
+# SumaVectores.c:107:18: warning: iteration 2147483647 invokes undefined behavior [-Waggressive-loop-optimizations]
+#   107 |  for (i=0; i<N; i++)
+#       |                 ~^~
+# SumaVectores.c:107:2: note: within this loop
+#   107 |  for (i=0; i<N; i++)
+#       |  ^~~
+./SumaVectores 1
+# Tamaño Vectores: 4294967295 (4B)
+# ^C
+\end{lstlisting}
+
+Al modificar el fuente, el tamaño de los vectores es tan grande como el valor máximo asumible por el sistema, por lo que a valores tan altos el comportamiento del mismo no está definido.
+De hecho, el programa debe ser finalizado manualmente debido a la cantidad de tiempo que tarda en ejecutarse.
