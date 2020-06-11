@@ -1,0 +1,514 @@
+\chapter{Cálculo de la eficiencia de algoritmos}\label{eficiencia}
+
+\section{Eficiencia teórica}\label{eficiencia-teorica}
+
+\subsection{Algoritmos iterativos}\label{eficiencia-teorica-iterativos}
+
+Calcular la eficiencia teórica en el peor y el mejor caso para los siguientes algoritmos:
+
+\subsubsection{Algoritmo iterativo 1}
+
+\begin{lstlisting}[language=C]
+int pivotar (double* v, const int ini, const int fin) {
+	double pivote = v[init],
+	       aux;
+	int i = ini+1,
+	    j = fin;
+
+	while (i <= j) {
+		while (v[i] < pivote && i <= j)
+			i++;
+
+		while (v[j] >= pivote && j >= i)
+			j--;
+
+		if (i < j) {
+			aux  = v[i];
+			v[i] = v[j];
+			v[j] = aux;
+		}
+	}
+
+	if (j > ini) {
+		v[ini] = v[j];
+		v[j]   = pivote;
+	}
+
+	return j;
+}
+\end{lstlisting}
+
+\textbf{Tamaño del caso:}
+
+El tamaño del caso es $j-i$, siendo $i$ la posición de inicio del vector con el que se trabaja y $j$ la posición de final, ambas inclusive.
+
+\textbf{Eficiencia en el caso peor:}
+
+En este caso, el algoritmo entra en el bucle \code{while (i <= j)}, que está compuesto de dos bucles que analizamos individualmente:
+
+\begin{itemize}
+	\item\code{while (v[i] < pivote \&\& i </ j)}\textbf{:} La ejecución más larga posible de este bucle se da cuando \code{v[i]} siempre es menor que \code{pivote}, de forma que se ejecuta el bucle hasta que \code{i} es igual que \code{j}, iterando ascendentemente por todo el vector menos el primer elemento, de forma que la eficiencia es $O(n-1)=O(n)$.
+	\item\code{while (v[j] >= pivote \&\& j >= i)}\textbf{:} La ejecución más larga posible de este vector se da cuando \code{v[j]} siempre es mayor o igual que \code{pivote}, iterando descendentemente por todo el vector menos el primer elemento, de forma que la eficiencia es $O(n-1)=O(n)$.
+\end{itemize}
+
+Por la regla del máximo, la eficiencia del cuerpo del bucle es $O(n)$.
+Al ejecutarse el cuerpo en el caso peor, tenemos que \code{i} es mayor que \code{j}, por lo que el bucle \code{while (i <= j)} se ejecuta una única vez, siendo su eficiencia $O(n)$.
+
+De esta forma determinamos que \textbf{la eficiencia de este algoritmo en caso peor es $\boldsymbol{O(n)}$}.
+
+\textbf{Eficiencia en el caso mejor:}
+
+En el caso mejor, el algoritmo no llega a entrar en el primer bucle, ya que \code{i} es mayor que \code{j}, por lo que sólo se ejecutan operaciones en tiempo constante.
+\textbf{La eficiencia de este algoritmoe en el caso mejor es $\boldsymbol{\Omega(1)}$}.
+
+\subsubsection{Algoritmo iterativo 2}
+
+\begin{lstlisting}[language=C]
+int Busqueda (int* v, int n, int elem) {
+	int inicio = 0,
+	    fin    = n - 1,
+		 centro = (inicio + fin) / 2;
+
+	while (inicio <= fin && v[centro] != elem) {
+		if (elem < v[centro])
+			fin = centro - 1;
+		else
+			inicio = centro + 1;
+
+		centro = (inicio + fin) / 2;
+	}
+
+	if (inicio > fin)
+		return -1;
+
+	return centro;
+}
+\end{lstlisting}
+
+\textbf{Tamaño del caso:}
+
+El tamaño del caso es \code{n}, ya que se toma el \code{inicio} del vector como \code{0} y el \code{fin}, como \code{n-1}.
+
+\textbf{Eficiencia en el caso peor:}
+
+En el caso peor el algoritmo entra en el bucle \code{while} y éste se ejecuta hasta que \code{inicio} sea mayor que \code{fin}, es decir, no se encuentra \code{elem}.
+En este caso, el bucle ejecuta una búsqueda binaria a lo largo del vector, posicionando \code{elem} en una de las dos mitades, ignorando la otra y dividiendo la mitad en la que se encuentra \code{elem} en dos hasta que sólo quedan dos elementos y se descartan ambos.
+Por tanto, \textbf{la eficiencia de este algoritmo en el caso peor es $\boldsymbol{O(logn)}$}.
+
+\textbf{Eficiencia en el caso mejor:}
+
+En el caso mejor, \code{v[centro]} es el valor que busca \code{elem}, por lo que no es necesario entrar en el bucle y el resto de operaciones se ejecutan en tiempo constante.
+\textbf{La eficiencia de este algoritmo en el caso mejor es $\boldsymbol{\Omega(1)}$}.
+
+\pagebreak
+
+\subsubsection{Algoritmo iterativo 3}
+
+\begin{lstlisting}[language=C]
+void EliminaRepetidos (double original[], int & nOriginal) {
+	for (int i=0; i<nOriginal; i++) {
+	//	Buscamos el valor repetido de original[i] desde original [i+1] hasta el final.
+		int j = i+1;
+
+		do {
+			if (original[j] == original[i]) {
+			/*
+			 *	Desplazamos todas las componentes desde j+1 hasta el final,
+			 *	una componente a la izquierda.
+			 */
+				for (int k=j+1; k<nOriginal; k++)
+					original[k-1] = original[k];
+			/*
+			 *	Como hemos eliminado una componente, reducimos el número de
+			 *	componenetes útiles.
+			 */
+				nOriginal--;
+			}
+			else {
+			//	Si el valor no está repetido, pasamos al siguiente j
+				j++;
+			}
+		} while (j < nOriginal);
+	}
+}
+\end{lstlisting}
+
+\textbf{Tamaño del caso:}
+
+El tamaño del caso es \code{nOriginal}, el número de elementos del vector \code{original}.
+
+\textbf{Eficiencia en el caso peor:}
+
+En este caso, todos los elementos del vector son iguales y deben eliminarse, entrando en el bloque \code{if (original[j] == original[i])} tantas veces como elementos haya menos uno.
+Este bloque contiene un bucle \code{for} cuyo cuerpo, inicialización, comprobación y actualización se ejecutan en tiempo constante.
+Este bucle se ejecuta de \code{i+2} a \code{nOriginal}, avanzando de uno en uno, por lo que su eficiencia es $O(n)$.
+
+En cualquier caso, el bucle \code{do while} siempre se ejecuta \code{nOriginal-j} veces, ya sea por incremento de \code{j} o decremento de \code{nOriginal}, por lo que la eficiencia de este bucle es siempre $O(n)$.
+Teniendo esto en cuenta y siguiendo la regla del producto, determinamos que la eficiencia total del buclde \code{do while} es $O(n^2)$ y que \textbf{la eficiencia de este algoritmo en el caso peor es $\boldsymbol{O(n^2)}$}.
+
+\textbf{Eficiencia en el caso mejor:}
+
+Como hemos visto en el análisis del caso peor, el bucle \code{do while} siempre se ejecuta con eficiencia $O(n)$.
+En el caso mejor, no hay ningún elemento repetido, por lo que el bucle \code{for} del cuerpo no se ejecuta nunca y la eficiencia total del cuerpo es $O(1)$.
+Por tanto, teniendo en cuenta la regla del producto, \textbf{la eficiencia de este algoritmo en el caso mejor es $\boldsymbol{\Omega(n)}$}.
+
+\pagebreak
+
+\subsection{Algoritmos recursivos}\label{eficiencia-recursivos}
+
+Analizar la eficiencia y calcular la ecuación en recurrencias para los siguientes algoritmos:
+
+\subsubsection{Algoritmo recursivo 1}
+
+\begin{lstlisting}[language=C]
+void hanoi (int M, int i, int j) {
+	if (M > 0) {
+		hanoi(M-1, i, 6-i-j);
+		printf("%d -> %d\n", i, j);
+		hanoi(M-1, 6-i-j, j);
+	}
+}
+\end{lstlisting}
+
+Identificamos los casos:
+
+\[T(n)=
+\begin{cases}
+	1         & n=0\text{ (caso base)} \\
+	1+2T(n-1) & n>1\text{ (caso general)}
+\end{cases}
+\]
+
+Nos queda la siguiente ecuación lineal no homogénea:
+
+\[T(n)=2T(n-1)+1\Leftrightarrow T(n)-2T(n-1)=1\]
+
+Calculamos las raíces de la parte homogénea tomando su polinomio característico:
+
+\[T(n)-2T(n-1)=0\Rightarrow x^n-2x^{n-1}=0\Leftrightarrow(x-2)x^{n-1}=0\Leftrightarrow x-2=0\Leftrightarrow x=2\]
+
+Calculamos las raíces de la parte no homogénea:
+
+\[1=b_1^n\cdot q_1(n)\Rightarrow b_1=1,q_1(n)=1\]
+
+Tenemos por tanto dos raíces en nuestro polinomio característico:
+
+\begin{itemize}
+	\item $x_1=2, m_1=1$
+	\item $x_2=2, m_1=1$
+\end{itemize}
+
+Queda la siguiente ecueción en recurrencias:
+
+\[T_n=c_{1,0}2^n n^0+c_{2,0}1^n n^0=2^n c_{1,0}+c_{2,0}\]
+
+Por tanto, \textbf{la eficiencia de este algoritmo es $\boldsymbol{O(2^n)}$}.
+
+\pagebreak
+
+\subsubsection{Algoritmo recursivo 2}
+
+\begin{lstlisting}[language=C]
+void HeapSort(int* v, int n) {
+	double* apo = new double[n];
+	int tamapo  = 0;
+
+	for (int i=0; i<n; i++) {
+		apo[tamapo] = v[i];
+		tamapo++;
+		insertarEnPos(apo, tamapo);
+	}
+
+	for (int i=0; i<n; i++) {
+		v[i] = apo[0];
+		tamapo--;
+		apo[0] = apo[tamapo];
+		reestructurarRaiz(apo, 0, tamapo);
+	}
+
+	delete [] apo;
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=C]
+void insertarEnPos (double* apo, int pos) {
+	int idx = pos - 1,
+	    padre;
+
+	if (idx > 0) {
+		if (idx % 2 == 0)
+			padre = (idx - 2) / 2;
+		else
+			padre = (idx - 1) / 2;
+
+		if (apo[padre] > apo[idx]) {
+			double tmp = apo[idx];
+			apo[idx]   = apo[padre];
+			apo[padre] = tmp;
+			insertarEnPos(apo, padre+1);
+		}
+	}
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=C]
+void reestructurarRaiz (double* apo, int pos, int tamapo) {
+	int minhijo;
+
+	if (2*pos+1 < tamapo) {
+		minhijo = 2 * pos + 1;
+
+		if (minhijo+1 < tamapo && apo[minhijo] > apo[minhijo+1])
+			minhijo++;
+
+		if (apo[pos] > apo[minhijo]) {
+			double tmp   = apo[pos];
+			apo[pos]     = apo[minhijo];
+			apo[minhijo] = tmp;
+			reestructurarRaiz(apo, minhijo, tamapo);
+		}
+	}
+}
+\end{lstlisting}
+
+Vamos a dividir este algoritmo en tres partes, calculando primero la eficiencia de \code{reestructurarRaiz}, luego la de \code{insertarEnPos} y, finalmente, la de \code{HeapSort}.
+
+\textbf{\code{insertarEnPos}:}
+
+Identificamos los casos:
+
+\[T(n)=
+\begin{cases}
+	1                & n\leq1\text{ (caso base)} \\
+	1+T(\frac{n}{2}) & n>1\text{ (caso general)}
+\end{cases}
+\]
+
+Nos queda la siguiente ecuación lineal no homogénea:
+
+\[T(n)=T(\frac{n}{2})+1\Leftrightarrow T(n)-T(\frac{n}{2})=1\]
+
+Hacemos el cambio de variable $n=2^m$ y calculamos las raíces de la parte homogénea tomando su polinomio característico:
+
+\[T(2^m)-T(2^{m-1})=0\Rightarrow x^{2m}-x^{2m-1}=0\Leftrightarrow(x-1)x^{2m-1}=0\Leftrightarrow x-1=0\Leftrightarrow x=1\]
+
+Calculamos las raíces de la parte no homogénea:
+
+\[1=b_1^n\cdot q_1(n)\Rightarrow b_1=1,q_1(n)=1\]
+
+Tenemos por tanto dos raíces en nuestro polinomio característico:
+
+\begin{itemize}
+	\item $x_1=2, m_1=2$
+\end{itemize}
+
+Queda la siguiente ecueción en recurrencias:
+
+\[T_m=c_{1,0}1^m m^0+c_{1,1}1^m m^1=1^m c_{1,0}+m1^m c_{1,1}\]
+
+Deshacemos el cambio de variable:
+
+\[T_n=1^{\log_2n}c_{1,0}+\log_2n\cdot1^{\log_2n}c_{1,1}\]
+
+Por tanto, \textbf{la eficiencia de este algoritmo es $\boldsymbol{O(\log n)}$}.
+
+\textbf{\code{reestructurarRaiz}:}
+
+Este algoritmo también tiene eficiencia $O(\log n)$, ya que en el caso general $T(n)=1+T(\frac{n}{2})$, desarrollándose igual que \code{insertarEnPos}.
+
+\textbf{\code{HeapSort}}
+
+Por último, queda analizar este algoritmo, que consideramos iterativo habiendo analizado sus bloques recursivos.
+Este algoritmo está compuesto por dos bucles \code{for}, ambos con cuerpos de eficiencia $O(\log n)$ y con inicialización, comprobación y actualización de eficiencia $O(1)$ que se repiten $n$ veces cada uno, por lo que tienen cada uno eficiencia $O(n\cdot\log n)$.
+Aplicando la regla del máximo, determinamos que \textbf{la eficiencia de \code{HeapSort} es $\boldsymbol{O(n\cdot\log n)}$}.
+
+\pagebreak
+
+\section{Eficiencia práctica}\label{eficiencia-practica}
+
+Para medir la eficiencia práctica se han tomado para todos muestras de $10000$ a $500000$ en incrementos de $10000$.
+
+Para el algoritmo \code{MergeSort} se han obtenido (entre otros\footnote{Los valores obtenidos han sido para todos los tamaños de $10000$ a $500000$ en incrementos de $10000$, se omiten algunos para facilitar la lectura}) los siguientes resultados:
+
+\begin{center}
+\begin{tabular}{r r || r r}
+\textbf{Tamaño} & \textbf{Tiempo} & \textbf{Tamaño} & \textbf{Tiempo} \\
+\toprule
+10000           & 711             & 250000          & 24060           \\
+20000           & 1516            & 300000          & 27927           \\
+50000           & 3971            & 310000          & 29103           \\
+100000          & 9403            & 320000          & 30087           \\
+110000          & 10816           & 350000          & 33250           \\
+120000          & 10900           & 400000          & 38004           \\
+150000          & 15143           & 410000          & 39056           \\
+200000          & 21954           & 420000          & 40506           \\
+210000          & 19686           & 450000          & 44966           \\
+220000          & 21438           & 500000          & 48632           \\
+\end{tabular}
+\end{center}
+
+Para el algoritmo \code{HeapSort} se han obtenido (entre otros) los siguientes resultados:
+
+\begin{center}
+\begin{tabular}{r r || r r}
+\textbf{Tamaño} & \textbf{Tiempo} & \textbf{Tamaño} & \textbf{Tiempo} \\
+\toprule
+10000           & 791             & 250000          & 32946           \\
+20000           & 1732            & 300000          & 39077           \\
+50000           & 4881            & 310000          & 40499           \\
+100000          & 11541           & 320000          & 41434           \\
+110000          & 13203           & 350000          & 45298           \\
+120000          & 13823           & 400000          & 53345           \\
+150000          & 19085           & 410000          & 53373           \\
+200000          & 25911           & 420000          & 59734           \\
+210000          & 27742           & 450000          & 57466           \\
+220000          & 29218           & 500000          & 66525           \\
+\end{tabular}
+\end{center}
+
+Se puede observar la progresión del tiempo de ejecución de ambos algoritmos en las siguientes gráficas:
+
+\begin{figure}[h]
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[xlabel=Número de elementos,
+             ylabel=Tiempo de ejecución ($\mu s$)
+            ]
+\addplot [scatter,
+          only marks,
+          mark size=1pt
+         ] table {Practicas/Eficiencia/merge-sort.log};
+\addplot [no markers,
+          black
+         ] table [y={create col/linear regression={y=y}}] {Practicas/Eficiencia/merge-sort.log};
+\end{axis}
+\end{tikzpicture}
+\begin{tikzpicture}
+\begin{axis}[xlabel=Número de elementos,
+             ylabel=Tiempo de ejecución ($\mu s$)
+            ]
+\addplot [scatter,
+          only marks,
+          mark size=1pt
+         ] table {Practicas/Eficiencia/heap-sort.log};
+\addplot [no markers,
+          black
+         ] table [y={create col/linear regression={y=y}}] {Practicas/Eficiencia/heap-sort.log};
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\caption{Tiempos de ejecución de \code{MergeSort} (izquierda) y \code{HeapSort} (derecha)}
+\end{figure}
+
+\section{Cálculo de la constante oculta}\label{eficiencia-oculta}
+
+\subsection{\code{MergeSort}}\label{eficiencia-oculta-mergesort}
+
+Calculamos la constante $K$ haciendo uso de \code{gnuplot}:
+
+\begin{lstlisting}[language=tcl]
+gnuplot> f(x)=a*x*log(x)
+gnuplot> fit f(x) 'merge-sort.log' via a
+iter      chisq       delta/lim  lambda   a
+   0 6.9308675510e+14   0.00e+00  3.75e+06    1.000000e+00
+   1 2.6651057555e+11  -2.60e+08  3.75e+05    2.698698e-02
+   2 4.1261386413e+07  -6.46e+08  3.75e+04    7.530609e-03
+   3 4.1250731902e+07  -2.58e+01  3.75e+03    7.526718e-03
+   4 4.1250731902e+07  -1.44e-10  3.75e+02    7.526718e-03
+iter      chisq       delta/lim  lambda   a
+
+After 4 iterations the fit converged.
+final sum of squares of residuals : 4.12507e+07
+rel. change during last iteration : -1.44494e-15
+
+degrees of freedom    (FIT_NDF)                        : 49
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 917.525
+variance of residuals (reduced chisquare) = WSSR/ndf   : 841852
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+a               = 0.00752672       +/- 3.459e-05    (0.4596%)
+\end{lstlisting}
+
+Tenemos que la constante $K$ vale, de media, $0.00752672$.
+Calculando el tiempo teórico y comparándolo con el tiempo de ejecución tenemos la siguiente gráfica:
+
+\begin{figure}[h]
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[xlabel=Número de elementos,
+             ylabel=Tiempo de ejecución ($\mu s$),
+             legend pos=outer north east
+            ]
+\addplot [color=red,
+          mark=*,
+          mark size=1pt
+         ] table [x index=0,y index=2,col sep=space] {Practicas/Eficiencia/merge-sort.log};
+\addplot [color=blue,
+          mark=*,
+          mark size=1pt
+         ] table [x index=0,y index=1,col sep=space] {Practicas/Eficiencia/merge-sort.log};
+\legend{Tiempo teórico,Tiempo de ejecución}
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\caption{Comparación entre los tiempos de ejecución práctico y teórico del algoritmo \code{MergeSort}}
+\end{figure}
+
+\pagebreak
+
+\subsection{\code{HeapSort}}\label{eficiencia-oculta-heapsort}
+
+Calculamos la constante $K$ haciendo uso de \code{gnuplot}:
+
+\begin{lstlisting}
+gnuplot> f(x)=a*x*log(x)
+gnuplot> fit f(x) 'heap-sort.log' via a
+iter      chisq       delta/lim  lambda   a
+   0 6.8915727396e+14   0.00e+00  3.75e+06    1.000000e+00
+   1 2.6508616504e+11  -2.60e+08  3.75e+05    2.974923e-02
+   2 1.2764186428e+08  -2.08e+08  3.75e+04    1.034809e-02
+   3 1.2763127018e+08  -8.30e+00  3.75e+03    1.034421e-02
+   4 1.2763127018e+08  -1.75e-10  3.75e+02    1.034421e-02
+iter      chisq       delta/lim  lambda   a
+
+After 4 iterations the fit converged.
+final sum of squares of residuals : 1.27631e+08
+rel. change during last iteration : -1.75127e-15
+
+degrees of freedom    (FIT_NDF)                        : 49
+rms of residuals      (FIT_STDFIT) = sqrt(WSSR/ndf)    : 1613.91
+variance of residuals (reduced chisquare) = WSSR/ndf   : 2.60472e+06
+
+Final set of parameters            Asymptotic Standard Error
+=======================            ==========================
+a               = 0.0103442        +/- 6.084e-05    (0.5882%)
+\end{lstlisting}
+
+Tenemos que la constante $K$ vale, de media, $0.0103442$.
+Calculando el tiempo teórico y comparándolo con el tiempo de ejecución tenemos la siguiente gráfica:
+
+\begin{figure}[h]
+\begin{center}
+\begin{tikzpicture}
+\begin{axis}[xlabel=Número de elementos,
+             ylabel=Tiempo de ejecución ($\mu s$),
+             legend pos=outer north east
+            ]
+\addplot [color=red,
+          mark=*,
+          mark size=1pt
+         ] table [x index=0,y index=2,col sep=space] {Practicas/Eficiencia/heap-sort.log};
+\addplot [color=blue,
+          mark=*,
+          mark size=1pt
+         ] table [x index=0,y index=1,col sep=space] {Practicas/Eficiencia/heap-sort.log};
+\addplot [no markers,
+          black
+         ] table [z={create col/linear regression={z=z}}] {Practicas/Eficiencia/heap-sort.log};
+\legend{Tiempo teórico,Tiempo de ejecución}
+\end{axis}
+\end{tikzpicture}
+\end{center}
+\caption{Comparación entre los tiempos de ejecución práctico y teórico del algoritmo \code{HeapSort}}
+\end{figure}

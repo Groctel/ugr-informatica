@@ -1,0 +1,190 @@
+\chapter{Programación dinámica}\label{programacion-dinamica}
+
+\section{Enunciado}\label{pd-enunciado}
+
+Un excéntrico nutricionista va a un restaurante.
+En la carta aparecen todos los PLATOS disponibles con el número de calorı́as.
+El nutricionista conoce el número mı́nimo de calorı́as que su cuerpo necesita en esa comida.
+Su objetivo es encontrar el menú que cubra exactamente esa cantidad de calorı́as o, en su defecto, que las supere de forma mı́nima sin repetir PLATOS\@.
+Diseñe un algoritmo de programación dinámica que determine qué PLATOS forman parte del menú óptimo y el número de calorı́as del menú óptimo.
+
+\section{Análisis del problema}\label{pd-analisis}
+
+\subsection{Elementos y definiciones}\label{pd-elementos-y-definiciones}
+
+Para la realización de este problema contamos con los siguientes elementos:
+
+\begin{itemize}
+	\item Un número $K$ de caloría a alcanzar.
+	\item Un total de $n$ PLATOS, con una cantidad de calorías $k_i$ para cada plato $i$.
+\end{itemize}
+
+Debemos encontrar un subconjunto $P$ de los PLATOS del menú cuyas calorías sean iguales o, en su defecto, mayores que $K$.
+Si no hubiera más remedio que pasarnos de $K$, debemos minimizar la diferencia.
+En el caso ideal, la relación entre las calorías de los PLATOS y $K$ sería la siguiente:
+
+\[K=\sum_{n=0}^{i}k_i,\forall i\in P\]
+
+Para tomar la decisión de qué PLATOS se van a elegir, utilizaremos una variable $p_i\in\{0,1\}$ que nos indicará la probabilidad que tiene cada plato $i$ de ser escogido.
+Teniendo esto en cuenta, podemos reformular la relación anterior de la siguiente forma:
+
+\[K=\sum_{n=0}^{i}k_i p_i,\forall i\in P\]
+
+Dado que consideramos el caso en el que superamos las calorías, aunque lo minimizaremos, definimos para todo el problema la relación entre $K$ y $P$ de la siguiente forma:
+
+\[K\leq\sum_{n=0}^{i}k_i p_i,\forall i\in P\]
+
+\subsection{Resolubilidad mediante programación dinámica}\label{pd-resolubilidad}
+
+Para que el problema pueda ser resuelto mediante técnicas de programación dinámica debe cumplir con los siguientes requisitos:
+
+\subsubsection{Debe tratarse de un problema de optimización}
+
+Como hemos explicado en~\ref{pd-elementos-y-definiciones}, queremos que la suma de las calorías de los PLATOS consumidos sea mayor o igual que $K$ de forma que la diferencia entre ambos sea mínima, por lo que claramente es un problema de minimización.
+
+\subsubsection{Debe ser resoluble por etapas}
+
+En cada etapa podemos decidir si añadir un plato a $P$, de forma que se modifica $p_i$ a $1$ si se añade el plato y $0$ en caso contrario.
+
+\subsubsection{Debe ser expresable mediante una ecuación en recurrencias}
+
+Para resolver este problema podemos considerar $M[i][j]$ como la mínima diferencia entre las calorías consumidas ($i$) y el total de calorías buscado ($j$), de forma que podemos expresar nuestro problema como $M[n][K]$.
+De esta forma a la hora de elegir cada uno de los PLATOS podemos definir el cambio sobre $M[i][j]$ de la siguiente forma:
+
+\[
+	M[i][j]=
+	\begin{cases}
+		k_i+M[i-1][j-k_i] & \text{si } p_i=1 \\
+		M[i-1][j]         & \text{si } p_i=0
+	\end{cases}
+\]
+
+Como lo que queremos es minimizar la diferencia entre el total de calorías y $K$, podemos expresarlo de la siguiente forma:
+
+\[M[i][j]=\min(k_i+M[i-1][j-k_i],M[i-1][j])\]
+
+Como casos base de la ecuación en recurrencias tenemos los siguientes:
+
+\[
+	M[1][j]=
+	\begin{cases}
+		0   & \text{si } j>k_1 \\
+		k_1 & \text{si } j\leq k_1
+	\end{cases}
+\]
+
+\[M[i][0]=0\]
+
+El primero es óptimo, ya que al tener un único plato a elegir sólo lo haremos si supera el número de calorías $K$.
+El segundo es óptimo trivialmente porque si queremos acercarnos lo máximo posible a $0$ calorías, lo que debemos hacer es salir corriendo del restaurante y no mirar atrás.
+
+\pagebreak
+
+\section{Diseño del algoritmo}
+
+Para simplificar las operaciones y no caer en problemas de aritmética de coma flotante, trabajaremos con valores $i,j\in\mathbb{N^*}$.
+Para trabajar con este algoritmo realizaremos el siguiente diseño de memoria:
+
+\begin{itemize}
+	\item\textbf{Se guardarán los datos en una tabla $\boldsymbol{M[i][j]}$:} En esta tabla las filas representarán cada uno de los PLATOS y las columnas, las calorías.
+	Cada elemento $M[i][j]$ almacenará el mínimo número de calorías consumibles mediante la elección de los $i-1$ PLATOS anteriores.
+	\item\textbf{Se rellenarán las filas de izquierda a derecha:} Como el problema es expresable mediante una ecuación en recurrencia, para conocer cada elemento $i$ de la solución deberemos conocer los $i-1$ anteriores, por lo que debemos empezar a rellenar desde el elemento $1$ e incrementar gradualmente.
+	\item\textbf{Asumiremos inválidos los valores $\boldsymbol{i=0}$ y $\boldsymbol{j=0}$.}
+\end{itemize}
+
+Definido este comportmiento, procedemos a crear el algoritmo:
+
+\begin{lstlisting}[language=Python]
+# Contantes
+const CALORIAS
+const INFINITO
+const vector PLATOS
+
+# Variables
+consumidas
+vector solucion
+matriz matriz_m;
+
+for fila in PLATOS
+	for columna in CALORIAS
+		matriz_m[fila] = 0
+
+for i in 1..CALORIAS
+	matriz_m[0][i] = INFINITO
+
+for i in 1..PLATOS
+	for j in 1..CALORIAS
+		actual         = matriz_m[i-1][j]
+		consumible     = PLATOS[i-1]
+		matriz_m[i][j] = INFINITO
+
+		if PLATOS[i-1] <= j
+			consumible = matriz_m[i-1][j-PLATOS[i-1]];
+
+			if consumible < INFINITO
+				consumible += PLATOS[i-1];
+
+		if consumible >= j
+			matriz_m[i][j] = min(actual, consumible)
+
+i = PLATOS
+j = CALORIAS
+
+while i>0 and j>0
+	if matriz_m[i][j] != matriz_m[i-1][j]
+		# Añade al final del vector solucion el valor i-1
+		j = j - PLATOS[i-1];
+
+	i = i-1
+
+# Muestra la solución
+\end{lstlisting}
+
+Con esta implementación procedemos a calcular la eficiencia del algoritmo.
+Este algoritmo está formado por cuatro bucles, tres \code{for} y un \code{while}.
+Tres de los bucles realizan tantas iteraciones como el tamaño de \code{PLATOS} mientras que uno de ellos (el segundo bucle \code{for}) las realiza sobre el valor de \code{CALORIAS}.
+De estos bucles, el tercero tiene un segundo bucle \code{for} dentro de él, que también itera sobre el valor de \code{CALORIAS}.
+De esta forma, la eficiencia del tercer bucle \code{for} en el caso peor es $O(ij)$ para una lista de $i$ platos y $k$ calorías totales, ya que el resto del bucle lo componen operaciones elmentales.
+Por la regla del máximo, ya que $ij>\max(i,j)$, concluimos que \textbf{la eficiencia de este algoritmo es $\boldsymbol{O(ij)}$}.
+
+\section{Implementación del algoritmo}
+
+Se ha implementado el algoritmo en C++ haciendo uso de la STL, de forma que los platos y la lista de solución se han representado en un \code{std::vector} y la matriz de trabajo como un \code{std::vector<std::vector>}.
+Para todos los elementos se ha utilizado el tipo de dato \code{unsigned} para asegurar que todos los elementos pertenecen a $\mathbb{N}$.
+De la misma forma se ha asegurado que en ningún momento se produzca un \textit{underflow} en los bucles.
+
+Para compilar el proyecto es suficiente con ejecutar \code{g++} sobre el único fichero \code{main.cpp} que lo compone.
+
+\section{Ejecución del algoritmo}
+
+Para ejecutar el algoritmo simplemente debemos editar la constante \code{CALORIAS} y el \code{std::vector} de \code{PLATOS}, compilarlo y ejecutarlo.
+Aquí se muestran algunas salidas del mismo:
+
+\subsubsection{$\boldsymbol{100}$ calorías con el vector \code{\{75, 83, 19, 64, 25, 6\}}}
+
+\begin{lstlisting}
+Plato 5: 25 calorías
+Plato 1: 75 calorías
+Total consumido: 100 calorías
+\end{lstlisting}
+
+\subsubsection{$\boldsymbol{100}$ calorías con el vector \code{\{75, 83, 19, 64, 21, 6\}}}
+
+\begin{lstlisting}
+Plato 6: 6 calorías
+Plato 3: 19 calorías
+Plato 1: 75 calorías
+Total consumido: 100 calorías
+\end{lstlisting}
+
+\subsubsection{$\boldsymbol{313}$ calorías con el vector \code{\{75, 83, 19, 64, 21, 6, 33, 51, 22, 31, 51, 76, 40, 12, 45, 21, 84\}}}
+
+\begin{lstlisting}
+Plato 8: 51 calorías
+Plato 5: 21 calorías
+Plato 4: 64 calorías
+Plato 3: 19 calorías
+Plato 2: 83 calorías
+Plato 1: 75 calorías
+Total consumido: 313 calorías
+\end{lstlisting}

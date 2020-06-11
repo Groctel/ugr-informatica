@@ -1,0 +1,39 @@
+\documentclass[10pt]{report}
+\usepackage[spanish]{babel}
+
+% Document settings
+
+\usepackage{titling}
+	\author{Atanasio José Rubio Gil}
+	\title{Algorítmica}
+	\date{\today}
+
+\usepackage[title=\thetitle]{aqademia}
+
+\aqchap{Práctica }
+\aqssec{}
+
+\usepackage{pgfplots}
+\usepackage{pgfplotstable}
+\usepackage{tikz}
+\usepackage{tikz-qtree}
+	\tikzset{blank/.style={draw=none}}
+
+% Document composition
+
+\begin{document}
+
+\aqtitlepage{Grado en Ingeniería Informática}
+            {Prácticas}
+            {}
+\tableofcontents
+
+\input{Practicas/Eficiencia.tex}
+\input{Practicas/DyV.tex}
+\input{Practicas/Voraces.tex}
+\input{Practicas/ProgramacionDinamica.tex}
+\input{Practicas/Grafos.tex}
+
+\input{Practicas/Bibliografia.tex}
+
+\end{document}
