@@ -1,0 +1,114 @@
+\tikzset{every picture/.style={line width=0.75pt}} %set default line width to 0.75pt
+
+\begin{tikzpicture}[x=1pt,y=1pt,yscale=-1,xscale=1]
+%uncomment if require: \path (0,235); %set diagram left start at 0, and has height of 235
+
+%Shape: Rectangle [id:dp9777322586147241]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 126; green, 211; blue, 33 }  ,fill opacity=1 ][line width=0.75]  (180.15,50.04) -- (189.95,50.04) -- (189.95,60.04) -- (180.15,60.04) -- cycle ;
+%Shape: Rectangle [id:dp5643921503512281]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 126; green, 211; blue, 33 }  ,fill opacity=1 ][line width=0.75]  (189.95,50.04) -- (199.75,50.04) -- (199.75,60.04) -- (189.95,60.04) -- cycle ;
+%Shape: Rectangle [id:dp2656365377183654]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 126; green, 211; blue, 33 }  ,fill opacity=1 ][line width=0.75]  (180.15,60.04) -- (189.95,60.04) -- (189.95,70.04) -- (180.15,70.04) -- cycle ;
+%Shape: Rectangle [id:dp3442854146601232]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 126; green, 211; blue, 33 }  ,fill opacity=1 ][line width=0.75]  (189.95,60.04) -- (199.75,60.04) -- (199.75,70.04) -- (189.95,70.04) -- cycle ;
+%Shape: Rectangle [id:dp026943086469769284]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 126; green, 211; blue, 33 }  ,fill opacity=1 ][line width=0.75]  (199.75,50.04) -- (209.55,50.04) -- (209.55,60.04) -- (199.75,60.04) -- cycle ;
+%Shape: Rectangle [id:dp24178310152356564]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 126; green, 211; blue, 33 }  ,fill opacity=1 ][line width=0.75]  (199.75,60.04) -- (209.55,60.04) -- (209.55,70.04) -- (199.75,70.04) -- cycle ;
+%Shape: Rectangle [id:dp8978302733140608]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 126; green, 211; blue, 33 }  ,fill opacity=1 ][line width=0.75]  (199.75,70.04) -- (209.55,70.04) -- (209.55,80.04) -- (199.75,80.04) -- cycle ;
+%Shape: Rectangle [id:dp9781999160020896]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 126; green, 211; blue, 33 }  ,fill opacity=1 ][line width=0.75]  (189.95,70.04) -- (199.75,70.04) -- (199.75,80.04) -- (189.95,80.04) -- cycle ;
+%Shape: Rectangle [id:dp9948264741762237]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 126; green, 211; blue, 33 }  ,fill opacity=1 ][line width=0.75]  (180.15,70.04) -- (189.95,70.04) -- (189.95,80.04) -- (180.15,80.04) -- cycle ;
+%Shape: Rectangle [id:dp7670141233033437]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]  (229.15,50.04) -- (238.95,50.04) -- (238.95,60.04) -- (229.15,60.04) -- cycle ;
+%Shape: Rectangle [id:dp04088026261938915]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]  (229.15,60.04) -- (238.95,60.04) -- (238.95,70.04) -- (229.15,70.04) -- cycle ;
+%Shape: Rectangle [id:dp23910333841895082]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 245; green, 166; blue, 35 }  ,fill opacity=1 ][line width=0.75]  (229.15,70.04) -- (238.95,70.04) -- (238.95,80.04) -- (229.15,80.04) -- cycle ;
+%Shape: Rectangle [id:dp5479449658889934]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 80; green, 227; blue, 194 }  ,fill opacity=1 ][line width=0.75]  (258.55,70.04) -- (268.35,70.04) -- (268.35,80.04) -- (258.55,80.04) -- cycle ;
+%Shape: Rectangle [id:dp24900658665942066]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 80; green, 227; blue, 194 }  ,fill opacity=1 ][line width=0.75]  (258.55,50.04) -- (268.35,50.04) -- (268.35,60.04) -- (258.55,60.04) -- cycle ;
+%Shape: Rectangle [id:dp9051424246072522]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 80; green, 227; blue, 194 }  ,fill opacity=1 ][line width=0.75]  (258.55,60.04) -- (268.35,60.04) -- (268.35,70.04) -- (258.55,70.04) -- cycle ;
+%Shape: Rectangle [id:dp20877566400813574]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 80; green, 227; blue, 194 }  ,fill opacity=1 ][line width=0.75]  (268.35,60.04) -- (278.15,60.04) -- (278.15,70.04) -- (268.35,70.04) -- cycle ;
+%Shape: Rectangle [id:dp7463070383085549]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 144; green, 19; blue, 254 }  ,fill opacity=1 ][line width=0.75]  (297.75,60.04) -- (307.55,60.04) -- (307.55,70.04) -- (297.75,70.04) -- cycle ;
+%Shape: Rectangle [id:dp5817482651613091]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 144; green, 19; blue, 254 }  ,fill opacity=1 ][line width=0.75]  (297.75,50.04) -- (307.55,50.04) -- (307.55,60.04) -- (297.75,60.04) -- cycle ;
+%Shape: Rectangle [id:dp5139194366611862]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 144; green, 19; blue, 254 }  ,fill opacity=1 ][line width=0.75]  (297.75,70.04) -- (307.55,70.04) -- (307.55,80.04) -- (297.75,80.04) -- cycle ;
+%Shape: Rectangle [id:dp0844836236320533]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 144; green, 19; blue, 254 }  ,fill opacity=1 ][line width=0.75]  (307.55,50.04) -- (317.35,50.04) -- (317.35,60.04) -- (307.55,60.04) -- cycle ;
+%Shape: Rectangle [id:dp6981612904215215]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 144; green, 19; blue, 254 }  ,fill opacity=1 ][line width=0.75]  (317.35,50.04) -- (327.15,50.04) -- (327.15,60.04) -- (317.35,60.04) -- cycle ;
+%Shape: Rectangle [id:dp5551743492475295]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 139; green, 87; blue, 42 }  ,fill opacity=1 ][line width=0.75]  (346.75,50.04) -- (356.55,50.04) -- (356.55,60.04) -- (346.75,60.04) -- cycle ;
+%Shape: Rectangle [id:dp5756209184456107]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 139; green, 87; blue, 42 }  ,fill opacity=1 ][line width=0.75]  (346.75,60.04) -- (356.55,60.04) -- (356.55,70.04) -- (346.75,70.04) -- cycle ;
+%Shape: Rectangle [id:dp6348941330811271]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 139; green, 87; blue, 42 }  ,fill opacity=1 ][line width=0.75]  (356.55,50.04) -- (366.35,50.04) -- (366.35,60.04) -- (356.55,60.04) -- cycle ;
+%Shape: Rectangle [id:dp8301788734565072]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 139; green, 87; blue, 42 }  ,fill opacity=1 ][line width=0.75]  (356.55,60.04) -- (366.35,60.04) -- (366.35,70.04) -- (356.55,70.04) -- cycle ;
+%Shape: Rectangle [id:dp7829057338389512]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 139; green, 87; blue, 42 }  ,fill opacity=1 ][line width=0.75]  (346.75,70.04) -- (356.55,70.04) -- (356.55,80.04) -- (346.75,80.04) -- cycle ;
+%Shape: Rectangle [id:dp3712039551146994]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 139; green, 87; blue, 42 }  ,fill opacity=1 ][line width=0.75]  (356.55,70.04) -- (366.35,70.04) -- (366.35,80.04) -- (356.55,80.04) -- cycle ;
+%Shape: Rectangle [id:dp13285358475192177]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 139; green, 87; blue, 42 }  ,fill opacity=1 ][line width=0.75]  (366.35,70.04) -- (376.15,70.04) -- (376.15,80.04) -- (366.35,80.04) -- cycle ;
+%Shape: Rectangle [id:dp7715824790936205]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 139; green, 87; blue, 42 }  ,fill opacity=1 ][line width=0.75]  (366.35,60.04) -- (376.15,60.04) -- (376.15,70.04) -- (366.35,70.04) -- cycle ;
+%Shape: Rectangle [id:dp3449796101141618]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 139; green, 87; blue, 42 }  ,fill opacity=1 ][line width=0.75]  (366.35,50.04) -- (376.15,50.04) -- (376.15,60.04) -- (366.35,60.04) -- cycle ;
+%Shape: Rectangle [id:dp16677713737745214]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 139; green, 87; blue, 42 }  ,fill opacity=1 ][line width=0.75]  (356.55,40.04) -- (366.35,40.04) -- (366.35,50.04) -- (356.55,50.04) -- cycle ;
+%Shape: Rectangle [id:dp2763666458417998]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 139; green, 87; blue, 42 }  ,fill opacity=1 ][line width=0.75]  (356.55,30.04) -- (366.35,30.04) -- (366.35,40.04) -- (356.55,40.04) -- cycle ;
+%Shape: Rectangle [id:dp8168324856584601]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 208; green, 2; blue, 27 }  ,fill opacity=1 ][line width=0.75]  (395.75,60.04) -- (405.55,60.04) -- (405.55,70.04) -- (395.75,70.04) -- cycle ;
+%Shape: Rectangle [id:dp7214289647668896]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 208; green, 2; blue, 27 }  ,fill opacity=1 ][line width=0.75]  (395.75,70.04) -- (405.55,70.04) -- (405.55,80.04) -- (395.75,80.04) -- cycle ;
+%Shape: Rectangle [id:dp2259114419872651]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 208; green, 2; blue, 27 }  ,fill opacity=1 ][line width=0.75]  (405.55,70.04) -- (415.35,70.04) -- (415.35,80.04) -- (405.55,80.04) -- cycle ;
+%Shape: Rectangle [id:dp4717862997923473]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 208; green, 2; blue, 27 }  ,fill opacity=1 ][line width=0.75]  (415.35,70.04) -- (425.15,70.04) -- (425.15,80.04) -- (415.35,80.04) -- cycle ;
+%Shape: Rectangle [id:dp9611478122162561]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 208; green, 2; blue, 27 }  ,fill opacity=1 ][line width=0.75]  (405.55,60.04) -- (415.35,60.04) -- (415.35,70.04) -- (405.55,70.04) -- cycle ;
+%Shape: Rectangle [id:dp7494245037857424]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 208; green, 2; blue, 27 }  ,fill opacity=1 ][line width=0.75]  (415.35,60.04) -- (425.15,60.04) -- (425.15,70.04) -- (415.35,70.04) -- cycle ;
+%Shape: Rectangle [id:dp6232296167130805]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 74; green, 144; blue, 226 }  ,fill opacity=1 ][line width=0.75]  (444.75,70.04) -- (454.55,70.04) -- (454.55,80.04) -- (444.75,80.04) -- cycle ;
+%Shape: Rectangle [id:dp8683869337578874]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 74; green, 144; blue, 226 }  ,fill opacity=1 ][line width=0.75]  (454.55,70.04) -- (464.35,70.04) -- (464.35,80.04) -- (454.55,80.04) -- cycle ;
+%Shape: Rectangle [id:dp7124076163428046]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 74; green, 144; blue, 226 }  ,fill opacity=1 ][line width=0.75]  (464.35,70.04) -- (474.15,70.04) -- (474.15,80.04) -- (464.35,80.04) -- cycle ;
+%Shape: Rectangle [id:dp6456653335371463]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 74; green, 144; blue, 226 }  ,fill opacity=1 ][line width=0.75]  (454.55,60.04) -- (464.35,60.04) -- (464.35,70.04) -- (454.55,70.04) -- cycle ;
+%Shape: Rectangle [id:dp7585326477718629]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 74; green, 144; blue, 226 }  ,fill opacity=1 ][line width=0.75]  (454.55,50.04) -- (464.35,50.04) -- (464.35,60.04) -- (454.55,60.04) -- cycle ;
+%Shape: Rectangle [id:dp6160757259731467]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 74; green, 144; blue, 226 }  ,fill opacity=1 ][line width=0.75]  (454.55,40.04) -- (464.35,40.04) -- (464.35,50.04) -- (454.55,50.04) -- cycle ;
+%Shape: Rectangle [id:dp006474296055878126]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 74; green, 144; blue, 226 }  ,fill opacity=1 ][line width=0.75]  (444.75,40.04) -- (454.55,40.04) -- (454.55,50.04) -- (444.75,50.04) -- cycle ;
+%Shape: Rectangle [id:dp5090163286459264]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 74; green, 144; blue, 226 }  ,fill opacity=1 ][line width=0.75]  (444.75,50.04) -- (454.55,50.04) -- (454.55,60.04) -- (444.75,60.04) -- cycle ;
+%Shape: Rectangle [id:dp906789860877004]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 74; green, 144; blue, 226 }  ,fill opacity=1 ][line width=0.75]  (444.75,60.04) -- (454.55,60.04) -- (454.55,70.04) -- (444.75,70.04) -- cycle ;
+%Shape: Rectangle [id:dp6011585657537859]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 65; green, 117; blue, 5 }  ,fill opacity=1 ][line width=0.75]  (503.55,60.04) -- (513.35,60.04) -- (513.35,70.04) -- (503.55,70.04) -- cycle ;
+%Shape: Rectangle [id:dp41702289164611983]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 65; green, 117; blue, 5 }  ,fill opacity=1 ][line width=0.75]  (493.75,60.04) -- (503.55,60.04) -- (503.55,70.04) -- (493.75,70.04) -- cycle ;
+%Shape: Rectangle [id:dp7475521297203958]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 65; green, 117; blue, 5 }  ,fill opacity=1 ][line width=0.75]  (503.55,70.04) -- (513.35,70.04) -- (513.35,80.04) -- (503.55,80.04) -- cycle ;
+%Shape: Rectangle [id:dp7415821682894657]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 65; green, 117; blue, 5 }  ,fill opacity=1 ][line width=0.75]  (513.35,70.04) -- (523.15,70.04) -- (523.15,80.04) -- (513.35,80.04) -- cycle ;
+%Shape: Rectangle [id:dp12102946712408946]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 65; green, 117; blue, 5 }  ,fill opacity=1 ][line width=0.75]  (523.15,70.04) -- (532.95,70.04) -- (532.95,80.04) -- (523.15,80.04) -- cycle ;
+%Shape: Rectangle [id:dp026773285156175275]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 65; green, 117; blue, 5 }  ,fill opacity=1 ][line width=0.75]  (523.15,60.04) -- (532.95,60.04) -- (532.95,70.04) -- (523.15,70.04) -- cycle ;
+%Shape: Rectangle [id:dp7362798318979569]
+\draw  [color={rgb, 255:red, 0; green, 0; blue, 0 }  ,draw opacity=1 ][fill={rgb, 255:red, 65; green, 117; blue, 5 }  ,fill opacity=1 ][line width=0.75]  (513.35,60.04) -- (523.15,60.04) -- (523.15,70.04) -- (513.35,70.04) -- cycle ;
+\end{tikzpicture}
