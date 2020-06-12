@@ -1,0 +1,535 @@
+\chapter{Herramientas de programación paralela I\@: Directivas OpenMP}\label{directivas-openmp}
+
+\section{Introducción a OpenMP}\label{directivas-openmp-introduccion}
+
+OpenMP (\textit{Open Multi-Processing}) es una API (\textit{Application Programming Interface}) de escritura de código paralelo entre varias hebras comunicadas por variables compartidas.
+La API, incluida de \code{<omp.h>} ofrece una capa de abstracción que permite al programador trabajar sin tener que acceder a las herramientras de paralelismo de bajo nivel.
+Para ello ofrece directivas del compilador, funciones de biblioteca y variables de entorno.
+
+Esta herramienta no extrae el paralelismo implícito, por lo que se trabaja con paralelización no automática.
+Está especificada para C, C++ y Fortran y es utilizada por multitud de proyectos de gran escala.
+
+\section{Directivas}\label{directivas-openmp-directivas}
+
+Como avanzamos en \S\ref{directivas-openmp-introduccion}, OpenMP se basa en directivas que el preprocesador del compilador sustituye por código antes de crear el ejecutable.
+También utiliza funciones para fijar parámetros en tiempo de ejecución y variables de entorno para fijarlas en tiempo de compilación.
+Estas directivas siguen la siguiente sintaxis:
+
+\begin{lstlisting}[language=C]
+#pragma omp nombre_directiva clausulas
+\end{lstlisting}
+
+El primer elemento, \code{\#pragma omp}, indica al compilador que la línea contiene una directiva OpenMP denominada \code{nombre\_directiva}.
+Las directivas pueden recibir cláusulas que delimitan su comportamiento.
+Las veremos con más profundidad en la práctica~\ref{clausulas-openmp}.
+Es imperativo que, tras definir la directiva, se introduzca un salto de línea, ya que ésta es la forma que tiene el preprocesador de conocer el espacio en el que debe introducir el código propio de la misma.
+Para dividir una directiva en múltiples líneas, puede usarse el carácter \code{\textbackslash} para ``escapar'' el salto de línea.
+
+Para compilar con OpenMP en \code{gcc} y \code{g++} usamos el \textit{flag} \code{openmp} de la siguiente forma:
+
+\begin{lstlisting}[language=sh]
+gcc -fopenmp main.c
+\end{lstlisting}
+
+Si no es incluye esta bandera, el compilador ignora las directivas, pero no las funciones.
+Para que éstas se ignoren podemos comprobar la existencia de OpenMP en el programa, que se muestra mediante la definición de \code{\_OPENMP}:
+
+\begin{lstlisting}[language=C]
+#ifdef _OPENMP
+	omp_set_num_threads(THREADS)
+#ENDIF
+\end{lstlisting}
+
+Las directivas tienen como ámbito el bloque inmediatamente posterior a ellas.
+Este bloque puede ampliarse manualmente mediante llaves:
+
+\begin{lstlisting}[language=C]
+#pragma omp parallel for
+for (i=0; i<MAX; i++)
+	// ...
+\end{lstlisting}
+
+\begin{lstlisting}[language=C]
+#pragma omp parallel // La llave debe ir en la línea siguiente
+{
+	for (i=0; i<MAX; i++)
+		// ...
+}
+\end{lstlisting}
+
+También se incluyen en el ámbito de operación de las directivas las subrutinas llamadas desde el bloque posterior a las mismas.
+
+Los bloques paralelizados por las directivas tendrán al final una única salida y nunca permiten instrucciones de entrada y salida como \code{goto}.
+
+\subsection{Directiva \code{parallel}}\label{directivas-openmp-directivas-parallel}
+
+\begin{lstlisting}[language=C]
+#pragma omp parallel
+{
+	// ...
+}
+\end{lstlisting}
+
+Esta directiva especifica qué cómputos se ejecutarán en paralelo.
+Cuando la hebra principal del programa, a partir de ahora \textit{hebra master}, llega a la línea de la directiva, se crean múltiples hebras que ejecutan el código en paralelo, de forma que cada una ejecuta el código incluido en el bloque.
+Esta directiva no reparte tareas entre las hebras y crea una barrera implícita al final del bloque, que las une y devuelve un resultado final.
+
+Un ejemplo sencillo de esta directiva sería un programa que imprime el índice de la hebra que ejecuta el bloque:
+
+\begin{lstlisting}[language=C]
+#include <stdio.h>
+
+#ifdef _OPENMP
+	#include <omp.h>
+#else
+	#define omp_get_thread_num() 0
+#endif
+
+int main () {
+	int ID;
+
+	#pragma omp parallel private(ID)
+	{
+		ID = omp_get_thread_num();
+		printf("Impresión ejecutada por la hebra %d\n", ID);
+	}
+
+	return 0;
+}
+\end{lstlisting}
+
+Al ejecutar varias veces este programa, veremos que las hebras que imprimen el mensaje lo hacen en un orden no determinista.
+También podemos modificar el número de hebras que ejecutan el código mediante la variable de entorno \code{OMP\_NUM\_THREADS}.
+
+\pagebreak
+
+\begin{lstlisting}[language=sh]
+gcc -fopenmp -O2 main.c -o main
+./main
+# Impresión ejecutada por la hebra 2
+# Impresión ejecutada por la hebra 0
+# Impresión ejecutada por la hebra 4
+# Impresión ejecutada por la hebra 11
+# Impresión ejecutada por la hebra 10
+# Impresión ejecutada por la hebra 7
+# Impresión ejecutada por la hebra 8
+# Impresión ejecutada por la hebra 5
+# Impresión ejecutada por la hebra 3
+# Impresión ejecutada por la hebra 1
+# Impresión ejecutada por la hebra 6
+# Impresión ejecutada por la hebra 9
+export OMP_NUM_THREADS=4
+./main
+# Impresión ejecutada por la hebra 0
+# Impresión ejecutada por la hebra 2
+# Impresión ejecutada por la hebra 3
+# Impresión ejecutada por la hebra 1
+\end{lstlisting}
+
+Como vemos en este ejemplo, la hebra \textit{master} es la de índice \code{0} y se ejecutan tantas hebras como tenga disponible el procesador o, en su defecto, las definidas en la variable de entorno \code{OMP\_NUM\_THREADS}.
+
+Dado que \code{omp\_get\_thread\_num()} devuelve el número de la hebra que se está ejecutando, podemos definir el comportamiento del programa en función del número de la hebra:
+
+\begin{lstlisting}[language=C]
+#include <stdio.h>
+#include <stdlib.h>
+
+#ifdef _OPENMP
+	#include <omp.h>
+#else
+	#define omp_get_thread_num() 0
+#endif
+
+int main (int argc, char ** argv) {
+	int hebra;
+
+	if (argc != 2) {
+		fprintf(stderr, "Ejecutar con un argumento: El número de hebras.\n");
+		return 1;
+	}
+
+	hebra = atoi(argv[1]);
+
+	#pragma omp parallel
+	{
+		if (omp_get_thread_num() < hebra)
+			printf("Impresión inferior ejecutada por la hebra %d\n",
+			       omp_get_thread_num());
+		else
+			printf("Impresión superior ejecutada por la hebra %d\n",
+			       omp_get_thread_num());
+	}
+
+	return 0;
+}
+\end{lstlisting}
+
+\pagebreak
+
+\begin{lstlisting}[language=sh]
+gcc -fopenmp -O2 divididas.c -o divididas
+./divididas 2
+# Impresión inferior ejecutada por la hebra 0
+# Impresión inferior ejecutada por la hebra 1
+# Impresión superior ejecutada por la hebra 2
+# Impresión superior ejecutada por la hebra 3
+\end{lstlisting}
+
+\subsection{Directivas para trabajo compartido (\textit{worksharing})}\label{directivas-openmp-directivas-trabajo-compartido}
+
+Con OpenMP podemos realizar cómputos de trabajo compartido aprovechando paralelismo de datos, de tareas y obligando a que sea una de las hebras quien ejecute una sección de código secuencial.
+
+\subsubsection{Paralelismo de datos: \code{\#pragma omp for}}
+
+\begin{lstlisting}[language=C]
+#pragma omp for
+for (i=0; i<MAX; i++)
+	// ...
+\end{lstlisting}
+
+Esta directiva permite ejecutar un bucle \code{for} por varias hebras de forma que cada una ejecuta una de las iteraciones y, al final, el resultado es el mismo que si se ejecutara secuencialmente.
+Para hacer esto, el cuerpo del bucle debe ser paralelizable y el número de iteraciones debe ser conocido en tiempo de compilación.
+Aplicando esta directiva junto con \code{parallel}, podemos ampliar el ejemplo de~\ref{directivas-openmp-directivas-parallel} para incluir un bucle en su cuerpo:
+
+\begin{lstlisting}[language=C]
+// ...
+
+int main () {
+	const int ITERACIONES = 10;
+	int i;
+
+	#pragma omp parallel private(ID)
+	{
+		#pragma omp for
+		for (i=0; i<ITERACIONES; i++)
+			printf("La hebra %d ejecuta la iteración %d\n",
+			       omp_get_thread_num(), i);
+	}
+
+	return 0;
+}
+\end{lstlisting}
+
+\subsubsection{Paralelismo de tareas: \code{\#pragma omp sections}}
+
+\begin{lstlisting}[language=C]
+#pragma omp sections
+{
+	#pragma omp section
+	{
+		// ...
+	}
+
+	#pragma omp section
+	{
+		// ...
+	}
+
+	// ...
+}
+\end{lstlisting}
+
+Esta directiva aprovecha el paralelismo a nivel de función para dividir un bloque de código en varias secciones ejecutables paralelamente con una sincronización al final del mismo.
+Dado que cada sección se ejecuta con una hebra diferente, el número de hebras que ejecutan las diferentes secciones es igual al número de secciones en las que se divide el bloque.
+Por ejemplo, podemos realizar llamadas a diferentes subrutinas o hacerlo con argumentos diferentes en función de la hebra:
+
+\begin{lstlisting}[language=C]
+#include <omp.h>
+#include <stdio.h>
+
+void f(const char * msg) {
+	printf("La hebra %d manda el mensaje \"%s\"\n", omp_get_thread_num(), msg);
+}
+
+int main () {
+	#pragma omp parallel
+	{
+		#pragma omp sections
+		{
+			#pragma omp section
+				f("Hola, mundo");
+
+			#pragma omp section
+				f("Qué pasa chavales");
+		}
+	}
+
+	return 0;
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=sh]
+gcc -fopenmp -O2 sections.c -o sections
+./sections
+# La hebra 0 manda el mensaje "Hola, mundo"
+# La hebra 3 manda el mensaje "Qué pasa chavales"
+./sections
+# La hebra 2 manda el mensaje "Qué pasa chavales"
+# La hebra 0 manda el mensaje "Hola, mundo"
+\end{lstlisting}
+
+\subsubsection{Ejecución secuencial: \code{\#pragma omp single}}
+
+\begin{lstlisting}[language=C]
+#pragma omp single
+{
+	// ...
+}
+\end{lstlisting}
+
+Esta directiva es vital para ejecutar bloques que no son \textit{thread-safe}, es decir, que no deben ser accedidos simultáneamente por diferentes hebras.
+Por ejemplo, puede utilizarse para pedir datos al usuario:
+
+\pagebreak
+
+\begin{lstlisting}[language=C]
+#include <omp.h>
+#include <stdio.h>
+
+int main () {
+	int num;
+
+	#pragma omp parallel
+	{
+		#pragma omp single
+		{
+			printf("Introduzca un valor: ");
+			scanf("%d", &num);
+		}
+
+		printf("La hebra %d recibió el valor compartido %d\n",
+	          omp_get_thread_num(), num);
+	}
+
+	return 0;
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=sh]
+gcc -fopenmp -O2 single.c -o single
+./single
+# Introduzca un valor: 1337
+# La hebra 0 recibió el valor compartido 1337
+# La hebra 3 recibió el valor compartido 1337
+# La hebra 1 recibió el valor compartido 1337
+# La hebra 2 recibió el valor compartido 1337
+\end{lstlisting}
+
+\subsubsection{Combinación de \code{parallel} con directivas de trabajo compartido}
+
+Podemos combinar estas directivas con su \code{parallel} para simplificar la lectura del código de forma que son equivalentes las singuientes expresiones:
+
+\code{for}\textbf{:}
+
+\begin{lstlisting}[language=C]
+#pragma omp parallel
+{
+	#pragma omp for
+	// ...
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=C]
+#pragma omp parallel for
+// ...
+\end{lstlisting}
+
+\code{sections}\textbf{:}
+
+\begin{lstlisting}[language=C]
+#pragma omp parallel
+{
+	#pragma omp sections
+	{
+		#pragma omp section
+		// ...
+
+		#pragma omp section
+		// ...
+	}
+
+	// ...
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=C]
+#pragma omp parallel sections
+{
+	#pragma omp section
+	// ...
+
+	#pragma imp section
+	// ...
+
+	// ...
+}
+\end{lstlisting}
+
+La combinación de directivas acepta todas las cláusulas de ambas directivas combinadas excepto \code{nowait}, que veremos en (TODO\@: Especificar dónde lo veremos cuando acabe el tema de las cláusulas).
+
+\subsection{Directivas para comunicación y sincronización}\label{directivas-openmp-directivas}
+
+\subsubsection{Directiva \code{barrier}}
+
+\begin{lstlisting}[language=C]
+#pragma omp barrier
+\end{lstlisting}
+
+Esta directiva crea una barrera explícita, un punto en el código en el que todas las hebras deben esperar a que las otras lleguen al mismo punto.
+Implícitamente, al final de \code{parallel} siempre hay una barrera que no es necesario declarar.
+
+\begin{lstlisting}[language=C]
+#include <omp.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+int main () {
+	time_t t_inicio,
+	       t_fin;
+
+	#pragma omp parallel private (t_inicio, t_fin)
+	{
+		if (omp_get_thread_num() < omp_get_num_threads() - 2)
+			system("sleep 3");
+
+		t_inicio = time(NULL);
+
+		#pragma omp barrier
+
+		t_fin = time(NULL) - t_inicio;
+
+		printf("La hebra %d ha esperado %d segundos\n",
+		        omp_get_thread_num(), t_fin);
+	}
+
+	return 0;
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=sh]
+gcc -fopenmp -O2 barrier.c -o barrier
+./barrier
+# La hebra 0 ha esperado 0 segundos
+# La hebra 3 ha esperado 3 segundos
+# La hebra 2 ha esperado 3 segundos
+# La hebra 1 ha esperado 0 segundos
+\end{lstlisting}
+
+\subsubsection{Directiva \code{critical}}
+
+\begin{lstlisting}[language=C]
+#pragma omp critical
+// ...
+\end{lstlisting}
+
+Esta directiva evita que varias hebras accedan a variables compartidas a la vez en lo que llamamos una \textbf{sección crítica}.
+Si dos hebras tratan de escribir a la vez en la misma variable compartida, existe la probabilidad de que se produzca un problema de sincronización en la escritura y el resultado no sea el mismo que al sumar los valores secuencialmente, lo cual es un error inconcebible en un programa bien escrito.
+Para evitar que ocurra, encerramos la sección crítica con la directiva \code{critical}:
+
+\begin{lstlisting}[language=C]
+#include <omp.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+int main () {
+	int suma = 0,
+	    sumalocal;
+
+	#pragma omp parallel private (sumalocal)
+	{
+		sumalocal = 0;
+
+		#pragma omp for
+		for (int i=0; i<10; i++)
+			sumalocal += i;
+
+		printf ("La suma local vale %d\n", sumalocal);
+
+		#pragma omp critical
+		suma += sumalocal;
+	}
+
+	printf ("La suma total vale %d\n", suma);
+
+	return 0;
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=sh]
+gcc -fopenmp -O2 critical.c -o critical
+./critical
+# La suma local vale 17
+# La suma local vale 3
+# La suma local vale 13
+# La suma local vale 12
+# La suma total vale 45
+\end{lstlisting}
+
+\subsubsection{Directiva \code{atomic}}
+
+\begin{lstlisting}[language=C]
+#pragma omp atomic
+// ...
+\end{lstlisting}
+
+Esta directiva es una alternativa a \code{critical} más eficiente.
+La sintaxis es la misma que la de la directiva anterior, pero tiene la ventaja de que aprovecha el hardware para realizar las operaciones atómicas con mucha menos sobrecarga.
+También asegura que cada sección \code{atomic} sea distinguible de las otras, mientras que todos los bloques \code{critical} se consideran iguales a menos que contengan una cláusula \code{name}.
+
+\pagebreak
+
+\subsection{Directiva \code{master}}\label{directivas-openmp-directivas}
+
+\begin{lstlisting}[language=C]
+#pragma omp master
+{
+	// ...
+}
+\end{lstlisting}
+
+Esta directiva obliga a que la hebra \textit{master} sea la que ejecute el bloque al que se refiere.
+No tiene barreras implícitas, por lo que deberemos declararlas nosotros manualmente.
+
+\begin{lstlisting}[language=C]
+#include <omp.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+int main () {
+	int suma = 0,
+	    sumalocal;
+
+	#pragma omp parallel private (sumalocal)
+	{
+		sumalocal = 0;
+
+		#pragma omp for
+		for (int i=0; i<10; i++)
+			sumalocal += i;
+
+		printf ("La suma local vale %d\n", sumalocal);
+
+		#pragma omp atomic
+		suma += sumalocal;
+	}
+
+	#pragma omp barrier
+
+	#pragma omp master
+	printf ("La hebra master (%d) indica que la suma total vale %d\n",
+	        omp_get_thread_num(), suma);
+
+	return 0;
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=sh]
+gcc -fopenmp -O2 master.c -o master
+./master
+# La suma local vale 3
+# La suma local vale 13
+# La suma local vale 17
+# La suma local vale 12
+# La hebra master (0) indica que la suma total vale 45
+\end{lstlisting}
