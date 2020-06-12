@@ -1,0 +1,78 @@
+\chapter{Entorno de programación: \textit{atcgrid} y gestor de colas}
+
+\section{Clúster de prácticas (\textit{atcgrid})}
+
+El clúster de prácticas (a partir de ahora \textit{atcgrid}), es un computador formado por tres nodos de cómputo (servidores \textit{rack} o de armario) \href{https://www.supermicro.com/products/system/1U/6016/SYS-6016T-T.cfm}{SuperMicro SuperServer 6016T-T}.
+Los estudiantes no tienen acceso directo a estos servidores.
+Para trabajar con ellos, lo hacen a partir de un nodo \textit{front-end} que envía los procesos pertinentes a los nodos de cómputo.
+
+Cada uno de los nodos tiene una placa base \href{www.supermicro.com/products/motherboard/QPI/5500/X8DTL-i.cfm}{SuperMicro X8DTL-i} de doble zócalo (\textit{dual socket}) para un \textit{chipset} \href{https://www.intel.com/content/www/us/en/design/products-and-solutions/processors-and-chipsets/tylersburg/technical-library.html}{Intel 5520}.
+Cuenta con $18$ espacios de memoria DDR3 800/1066 divididos en $9$ para cada uno de los procesadores que componen el \textit{chipset} y cada uno con espacio para $4GB$, permitiendo un total de $72GB$ de memoria RAM\@.
+
+Los procesadores instalados en la placa son \href{https://ark.intel.com/content/www/us/en/ark/products/48768/intel-xeon-processor-e5645-12m-cache-2-40-ghz-5-86-gt-s-intel-qpi.html}{Intel Xeon E5645}.
+Estos procesadores cuentan con 6 núcleos y 12 hebras con una frecuencia de $2.40GHz$ por núcleo; una caché L3 compartida por todos los núcleros de 12MB y un bus de $5.86GT/s$ (Giga Transferencias por segundo).
+
+El acceso al \textit{atcgrid} se hace mediante una conexión segura al directorio \code{\$HOME} que se ofrece a cada estudiante de la asignatura.
+Esta conexión puede hacerse con \code{ssh} para interactuar con el sistema y con \code{sftp} para transferir ficheros entre la máquina local y el servidor.
+
+\subsection{\code{ssh}}
+
+La conexión por \code{ssh} se hace usando la orden homónima e introduciendo como argumento el \code{username} propio:
+
+\begin{lstlisting}[language=sh]
+ssh username@atcgrid.ugr.es
+\end{lstlisting}
+
+Al ejecutar esta orden e introducir la contraseña, podemos acceder a nuestra shell personal.
+Dentro de ésta es posible cambiar los ficheros \code{.bashrc} y \code{.bash\_profile} para asignar \code{alias} y herramientas que nos ayuden a trabajar más cómodamente.
+De la misma forma, podemos utilizar \code{vim} para hacer ediciones rápidas a los scripts si se encontrara algún error en éstos.
+
+\subsection{\code{sftp}}
+
+Éste es un programa de transferencia segura de ficheros al que se puede acceder de forma similar a \code{ssh}:
+
+\begin{lstlisting}[language=sh]
+sftp username@atcgrid.ugr.es
+\end{lstlisting}
+
+Al trabajar con \code{sftp} distinguimos entre los directorios remotos, que no necesitan un tratamiento especial, y los locales, para los cuales debemos anteponer el carácter \code{l} en las órdenes que usemos.
+Por ejemplo \code{ls} muestra el contenido del directorio de trabajo remoto (\code{pwd}) mientras que \code{lls} muestra el contenido del directorio de trabajo local (\code{lpwd}).
+
+Para transferir ficheros lo hacemos con \code{put fichero} y los recuperamos con \code{get fichero}.
+
+\section{Sistema de colas}
+
+Para ejecutar programas en \textit{atcgrid} usamos el gestor de colas \href{https://slurm.schedmd.com/pdfs/summary.pdf}{\code{slurm}}.
+Las órdenes de trabajo más básicas y las que usaremos a lo largo de estas prácticas son las siguientes:
+
+\subsection{Ejecución en primer plano}
+
+\begin{lstlisting}[language=sh]
+srun -p ac ./HelloOMP
+srun -p ac lscpu
+\end{lstlisting}
+
+La orden \code{srun} envía a ejecutar un trabajo a la cola especificada con \code{-p} (\code{ac} en el caso de esta asignatura) y muestra el resultado por la salida estándar.
+
+\subsection{Ejecución en segundo plano}
+
+\begin{lstlisting}[language=sh]
+sbatch -p ac script.sh
+sbatch -p ac --wrap "echo \"Hello World\""
+sbatch -p ac --wrap "./HelloOMP"
+sbatch -p ac --wrap "echo \"Hello World\" && ./HelloOMP"
+\end{lstlisting}
+
+La orden \code{sbatch} envía a ejecutar un script definido en un fichero o tras \code{--wrap} a la cola pertinente y devuelve la salida en un fichero.
+Ésta es la forma de ejecución recomendada, ya que permite enviar varios trabajos a la cola en lugar de tener que esperar a que uno acabe para enviar otro.
+
+\subsection{Trabajos sobre la cola}
+
+\begin{lstlisting}[language=sh]
+squeue
+scancel jobid
+sinfo
+\end{lstlisting}
+
+Con la orden \code{scancel} podemos cancelar un trabajo cuyo \code{jobid} hayamos previamente recuperado mediante la orden \code{squeue}.
+Por otro lado, \code{sinfo} lista información sobre las colas y los nodos del \textit{atcgrid}.
