@@ -1,0 +1,342 @@
+\chapter{Herramientas de programación paralela II\@: Cláusulas OpemMP}\label{clausulas-openmp}
+
+\section{Definiciones}\label{clausulas-openmp-definiciones}
+
+Las cláusulas son argumentos adicionales que toman las directivas para definir y ajustar su comportamiento.
+Aceptan cláusulas las siguientes directivas:
+
+\begin{table}[!h]
+\begin{center}
+\begin{tabular}{l c c c c c c}
+\textbf{Cláusula}         & \code{parallel} & \code{for} & \code{sections} & \code{single} & \code{parallel for} & \code{parallel sections} \\
+	\toprule
+	\code{if ()}           & \code{X}        &            &                 & \code{X}      & \code{X}            &                          \\
+	\code{num\_threads ()} & \code{X}        &            &                 & \code{X}      & \code{X}            &                          \\
+	\code{shared}          & \code{X}        &            &                 & \code{X}      & \code{X}            &                          \\
+	\code{private}         & \code{X}        & \code{X}   & \code{X}        & \code{X}      & \code{X}            & \code{X}                 \\
+	\code{firstprivate}    &                 & \code{X}   & \code{X}        &               & \code{X}            & \code{X}                 \\
+	\code{lastprivate}     & \code{X}        & \code{X}   & \code{X}        & \code{X}      & \code{X}            & \code{X}                 \\
+	\code{default ()}      & \code{X}        &            &                 & \code{X}      & \code{X}            &                          \\
+	\code{reduction}       & \code{X}        & \code{X}   & \code{X}        &               & \code{X}            & \code{X}                 \\
+	\code{copyin}          & \code{X}        &            &                 & \code{X}      & \code{X}            &                          \\
+	\code{copyprivate}     &                 &            &                 & \code{X}      &                     &                          \\
+	\code{schedule ()}     &                 & \code{X}   &                 &               & \code{X}            &                          \\
+	\code{ordered ()}      &                 & \code{X}   &                 &               & \code{X}            &                          \\
+	\code{nowait}          &                 & \code{X}   & \code{X}        & \code{X}      &                     &                          \\
+\end{tabular}
+\end{center}
+\caption{Cláusulas aceptadas por las diferentes directivas estudiadas}\label{clausulas-omp-definiciones-aceptacion}
+\end{table}
+
+Por norma general, las variables declaradas fuera de la región paralela y las dinámicas son compartidas por las hebras dentro de las regiones paralelas, mientras que las variables declaradas dentro de las mismas son privadas.
+Son excepciones a esta norma los índices de los bucles \code{for}, que son privados por defecto, y las variables declaradas como \code{static}.
+
+\section{Cláusulas relacionadas con la compartición de datos}\label{clausulas-openmp-comparticion-de-datos}
+
+\subsection{Cláusula \code{shared}}
+
+\begin{lstlisting}[language=C]
+#pragma omp [directiva] shared (var, ...)
+\end{lstlisting}
+
+Las variables especificadas como argumentos a la cláusula se comparten por todas las hebras a lo largo de la sección paralela.
+Debemos tener cuidado con las secciones críticas que se produzcan en estas secciones.
+
+\pagebreak
+
+\begin{lstlisting}[language=C]
+#include <omp.h>
+#include <stdio.h>
+
+int main () {
+	int resultado         = 0,
+	    res_indeterminado = 0;
+
+	#pragma omp parallel for shared (resultado)
+	for (int i=0; i<10; i++)
+		#pragma omp atomic
+		resultado += i;
+
+	#pragma omp parallel for shared (res_indeterminado)
+	for (int i=0; i<10; i++)
+		res_indeterminado += i;
+
+	printf("Resultado: %d\nResultado indeterminado: %d\n",
+	       resultado, res_indeterminado);
+
+	return 0;
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=sh]
+gcc -fopenmp -O2 shared.c -o shared
+./shared
+# Resultado: 45
+# Resultado indeterminado: 24
+./shared
+# Resultado: 45
+# Resultado indeterminado: 13
+\end{lstlisting}
+
+\subsection{Cláusula \code{private}}
+
+\begin{lstlisting}[language=C]
+#pragma omp [directiva] private (var, ...)
+\end{lstlisting}
+
+Las variables especificadas como argumentos a la cláusula se comportan como variables privadas de cada una de las hebras a lo largo de la sección paralela.
+Su valor de entrada y salida queda indefinido por mucho que la variable esté inicializada antes de la sección, por lo que es imperativo inicializarla dentro de la misma.
+Como vimos en \S\ref{clausulas-openmp-definiciones}, los índices de los bucles \code{for} son privados por defecto.
+
+\begin{lstlisting}[language=C]
+#include <omp.h>
+#include <stdio.h>
+
+int main () {
+	int resultado         = 0,
+	    res_indeterminado = 0;
+
+	omp_set_num_threads(2);
+
+	#pragma omp parallel private (resultado)
+	{
+		resultado = 0;
+
+		#pragma omp parallel for
+		for (int i=0; i<4; i++) {
+			#pragma omp atomic
+			resultado += i;
+
+			printf("Resultado: %d\n", resultado);
+		}
+	}
+
+	#pragma omp parallel for private (res_indeterminado)
+	for (int i=0; i<4; i++) {
+		res_indeterminado += i;
+		printf("Resultado indeterminado: %d\n", res_indeterminado);
+	}
+
+	return 0;
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=sh]
+gcc -fopenmp -O2 private.c -o private
+./private
+# Resultado: 0
+# Resultado: 1
+# Resultado: 3
+# Resultado: 6
+# Resultado: 0
+# Resultado: 1
+# Resultado: 3
+# Resultado: 6
+# Resultado indeterminado: -754834318
+# Resultado indeterminado: -754834315
+# Resultado indeterminado: 0
+# Resultado indeterminado: 1
+\end{lstlisting}
+
+\subsection{Cláusula \code{firstprivate}}
+
+\begin{lstlisting}[language=C]
+#pragma omp [directiva] firstprivate (var, ...)
+\end{lstlisting}
+
+Esta cláusula combina la cláusula \code{private} con la inicialización de las variables que toma como argumento al entrar en la región paralela al valor que tuvieran inmediatamente antes de entrar en ella, de forma que no es nececesario inicializarlas en el interior del bloque.
+
+\begin{lstlisting}[language=C]
+#include <omp.h>
+#include <stdio.h>
+
+int main () {
+	int resultado = 0;
+
+	#pragma omp parallel for firstprivate (resultado)
+	for (int i=0; i<4; i++) {
+		resultado += i;
+		printf("Resultado: %d\n", resultado);
+	}
+
+	printf("Resultado final: %d\n", resultado);
+
+	return 0;
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=sh]
+gcc -fopenmp -O2 firstprivate.c -o firstprivate
+./firstprivate
+# Resultado: 0
+# Resultado: 2
+# Resultado: 1
+# Resultado: 3
+# Resultado final: 0
+\end{lstlisting}
+
+\subsection{Cláusula \code{lastprivate}}
+
+\begin{lstlisting}[language=C]
+#pragma omp [directiva] lastprivate (var, ...)
+\end{lstlisting}
+
+Esta cláusula combina la cláusula \code{private} con la copia del último valor que habrían tenido las variables pasadas como argumento si el bloque se hubiera ejecutado secuencialmente
+Para ello, es imperativo que haya una estructura secuencial clara, por lo que se imponen restricciones sobre su aplicación tal y como se muestra en el cuadro~\ref{clausulas-omp-definiciones-aceptacion}.
+
+\begin{lstlisting}[language=C]
+#include <omp.h>
+#include <stdio.h>
+
+int main () {
+	int resultado = 0;
+
+	#pragma omp parallel for lastprivate (resultado)
+	for (int i=0; i<4; i++) {
+		resultado = i;
+		printf("Resultado: %d\n", resultado);
+	}
+
+	printf("Resultado final: %d\n", resultado);
+
+	return 0;
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=sh]
+gcc -fopenmp -O2 lastprivate.c -o lastprivate
+./lastprivate
+# Resultado: 2
+# Resultado: 3
+# Resultado: 1
+# Resultado: 0
+# Resultado final: 3
+\end{lstlisting}
+
+\subsection{Cláusula \code{default}}
+
+\begin{lstlisting}[language=C]
+#pragma omp [directiva] default (none | shared)
+\end{lstlisting}
+
+Si se indica \code{none} en esta cláusula, las variables que antes entraban como compartidas por defecto ahora deben ser declaradas para su compartición manualmente mediante \code{shared}, \code{private}, \code{firstprivate}, \code{lastprivate} y \code{reduction}.
+
+\begin{lstlisting}[language=C]
+#include <omp.h>
+#include <stdio.h>
+
+int main () {
+	int resultado = 0;
+
+	#pragma omp parallel for default (none) lastprivate (resultado)
+	for (int i=0; i<4; i++) {
+		resultado = i;
+		printf("Resultado: %d\n", resultado);
+	}
+
+	printf("Resultado final: %d\n", resultado);
+
+	return 0;
+}
+\end{lstlisting}
+
+\section{Cláusulas relacionadas con comunicación y sincronización}
+
+\subsection{Cláusula \code{reduction}}
+
+\begin{lstlisting}[language=C]
+#pragma omp [directive] reduction (operador : var, ...)
+\end{lstlisting}
+
+Esta cláusula transforma las operaciones que se hacen en bucle (o de cualquier otra forma reiterada) a las variables pasadas como argumento mediante el \code{operador} especificado a una única operación.
+Formalmente, \code{reduction} (en el caso de \code{reduction (+:k)}) transformaría la expresión del lado izquierdo a la del lado derecho:
+
+\[\sum_{i=0}^{k}k=k_0+k_1+\cdots+k_{n-1}+k_n\]
+
+Al usar esta cláusula, las variables especificadas toman un valor de entrada al bloque por defecto en función del operador:
+
+\begin{table}[!h]
+	\begin{center}
+		\begin{tabular}{c c}
+			\textbf{Operador} & \textbf{Valor inicial}     \\
+			\toprule
+			\code{+}          & $0$                        \\
+			\code{-}          & $0$                        \\
+			\code{*}          & $1$                        \\
+			\code{\&}         & $0$ (todos los bits a $1$) \\
+			\code{|}          & $0$                        \\
+			\code{\^{}}       & $0$                        \\
+			\code{\&\&}       & $1$                        \\
+			\code{||}         & $0$                        \\
+		\end{tabular}
+	\end{center}
+	\caption{Cláusulas aceptadas por las diferentes directivas estudiadas}\label{clausulas-omp-definiciones-aceptacion}
+\end{table}
+
+\begin{lstlisting}[language=C]
+#include <omp.h>
+#include <stdio.h>
+
+int main () {
+	int resultado = 0;
+
+	#pragma omp parallel for default (none) lastprivate (resultado) \
+	                         reduction(+ : resultado)
+	for (int i=0; i<4; i++) {
+		resultado = i;
+		printf("Resultado: %d\n", resultado);
+	}
+
+	printf("Resultado final: %d\n", resultado);
+
+	return 0;
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=sh]
+gcc -fopenmp -O2 reduction.c -o reduction
+./reduction
+# Resultado: 0
+# Resultado: 3
+# Resultado: 2
+# Resultado: 1
+# Resultado final: 6
+\end{lstlisting}
+
+\subsection{Cláusula \code{copyprivate}}
+
+Esta cláusula, que sólo puede usarse con la directiva \code{single}, permite que una variable privada de una hebra se copia a las variables privadas del mismo nombre del resto de hebras.
+Esto difunde el dato al resto de hebras de forma que todas pueden acceder a una actualización del mismo.
+
+\begin{lstlisting}[language=C]
+#include <omp.h>
+#include <stdio.h>
+
+int main () {
+	#pragma omp parallel
+	{
+		int num;
+
+		#pragma omp single copyprivate (num)
+		{
+			printf("Introduzca un valor: ");
+			scanf("%d", &num);
+		}
+
+		printf("La hebra %d recibió el valor compartido %d\n",
+	          omp_get_thread_num(), num);
+	}
+
+	return 0;
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=sh]
+gcc -fopenmp -O2 copyprivate.c -o copyprivate
+./copyprivate
+# Introduzca un valor: 1337
+# La hebra 0 recibió el valor compartido 1337
+# La hebra 3 recibió el valor compartido 1337
+# La hebra 1 recibió el valor compartido 1337
+# La hebra 2 recibió el valor compartido 1337
+\end{lstlisting}

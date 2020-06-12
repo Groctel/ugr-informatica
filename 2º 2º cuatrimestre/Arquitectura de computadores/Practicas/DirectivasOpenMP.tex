@@ -45,14 +45,14 @@ Este bloque puede ampliarse manualmente mediante llaves:
 
 \begin{lstlisting}[language=C]
 #pragma omp parallel for
-for (i=0; i<MAX; i++)
+for (unsigned i=0; i<MAX; i++)
 	// ...
 \end{lstlisting}
 
 \begin{lstlisting}[language=C]
 #pragma omp parallel // La llave debe ir en la línea siguiente
 {
-	for (i=0; i<MAX; i++)
+	for (unsigned i=0; i<MAX; i++)
 		// ...
 }
 \end{lstlisting}
@@ -100,8 +100,6 @@ int main () {
 
 Al ejecutar varias veces este programa, veremos que las hebras que imprimen el mensaje lo hacen en un orden no determinista.
 También podemos modificar el número de hebras que ejecutan el código mediante la variable de entorno \code{OMP\_NUM\_THREADS}.
-
-\pagebreak
 
 \begin{lstlisting}[language=sh]
 gcc -fopenmp -O2 main.c -o main
@@ -164,8 +162,6 @@ int main (int argc, char ** argv) {
 }
 \end{lstlisting}
 
-\pagebreak
-
 \begin{lstlisting}[language=sh]
 gcc -fopenmp -O2 divididas.c -o divididas
 ./divididas 2
@@ -183,7 +179,7 @@ Con OpenMP podemos realizar cómputos de trabajo compartido aprovechando paralel
 
 \begin{lstlisting}[language=C]
 #pragma omp for
-for (i=0; i<MAX; i++)
+for (unsigned i=0; i<MAX; i++)
 	// ...
 \end{lstlisting}
 
@@ -196,12 +192,11 @@ Aplicando esta directiva junto con \code{parallel}, podemos ampliar el ejemplo d
 
 int main () {
 	const int ITERACIONES = 10;
-	int i;
 
 	#pragma omp parallel private(ID)
 	{
 		#pragma omp for
-		for (i=0; i<ITERACIONES; i++)
+		for (unsigned i=0; i<ITERACIONES; i++)
 			printf("La hebra %d ejecuta la iteración %d\n",
 			       omp_get_thread_num(), i);
 	}
@@ -279,8 +274,6 @@ gcc -fopenmp -O2 sections.c -o sections
 
 Esta directiva es vital para ejecutar bloques que no son \textit{thread-safe}, es decir, que no deben ser accedidos simultáneamente por diferentes hebras.
 Por ejemplo, puede utilizarse para pedir datos al usuario:
-
-\pagebreak
 
 \begin{lstlisting}[language=C]
 #include <omp.h>
@@ -441,7 +434,7 @@ int main () {
 		sumalocal = 0;
 
 		#pragma omp for
-		for (int i=0; i<10; i++)
+		for (unsigned i=0; i<10; i++)
 			sumalocal += i;
 
 		printf ("La suma local vale %d\n", sumalocal);
@@ -477,8 +470,6 @@ Esta directiva es una alternativa a \code{critical} más eficiente.
 La sintaxis es la misma que la de la directiva anterior, pero tiene la ventaja de que aprovecha el hardware para realizar las operaciones atómicas con mucha menos sobrecarga.
 También asegura que cada sección \code{atomic} sea distinguible de las otras, mientras que todos los bloques \code{critical} se consideran iguales a menos que contengan una cláusula \code{name}.
 
-\pagebreak
-
 \subsection{Directiva \code{master}}\label{directivas-openmp-directivas}
 
 \begin{lstlisting}[language=C]
@@ -505,7 +496,7 @@ int main () {
 		sumalocal = 0;
 
 		#pragma omp for
-		for (int i=0; i<10; i++)
+		for (unsigned i=0; i<10; i++)
 			sumalocal += i;
 
 		printf ("La suma local vale %d\n", sumalocal);
