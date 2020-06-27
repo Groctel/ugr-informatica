@@ -145,7 +145,7 @@ Estos paquetes pueden contener binarios o código fuente que debe ser compilado 
 Las labores de administración de software en Linux se realizan mediante \textbf{gestores de paquetes}, que son interfaces gráficas o textuales que permiten instalar, desinstalar y administrar programas.
 En esta sección mostramos cómo usar algunos de ellos.
 
-\subsubsection{\texttt{apt}}
+\subsubsection{\code{apt}}
 
 Es el gestor de paquetes de Debian y sus distribuciones derivadas.
 Permite instalar ficheros \code{.deb} y \code{.rpm} y acepta los siguientes argumentos:
@@ -159,7 +159,7 @@ Permite instalar ficheros \code{.deb} y \code{.rpm} y acepta los siguientes argu
 	\item\code{remove}\textbf{:} Elimina el paquete pasado como segundo argumento.
 \end{itemize}
 
-\subsubsection{\texttt{pacman}}
+\subsubsection{\code{pacman}}
 
 Es el gestor de paquetes de ArchLinux y sus distribuciones derivadas.
 Acepta los siguientes argumentos.
@@ -174,7 +174,7 @@ Acepta los siguientes argumentos.
 	\item\code{-U}\textbf{:} Instala un paquete desde la ruta pasada como segundo argumento.
 \end{itemize}
 
-\subsubsection{\texttt{rpm}}
+\subsubsection{\code{rpm}}
 
 Es un gestor de paquetes de bajo nivel propio de RedHat.
 Acepta los siguientes argumentos.
@@ -189,12 +189,12 @@ Acepta los siguientes argumentos.
 	\item\code{-V}\textbf{:} Verifica la integridad de la instalación del paqeute pasado como segundo argumento.
 \end{itemize}
 
-\subsubsection{\texttt{yay}}
+\subsubsection{\code{yay}}
 
 No es un gestor de paquetes como tal, sino un cliente para buscar paquetes en el AUR (\emph{Arch User Repository}) que incorpora todas las funcionalidades de \code{pacman}.
 Como adición a \code{pacman}, permite buscar paquetes en los repositorios pasando una cadena de caracteres como argumento y ejecuta \code{yay -Syu} al ser llamado sin argumentos.
 
-\subsubsection{\texttt{yum}}
+\subsubsection{\code{yum}}
 
 Es un gestor de paquetes usado para instalar ficheros \code{.rpm}, propios de RedHat.
 Acepta los siguientes argumentos:

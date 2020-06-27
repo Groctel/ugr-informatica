@@ -1,6 +1,6 @@
-\chapter{Biblioteca \texttt{dirent.h}}
+\chapter{Biblioteca \code{dirent.h}}
 
-\section{\texttt{closedir}}\label{closedir}
+\section{\code{closedir}}\label{closedir}
 
 \begin{lstlisting}[language=C]
 #include <sys/types.h>
@@ -14,7 +14,7 @@ El directorio deja de estar disponible después de la operación.
 En caso de éxito, devuelve \code{0}.
 En caso de fracaso, devuelve \code{-1} acompañado por el \code{errno} apropiado.
 
-\section{\texttt{opendir}}\label{opendir}
+\section{\code{opendir}}\label{opendir}
 
 \begin{lstlisting}[language=C]
 #include <sys/types.h>
@@ -28,7 +28,7 @@ Abre un flujo al directorio de nombre \code{name}.
 En caso de éxito, devuelve un puntero al flujo del directorio abierto posicionado al inicio del mismo.
 En caso de fracaso, devuelve \code{NULL} acompañado por el \code{errno} apropiado.
 
-\section{\texttt{readdir}}\label{readdir}
+\section{\code{readdir}}\label{readdir}
 
 \begin{lstlisting}[language=C]
 #include <dirent.h>
@@ -40,7 +40,7 @@ Accede a la siguiente entrada del flujo de directorio \code{dirp}.
 En caso de éxito, devuelve un puntero a una estructura \code{dirent} que representa dicha entrada.
 En caso de fracaso o de haber llegado al final del directorio, devuelve \code{NULL} acompañado por el \code{errno} apropiado, que se cambia únicamente en caso de error.
 
-\section{\texttt{rewinddir}}\label{rewinddir}
+\section{\code{rewinddir}}\label{rewinddir}
 
 \begin{lstlisting}[language=C]
 #include <sys/types.h>
@@ -52,7 +52,7 @@ void rewinddir (DIR* dirp);
 Reajusta la posición del flujo de directorio \code{dirp} al inicio del directorio.
 No devuelve ningún valor.
 
-\section{\texttt{seekdir}}\label{seekdir}
+\section{\code{seekdir}}\label{seekdir}
 
 \begin{lstlisting}[language=C]
 #include <dirent.h>
@@ -64,7 +64,7 @@ Ajusta la posición del flujo de directorio \code{dirp}.
 Esta posición debe haber sido devuelta por \code{telldir} con anterioridad para que sea válida.
 No devuelve ningún valor.
 
-\section{\texttt{telldir}}\label{telldir}
+\section{\code{telldir}}\label{telldir}
 
 \begin{lstlisting}[language=C]
 #include <dirent.h>

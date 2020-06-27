@@ -1,6 +1,6 @@
 \chapter{Otras bibliotecas}
 
-\section{\texttt{exec}}\label{exec}
+\section{\code{exec}}\label{exec}
 
 \begin{lstlisting}[language=C]
 #include <unistd.h>
@@ -23,28 +23,28 @@ Todas las funciones de la familia \code{exec} reemplazan la imagen del proceso i
 Todas estas funciones devuelven, únicamente si ocurre un error, \code{-1} acompañado por el \code{errno} apropiado.
 Reciben como primer argumento el nombre del fichero que se va a ejecutar y se dividen en varias categorías según sus sufijos:
 
-\subsection{\texttt{e}: \texttt{execle()} y \texttt{execvpe()}}
+\subsection{\code{e}: \texttt{execle()} y \texttt{execvpe()}}
 
 El entorno del invocante se especifica mediante el argumento \code{envp}, que es un array de punteros a cadenas de caracteres de finalización nula y debe acabar obligatoriamente en un puntero nulo.
 El resto de funciones \code{exec} (que no incluyen la \code{e}) toman el entorno para la nueva imagen del proceso de la variable externa \code{environ} en la invocación.
 
-\subsection{\texttt{l}: \texttt{execl()}, \texttt{execlp()}y \texttt{execle()}}
+\subsection{\code{l}: \texttt{execl()}, \texttt{execlp()}y \texttt{execle()}}
 
 El argumento \code{arg} se interpreta como \code{arg0, arg1, ..., argn}, siendo todos cadenas de caracteres de finalización nula que representan los argumentos con los que se ejecuta el proceso.
 El último argumento debe ser obligatoriamente un puntero nulo casteado a \code{(char*) NULL}.
 
-\subsection{\texttt{p}: \texttt{execlp()}, \texttt{execvp()} y \texttt{execvpe()}}
+\subsection{\code{p}: \texttt{execlp()}, \texttt{execvp()} y \texttt{execvpe()}}
 
 Duplican las acciones de la shell para la búsqueda del ejecutable si éste no contiene un carácter \code{/}.
 Éste se busca en \code{\$PATH}.
 En caso de que no esté definido, se busca por defecto en el valor que devuelve \code{confstr(\_CS\_PATH)} (generalmente \code{/bin:/usr/bin}).
 Si la ruta sí contiene \code{/}, se ignora \code{\$PATH} y se busca en la ruta especificada.
 
-\subsection{\texttt{v}: \texttt{execv()}, \texttt{execvp()} y \texttt{execvpe()}}
+\subsection{\code{v}: \texttt{execv()}, \texttt{execvp()} y \texttt{execvpe()}}
 
 El argumento \code{argv} es un array de punteros a cadenas de caracteres de finalización nula que representa los argumentos con los que se inejecuta el proceso y que debe acabar obligatoriamente en un puntero nulo.
 
-\section{\texttt{ntfw}}\label{ntfw}
+\section{\code{ntfw}}\label{ntfw}
 
 \begin{lstlisting}[language=C]
 #include <ftw.h>
@@ -100,7 +100,7 @@ Por último, \code{flags} indica banderas seleccionables múltiplemente con \cod
 	\item\code{FTW\_PHYS}\textbf{:} No seguir enlaces simbólicos.
 \end{itemize}
 
-\section{\texttt{perror}}
+\section{\code{perror}}
 
 \begin{lstlisting}[language=C]
 #include <stdio.h>
@@ -115,7 +115,7 @@ Por la salud mental de quienes lo lean, se recomienda (porque la logística de o
 perror("Sa matao Paco!\n");
 \end{lstlisting}
 
-\section{\texttt{printf}}
+\section{\code{printf}}
 
 \begin{lstlisting}[language=C]
 #include <stdio.h>
@@ -159,7 +159,7 @@ printf("He sacado un %d. Oh! %s, no te había visto.\n", numero, saludo);
 La variante \code{dprintf} introduce la salida en el fichero identificado por su descriptor \code{fd}\footnote{Estoy bastante seguro de que borra todos los datos incluso probando a abrir el fichero con \code{O\_APPEND}, pero es muy tarde y no me apetece ponerme a investigar movidas raras. Mucho que podemos escribir en un fichero con \code{printf}}.
 La variante \code{sprintf} introduce la salida en la cadena de caracteres \code{str}, permitiendo traducir cualquier dato a cadenas de caracteres.
 
-\section{\texttt{scanf}}
+\section{\code{scanf}}
 
 \begin{lstlisting}[language=C]
 #include <stdio.h>
