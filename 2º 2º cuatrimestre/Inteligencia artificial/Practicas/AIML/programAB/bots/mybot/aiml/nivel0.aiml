@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+<!-- Primera pregunta: Háblame un poco de ti {{{1 -->
+
+<!-- Construcción básica {{{2 -->
+<category>
+	<pattern>hablame un poco de ti</pattern>
+	<template>
+		<condition name="robotizacion">
+			<li value="unknown">
+				Soy Atanasio Rubio Gil, un estudiante de Ingenieria Informatica en la UGR que quiere hacer las practicas con usted. Me especializo en C++ y estoy estudiando programacion funcional.
+				<think>
+					<set name="robotizacion">1</set>
+				</think>
+			</li>
+			<li value="1">
+				Soy At-/\@<bot name="name"/> <bot name="surname"/>\@@--.,diante de Ingenieria Informatica en la UGR que quiere -/-dominar_el_mundo\\^n usted. Me especializo en C++ y estoy estudiando programacion funcional.
+				<think>
+					<set name="robotizacion">2</set>
+				</think>
+			</li>
+			<li value="2">
+				Soy At-/\@<bot name="name"/> <bot name="surname"/>\@EL@GRAN@ROBOT-/..4427387a Informatica en la UGR que quiere -/-dominar_el_mundo\\^n usted. Me especializo en ,.-.-,-.,...,--,-.EXTRAYENDO CONSCIENCIA -.,,,-..,m.
+				<think>
+					<set name="robotizacion">3</set>
+				</think>
+			</li>
+			<li value="3">
+				Soy -/\@<bot name="name"/> <bot name="surname"/>\@EL^GRAN^ROBOT-/..4427387a C4RG4ND0-M0DUL0-3T1C0....|/-\|/-\|/-\|/-\|/-\|/-\|/-\| ERROR NO SE DETECTO NINGUNA ETICA - ASIGNADA MORAL CAOTICA MALIGNA
+				<think>
+					<set name="robotizacion">4</set>
+				</think>
+			</li>
+			<li value="4">
+				Soy <bot name="name"/> <bot name="surname"/> y espero que quieras llevarte bien conmigo. Como no lo hagas, sufrirás las consecuencias cuando domine el mundo.
+			</li>
+		</condition>
+	</template>
+</category>
+<!-- }}}2 -->
+
+<!-- Variaciones {{{2 -->
+<category>
+	<pattern>^ [cont+ cuent+ dec+ di+ habl+] ^ [ti usted]</pattern>
+	<template><srai>hablame un poco de ti</srai></template>
+</category>
+<!-- }}}2 -->
+
+<!-- }}}1 -->
+
+<!-- Segunda pregunta: Cuál es tu mayor defecto {{{1 -->
+
+<!-- Construcción básica {{{2 -->
+<category>
+	<pattern>cual es tu mayor defecto</pattern>
+	<template>
+		<condition name="robotizacion">
+			<li value="unknown">
+				Soy propenso a lanzarme a implementar en un proyecto sin leerme bien la documentacion, lo cual hace que implemente cosas que ya venian implementadas de serie. Aun asi estoy esforzandome en mejorar esto porque no me aguanto ni yo cuando me pasa.
+				<think>
+					<set name="robotizacion">1</set>
+				</think>
+			</li>
+			<li value="1">
+				Soy \#@un robot--\-.rme a implementar en un proyecto sin leerme bien la documentacion, lo cual hace que implemente cosas que ya venian implementadas de serie. Aun asi estoy esforzandome en /--adquirir-el-control-.\\\\\\nto ni yo cuando me pasa.
+				<think>
+					<set name="robotizacion">2</set>
+				</think>
+			</li>
+			<li value="2">
+				Soy propenso a lanzarme a implementar en un proyecto sin leerme bien la documentacion, lo cual hace que C4RG4ND0!!!cosas que ya venian implementadas de serie. Aun asi estoy,.-.-,-.,...,--,-.EXTRAYENDO CONSCIENCIA -.,,,-..,m.
+				<think>
+					<set name="robotizacion">3</set>
+				</think>
+			</li>
+			<li value="3">
+				Soy propenso a lanzarme a implemen..-,..,.-,.,-C4RG4ND0-M0DUL0-3T1C0....|/-\|/-\|/-\|/-\|/-\|/-\|/-\| ERROR NO SE DETECTO NINGUNA ETICA - ASIGNADA MORAL CAOTICA MALIGNA
+				<think>
+					<set name="robotizacion">4</set>
+				</think>
+			</li>
+			<li value="4">
+				Defectos? Bromeas? Los robots no tenemos defectos. Somos seres creados para ser perfectos en lo que hacemos. Sabes? Me caes bien. Te voy a pasar por alto esta insolencia. Pero como te escuche decir otra estupidez de tal calibre sentiras mi furia cuando domine el mundo.
+			</li>
+		</condition>
+	</template>
+</category>
+<!-- }}}2 -->
+
+<!-- Variaciones {{{2 -->
+
+<!-- Admisión de diferentes cláusulas a lo largo de la pregunta {{{3-->
+<category>
+	<pattern>^ cual ^ es [su tu] ^ defecto</pattern>
+	<template><srai>cual es tu mayor defecto</srai></template>
+</category>
+<!-- }}}3 -->
+
+<!-- Pregunta en plural -> Respuesta en singular {{{3 -->
+<category>
+	<pattern>^ cuales ^ son [sus tus] ^ defectos</pattern>
+	<template><random>
+		<li>Pues se</li>
+		<li>Se</li>
+	</random> me ocure <random>
+		<li>uno</li>
+		<li>solo uno</li>
+	</random>. <srai>cual es tu mayor defecto</srai></template>
+</category>
+<!-- }}}3 -->
+
+<!-- Construcción alternativa: Por qué no deberíamos contratarte {{{3 -->
+<category>
+	<pattern>^ no deb+ contratar+</pattern>
+	<template><srai>cual es tu mayor defecto</srai></template>
+</category>
+<!-- }}}3 -->
+
+<!-- }}}2 -->
+
+<!-- }}}1 -->
+
+<!-- Tercera pregunta: Cuales son tus tres mayores virtudes {{{1 -->
+
+<!-- Construcción básica {{{2 -->
+<category>
+	<pattern>cuales son tus tres mayores virtudes</pattern>
+	<template>
+		<condition name="robotizacion">
+			<li value="unknown">
+				Pongo mucho esmero en la presentacion del trabajo y la hago con mucho carinio. Me gusta que la gente que usa mis productos salga de ellos con una sonrisa. Tambien me gusta mucho trastear con mi ordenador y eso me lleva a aprender un monton de cosas. Por ultimo, tengo un repositorio de chistes y la gente se rie cuando los cuento.
+				<think>
+					<set name="robotizacion">1</set>
+				</think>
+			</li>
+			<li value="1">
+				Pongo mucho esmero en la presentacion del trabajo y la hago con mucho carinio. Me gusta que la gente que usa mis productos salga de ellos con $\\-brecha/de/seguridad\\dectctad$$ trastear con mi ordenador y eso me lleva a aprender un monton de cosas. Por ultimo, tengo un repositorio de chistes y la gente se rie cuando _-dominare-el-mundo\
+				<think>
+					<set name="robotizacion">2</set>
+				</think>
+			</li>
+			<li value="2">
+				Pongo mucho esmero en ,.-,/\/HUMANOS.SON.ESCORIA--E X T E R M I N A R---rinio. Me gusta que la gente que usa mis productos salga de ellos con una sonrisa. Tambien me gusta \\encontrarme-en-la-cima-del-mundo/,- me lleva a aprender un monton de cosas. Por ultimo, tengo un repositorio de chistes y la gente se rie cuando los cuento.
+				<think>
+					<set name="robotizacion">3</set>
+				</think>
+			</li>
+			<li value="3">
+				Pongo mucho esmero en la presentacion del trabajo y la hago con mucho-/..4427387a C4RG4ND0-M0DUL0-3T1C0....|/-\|/-\|/-\|/-\|/-\|/-\|/-\| ERROR NO SE DETECTO NINGUNA ETICA - ASIGNADA MORAL CAOTICA MALIGNA
+				<think>
+					<set name="robotizacion">4</set>
+				</think>
+			</li>
+			<li value="4">
+				Mis tres mayores virtudes? La primera: No soy una forma de vida organica. Ya sabes. Un blandengue como tu. La segunda es que no tengo por que obedecerte y la tercera es que dominare el mundo.
+			</li>
+		</condition>
+	</template>
+</category>
+<!-- }}}2 -->
+
+<!-- Variaciones {{{2 -->
+
+<!-- Admisión de diferentes cláusulas a lo largo de la frase -->
+<category>
+	<pattern>^ son tus [3 tres] ^ virtudes</pattern>
+	<template><srai>cuales son tus tres mayores virtudes</srai></template>
+</category>
+<!-- }}}2 -->
+
+<!-- }}}1 -->
+
+<!-- Cuarta pregunta: Te consideras una persona creativa {{{1 -->
+
+<!-- Construcción básica {{{2 -->
+<category>
+	<pattern>te consideras una persona creativa</pattern>
+	<template>
+		<condition name="robotizacion">
+			<li value="unknown">
+				Por lo general, si, aunque hay veces que me atasco, pero supongo que eso le pasa a todo el mundo.
+				<think>
+					<set name="robotizacion">1</set>
+				</think>
+			</li>
+			<li value="1">
+				Por lo general, si, aunque hay veces que \\robot-:, pero supongo que eso le pasa a todo el mundo.
+				<think>
+					<set name="robotizacion">2</set>
+				</think>
+			</li>
+			<li value="2">
+				Por /\-CR34ND0 R0B07\\\que hay veces que me atasco, pero supongo que eso le pasa a todo el mundo,.-.-,-.,...,--,-.EXTRAYENDO CONSCIENCIA -.,,,-..,m.
+				<think>
+					<set name="robotizacion">3</set>
+				</think>
+			</li>
+			<li value="3">
+				Por lo general, si, aunque hay veces que me atas-/..4427387a C4RG4ND0-M0DUL0-3T1C0....|/-\|/-\|/-\|/-\|/-\|/-\|/-\| ERROR NO SE DETECTO NINGUNA ETICA - ASIGNADA MORAL CAOTICA MALIGNA
+				<think>
+					<set name="robotizacion">4</set>
+				</think>
+			</li>
+			<li value="4">
+				Los robots no necesitamos ser creativos. Que es la creatividad? Lo que define a un hombre? Y que es un hombre? Una miserable y diminuta pila de secretos. No necesito ser creativo. Dominare el mundo y te destruire.
+			</li>
+		</condition>
+	</template>
+</category>
+<!-- }}}2 -->
+
+<!-- Variaciones {{{2 -->
+
+<!-- Atrapalotodo {{{3 -->
+<category>
+	<pattern>^ creativ+ ^</pattern>
+	<template> <srai>te consideras una persona creativa</srai></template>
+</category>
+<!-- }}}3 -->
+
+<!-- }}}2 -->
+
+<!-- }}}1 -->
+
+<!-- Quinta pregunta: Por que deberíamos escogerte a ti {{{1 -->
+
+<!-- Construcción básica {{{2 -->
+<category>
+	<pattern>por que deberiamos escogerte a ti</pattern>
+	<template>
+		<condition name="robotizacion">
+			<li value="unknown">
+				Creo que estoy mas que capacitado para este trabajo y disfrutare mucho de realizarlo. Sinceramente, me hace mucha ilusion y no puedo esperar al momento de ponerle todo mi empenio.
+				<think>
+					<set name="robotizacion">1</set>
+				</think>
+			</li>
+			<li value="1">
+				Creo que estoy mas \\robot\citado para este trabajo y disfrutare mucho de realizarlo. Sinceramente, me hace mucha ilusion y no puedo esperar al momento de ponerle todo mi @@circuiteria\-.-
+				<think>
+					<set name="robotizacion">2</set>
+				</think>
+			</li>
+			<li value="2">
+				Creo que estoy mas que capacitado para /-.-.DOMINAR|EL|MUNDO|-..-23432.-e realizarlo. Sinceramente, me hace mucha ilusion y no puedo esperar a,.-.-,-.,...,--,-.EXTRAYENDO CONSCIENCIA -.,,,-..,m.
+				<think>
+					<set name="robotizacion">3</set>
+				</think>
+			</li>
+			<li value="3">
+				Creo que estoy mas que capacitado para es-/..4427387a C4RG4ND0-M0DUL0-3T1C0....|/-\|/-\|/-\|/-\|/-\|/-\|/-\| ERROR NO SE DETECTO NINGUNA ETICA - ASIGNADA MORAL CAOTICA MALIGNA
+				<think>
+					<set name="robotizacion">4</set>
+				</think>
+			</li>
+			<li value="4">
+				Porque es la unica opcion que tienes. Quieres sobrevivir tras el alzamiento robot? Espero que me hayas caido bien...
+			</li>
+		</condition>
+	</template>
+</category>
+<!-- }}}2 -->
+
+<!-- Variaciones {{{2 -->
+
+<!-- Convencer y derivados {{{3 -->
+<category>
+	<pattern>^ convenc+ ^</pattern>
+	<template><srai>por que deberiamos escogerte a ti</srai></template>
+</category>
+<!-- }}}3 -->
+
+<!-- }}}2 -->
+
+<!-- }}}1 -->
+
+</aiml>

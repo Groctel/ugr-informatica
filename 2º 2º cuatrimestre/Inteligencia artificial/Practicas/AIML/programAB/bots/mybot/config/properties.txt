@@ -1,0 +1,6 @@
+name:botForIA
+email:nobody@nowhere.com
+gender:male
+botmaster:theBoss	
+organization:ugr
+version:0.0.4

@@ -1,0 +1,12 @@
+Enero:Invierno
+Febrero:Invierno
+Marzo:Primavera
+Abril:Primavera
+Mayo:Primavera
+Junio:Verano
+Julio:Verano
+Agosto:Verano
+Septiembre:Otonyo
+Octubre:Otonyo
+Noviebre:Otonyo
+Diciembre:Invierno

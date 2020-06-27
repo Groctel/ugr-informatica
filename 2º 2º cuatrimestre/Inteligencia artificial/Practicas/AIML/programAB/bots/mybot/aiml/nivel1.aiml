@@ -1,0 +1,1598 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+<!-- ¿Está libre un día? {{{1 -->
+
+<!-- Construcción básica - Todo el día {{{2 -->
+<category>
+	<pattern>esta libre el *</pattern>
+<!--
+	ARGUMENTOS:
+	- 1: Día por el que se pregunta -->
+	<template>
+	<!--
+		Transformamos la fecha en formato DD-MM-YY -->
+		<think>
+			<set name="fecha">
+				<srai>TODATE <star/></srai>
+			</set>
+		</think>
+
+	<!--
+		Procedemos en función de la conversión de la fecha. -->
+		<condition var="fecha">
+		<!--
+			Si la fecha es inválida, informamos de ello y finalizamos. -->
+			<li value="FALSE">
+				<srai>THINK
+				</srai> Lo siento, pero no puedo acceder a la fecha que dices.
+			<!-- Cambiamos al contexto general -->
+				<think>
+					<set name="topic">unknown</set>
+				</think>
+			</li>
+		<!--
+			Si la fecha es válida, procedemos a examinarla. -->
+			<li>
+			<!--
+				Comprobamos si "fecha" tiene horas libres. Si las tiene, "libre"
+				valdrá "TRUE", en caso contrario, "FALSE". -->
+				<think>
+					<set var="libre">
+						<srai>FREE DAY <get name="fecha"/></srai>
+					</set>
+				</think>
+
+			<!--
+				Respondemos de acuerdo a si "fecha" está libre. -->
+				<condition var="libre">
+				<!--
+					Si no hay horas libres en "fecha", se informa de ello y se ofrece
+					que se pida otro día. Nos trasladamos al contexto de pedir cita
+					"otro dia". -->
+					<li value="FALSE">
+						<srai>THINK
+						</srai> Lo siento, el <star/> esta completo. Deseas otro día?
+						<think>
+							<set name="topic">dia invalido</set>
+						</think>
+					</li>
+				<!--
+					Si hay horas libres en "fecha", se muestran las horas libres y se
+					ofrece a que se pide una hora u otro día. -->
+					<li value="TRUE">
+						<srai>THINK
+						</srai> Si, tenemos hora libre <srai>VERBOSE HOURS
+						                               <srai>FREE <get name="fecha"/> LIST</srai>
+						</srai>. Deseas concertar una cita a alguna de estas horas o deseas otro dia?
+						<think>
+							<set name="topic">dia valido</set>
+						</think>
+					</li>
+				</condition>
+			</li>
+		</condition>
+	</template>
+</category>
+<!-- }}}2 -->
+
+<!-- Construcción compleja - Por la mañana o por la tarde {{{2 -->
+<category>
+	<pattern>esta libre el * por la *</pattern>
+<!--
+	ARGUMENTOS:
+	- 1: Día por el que se pregunta -->
+	<template>
+	<!--
+		Transformamos la fecha en formato DD-MM-YY -->
+		<think>
+			<set name="fecha">
+				<srai>TODATE <star index="1"/></srai>
+			</set>
+		</think>
+
+	<!--
+		Procedemos en función de la conversión de la fecha. -->
+		<condition var="fecha">
+		<!--
+			Si la fecha es inválida, informamos de ello y finalizamos. -->
+			<li value="FALSE">
+				<srai>THINK
+				</srai> Lo siento, pero no puedo acceder a la fecha que dices.
+			<!-- Cambiamos al contexto general -->
+				<think>
+					<set name="topic">unknown</set>
+				</think>
+			</li>
+		<!--
+			Si la fecha es válida, procedemos a examinarla. -->
+			<li>
+			<!--
+				Cotejamos el horario con la lista de horarios válidos. -->
+				<think>
+					<set var="horario">
+						<map name="horarios"><star index="2"/></map>
+					</set>
+				</think>
+
+			<!--
+				Procedemos en función del éxito del cotejamiento. -->
+				<condition var="horario">
+				<!--
+					Si el horario es inválido, informamos de ello y finalizamos. -->
+					<li value="unknown">
+						<srai>THINK
+						</srai> Lo siento, entiendo la fecha pero no tengo ningún horario con ese nombre. Me lo puedes repetir?
+					<!-- Cambiamos al contexto general -->
+						<think>
+							<set name="topic">unknown</set>
+						</think>
+					</li>
+				<!--
+					Si el horario es válido procedemos a ver si hay hora libre. -->
+					<li>
+					<!--
+						Comprobamos si "fecha" tiene horas libres. Si las tiene, "libre"
+						valdrá "TRUE", en caso contrario, "FALSE". -->
+						<think>
+						<!--
+							Comprobamos la disponibilidad en función del horario. -->
+							<condition var="horario">
+							<!-- Horario de mañana -->
+								<li value="maniana">
+									<set var="libre">
+										<srai>FREE DAY <get name="fecha"/> MORNING</srai>
+									</set>
+								</li>
+							<!-- Horario de tarde -->
+								<li value="tarde">
+									<set var="libre">
+										<srai>FREE DAY <get name="fecha"/> AFTERNOON</srai>
+									</set>
+								</li>
+							</condition>
+						</think>
+
+					<!--
+						Respondemos de acuerdo a si "fecha" está libre. -->
+						<condition var="libre">
+						<!--
+							Si no hay horas libres en "fecha", se informa de ello y se ofrece
+							que se pida otro día. Nos trasladamos al contexto de pedir cita
+							"otro dia". -->
+							<li value="FALSE">
+								<srai>THINK
+								</srai> Lo siento, el <star index="1"/> esta completo por la <star index="2"/>. Deseas otro día?
+								<think>
+									<set name="topic">dia invalido</set>
+								</think>
+							</li>
+						<!--
+							Si hay horas libres en "fecha", se muestran las horas libres y se
+							ofrece a que se pide una hora u otro día. -->
+							<li value="TRUE">
+							<!--
+								Imrpimimos la disponibilidad en función del horario. -->
+								<condition var="horario">
+								<!-- Horario de mañana -->
+									<li value="maniana">
+										<srai>THINK
+										</srai> Si, tenemos hora libre <srai>VERBOSE HOURS
+										<srai>FREE <get name="fecha"/> LIST MORNING</srai>
+										</srai>. Deseas concertar una cita a alguna de estas horas o deseas otro dia?
+									</li>
+								<!-- Horario de tarde -->
+									<li value="tarde">
+										<srai>THINK
+										</srai> Si, tenemos hora libre <srai>VERBOSE HOURS
+										<srai>FREE <get name="fecha"/> LIST AFTERNOON</srai>
+										</srai>. Deseas concertar una cita a alguna de estas horas o deseas otro dia?
+									</li>
+								</condition>
+								<think>
+									<set name="topic">dia valido</set>
+								</think>
+							</li>
+						</condition>
+					</li>
+				</condition>
+			</li>
+		</condition>
+	</template>
+</category>
+<!-- }}}2 -->
+
+<!-- Variaciones {{{2 -->
+
+<!-- Atrapalotodo simple {{{3 -->
+<category>
+	<pattern>^ (cita libr+) ^ el *</pattern>
+	<template>
+		<srai>esta libre el <star index="3"/></srai>
+	</template>
+</category>
+<!-- }}}2 -->
+
+<!-- Atrapalotodo complejo {{{3 -->
+<category>
+	<pattern>^ (cita libr+) ^ el * por la *</pattern>
+	<template>
+		<srai>esta libre el <star index="3"/> por la <star index="4"/></srai>
+	</template>
+</category>
+<!-- }}}2 -->
+
+<!-- }}}1 -->
+
+<!-- ¿Está libre un día a una hora? {{{1 -->
+
+<!-- Construcción básica {{{2 -->
+<category>
+	<pattern>esta libre el * a las *</pattern>
+<!--
+	ARGUMENTOS:
+	- 1: Día por el que se pregunta -->
+	<template>
+	<!--
+		Transformamos la fecha en formato DD-MM-YY -->
+		<think>
+			<set name="fecha">
+				<srai>TODATE <star index="1"/></srai>
+			</set>
+		</think>
+
+	<!--
+		Procedemos en función de la conversión de la fecha. -->
+		<condition name="fecha">
+		<!--
+			Si la fecha es inválida, informamos de ello y finalizamos. -->
+			<li value="FALSE">
+				<srai>THINK
+				</srai> Lo siento, pero no puedo acceder a la fecha que dices.
+			<!-- Cambiamos al contexto general -->
+				<think>
+					<set name="topic">unknown</set>
+				</think>
+			</li>
+		<!--
+			Si la fecha es válida, procedemos a examinarla. -->
+			<li>
+			<!--
+				Comprobamos que la hora sea correcta. -->
+				<think>
+					<set name="hora">
+						<srai>TOTIME <star index="2"/></srai>
+					</set>
+				</think>
+
+			<!--
+				Procedemos en funcion de la conversion de la hora. -->
+				<condition name="hora">
+				<!--
+					Si la hora no es correcta informamos de ellos y finalizamos. -->
+					<li value="FALSE">
+						<srai>THINK
+						</srai> Lo siento, pero la hora que me has dicho no es correcta.
+					<!-- Cambiamos al contexto general -->
+						<think>
+							<set name="topic">unknown</set>
+						</think>
+					</li>
+					<li>
+						<think>
+							<set var="ocupado">
+								<srai>IS BUSY DAY <get name="fecha"/> AT <get name="hora"/></srai>
+							</set>
+						</think>
+
+					<!--
+						Respondemos de acuerdo a si "fecha" está libre. -->
+						<condition var="ocupado">
+						<!--
+							Si no hay horas libres en "fecha", se informa de ello y se ofrece
+							que se pida otro día. Nos trasladamos al contexto de pedir cita
+							"otro dia". -->
+							<li value="TRUE">
+								<srai>THINK
+								</srai> Lo siento, el <star index="1"/> esta completo a las <star index="2"/>. Deseas otro dia?
+								<think>
+									<set name="topic">dia invalido</set>
+								</think>
+							</li>
+						<!--
+							Si hay horas libres en "fecha", se muestran las horas libres y se
+							ofrece a que se pide una hora u otro día. -->
+							<li value="FALSE">
+								<srai>THINK
+								</srai> Si, el <star index="1"/> estamos libres a las <star index="2"/>. Te aniado a esta hora?
+								<think>
+									<set name="topic">hora valida</set>
+								</think>
+							</li>
+						</condition>
+					</li>
+				</condition>
+			</li>
+		</condition>
+	</template>
+</category>
+<!-- }}}2 -->
+
+<!-- Variaciones {{{2 -->
+
+<!-- Atrapalotodo {{{3 -->
+<category>
+	<pattern>^ (cita) ^ el * a las *</pattern>
+	<template>
+		<srai>esta libre el <star index="3"/> a las <star index="4"/></srai>
+	</template>
+</category>
+
+<!-- }}}2 -->
+
+<!-- }}}1 -->
+
+<!-- Topic: El día pedido es inválido {{{1 -->
+
+<topic name="dia invalido">
+
+<!-- Deseo otro día (no se especifica la fecha) {{{2 -->
+<category>
+	<pattern>^ si ^</pattern>
+	<template>
+		Que otro dia deseas consultar?
+	</template>
+</category>
+<!-- }}}2 -->
+
+<!-- Deseo otro día (Se especifica la fecha) {{{2 -->
+<category>
+	<pattern>^ el *</pattern>
+	<template>
+	<!--
+		Comprobamos la disponibilidad del día pasado como argumento. -->
+		<srai>esta libre el <star index="2"/></srai>
+	</template>
+</category>
+<!-- }}}2 -->
+
+<!-- No deseo otro día {{{2 -->
+<category>
+	<pattern>^ no ^</pattern>
+	<template>
+		Dime en que mas puedo ayudarte.
+	<!--
+		Nos trasladamos al contexto general. -->
+		<think>
+			<set name="topic">unknown</set>
+		</think>
+	</template>
+</category>
+<!-- }}}2 -->
+
+</topic>
+
+<!-- }}}1 -->
+
+<!-- Topic: El día pedido es válido {{{1 -->
+
+<topic name="dia valido">
+
+<!-- Concertar una cita, no se especifica la hora {{{2 -->
+<category>
+	<pattern>^ cita ^</pattern>
+	<template>
+		Perfecto. A que hora la quieres?
+	</template>
+</category>
+<!-- }}}2 -->
+
+<!-- Concertar una cita, se especifica la hora {{{2 -->
+<category>
+	<pattern># (a) las * ^</pattern>
+	<template>
+		<think>
+			<set name="hora">
+				<srai>TOTIME <star index="2"/></srai>
+			</set>
+			<set var="ocupado">
+				<srai>IS BUSY DAY <get name="fecha"/> AT <get name="hora"/></srai>
+			</set>
+		</think>
+
+		<condition var="ocupado">
+			<li value="FALSE">
+				Ok, te apunto.
+
+				<think>
+					<srai>MARK ocupado AT <get name="hora"/> on <get name="fecha"/></srai>
+					<set name="topic">unknown</set>
+				</think>
+			</li>
+			<li>
+				Lo siento, pero a esa hora no tenemos hueco. Deseas otra hora u otro dia?
+			</li>
+		</condition>
+	</template>
+</category>
+</topic>
+<!-- }}}2 -->
+
+<!-- Prefiero otro día {{{2 -->
+<category>
+	<pattern>^ (prefiero mejor) ^ el *</pattern>
+	<template>
+		<think>
+			<set name="topic">unknown</set>
+		</think>
+
+		<srai>esta libre el <star index="3"/></srai>
+	</template>
+</category>
+<!-- }}}2 -->
+
+<!-- }}}1 -->
+
+<!-- Topic: Petiición de nombre {{{1-->
+
+<topic name="peticion nombre">
+
+<!-- Introduccion directa del nombre {{{2 -->
+<category>
+	<pattern>*</pattern>
+	<template>
+		<think>
+			<srai>REGISTER <star/> ON <get name="fecha"/> AT <get name="hora"/></srai>
+			<set name="topic">unknown</set>
+		</think>
+		Ya te he apuntado. Tienes cita el <get name="fecha"/> a las <get name="hora"/>. Estoy a tu disposicion para cualquier cosa que necesites.
+	</template>
+</category>
+<!-- }}}2 -->
+
+<!-- Mi nombre es... {{{2 -->
+<category>
+	<pattern>mi nombre es *</pattern>
+	<template>
+		<srai><star/></srai>
+	</template>
+</category>
+<!-- }}}2 -->
+
+<!-- Me llamo... {{{2 -->
+<category>
+	<pattern>me llamo *</pattern>
+	<template>
+		<srai><star/></srai>
+	</template>
+</category>
+<!-- }}}2 -->
+
+<!-- Soy... {{{2 -->
+<category>
+	<pattern>soy *</pattern>
+	<template>
+		<srai><star/></srai>
+	</template>
+</category>
+<!-- }}}2 -->
+
+</topic>
+
+<!-- }}}1 -->
+
+<!-- Topic: Hora válida {{{1-->
+
+<topic name="hora valida">
+
+<!-- Sí {{{2 -->
+<category>
+	<pattern>^ si ^</pattern>
+	<template>
+		Perfecto, dime tu nombre y te apunto.
+		<think>
+			<set name="topic">peticion nombre</set>
+		</think>
+	</template>
+</category>
+<!-- }}}2 -->
+
+</topic>
+
+<!-- }}}1 -->
+
+<!-- Herramientas de utilidad {{{1 -->
+
+<!-- Informar si un día está libre {{{2 -->
+
+<category>
+	<pattern>FREE DAY *</pattern>
+<!--
+	ARGUMENTOS:
+	- 1: Día expresado como DD-MM-YY -->
+	<template>
+		<think>
+		<!--
+			Extraemos la lista de estados de las horas desde las 08:00 hasta las
+			20:00 del día pasado como argumento. -->
+			<set var="horas">
+				<srai>SUBLIST FROM <srai>ORDINAL 08:00</srai>
+				              TO   <srai>ORDINAL 20:00</srai>
+				      OF <map name="eventos"><star/></map>
+				</srai>
+			</set>
+		<!--
+			Buscamos la palabra "null", que indica si una hora está libre, en la
+			lista de estados. -->
+			<set var="nullpos">
+				<srai>FINDITEM null IN <get var="horas"/></srai>
+			</set>
+		</think>
+
+	<!--
+		Imprimimos "FALSE" si no se ha encontrado la palabra "null" y "TRUE" en
+		caso contrario. -->
+		<condition var="nullpos">
+			<li value="0">FALSE</li>
+			<li>TRUE</li>
+		</condition>
+	</template>
+</category>
+<!-- }}}2 -->
+
+<!-- Informar si un día está libre en un intervalo {{{2 -->
+
+<category>
+	<pattern>FREE DAY * FROM * TO *</pattern>
+<!--
+	ARGUMENTOS:
+	- 1: Día expresado como DD-MM-YY
+	- 2: Hora de inicio del intervalo (inclusive) expresada como HH:00
+	- 3: Hora de fin del intervalo (inclusive) expresada como HH:00 -->
+	<template>
+		<think>
+		<!--
+			Extraemos la lista de estados de las horas desde las 08:00 hasta las
+			20:00 del día pasado como argumento. -->
+			<set var="horas">
+				<srai>SUBLIST FROM <srai>ORDINAL <star index="2"/></srai>
+				              TO   <srai>ORDINAL <star index="3"/></srai>
+				      OF <map name="eventos"><star index="1"/></map>
+				</srai>
+			</set>
+		<!--
+			Buscamos la palabra "null", que indica si una hora está libre, en la
+			lista de estados. -->
+			<set var="nullpos">
+				<srai>FINDITEM null IN <get var="horas"/></srai>
+			</set>
+		</think>
+
+	<!--
+		Imprimimos "FALSE" si no se ha encontrado la palabra "null" y "TRUE" en
+		caso contrario. -->
+		<condition var="nullpos">
+			<li value="0">FALSE</li>
+			<li>TRUE</li>
+		</condition>
+	</template>
+</category>
+<!-- }}}2 -->
+
+<!-- Informar si un día está libre por la mañana {{{2 -->
+
+<category>
+	<pattern>FREE DAY * MORNING</pattern>
+<!--
+	ARGUMENTOS:
+	- 1: Día expresado como DD-MM-YY -->
+	<template>
+		<think>
+		<!--
+			Extraemos la lista de estados de las horas desde las 08:00 hasta las
+			20:00 del día pasado como argumento. -->
+			<set var="horas">
+				<srai>SUBLIST FROM <srai>ORDINAL 08:00</srai>
+				              TO   <srai>ORDINAL 14:00</srai>
+				              OF <map name="eventos"><star/></map>
+				</srai>
+			</set>
+		<!--
+			Buscamos la palabra "null", que indica si una hora está libre, en la
+			lista de estados. -->
+			<set var="nullpos">
+				<srai>FINDITEM null IN <get var="horas"/></srai>
+			</set>
+		</think>
+
+	<!--
+		Imprimimos "FALSE" si no se ha encontrado la palabra "null" y "TRUE" en
+		caso contrario. -->
+		<condition var="nullpos">
+			<li value="0">FALSE</li>
+			<li>TRUE</li>
+		</condition>
+	</template>
+</category>
+<!-- }}}2 -->
+
+<!-- Informar si un día está libre en un intervalo {{{2 -->
+
+<category>
+	<pattern>FREE DAY * AFTERNOON</pattern>
+<!--
+	ARGUMENTOS:
+	- 1: Día expresado como DD-MM-YY -->
+	<template>
+		<think>
+		<!--
+			Extraemos la lista de estados de las horas desde las 08:00 hasta las
+			20:00 del día pasado como argumento. -->
+			<set var="horas">
+				<srai>SUBLIST FROM <srai>ORDINAL 15:00</srai>
+				              TO   <srai>ORDINAL 20:00</srai>
+				      OF <map name="eventos"><star/></map>
+				</srai>
+			</set>
+		<!--
+			Buscamos la palabra "null", que indica si una hora está libre, en la
+			lista de estados. -->
+			<set var="nullpos">
+				<srai>FINDITEM null IN <get var="horas"/></srai>
+			</set>
+		</think>
+
+	<!--
+		Imprimimos "FALSE" si no se ha encontrado la palabra "null" y "TRUE" en
+		caso contrario. -->
+		<condition var="nullpos">
+			<li value="0">FALSE</li>
+			<li>TRUE</li>
+		</condition>
+	</template>
+</category>
+<!-- }}}2 -->
+
+<!-- Mostrar horas libres de un día en un intervalo {{{2 -->
+<category>
+	<pattern>FREE * LIST FROM * TO *</pattern>
+<!--
+	ARGUMENTOS:
+	- 1: Día expresdo como DD-MM-YY
+	- 2: Hora de inicio del intervalo (inclusive) expresada como HH:00
+	- 3: Hora de fin del intervalo (exclusive) expresada como HH:00 -->
+	<template>
+		<think>
+		<!--
+			Tomamos el valor del iterador como el equivalente ordinal de la hora
+			de inicio del intervalo. -->
+			<set var="iterador">
+				<srai>ORDINAL <star index="2"/></srai>
+			</set>
+		<!--
+			Tomamos el valor de fin del bucle como el equivalente ordinal de la
+			hora de fin del intervalo. -->
+			<set var="final">
+				<srai>ORDINAL <star index="3"/></srai>
+			</set>
+		<!--
+			Creamos la lista de salida conteniendo la palabra "FREE" -->
+			<set var="lista">FREE</set>
+		</think>
+
+	<!--
+		Iteramos por todos los valores del iterador hasta que sea igual al valor
+		de salida. -->
+		<condition var="iterador">
+		<!--
+			CONDICIÓN DE SALIDA: Si el valor de "iterador" es el valor de "final",
+			eliminamos el primer elemento de la lista "lista" (la palabra "FREE") y
+			la imprimimos. -->
+			<li><value><get var="final"/></value>
+				<srai>REMAIN <get var="lista"/></srai>
+			</li>
+		<!--
+			CONDICIÓN ITERATIVA: Si el valor de "iterador" es diferente al valor de
+			"final" (se garantiza que en este caso siempre será menor), comprobamos
+			si la hora a la que apunta "iterador" está libre. -->
+			<li>
+				<think>
+				<!--
+					Creamos "elemento", que estará vacía si la hora está ocupada o
+					contendrá la hora expresada como HH:00 si no lo está. -->
+					<set var="elemento">
+						<srai>PRINT DAY <star index="1"/> FREE AT
+						      <map name="horas"><get var="iterador"/></map>:00
+						</srai>
+					</set>
+				<!--
+					Añadimos el contenido de "elemento" a la "lista" de horas libres.
+					Si el contenido de "elemento" es nulo, no se añade la hora, por
+					lo que no hace falta expresar esta operación en forma de
+					condición. -->
+					<set var="lista">
+						<get var="lista"/> <get var="elemento"/>
+					</set>
+				<!--
+					Actualizamos el iterador sumándole 1. -->
+					<set var="iterador">
+						<srai>PLUS <get var="iterador"/> 1</srai>
+					</set>
+				</think>
+				<loop/>
+			</li>
+		</condition>
+	</template>
+</category>
+<!-- }}}2 -->
+
+<!-- Mostrar las horas libres de un día [08:00 - 21:00) {{{2 -->
+<category>
+	<pattern>FREE * LIST</pattern>
+<!--
+	ARGUMENTOS:
+	- 1: Fecha expresada en DD-MM-YY -->
+	<template>
+	<!--
+		Devolvemos la lista de horas disponibles en todo el horario laboral del
+		día pasado como arugmento. -->
+		<srai>FREE <star/> LIST FROM 08:00 TO 21:00</srai>
+	</template>
+</category>
+<!-- }}}2 -->
+
+<!-- Mostrar las horas libres de un día por la mañana [08:00 - 15:00) {{{2 -->
+<category>
+	<pattern>FREE * LIST MORNING</pattern>
+<!--
+	ARGUMENTOS:
+	- 1: Fecha expresada en DD-MM-YY -->
+	<template>
+	<!--
+		Devolvemos la lista de horas disponibles en el horario de mañana del día
+		pasado como argumento. -->
+		<srai>FREE <star/> LIST FROM 08:00 TO 15:00</srai>
+	</template>
+</category>
+<!-- }}}2 -->
+
+<!-- Mostrar las horas libres de un día por la tarde [15:00 - 21:00) {{{2 -->
+<category>
+	<pattern>FREE * LIST AFTERNOON</pattern>
+<!--
+	ARGUMENTOS:
+	- 1: Fecha expresada en DD-MM-YY -->
+	<template>
+	<!--
+		Devolvemos la lista de horas disponibles en el horario de tarde del día
+		pasado como argumento. -->
+		<srai>FREE <star/> LIST FROM 15:00 TO 21:00</srai>
+	</template>
+</category>
+<!-- }}}2 -->
+
+<!-- Imprimir una hora si está libre {{{2 -->
+<category>
+	<pattern>PRINT DAY * FREE AT *</pattern>
+<!--
+	ARGUMENTOS:
+	- 1: Día expresdo como DD-MM-YY
+	- 2: Hora expresada como HH:00 -->
+	<template>
+		<think>
+		<!--
+			Almacenamos el estado de ocupación ("TRUE" o "FALSE") de la hora pasada
+			como segundo argumento del día pasado como primer argumento en la
+			variable "ocupada". -->
+			<set var="ocupada">
+				<srai>IS BUSY DAY <star index="1"/> AT <star index="2"/></srai>
+			</set>
+		</think>
+
+	<!--
+		Si la hora no está ocupada, imprimimos la hora. En caso contrario, no
+		imprimimos nada. -->
+		<condition var="ocupada">
+			<li value="FALSE"><star index="2"/></li>
+		</condition>
+	</template>
+</category>
+<!-- }}}2 -->
+
+<!-- Imprimir verbosamente una franja horaria {{{2 -->
+<category>
+	<pattern>VERBOSE HOURS *</pattern>
+<!--
+	ARGUMENTOS:
+	- 1: Lista de horas expresada como "HH:00 HH:00 ... HH:00" -->
+	<template>
+		<think>
+		<!--
+			Inicializamos el iterador al segundo valor de la lista. -->
+			<set var="iterador">2</set>
+		<!--
+			Tomamos el tope del iterador como el número de elementos de la lista
+			(apunta a un elemento válido en la misma) -->
+			<set var="tope">
+				<srai>COUNT <star/></srai>
+			</set>
+		<!--
+			Declaramos que se produce una violación de segmento si se está
+			intentando acceder a un elemento más allá del número de elementos que
+			contiene la lista. Éste es un caso extremo en el que la lista de horas
+			sólo contiene un elemento. Si esto ocurre, se evita imprimir horas
+			vacías con "iterador" apuntando al segundo elemento de la lita. -->
+			<set var="segfault">
+				<srai>PLUS <get var="tope"/> 1</srai>
+			</set>
+		<!--
+			Creamos la lista de salida conteniendo la palabra "HORAS" -->
+			<set var="lista">HORAS</set>
+		</think>
+
+			<think>
+			<!--
+				Añadimos la primera hora a la lista de salida precedida de "a las"
+				como primer caso. No se hace uso del iterador porque en el caso
+				extremo de que la lista contuviera un solo elemento, el caso de
+				inicio valdría lo mismo que "tope". -->
+				<set var="lista">
+					<get var="lista"/> a las <srai>TOP <star/></srai>
+				</set>
+			</think>
+
+	<!--
+		Iteramos por todos los valores del iterador hasta que sea igual al "tope"
+		o sólo el caso extremo en el que valga "segfault". -->
+		<condition var="iterador">
+		<!--
+			CONDICIÓN DE SALIDA: En el caso extremo de que la lista contenga un
+			único elemento se imprime la lista eliminando el primer elemento (la
+			palabra "HORAS") de la misma. -->
+			<li><value><get var="segfault"/></value>
+				<srai>REMAIN <get var="lista"/></srai>
+			</li>
+		<!--
+			CONDICIÓN DE SALIDA: Si el iterador se encuentra en la última hora de
+			la lista, la añadimos precedida de "y a las" e imprimimos la lista
+			eliminando el primer elemento (la palabra "HORAS") de la misma. -->
+			<li><value><get var="tope"/></value>
+				<think>
+			<!--
+				Añadimos la hora a la lista. -->
+					<set var="lista">
+						<get var="lista"/> y las <srai>SELECTITEM
+						<get var="iterador"/> IN <star/></srai>
+					</set>
+				</think>
+			<!--
+				Imprimimos la lista. -->
+				<srai>REMAIN <get var="lista"/></srai>
+			</li>
+		<!--
+			CONDICIÓN ITERATIVA: En cualquier otro caso (en el que "iterador" es
+			mayor que 2 y menor o igual que "tope"), añadimos la hora a la que
+			apunta "iterador" precedida de ", a las" (especial atención a la coma).
+			-->
+			<li>
+				<think>
+				<!--
+					Añadimos la hora a la lista. -->
+					<set var="lista">
+						<get var="lista"/>, las <srai>SELECTITEM
+						<get var="iterador"/> IN <star/></srai>
+					</set>
+				<!--
+					Incrementamos el valor de "iterador" en 1. -->
+					<set var="iterador">
+						<srai>PLUS <get var="iterador"/> 1</srai>
+					</set>
+				</think>
+				<loop/>
+			</li>
+		</condition>
+	</template>
+</category>
+<!-- }}}2 -->
+
+<!-- Transformar una fecha a formato DD-MM-YY {{{2 -->
+<category>
+	<pattern>TODATE *</pattern>
+<!--
+	ARGUMENTOS:
+	- 1: Fecha expresada en alguno de los siguientes formatos:
+	     - "DDDDD de MMMMM"
+	     - "DDDDD del MM"
+	     - "DD de MMMMM"
+	     - "DD del MM"
+	     - "DD MM YY"
+	     - DD-MM-YY -->
+	<template>
+		<think>
+		<!--
+			Extraemos la cadena de palabras original del patrón. -->
+			<set var="original">
+				<star/>
+			</set>
+		<!--
+			Contamos el número de palabras que tiene la fecha pasada para
+			identificar el formato de entrada de la misma. -->
+			<set var="longitud">
+				<srai>COUNT <star/></srai>
+			</set>
+
+		<!--
+			Procedemos según el número de palabras que contenga la fecha. -->
+			<condition var="longitud">
+			<!--
+				Si la fecha está formada por una única palabra debe ser del formato
+				DD-MM-YY. Realizaremos las comprobaciones sobre este formato más
+				adelante. -->
+				<li value="1">
+					<set var="fecha">
+						<get var="original"/>
+					</set>
+				</li>
+			<!--
+				Si la fecha está formada por tres palabras debe ser del formato
+				"DDDDD de MMMMM", "DDDDD del MM", "DD de MMMMM" o "DD del MM". -->
+				<li value="3">
+				<!--
+					Tomamos el primer elemento (el día) de la fecha para evaluarlo.
+					-->
+					<set var="dia">
+						<srai>TOP <get var="original"/></srai>
+					</set>
+				<!--
+					Dividimos los caracteres del día para evaluarlo. -->
+					<set var="dia">
+						<explode><get var="dia"/></explode>
+					</set>
+				<!--
+					Contamos el número de caracteres del día. -->
+					<set var="cifrasdia">
+						<srai>COUNT <get var="dia"/></srai>
+					</set>
+
+				<!--
+					Procedemos en función del número de caracteres del día. -->
+					<condition var="cifrasdia">
+					<!--
+						Si el día contiene una sola cifra le prefijamos un 0. -->
+						<li value="1">
+							<set var="fecha">
+								<map name="dias"><srai>TOP <get var="original"/>
+								                 </srai></map>
+							</set>
+						</li>
+					<!--
+						Si el día contiene dos cifras lo cotejamos con la lista de
+						días válidos. -->
+						<li value="2">
+							<set var="fecha">
+								<map name="dias"><srai>TOP <get var="original"/>
+								                 </srai></map>
+							</set>
+						</li>
+					<!--
+						Si el día tiene más de dos cifras lo cotejamos con la lista
+						de días válidos. -->
+						<li>
+							<set var="fecha">
+								<map name="dias"><srai>TOP <get var="original"/>
+								                 </srai></map>
+							</set>
+						</li>
+					</condition>
+				<!--
+					Eliminamos el número de la fecha original, quedándonos con el
+					resto de la cadena. -->
+					<set var="original">
+						<srai>REMAIN <get var="original"/></srai>
+					</set>
+				<!--
+					Tomamos el segundo de la fecha para evaluar si es "de" o "del".
+					-->
+					<set var="dedel">
+						<srai>TOP <get var="original"/></srai>
+					</set>
+				<!--
+					En cualquier caso, eliminamos la palabra "de" o "del" de la fecha
+					original, quedándolos únicamente con el mes. -->
+					<set var="original">
+						<srai>REMAIN <get var="original"/></srai>
+					</set>
+
+				<!--
+					Si la palabra de enlace es "de" o "del" cotejamos el mes con la
+					lista de meses válidos. -->
+					<condition var="dedel">
+						<li value="de">
+						<!--
+							Añadimos el ordinal correspondiente al mes a la fecha y
+							asumimos que el año es 2020 (20) -->
+							<set var="fecha">
+								<get var="fecha"/>-<map name="meses"><srai>
+								                    TOP <get var="original"/>
+								                    </srai></map>-20
+							</set>
+						</li>
+					<!--
+						Si la palabra es "del", el mes está expresado numéricamente,
+						por lo que no hace buscarlo en un map. -->
+						<li value="del">
+						<!--
+							Añadimos el ordinal correspondiente al mes a la fecha y
+							asumimos que el año es 2020 (20) -->
+							<set var="fecha">
+								<get var="fecha"/>-<map name="meses"><srai>
+								                    TOP <get var="original"/>
+								                    </srai></map>-20
+							</set>
+						</li>
+					<!--
+						Si la palabra de enlace es distinta a "de" o "del", puede que
+						provenga de "date". La comprobaremos más adelante. -->
+						<li>
+						<!--
+							La transformamos para hacerla interpretable. -->
+							<set var="fecha">
+								<srai>SWITCH SPACES TO - IN STRING <star/></srai>
+							</set>
+						</li>
+					</condition>
+				</li>
+			<!--
+				Si la longitud de la fecha pasada como argumento es distinta a 1 ó
+				3, la fecha no es válida. -->
+				<li>
+					<set var="fecha">FALSE</set>
+				</li>
+			</condition>
+		<!--
+			Creada la cadena de la fecha, realizamos una última comprobación para
+			ver si algún caso se nos ha quedado colgado. Para ello, dividimos la
+			fecha en diferentes "componentes". -->
+			<set var="componentes">
+				<srai>SWITCH - TO SPACES IN STRING <get var="fecha"/></srai>
+			</set>
+		<!--
+			Calculamos el número de componentes. -->
+			<set var="numcomponentes">
+				<srai>COUNT <get var="componentes"/></srai>
+			</set>
+
+		<!--
+			Si sólo tenemos dos componentes presumimos el año 2020 por pragmatismo
+			y lo añadimos tanto a los componentes como a la fecha. -->
+			<condition var="numcomponentes">
+				<li value="2">
+				<!-- Actualizamos los componentes -->
+					<set var="componentes">
+						<get var="componentes"/> 20
+					</set>
+				<!-- Actualizamos la fecha -->
+					<set var="fecha">
+						<get var="fecha"/>-20
+					</set>
+				</li>
+			</condition>
+		<!--
+			Almacenamos el año en una variable. -->
+			<set var="anio">
+				<srai>SELECTITEM 3 IN <get var="componentes"/></srai>
+			</set>
+		<!--
+			Si el año no es 2020 (20), la fecha es inválida. -->
+			<condition var="anio">
+				<li value="20"></li>
+				<li>
+					<set var="fecha">FALSE</set>
+				</li>
+			</condition>
+		<!--
+			Almacenamos el mes en una variable. -->
+			<set var="mes">
+				<srai>SELECTITEM 2 IN <get var="componentes"/></srai>
+			</set>
+		<!--
+			Cotejamos el mes con la lista de meses válidos. -->
+			<set var="mes">
+				<map name="meses"><get var="mes"/></map>
+			</set>
+		<!--
+			Actualizamos la variable "dia" al primer elemento de "componentes". -->
+			<set var="dia">
+				<srai>TOP <get var="componentes"/></srai>
+			</set>
+		<!--
+			Cotejamos el día con la lista de meses válidos. -->
+			<set var="dia">
+				<map name="dias"><get var="dia"/></map>
+			</set>
+		<!--
+			Reformulamos la fecha con estos cambios. -->
+			<set var="fecha">
+				<get var="dia"/>-<get var="mes"/>-<get var="anio"/>
+			</set>
+		<!--
+			Para una última comprobación recomponemos los componentes. -->
+			<set var="componentes">
+				<srai>SWITCH - TO SPACES IN STRING <get var="fecha"/></srai>
+			</set>
+		<!--
+			Buscamos la cadena "unknown" dentro de los "componentes". -->
+			<set var="invalido-unknown">
+				<srai>FINDITEM unknown IN <get var="componentes"/></srai>
+			</set>
+		<!--
+			Si se encuentra la cadena "unknown", la fecha es inválida. -->
+			<condition var="invalido-unknown">
+				<li value="0"></li>
+				<li>
+					<set var="fecha">FALSE</set>
+				</li>
+			</condition>
+		<!--
+			Buscamos la cadena "FALSE" dentro de los "componentes". -->
+			<set var="invalido-false">
+				<srai>FINDITEM FALSE IN <get var="componentes"/></srai>
+			</set>
+		<!--
+			Si se encuentra la cadena "FALSE", la fecha es inválida. -->
+			<condition var="invalido-false">
+				<li value="0"></li>
+				<li>
+					<set var="fecha">FALSE</set>
+				</li>
+			</condition>
+		</think>
+	<!--
+		Imprimimos la fecha. -->
+		<get var="fecha"/>
+	</template>
+</category>
+<!-- Espero que esta rutina esté en utilidades_2021.aiml }}}2 -->
+
+<!-- Transformar una hora a formato HH:00 {{{2 -->
+<category>
+	<pattern>TOTIME *</pattern>
+	<template>
+		<think>
+		<!--
+			Almacenamos todas las cifras de la hora para contarlas. -->
+			<set var="cifras">
+				<explode><star/></explode>
+			</set>
+
+		<!--
+			Contamos el número de cifras de la hora. -->
+			<set var="numcifras">
+				<srai>COUNT <get var="cifras"/></srai>
+			</set>
+
+		<!--
+			Procedemos en función del número de cifras. -->
+			<condition var="numcifras">
+			<!--
+				Si la hora está compuesta por una cifra, la cotejamos con con la
+				lista de horas válidas. -->
+				<li value="1">
+					<set var="hora">
+						<map name="horas-hh"><star/></map>
+					</set>
+				</li>
+			<!--
+				Si la hora está compuesta por dos cifras, la cotejamos con con la
+				lista de horas válidas. -->
+				<li value="2">
+				<!--
+					Cotejamos la hora con la lista de horas válidas. -->
+					<set var="hora">
+						<map name="horas-hh"><star/></map>
+					</set>
+				</li>
+			<!--
+				Si la hora está compuesta por más de dos cifras, comprobamos si es
+				una cadena arbitraria o una hora en formato HH:XX, donde sólo nos
+				importa el HH, por lo que consideramos XX y lo traduciremos a 00.
+				-->
+				<li>
+				<!--
+					Almacenamos el posible divisor (":") en una variable. -->
+					<set var="divisor">
+						<srai>SELECTITEM 3 IN <get var="cifras"/></srai>
+					</set>
+
+				<!--
+					Procedemos en función del formato. -->
+					<condition var="divisor">
+					<!--
+						Si el divisor es ":", bucamos el formato HH:XX. -->
+						<li value=":">
+						<!--
+							Formamos la cadena de formato HH a partir de las cifras.
+							-->
+							<set var="hh">
+								<srai>TOP <get var="cifras"/>
+								</srai><srai>SELECTITEM 2 IN <get var="cifras"/></srai>
+							</set>
+						<!--
+							Cotejamos la hora con la lista de horas válidas. -->
+							<set var="hora">
+								<map name="horas-hh"><get var="hh"/></map>
+							</set>
+						</li>
+					<!--
+						En caso de que no lo sea, buscamos si el divisor estuviera en
+						la segunda posición. -->
+						<li>
+						<!--
+							Almacenamos el posible divisor (":") en una variable. -->
+							<set var="divisor">
+								<srai>SELECTITEM 2 IN <get var="cifras"/></srai>
+							</set>
+
+						<!--
+							Procedemos en función del formato. -->
+							<condition var="divisor">
+							<!--
+								Si el divisor es ":", bucamos el formato HH:XX. -->
+								<li value=":">
+								<!--
+									Cotejamos la hora con la lista de horas válidas. -->
+									<set var="hora">
+										<map name="horas-hh"><srai>
+										TOP <get var="cifras"/></srai></map>
+									</set>
+								</li>
+							<!--
+								En cualquier otro caso cotejamos la hora pasa como
+								argumento. -->
+								<li>
+									<set var="hora">
+										<map name="horas-hh"><star/></map>
+									</set>
+								</li>
+							</condition>
+						</li>
+					</condition>
+				</li>
+			</condition>
+		<!--
+			Cotejamos la hora con la lista de horas válidas. -->
+			<set var="hora">
+				<map name="horas-hh"><get var="hora"/></map>
+			</set>
+
+		<!--
+			Si la hora es incorrecta, la cambiamos por FALSE. -->
+			<condition var="hora">
+				<li value="unknown">
+					<set var="hora">FALSE</set>
+				</li>
+				<li>
+					<set var="hora">
+						<get var="hora"/>:00
+					</set>
+				</li>
+			</condition>
+		</think>
+
+	<!--
+		Imprimimos la hora en formato HH:00 -->
+		<get var="hora"/>
+	</template>
+</category>
+<!-- }}}2 -->
+
+<!-- Transformar un carácter en una cadena {{{2 -->
+<category>
+	<pattern>SWITCH * TO * IN STRING *</pattern>
+	<template>
+		<think>
+		<!--
+			Inicializamos la "salida" de la rutina sin contenido -->
+			<set var="salida"></set>
+		<!--
+			Asignamos la "cadena" pasada como tercer argumento a su variable. Para
+			preservar los espacios los codificamos como "~".-->
+			<set var="cadena">
+				<srai>SWITCH SPACES TO ~ IN STRING <star index="3"/></srai>
+			</set>
+		<!--
+			Separamos todas las letras de "cadena" por espacios (hola -> h o l a).
+			-->
+			<set var="cadena">
+				<explode><get var="cadena"/></explode>
+			</set>
+		<!--
+			Tomamos la primera letra de la cadena (que ahora es la primera palabra)
+			y la almacenamos como un "caracter". -->
+			<set var="caracter">
+				<srai>TOP <get var="cadena"/></srai>
+			</set>
+		<!--
+			Eliminamos el primer elemento de la "cadena". -->
+			<set var="cadena">
+				<srai>REMAIN <get var="cadena"/></srai>
+			</set>
+
+		<!--
+			Realizamos operaciones iterativas sobre la "cadena" hasta que ésta esté
+			vacía. -->
+			<condition var="caracter">
+			<!--
+				CONDICIÓN DE SALIDA: Si no quedan palabras en la cadena, no se
+				realizan más operaciones y se sale del bucle. -->
+				<li value="NIL"></li>
+			<!--
+				CONDICIÓN ITERATIVA: Si la palabra coincide con el carácter pasado
+				como primer argumento, lo transformamos en el pasado como segundo
+				argumento y lo añadimos a la salida. -->
+				<li><value><star index="1"/></value>
+				<!--
+					Transformamos el "caracter" en el pasado como segundo argumento.
+					-->
+					<set var="caracter">
+						<star index="2"/>
+					</set>
+				<!--
+					Añadimos el "caracter" transformado a la salida. -->
+					<set var="salida">
+						<get var="salida"/><get var="caracter"/>
+					</set>
+				<!--
+					Cambiamos el "caracter" por el siguiente de la "cadena". -->
+					<set var="caracter">
+						<srai>TOP <get var="cadena"/></srai>
+					</set>
+				<!--
+					Eliminamos la primera palabra de la "cadena". -->
+					<set var="cadena">
+						<rest><get var="cadena"/></rest>
+					</set>
+					<loop/>
+				</li>
+			<!--
+				CONDICIÓN ITERATIVA: Si la palabra no coincide con el carácter
+				pasado como primer argumento se añade a la salida sin más
+				operaciones. -->
+				<li>
+				<!--
+					Añadimos el "caracter" transformado a la salida. -->
+					<set var="salida">
+						<get var="salida"/><get var="caracter"/>
+					</set>
+				<!--
+					Cambiamos el "caracter" por el siguiente de la "cadena". -->
+					<set var="caracter">
+						<srai>TOP <get var="cadena"/></srai>
+					</set>
+				<!--
+					Eliminamos la primera palabra de la "cadena". -->
+					<set var="cadena">
+						<rest><get var="cadena"/></rest>
+					</set>
+					<loop/>
+				</li>
+			</condition>
+		</think>
+		<srai>SWITCH ~ TO SPACES IN STRING <get var="salida"/></srai>
+	</template>
+</category>
+<!-- }}}2 -->
+
+<!-- Transformar un carácter en un espacio {{{2 -->
+<category>
+	<pattern>SWITCH * TO SPACES IN STRING *</pattern>
+	<template>
+		<think>
+		<!--
+			Inicializamos la "salida" de la rutina sin contenido -->
+			<set var="salida"></set>
+		<!--
+			Asignamos la "cadena" pasada como tercer argumento a su variable. -->
+			<set var="cadena">
+				<star index="2"/>
+			</set>
+		<!--
+			Separamos todas las letras de "cadena" por espacios (hola -> h o l a).
+			-->
+			<set var="cadena">
+				<explode><get var="cadena"/></explode>
+			</set>
+		<!--
+			Tomamos la primera letra de la cadena (que ahora es la primera palabra)
+			y la almacenamos como un "caracter". -->
+			<set var="caracter">
+				<srai>TOP <get var="cadena"/></srai>
+			</set>
+		<!--
+			Eliminamos el primer elemento de la "cadena". -->
+			<set var="cadena">
+				<srai>REMAIN <get var="cadena"/></srai>
+			</set>
+
+		<!--
+			Realizamos operaciones iterativas sobre la "cadena" hasta que ésta esté
+			vacía. -->
+			<condition var="caracter">
+			<!--
+				CONDICIÓN DE SALIDA: Si no quedan palabras en la cadena, no se
+				realizan más operaciones y se sale del bucle. -->
+				<li value="NIL"></li>
+			<!--
+				CONDICIÓN ITERATIVA: Si la palabra coincide con el carácter pasado
+				como primer argumento, lo transformamos el siguiente carácter (se
+				garantiza que tras un espacio hay un nuevo carácter) y añadimos
+				éste precedido de un espacio. -->
+				<li><value><star index="1"/></value>
+				<!--
+					Cambiamos el "caracter" por el siguiente de la "cadena". -->
+					<set var="caracter">
+						<srai>TOP <get var="cadena"/></srai>
+					</set>
+				<!--
+					Eliminamos la primera palabra de la "cadena". -->
+					<set var="cadena">
+						<rest><get var="cadena"/></rest>
+					</set>
+				<!--
+					Añadimos el "caracter" siguiente a la salida preceido de un
+					espacio. -->
+					<set var="salida">
+						<get var="salida"/> <get var="caracter"/>
+					</set>
+				<!--
+					Cambiamos el "caracter" por el siguiente de la "cadena". -->
+					<set var="caracter">
+						<srai>TOP <get var="cadena"/></srai>
+					</set>
+				<!--
+					Eliminamos la primera palabra de la "cadena". -->
+					<set var="cadena">
+						<rest><get var="cadena"/></rest>
+					</set>
+					<loop/>
+				</li>
+			<!--
+				CONDICIÓN ITERATIVA: Si la palabra no coincide con el carácter
+				pasado como primer argumento se añade a la salida sin más
+				operaciones. -->
+				<li>
+				<!--
+					Añadimos el "caracter" transformado a la salida. -->
+					<set var="salida">
+						<get var="salida"/><get var="caracter"/>
+					</set>
+				<!--
+					Cambiamos el "caracter" por el siguiente de la "cadena". -->
+					<set var="caracter">
+						<srai>TOP <get var="cadena"/></srai>
+					</set>
+				<!--
+					Eliminamos la primera palabra de la "cadena". -->
+					<set var="cadena">
+						<rest><get var="cadena"/></rest>
+					</set>
+					<loop/>
+				</li>
+			</condition>
+		</think>
+		<get var="salida"/>
+	</template>
+</category>
+<!-- }}}2 -->
+
+<!-- Transformar los espacios en una cadena de caracteres {{{2 -->
+<category>
+	<pattern>SWITCH SPACES TO * IN STRING *</pattern>
+	<template>
+		<think>
+		<!--
+			Asignamos la "cadena" pasada como segundo argumento a su variable. -->
+			<set var="cadena">
+				<star index="2"/>
+			</set>
+		<!--
+			Inicializamos la "salida" de la rutina con la primera palabra de
+			"cadena". -->
+			<set var="salida">
+				<srai>TOP <get var="cadena"/></srai>
+			</set>
+		<!--
+			Eliminamos la primera palabra de la "cadena". -->
+			<set var="cadena">
+				<srai>REMAIN <get var="cadena"/></srai>
+			</set>
+
+		<!--
+			Realizamos operaciones iterativas sobre la "cadena" hasta que ésta esté
+			vacía. -->
+			<condition var="cadena">
+			<!--
+				CONDICIÓN DE SALIDA: Si no quedan palabras en la cadena, no se
+				realizan más operaciones y se sale del bucle. -->
+				<li value="NIL"></li>
+			<!--
+				CONDICIÓN ITERATIVA: Si quedan palabras en el bucle, se añade la
+				subcadena pasada como primer argumento a la salida en sustitución
+				del espacio, se concatena con la siguiente palabra y se elimina
+				ésta.-->
+				<li>
+				<!--
+					Sustituimos el espacio. -->
+					<set var="salida">
+						<get var="salida"/><star index="1"/>
+					</set>
+				<!--
+					Concatenamos con la siguiente palabra de la "cadena". -->
+					<set var="salida">
+						<get var="salida"/><srai>TOP <get var="cadena"/></srai>
+					</set>
+				<!--
+					Eliminamos la palabra concatenada de la "cadena". -->
+					<set var="cadena">
+						<rest><get var="cadena"/></rest>
+					</set>
+					<loop/>
+				</li>
+			</condition>
+		</think>
+		<!--
+			Imprimimos la cadena resultante -->
+		<get var="salida"/>
+	</template>
+</category>
+<!-- }}}2 -->
+
+<!-- Mostrar mensaje de espera (texto de adorno) {{{2 -->
+<category>
+	<pattern>THINK</pattern>
+	<template>
+		<random>
+			<li>Un momentito que mire...</li>
+			<li>Dame un segundito...</li>
+			<li>Lo estoy comprobando...</li>
+			<li>A ver que mire...</li>
+			<li>Un momentito y te digo...</li>
+			<li>Estoy mirando...</li>
+		</random>
+	</template>
+</category>
+<!-- }}}2 -->
+
+<!-- Registrar una cita a nombre de un usuario {{{2 -->
+<category>
+	<pattern>REGISTER * ON * AT *</pattern>
+	<template>
+		<think>
+			<set var="nombre">
+				<srai>SWITCH SPACES TO - IN STRING <star index="1"/></srai>
+			</set>
+
+			<srai>MARK <get var="nombre"/> AT <star index="3"/> ON <star index="2"/></srai>
+		</think>
+	</template>
+</category>
+<!-- }}}2 -->
+
+<!-- Recuperar el nombre de un usario con cita  {{{2 -->
+<category>
+	<pattern>WHOIS * AT *</pattern>
+	<template>
+		<think>
+			<set var="nombre">
+				<srai>SELECTITEM <srai>ORDINAL <star index="2"/></srai> IN <map name="eventos"><star index="1"/></map></srai>
+			</set>
+		</think>
+
+		<srai>SWITCH - TO SPACES IN STRING <get var="nombre"/></srai>
+	</template>
+</category>
+<!-- }}}2 -->
+
+<!-- }}}1 -->
+
+</aiml>

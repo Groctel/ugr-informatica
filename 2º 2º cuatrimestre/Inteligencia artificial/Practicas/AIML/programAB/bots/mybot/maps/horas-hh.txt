@@ -1,0 +1,118 @@
+1:01
+01:01
+2:02
+02:02
+3:03
+03:03
+4:04
+04:04
+5:05
+05:05
+6:06
+06:06
+7:07
+07:07
+8:08
+08:08
+9:09
+09:09
+10:10
+11:11
+12:12
+13:13
+14:14
+15:15
+16:16
+17:17
+18:18
+19:19
+20:20
+21:21
+22:22
+23:23
+24:00
+00:00
+una:13
+dos:14
+tres:15
+cuatro:16
+cinco:17
+seis:18
+siete:19
+ocho:20
+nueve:09
+diez:10
+once:11
+doce:12
+1 de la noche:01
+1 de la madrugada:01
+01 de la noche:01
+01 de la madrugada:01
+2 de la noche:02
+2 de la madrugada:02
+02 de la noche:02
+02 de la madrugada:02
+3 de la noche:03
+3 de la madrugada:03
+03 de la noche:03
+03 de la madrugada:03
+4 de la noche:04
+4 de la madrugada:04
+04 de la noche:04
+04 de la madrugada:04
+5 de la maniana:05
+5 de la madrugada:05
+05 de la maniana:05
+05 de la madrugada:05
+6 de la maniana:06
+6 de la madrugada:06
+06 de la maniana:06
+06 de la madrugada:06
+7 de la maniana:07
+7 de la madrugada:07
+07 de la maniana:07
+07 de la madrugada:07
+8 de la maniana:08
+08 de la maniana:08
+9 de la maniana:09
+09 de la maniana:09
+10 de la maniana:10
+11 de la maniana:11
+12 de la maniana:12
+12 del mediodia:12
+1 de la tarde:13
+01 de la tarde:13
+una de la tarde:13
+una del mediodia:13
+2 de la tarde:14
+02 de la tarde:14
+dos de la tarde:14
+3 de la tarde:15
+03 de la tarde:15
+tres de la tarde:15
+4 de la tarde:16
+04 de la tarde:16
+cuatro de la tarde:16
+5 de la tarde:17
+05 de la tarde:17
+cinco de la tarde:17
+6 de la tarde:18
+06 de la tarde:18
+seis de la tarde:18
+7 de la tarde:19
+07 de la tarde:19
+siete de la tarde:19
+8 de la tarde:20
+08 de la tarde:20
+ocho de la tarde:20
+ocho de la noch:20
+9 de la tarde:21
+09 de la tarde:21
+nueve de la tarde:21
+nueve de la noche:21
+10 de la tarde:22
+10 de la noche:22
+11 de la tarde:23
+11 de la noche:23
+12 de la tarde:00
+12 de la noche:00

@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+    <!-- File: simulatiempo.aiml -->
+    <!-- Author: Juan Fernandez -->
+    <!-- Last modified: February 10, 2020 -->
+
+<!-- ******************* UTILIDADES PROPIAS DE LA PRACTICA 1  *****************************
+ -->
+ <category>
+    <pattern>MINUS * 1</pattern>
+    <template>
+        <map>
+            <name>predecessor</name> <star/>
+
+        </map>
+     </template>
+</category>
+
+<category>
+    <pattern>SUMA * *</pattern>
+    <template>
+        <think>
+            <set var="result"> <star/> </set>
+            <set var="count"> <star index="2"/></set>
+        </think>
+        <condition var="count">
+            <li value="0"> <get var="result"/> </li>
+
+            <li >
+                  <think>
+                   <set var="result"><srai>PLUS <get var="result"/> 1 </srai></set>
+                  <set var="count"><srai>MINUS <get var="count"/> 1 </srai></set>
+                  </think>
+                  <loop/>
+            </li>
+
+        </condition>
+    </template>
+</category>
+
+<category>
+    <pattern>PLUS * 1</pattern>
+    <template>
+        <map>
+            <name>successor</name> <star/>
+        </map>
+     </template>
+</category>
+
+
+
+<!-- DEVUELVE UNA LISTA EN LA QUE SE HAN ELIMINADO LOS PRIMEROS K ELEMENTOS DE OTRA LISTA
+
+REMOVE 2 FIRST ELEMENTS FROM A B C D -> C D
+ -->
+ <category>
+    <pattern>REMOVE * FIRST ELEMENTS FROM *</pattern>
+    <template>
+        <think>
+            <set var="count">
+                <star/>
+            </set>
+            <set var="list">
+                <star index="2"/>
+            </set>
+            <set var="item">
+                <srai>TOP <get var="list"/></srai>
+            </set>
+        </think>
+        <condition var="count">
+            <li value="0"><get var="list"/></li>
+            <li>
+                <think>
+                    <set var="count">
+                        <map>
+                            <name>predecessor</name>
+                            <get var="count"/>
+                        </map>
+                    </set>
+                    <think>
+                        <set var="list">
+                            <srai>REMAIN <get var="list"/></srai>
+                        </set>
+                    </think>
+                    <think>
+                        <set var="item">
+                            <srai>TOP <get var="list"/></srai>
+                        </set>
+                    </think>
+                </think>
+                <loop/>
+            </li>
+        </condition>
+    </template>
+</category>
+
+
+
+
+<!-- DEVUELVE UN "TROZO" DE UNA LISTA, DESDE LA POSICION i A LA j,
+ASUME QUE j >= i y que el tamaño de TROZO es < 50
+SUBLIST FROM 2 TO 4 OF A B C D E -> B C D -->
+
+ <category>
+    <pattern>SUBLIST FROM * TO * OF *</pattern>
+    <template>
+       <think> <set name="aux"> <star index="2"/></set></think>
+
+       <condition name="aux">
+          <li value="0"></li>
+          <li>
+            <think>
+            <set name="aux"> <srai> REMOVE <srai> MINUS <star/> 1 </srai> FIRST ELEMENTS FROM <star index="3"/> </srai> </set>
+            <set name="item"> <srai>TOP <get name="aux"/></srai></set>
+            <set name="lista"><get name="item"/></set>
+            <set name="count"><star/></set>
+            </think>
+            <condition name="count">
+                <li value="50"> TAS PASAO</li>
+                <li>
+                    <value><star index="2"/></value>
+                    <get name="lista"/>
+                </li>
+
+                <li>
+                <think>
+                   <set name="count">
+                       <map>
+                         <name>successor</name>
+                         <get name="count"/>
+                       </map>
+                    </set>
+                    <set name="aux"><srai>REMAIN <get name="aux"/></srai></set>
+                    <set name="item">
+                        <srai>TOP <get name="aux"/></srai>
+                    </set>
+                    <set name="lista">
+                        <get name="lista"/> <get name="item"/>
+                    </set>
+                </think>
+
+
+
+
+                <loop/>
+            </li>
+            </condition>
+        </li>
+    </condition>
+
+
+    </template>
+</category>
+
+
+
+<!-- MODIFY POSITION 7 IN LISTA WITH "OCUPADO"  -->
+<!-- Esta regla asume que la longitud de la lista de donde extraer una sublista es de 24 elementos -->
+
+ <category>
+    <pattern>MODIFY POSITION * OF *  WITH *</pattern>
+    <template>
+
+      <think>
+        <set name="posaux"><srai> MINUS <star/> 1</srai></set>
+        <set name="trozo1"> <srai> SUBLIST FROM 1 TO <get name="posaux"/> OF <star index="2"/></srai> </set>
+        <set name="posaux"><srai> PLUS <star/> 1</srai></set>
+        <set name="trozo2"> <srai> SUBLIST FROM <get name="posaux"/> TO 24 OF <star index="2"/></srai> </set>
+      </think>
+      <get name="trozo1"/> <star index="3"/> <get name="trozo2"/>
+
+    </template>
+</category>
+
+
+<!-- TRANSFORMA UNA HORA EN FORMATO HH:MM A POSICION EN LA LISTA  -->
+<!-- EJEMPLO: ORDINAL 10:00  -->
+<category>
+    <pattern>ORDINAL *</pattern>
+    <template>
+        <srai> PLUS
+            <srai>DECODE <srai> sublist from 1 to 2 of <explode> <star/></explode></srai></srai>
+            1
+        </srai>
+    </template>
+</category>
+
+
+<!-- DEVUELVE EL ESTADO DE LAS FRANJAS HORARIAS EXPRESADAS EN EL FORMATO DD-MM-YY  -->
+<!-- EJEMPLO: LISF OF DAY 25-02-20  -->
+<category>
+    <pattern>LIST OF DAY *</pattern>
+    <template><map name="eventos"><star index="1"/></map></template>
+</category>
+
+
+<!-- MARCA EN LA AGENDA {ocupado o null} UNA HORA DE UN DIA -->
+<!-- EJEMPLO: MARK OCUPADO AT 05:00 ON 25-02-20 -->
+<category>
+    <pattern>MARK * AT * ON * </pattern>
+    <template>
+        <think>
+            <set var="franjas"><srai>LIST OF DAY <star index="3"/></srai></set>
+            <set var="valor"><srai> MODIFY POSITION <srai>ORDINAL <star index="2"/> </srai> OF <get var="franjas"/> WITH <star/> </srai></set>
+	</think>
+            <modifymap>
+              <name>eventos</name>
+              <key><star index="3"/></key>
+              <value><get var="valor"/></value>
+            </modifymap>
+    </template>
+</category>
+
+
+<!-- Determina si la franja esta ocupada dado un dia y una hora -->
+<!-- EJEMPLO: IS BUSY DAY 25-02-20 AT 10:00 -->
+<category>
+    <pattern> IS BUSY DAY * AT * </pattern>
+    <template>
+	<think>
+	    <set var="franjas"><srai>LIST OF DAY <star index="1"/></srai></set>
+	    <set var="contador"><srai>ORDINAL <star index="2"/></srai></set>
+	    <set var="contador"><map name="predecessor"><get var="contador"/></map></set>
+	    <set var="valor"><first><get var="franjas"/></first></set>
+	    <set var="franjas"><rest><get var="franjas"/></rest></set>
+        </think>
+            <condition var="contador">
+	      <li value="0"><think><set var="result"><get var="valor"/></set></think></li>
+	     <li>
+		<think>
+		  <set var="contador"><map name="predecessor"><get var="contador"/></map></set>
+		  <set var="valor"><first><get var="franjas"/></first></set>
+		  <set var="franjas"><rest><get var="franjas"/></rest></set>
+		</think>
+		<loop/>
+	     </li>
+            </condition>
+
+        <condition var="result">
+          <li value="ocupado">TRUE</li>
+	  <li>FALSE</li>
+        </condition>
+    </template>
+</category>
+
+
+
+</aiml>

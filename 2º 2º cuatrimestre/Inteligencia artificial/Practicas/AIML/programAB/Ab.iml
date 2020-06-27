@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="JAVA_MODULE" version="4">
+  <component name="NewModuleRootManager" inherit-compiler-output="true">
+    <exclude-output />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+    </content>
+    <orderEntry type="jdk" jdkName="1.8" jdkType="JavaSDK" />
+    <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="library" name="commons-logging-1.1.1" level="project" />
+    <orderEntry type="library" name="commons-codec-1.6" level="project" />
+    <orderEntry type="library" name="joda-time-2.1" level="project" />
+    <orderEntry type="library" name="jgoodies-forms" level="project" />
+    <orderEntry type="library" name="jgoodies-common" level="project" />
+    <orderEntry type="library" name="httpmime-4.2.1" level="project" />
+    <orderEntry type="library" name="httpcore-4.2.1" level="project" />
+    <orderEntry type="library" name="httpclient-cache-4.2.1" level="project" />
+    <orderEntry type="library" name="httpclient-4.2.1" level="project" />
+    <orderEntry type="library" name="hamcrest-all-1.3" level="project" />
+    <orderEntry type="library" name="json-20090211" level="project" />
+    <orderEntry type="library" name="sanmoku-0.0.5" level="project" />
+    <orderEntry type="library" name="junit-4.11" level="project" />
+    <orderEntry type="library" name="sanmoku-feature-ex-0.0.1" level="project" />
+  </component>
+</module>

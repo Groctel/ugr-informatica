@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml version="2.0">
+
+<!-- Pedir cita el próximo día de la semana {{{1 -->
+<category>
+	<pattern># el * que viene</pattern>
+	<template>
+		<srai>esta libre el <srai>DAY <srai>TODAY</srai> NEXT <star index="2"/></srai></srai>
+	</template>
+</category>
+<!-- }}}1 -->
+
+<!-- Pedir cita el próximo día de la semana a una hora concreta {{{1 -->
+<category>
+	<pattern># el * que viene a las *</pattern>
+	<template>
+		<srai>esta libre el <srai>DAY <srai>TODAY</srai> NEXT <star index="2"/></srai> a las <star index="3"/></srai>
+	</template>
+</category>
+<!-- }}}1 -->
+
+<!-- Pedir cita el próximo día de la semana por la mañana o por la tarde {{{1 -->
+<category>
+	<pattern># el * que viene por la *</pattern>
+	<template>
+		<srai>esta libre el <srai>DAY <srai>TODAY</srai> NEXT <star index="2"/></srai> por la <star index="3"/></srai>
+	</template>
+</category>
+<!-- }}}1 -->
+
+<!-- Pedir cita hoy atrapalotodo {{{1 -->
+<category>
+	<pattern>^ hoy ^</pattern>
+	<template>
+		<srai>esta libre el <srai>TODAY</srai></srai>
+	</template>
+</category>
+<!-- }}}1 -->
+
+<!-- Pedir cita hoy atrapalotodo a una hora concreta {{{1 -->
+<category>
+	<pattern>^ hoy ^ a las *</pattern>
+	<template>
+		<srai>esta libre el <srai>TODAY</srai> a las <star index="3"/></srai>
+	</template>
+</category>
+<!-- }}}1 -->
+
+<!-- Pedir cita hoy atrapalotodo por la mañana o por la tarde {{{1 -->
+<category>
+	<pattern>^ hoy ^ por la *</pattern>
+	<template>
+		<srai>esta libre el <srai>TODAY</srai> por la <star index="3"/></srai>
+	</template>
+</category>
+<!-- }}}1 -->
+
+<!-- Pedir cita mañana atrapalotodo {{{1 -->
+<category>
+	<pattern>^ maniana ^</pattern>
+	<template>
+		<srai>esta libre el <srai>TOMORROW</srai></srai>
+	</template>
+</category>
+<!-- }}}1 -->
+
+<!-- Pedir cita mañana atrapalotodo a una hora concreta {{{1 -->
+<category>
+	<pattern>^ maniana ^ a las *</pattern>
+	<template>
+		<srai>esta libre el <srai>TOMORROW</srai> a las <star index="3"/></srai>
+	</template>
+</category>
+<!-- }}}1 -->
+
+<!-- Pedir cita mañana atrapalotodo por la mañana o por la tarde{{{1 -->
+<category>
+	<pattern>^ maniana ^ por la *</pattern>
+	<template>
+		<srai>esta libre el <srai>TOMORROW</srai> por la <star index="3"/></srai>
+	</template>
+</category>
+<!-- }}}1 -->
+
+<!-- Pedir cita pasado mañana atrapalotodo {{{1 -->
+<category>
+	<pattern>^ pasado maniana ^</pattern>
+	<template>
+		<srai>esta libre el <srai>AFTER TOMORROW</srai></srai>
+	</template>
+</category>
+<!-- }}}1 -->
+
+<!-- Pedir cita pasado mañana atrapalotodo a una hora concreta {{{1 -->
+<category>
+	<pattern>^ pasado maniana ^ a las *</pattern>
+	<template>
+		<srai>esta libre el <srai>AFTER TOMORROW</srai> a las <star index="3"/></srai>
+	</template>
+</category>
+<!-- }}}1 -->
+
+<!-- Pedir cita pasado mañana atrapalotodo por la mañana o por la tarde {{{1 -->
+<category>
+	<pattern>^ pasado maniana ^ por la *</pattern>
+	<template>
+		<srai>esta libre el <srai>AFTER TOMORROW</srai> por la <star index="3"/></srai>
+	</template>
+</category>
+<!-- }}}1 -->
+
+<!-- Herramientas de utilidad {{{1 -->
+
+<!-- Avanzar la fecha un número de días {{{2 -->
+<category>
+	<pattern>DAY * PLUS *</pattern>
+	<template>
+		<think>
+			<set var="indice">
+				<srai>FINDITEM <star index="1"/> IN <map name="cal">cal</map></srai>
+			</set>
+
+			<set var="indice">
+				<srai>SUMA <get var="indice"/> <star index="2"/></srai>
+			</set>
+		</think>
+
+		<srai>SELECTITEM <get var="indice"/> IN <map name="cal">cal</map></srai>
+	</template>
+</category>
+<!-- }}}2 -->
+
+<!-- Generar la semana restante {{{2 -->
+
+<category>
+	<pattern>DAY * WEEK</pattern>
+	<template>
+		<think>
+			<set var="indice">
+				<srai>FINDITEM <star/> IN <map name="cal">cal</map></srai>
+			</set>
+
+			<set var="iterador">
+				<map name="dias-semana"><star/></map>
+			</set>
+
+			<set var="iterador">
+				<map name="dias-semana"><get var="iterador"/></map>
+			</set>
+
+			<set var="semana">WEEK</set>
+
+			<condition var="iterador">
+				<li value="0">
+					<set var="semana">
+						<get var="semana"/> <srai>SELECTITEM <get var="indice"/> IN <map name="cal">cal</map></srai>
+					</set>
+				</li>
+				<li>
+					<set var="semana">
+						<get var="semana"/> <srai>SELECTITEM <get var="indice"/> IN <map name="cal">cal</map></srai>
+					</set>
+					<set var="iterador">
+						<srai>MINUS <get var="iterador"/> 1</srai>
+					</set>
+					<set var="indice">
+						<srai>PLUS <get var="indice"/> 1</srai>
+					</set>
+					<loop/>
+				</li>
+			</condition>
+		</think>
+
+		<srai>REMAIN <get var="semana"/></srai>
+	</template>
+</category>
+<!-- }}}2 -->
+
+<!-- Generar la lista de la semana siguiente {{{2 -->
+<category>
+	<pattern>DAY * NEXT WEEK</pattern>
+	<template>
+		<think>
+			<set var="semana">
+				<srai>DAY <star/> WEEK</srai>
+			</set>
+
+			<set var="ultimo">
+				<srai>COUNT <get var="semana"/></srai>
+			</set>
+
+			<set var="ultimo">
+				<srai>SELECTITEM <get var="ultimo"/> IN <get var="semana"/></srai>
+			</set>
+
+			<set var="siguiente">
+				<srai>DAY <get var="ultimo"/> PLUS 1</srai>
+			</set>
+		</think>
+
+		<srai>DAY <get var="siguiente"/> WEEK</srai>
+
+	</template>
+</category>
+
+<!-- }}}2 -->
+
+<!-- Dar la fecha actual {{{2 -->
+<category>
+	<pattern>TODAY</pattern>
+	<template>
+		<srai>TODATE <srai>DATE</srai></srai>
+	</template>
+</category>
+<!-- }}}2 -->
+
+<!-- Dar la fecha de mañana {{{2 -->
+<category>
+	<pattern>TOMORROW</pattern>
+	<template>
+		<srai>DAY <srai>TODAY</srai> PLUS 1</srai>
+	</template>
+</category>
+<!-- }}}2 -->
+
+<!-- Dar la fecha de pasado mañana {{{2 -->
+<category>
+	<pattern>AFTER TOMORROW</pattern>
+	<template>
+		<srai>DAY <srai>TODAY</srai> PLUS 2</srai>
+	</template>
+</category>
+<!-- }}}2 -->
+
+<!-- Dar el próximo día específico de la semana {{{2 -->
+<category>
+	<pattern>DAY * NEXT *</pattern>
+	<template>
+		<think>
+			<set var="inicio">
+				<map name="dias-semana"><star index="1"/></map>
+			</set>
+
+			<set var="inicio">
+				<srai>FINDITEM <get var="inicio"/> IN <map name="dias-semana">cal</map></srai>
+			</set>
+
+			<set var="contador">1</set>
+			<set var="lector">
+				<srai>SELECTITEM <srai>PLUS <get var="inicio"/> 1</srai> IN <map name="dias-semana">cal</map></srai>
+			</set>
+
+			<condition var="lector">
+				<li><value><star index="2"/></value></li>
+				<li>
+					<set var="contador">
+						<srai>PLUS <get var="contador"/> 1</srai>
+					</set>
+
+					<set var="lector">
+						<srai>SELECTITEM <srai>SUMA <get var="inicio"/> <get var="contador"/></srai> IN <map name="dias-semana">cal</map></srai>
+					</set>
+					<loop/>
+				</li>
+			</condition>
+		</think>
+
+		<srai>DAY <star index="1"/> PLUS <get var="contador"/></srai>
+	</template>
+</category>
+<!-- }}}2 -->
+
+<!-- }}}1 -->
+
+</aiml>

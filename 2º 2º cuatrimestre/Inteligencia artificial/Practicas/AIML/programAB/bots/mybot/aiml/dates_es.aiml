@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<aiml>
+<!-- File: date.aiml -->
+<!-- Author: Dr. Richard S. Wallace -->
+<!-- Last modified: July 19, 2014 -->
+<!--  -->
+<!-- This AIML file is part of the ALICE2 0.0.5 chat bot knowledge base. -->
+<!--  -->
+<!-- The ALICE2 brain is Copyright &copy; 2014 by ALICE AI Foundation. -->
+<!--  -->
+<!-- The ALICE2 brain is released under the terms of the GNU Lesser General -->
+<!-- Public License, as published by the Free Software Foundation. -->
+<!--  -->
+<!-- This file is distributed WITHOUT ANY WARRANTY; without even the  -->
+<!-- implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.   -->
+<!--  -->
+<!-- For more information see http://www.alicebot.org -->
+
+<!--  -->
+
+
+<category><pattern>SEASON</pattern>
+<template>
+<think><set var="month"><date format="%B" jformat="MMMMMMMMM"/></set></think>
+<set name="estacion"> <map name="season_es"><get var="month"/></map></set>
+</template>
+</category>
+
+<category><pattern>DAY</pattern>
+<template><srai>QUITARTILDE <date format="%A" jformat="EEEEEEEEEEEEEEE"/></srai></template>
+</category>
+
+<category><pattern>TOMORROW ^</pattern>
+<template>
+<think><set var="today"><srai>DAY</srai></set></think>
+<map name="tomorrow_es"><get var="today"/></map></template>
+</category>
+
+<category><pattern>YEAR ^</pattern>
+<template><date format="%Y" jformat="yyyy"/></template>
+</category>
+
+<category><pattern>NEXT YEAR ^</pattern>
+<template><map><name>successor</name><date format="%Y" jformat="yyyy"/></map></template>
+</category>
+
+<category><pattern>LAST YEAR ^</pattern>
+<template><map><name>predecessor</name><date format="%Y" jformat="yyyy"/></map></template>
+</category>
+
+<category><pattern>MONTH</pattern>
+<template><date format="%B" jformat="MMMMMMMMM"/></template>
+</category>
+
+<category><pattern>TIME</pattern>
+<template><date format="%I:%M %p" jformat="h:mm a"/></template>
+</category>
+
+<category><pattern>DATE</pattern>
+<template><date format="%B %d, %Y" jformat="dd MMMMMMMMM yy"/></template>
+</category>
+
+<category><pattern>DAY PHASE</pattern>
+<template><think>
+<set var="hour"><date format="%I" jformat="h"/></set>
+<set var="ampm"><date format="%p" jformat="a"/></set>
+</think>
+<condition>
+<li value="AM" var="ampm">Manyana</li>
+<li><condition var="hour">
+    <li value="12">Manyana</li>
+    <li value="1">Tarde</li>
+    <li value="2">Tarde</li>
+    <li value="3">Tarde</li>
+    <li value="4">Tarde</li>
+    <li value="5">Tarde</li>
+    <li value="6">Tarde</li>
+    <li value="7">Tarde</li>
+    <li value="8">Tarde</li>
+    <li>Noche</li>
+  </condition>
+</li>
+</condition></template>
+</category>
+
+<category><pattern>DATE AND TIME</pattern>
+<template> <date/></template>
+</category>
+
+<category><pattern>DATE TOMORROW</pattern>
+<template><srai>TOMORROWDATE <date format="%B %d %Y" jformat="dd MMMMMMMMM yy"/></srai></template>
+</category>
+
+<category><pattern>TOMORROWDATE <set>number</set> <set>month_es</set> <set>number</set></pattern>
+<template> <map name="successor"> <star/>  </map> <star index="2"/> <star index="3"/></template>
+</category>
+
+<category><pattern>TOMORROWDATE 31 ENERO <set>number</set></pattern>
+<template>1 Febrero <star/></template>
+</category>
+
+<category><pattern>TOMORROWDATE 28 FEBRERO 20</pattern>
+<template>29 Febrero 2020</template>
+</category>
+
+<category><pattern>TOMORROWDATE 28 FEBRERO 24</pattern>
+<template>29 Febrero 2024</template>
+</category>
+
+<category><pattern>TOMORROWDATE 28 FEBRERO 28</pattern>
+<template>29 Febrero 2028</template>
+</category>
+
+<category><pattern>TOMORROWDATE 28 FEBRERO <set>number</set></pattern>
+<template>1 Marzo <star/></template>
+</category>
+
+<category><pattern>TOMORROWDATE 29 FEBRERO <set>number</set></pattern>
+<template>1 Marzo  <star/></template>
+</category>
+
+<category><pattern>TOMORROWDATE 31 MARZO <set>number</set></pattern>
+<template>1 Abril <star/></template>
+</category>
+
+<category><pattern>TOMORROWDATE 30 ABRIL <set>number</set></pattern>
+<template>1 Mayo <star/></template>
+</category>
+
+<category><pattern>TOMORROWDATE 31 MAYO<set>number</set></pattern>
+<template>1 Junio <star/></template>
+</category>
+
+<category><pattern>TOMORROWDATE 30 JUNIO <set>number</set></pattern>
+<template>1 Julio <star/></template>
+</category>
+
+<category><pattern>TOMORROWDATE 31 JULIO <set>number</set></pattern>
+<template>1 Agosto <star/></template>
+</category>
+
+<category><pattern>TOMORROWDATE 31 AGOSTO <set>number</set></pattern>
+<template>1 Septiembre <star/></template>
+</category>
+
+<category><pattern>TOMORROWDATE 30 SEPTIEMBRE<set>number</set></pattern>
+<template>1 Octubre <star/></template>
+</category>
+
+<category><pattern>TOMORROWDATE 31 OCTUBRE <set>number</set></pattern>
+<template>1 Noviembre <star/></template>
+</category>
+
+<category><pattern>TOMORROWDATE 30 NOVIEMBRE <set>number</set></pattern>
+<template>1 Diciembre <star/></template>
+</category>
+
+<category><pattern>TOMORROWDATE 31 DICIEMBRE <set>number</set></pattern>
+<template>1 ENERO <map name="successor"><star/></map></template>
+</category>
+
+<category><pattern>DAYAFTERTOMORROWDATE  <set>number</set> <set>month_es</set> <set>number</set></pattern>
+<template><srai>TOMORROWDATE <srai>TOMORROWDATE <star/> <star index="2"/> <star index="3"/></srai></srai></template>
+</category>
+
+<category><pattern>DAYAFTERTOMORROWDATE</pattern>
+<template><srai>DATE IN 2 DAYS</srai></template>
+</category>
+
+<category><pattern>DAY AFTER TOMORROW</pattern>
+<template>
+ <think>
+ <set var="hoy"><srai>DAY</srai></set>
+ <set var="manana"><map name="tomorrow_es"><get var="hoy"/></map></set>
+ </think>
+ <map name="tomorrow_es"><get var="manana"/></map>
+</template>
+</category>
+
+<category><pattern>DATE IN <set>number</set> DAYS</pattern>
+<template><think><set var="days"><star/></set>
+<set var="date"><date format="%B %d %Y" jformat="dd MMMMMMMMM yy"/></set>
+</think>
+<condition var="days">
+<li value="0"><get var="date"/></li>
+<li><think><set var="date"><srai>TOMORROWDATE <get var="date"/></srai></set> <set var="days"><map name="predecessor"><get var="days"/></map></set></think> <loop/></li>
+</condition></template>
+</category>
+
+<category><pattern>DAYS UNTIL <set>weekday_es</set></pattern>
+<template><think>
+<set var="day"><star/></set>
+<set var="today"><srai>DAY</srai></set>
+<set var="days">0</set></think>
+<condition var="today">
+<li><value><get var="day"/></value><get var="days"/></li>
+<li><think><set var="today"><map name="tomorrow_es"><get var="today"/></map></set> <set var="days"><map name="successor"><get var="days"/></map></set></think> <loop/></li>
+</condition></template>
+</category>
+
+
+<category><pattern>DATE ON <set>weekday_es</set></pattern>
+<template><srai>DATE IN <srai>DAYS UNTIL <star/></srai> DAYS</srai></template>
+</category>
+
+<category><pattern>DATE ON WEEKEND</pattern>
+<template><srai>DATE IN <srai>DAYS UNTIL sabado</srai> DAYS</srai></template>
+</category>
+
+
+<category><pattern>SUCCESSOR <set>number</set></pattern>
+<template><map name="successor"><star/></map></template>
+</category>
+
+<category><pattern>DATE A WEEK FROM <set>weekday_es</set></pattern>
+<template><srai>DATE IN
+<srai>SUCCESSOR
+<srai>SUCCESSOR
+<srai>SUCCESSOR
+<srai>SUCCESSOR
+<srai>SUCCESSOR
+<srai>SUCCESSOR
+<srai>SUCCESSOR
+<srai>DAYS UNTIL <star/></srai>
+</srai>
+</srai>
+</srai>
+</srai>
+</srai>
+</srai>
+</srai>
+DAYS</srai></template>
+</category>
+
+
+<category><pattern>WEEKDAY IN <set>number</set> DAYS</pattern>
+<template><think>
+<set var="days"><star/></set>
+<set var="day"><srai>DAY</srai></set>
+</think>
+<condition var="days">
+<li value="0"><get var="day"/></li>
+<li><think><set var="day"><map name="tomorrow_es"><get var="day"/></map></set>
+<set var="days"><map name="predecessor"><get var="days"/></map></set></think> <loop/></li>
+</condition></template>
+</category>
+</aiml>
