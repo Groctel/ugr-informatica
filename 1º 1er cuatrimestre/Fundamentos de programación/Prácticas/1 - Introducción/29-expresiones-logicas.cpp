@@ -1,17 +1,17 @@
 #include <iostream>
 
 int main () {
-	bool es_bisiesto = false,
+	bool es_bisiesto   = false,
 	     es_de_1_a_100 = false,
-	     es_inactivo = false,
-	     es_minuscula = false;
+	     es_inactivo   = false,
+	     es_minuscula  = false;
 	char letra;
 	int adivine,
 	    anio,
 	    edad;
 
 	std::cout << "Introduzca una letra, una edad, un número y un año: ";
-	std::cin >> letra >> edad >> adivine >> anio;
+	std::cin  >> letra >> edad >> adivine >> anio;
 
 	es_minuscula  = 'a' <= letra && letra <= 'z';
 	es_inactivo   = edad < 18 || 65 < edad;

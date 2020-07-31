@@ -8,8 +8,8 @@ enum class EstadoCivil {
 };
 
 int main () {
-	const int EDAD = 20;
-	const double PIB  = 1166.3;
+	const int EDAD       = 20;
+	const double PIB     = 1166.3;
 	const bool ES_PRIMO  = true,
 	           ES_HOMBRE = false;
 
