@@ -1,0 +1,110 @@
+\chapter{Los extraños mundos de Belkan}\label{belkan}
+
+\section{Introducción}\label{belkan-intro}
+
+Para esta práctica se han implementado tres métodos de comportamiento del jugador, dos de los cuales son deliberativos y el otro reactivo.
+Partimos de que se nos dan implementadas las siguientes funciones, functores y estructuras:
+
+\begin{itemize}
+	\item\code{ComparaEstados}\textbf{:} Functor para ordenar estados en la lista de cerrados.
+	\item\code{estado}\textbf{:} Estado del jugador en un punto concreto de la ejecución.
+	\item\code{nodo}\textbf{:} Definición de la estructura \code{nodo} para las listas de abiertos.
+	\item\code{pathFinding\_Profundidad}\textbf{:} Algoritmo de búsqueda en profundidad.
+	\item\code{think}\textbf{:} Función que se llama en cada turno para decidir la acción que va a tomar el jugador.
+\end{itemize}
+
+Junto con estas definiciones también encontramos funciones para mostrar el plan gráficamente y comprobar si el jugador va a toparse con obstáculos o morir.
+Para facilitar la lectura y modificación del código se han añadido los siguientes enumerados:
+
+\begin{itemize}
+	\item\code{Terreno}\textbf{:} Asocia cada elemento del terreno con su correspondiente \code{unsigned char}.
+	\item\code{Superficie}\textbf{:} Asocia cada elemento móvil del juego con su correspondiente \code{unsigned char}.
+\end{itemize}
+
+También se modifica el contenido de \code{pathFinding\_Profundidad} de forma que se den nombres más significativos a las variables que utiliza y se han capitalizado los nombres de las estructuras \code{nodo} a \code{Nodo} y \code{estado} a \code{Estado}.
+Sobre estas modificaciones iniciales, comenzamos a desarrollar, en el orden aquí expuestos, cada uno de los algoritmos que componen la versión final del ejercicio.
+
+\section{Búsqueda en anchura}\label{belkan-anchura}
+
+La implementación de este algoritmo se basa en modificar \code{pathFinding\_Profundidad} para sustituir la \code{std::stack} por una \code{std::queue}, de forma que los elementos que se añadan al árbol de búsqueda de planificaciones se hagan a través de todas las ramas y no se priorice una acción.
+En el caso de la búsqueda en profundidad, se añaden nodos de acción en el orden \code{[act\_TURN\_R, act\_TURN\_L, act\_FORWARD]}, de forma que, al buscar en la pila, el orden de recogida de estas acciones es inverso, dando prioridad a que el jugador avance hasta encontrarse con un obstáculo y girar en sentido contrario a las agujas del reloj, por lo que es posible que el plan describa un rectángulo a lo largo de todo el mapa hasta el objetivo si éste se coloca a espaldas de la posición inicial del jugador.
+
+Con la modificación de la estructura, conseguimos que se busque con igual prioridad por todas las ramas del árbol de planificación, aunque esto tiene un coste de almacenamiento mucho más elevado, ya que la lista de cerrados se va creando recorriendo todos los niveles del árbol.
+Sin embargo, a pesar de este coste, esta búsqueda nos devuelve el camino más corto hacia el objetivo a riesgo de que éste resulte excesivamente drenante para el jugador, que se puede quedar sin batería.
+
+Por motivos que se describen en \S\ref{belkan-coste}, el functor que ordena el \code{std::set} que forma la lista de cerrados se ha cambiado a \code{ComparaEstadosSinObjetos}, pues la adición de estos objetos suponía que una casilla, que debería guardarse $4$ veces en este caso (una para cada orientación), se guardase hasta $16$ veces, ya que a la cuenta inicial se le deberían contar dos estados más para los valores de \code{bikini} y \code{zapatillas} que se añadirán en dicha sección.
+Tan grande resulta la diferencia de elementos que el programa consiguió llenar varios gigas de memoria RAM a lo largo de su ejecución durante el proceso de desarrollo.
+
+\section{Búsqueda de coste uniforme}\label{belkan-coste}
+
+Esta búsqueda se ha implementado sobre la búsqueda en anchura modificando la \code{std::queue} por un \code{std::multiset} para la lista de abiertos.
+De esta forma, cada elemento de la lista se encuentra únicamente una vez (aunque también se registra que se haya alcanzado varias veces) y se ordenan en función de su coste.
+Este coste viene definido por el functor \code{ComparaCostes} que devuelve el coste $f$ de los dos estados que compara.
+Este coste, definido como $f=g+h$ está compuesto por el coste acumulado de viaje hasta el nodo ($g$) y el coste de la heurística implementada para resolver el problema ($h$).
+Como en este caso estamos trabajando con concocimiento, no usamos el coste $h$ y lo igualamos a $0$ para todos los estados, de formaa que se define el coste como $f=g$.
+
+Como existe la posibilidad de que el jugador entre en un nodo con o sin \code{bikini} o \code{zapatillas}, se añaden dos \code{bool} con estos nombres al \code{Estado} y se tienen en cuenta estos valores para el cálculo del coste de cada una de las casillas.
+Este coste se implementa en la función miembro \code{Coste}, que actualiza el coste del nodo que recibe por referencia al indicado según el peso de cada una de las casillas.
+Al calcular este coste, si se encuentra un estado igual al del nodo hijo generado, éste se inserta en la lista de abiertos únicamente si su coste es menor que el del ya existente (reemplazándolo).
+De esta forma nos aseguramos de que el valor siempre sea el mínimo posible.
+
+Esta última función de búsqueda de nodos la implementamos mediante una función que opera directamente sobre el \code{std::multiset} llamada \code{BuscaNodo}, que lo recorre hasta encontrar un nodo en la lista de abiertos que tenga el mismo estado que el hijo generado.
+Esta comparación se hace mediante un functor llamado \code{EstadosIguales} que simplemente devuelve si todos los atributos de ambos estados tienen el mismo valor.
+
+Realizada esta búsqueda, se garantiza que el camino encontrado siempre será el de menor coste.
+
+\section{Búsqueda sin información}\label{belkan-sin-info}
+
+Para este último método de búsqueda implementamos el algoritmo \code{A*}, que realiza la búsqueda de caminos combinando el agoritmo de búsqueda por coste uniforme (por lo que este algoritmo se implementa sobre \code{pathFinding\_CUniforme}) con la heurística de la distancia de Manhattan.
+Elegimos esta heurística porque es muy sencilla de calcular porque es admisible, pues nunca sobreestimará el coste de desplazarse hacia una casilla (Russell, Norvig, \& Rodríguez, 2004, p. 139), ya que siempre considera los saltos entre casillas como movimientos de coste $1$.
+Gracias a esta admisibilidad nos aseguramos de no tener que revisar en ningún momento la lista de cerrados, reduciendo considerablemente el tiempo de ejecución.
+Esta heurística la calculamos mediante una función llamada \code{DistanciaManhattan} que recibe dos estados y devuelve la distancia de Manhattan entre ellos.
+
+Para ir descubriendo el camino se implementa la función miembro \code{PiramideVisionaria}, que rellena el \code{mapaResultado} con los elementos recogidos por el visor del jugador.
+
+Con estas modificaciones implementadas, podemos ejecutar el código para que encuentre un objetivo, pero debemos modificar otras partes del comportamiento para que el jugador sea capaz de encontrar múltiples objetivos y agotar el tiempo en lugar de la batería.
+
+\subsection{Necesidad de batería}\label{belkan-bateria}
+
+Para asegurarnos de que el jugador va a buscar la batería para no quedarse sin energía, creamos la función miembro \code{NecesidadRecarga}, que devuelve un valor entre $0$ y algún número alrededor de $6$ no muy bien calculado que indica la predisposición del jugador a abandonar su objetivo actual por la batería para recargar energía.
+Este método tiene en cuenta un \code{std::set} de baterías en el que se almacenan todas las baterías encontradas hasta el momento.
+Para almacenarlas, cada vez que \code{PiramideVisionaria} encuentra una casilla de tipo \code{Terreno::Recarga}, se envía su posición al conjunto de baterías encontradas.
+
+Cada vez que se comprueba la necesidad de recarga del jugador, se inicializa ésta a $0$ y se busca en la batería más cercana.
+Si no hay baterías registradas, se devuelve $0$ porque no tiene sentido ir a buscar una batería en terreno aún desconocido.
+Si hay baterías, se escoge la más cercana y se calcula la necesidad mediante la siguiente fórmula:
+
+\[necesidad = \frac{\frac{3000\cdot sensores.bateria}{40}}{10+DistanciaManhattan(actual,\ mas\_cercana)}\]
+
+Esta función no sigue ningún tipo de razonamiento extremadamente complejo que determine el momento óptimo para buscar la batería basándose en estrategias de cálculo utilizadas especialmente para el caso.
+Más bien, se ha implementado mediante la heurística de \textit{me parece decente pero voy a modificar este numerico}, ya que la necesidad de batería es, al fin y al cabo, una \textit{intuición} que tiene el jugador en algún momento de su vida.
+Por ello, el valor de $necesidad$ que insta a éste a proceder hacia la batería es también arbitrario y se ha modificado al buen ojo (porque el ojo es bueno) del programador.
+
+La decisión de proceder a por la batería se toma, junto con otras decisiones, en la función miembro \code{think}.
+
+\subsection{Modificaciones a la función miembro \code{think}}\label{belkan-think}
+
+En esta función se han implementado, únicamente si el \code{nivel} en el que se encuentra el jugador es el $4$, las siguientes comprobaciones para ajustar el comportamiento del jugador en cada turno:
+
+\subsubsection{Comprobaciones anteriores a la formulación del plan}
+
+\begin{itemize}
+	\item\textbf{La casilla actual es un bikini:} Se añade el bikini al estado actual del jugador.
+	\item\textbf{La casilla actual son unas zapatillas:} Se añaden las zapatillas al estado actual del jugador.
+	\item\textbf{La fila y columna del destino no coinciden con las almacenadas en los sensores:} Esto ocurre si se ha modificado el destino en algún momento de la ejecución del plan, en cuyo caso se manda a reformular para no desperdiciar tiempo de ejecución y batería navegando hacia un destino ya inexistente.
+	\item\textbf{La casilla inmediatamente posterior al jugador (\code{sensores.terreno[2]}) es agua o bosque y éste no tiene bikini o zapatillas, respectivamente:} En este caso, proceder por estos caminos resulta en una penalización extremadamente alta, por lo que se manda a reformular el plan para escoger un camino alternativo.
+	\item\textbf{La necesidad de recarga del jugador es superior a $\boldsymbol{3}$:} En este caso, por todo lo expuesto en~\ref{belkan-bateria}, el jugador almacena su destino en memoria y procede a buscar la batería, trazando para ello un nuevo plan.
+	\item\textbf{Resulta beneficioso recalcular la ruta:} Si el jugador se encuentra con que va a proceder por una casilla que antes le era desconocida, recalcula la ruta teniendo en cuenta el conocimiento adquirido en los últimos tres turnos. Para ello, hace uso de un contador \code{recalcula} que pone a $3$ cada que vez que el equivalente de \code{mapaResultado} a \code{sensores.terreno[12]} vale \code{Terreno::Desconocido}.
+\end{itemize}
+
+\subsubsection{Comprobaciones posteriores a la formulación del plan}
+
+\begin{itemize}
+	\item\textbf{La casilla actual es una batería y la carga es menor que $\boldsymbol{2980}$:} En este caso no se sigue con el plan y el jugador se mantiene inmóvil hasta recargar la batería.
+	\item\textbf{La casilla actual es una batería y el jugador está casi cargado:} Se procede con el plan, aprovechando el último \textit{tick} de la batería para realizar el siguiente movimiento del mismo.
+	\item\textbf{La casilla inmediatamente posterior al jugador es un muro o un precipicio:} El jugador gira a la izquierda o la derecha en función de la posición del objetivo en el mapa y retraza el plan.
+\end{itemize}
+
+\section{Bibliografía}
+
+Russell, S. J., Norvig, P., \& Rodríguez, J. M. C. (2004). Inteligencia artificial. Madrid, España: Pearson Educación.
