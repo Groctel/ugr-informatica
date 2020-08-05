@@ -10,7 +10,7 @@ Cada uno de los nodos tiene una placa base \href{www.supermicro.com/products/mot
 Cuenta con $18$ espacios de memoria DDR3 800/1066 divididos en $9$ para cada uno de los procesadores que componen el \textit{chipset} y cada uno con espacio para $4GB$, permitiendo un total de $72GB$ de memoria RAM\@.
 
 Los procesadores instalados en la placa son \href{https://ark.intel.com/content/www/us/en/ark/products/48768/intel-xeon-processor-e5645-12m-cache-2-40-ghz-5-86-gt-s-intel-qpi.html}{Intel Xeon E5645}.
-Estos procesadores cuentan con 6 núcleos y 12 hebras con una frecuencia de $2.40GHz$ por núcleo; una caché L3 compartida por todos los núcleros de 12MB y un bus de $5.86GT/s$ (Giga Transferencias por segundo).
+Estos procesadores cuentan con $6$ núcleos físicos con $2$ hebras por núcleo para un total de $12$ núcleos lógicos ($24$ por placa ya que cada una cuenta con dos procesadores) con una frecuencia de $2.40GHz$ por núcleo; una caché L3 compartida por todos los núcleros de 12MB y un bus de $5.86GT/s$ (Giga Transferencias por segundo).
 
 El acceso al \textit{atcgrid} se hace mediante una conexión segura al directorio \code{\$HOME} que se ofrece a cada estudiante de la asignatura.
 Esta conexión puede hacerse con \code{ssh} para interactuar con el sistema y con \code{sftp} para transferir ficheros entre la máquina local y el servidor.
@@ -21,6 +21,7 @@ La conexión por \code{ssh} se hace usando la orden homónima e introduciendo co
 
 \begin{lstlisting}[language=sh]
 ssh username@atcgrid.ugr.es
+ssh -X username@atcgrid.ugr.es # Permite compatibilidad con X11
 \end{lstlisting}
 
 Al ejecutar esta orden e introducir la contraseña, podemos acceder a nuestra shell personal.

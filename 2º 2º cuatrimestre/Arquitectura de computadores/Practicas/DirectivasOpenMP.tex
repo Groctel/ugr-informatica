@@ -16,10 +16,10 @@ También utiliza funciones para fijar parámetros en tiempo de ejecución y vari
 Estas directivas siguen la siguiente sintaxis:
 
 \begin{lstlisting}[language=C]
-#pragma omp nombre_directiva clausulas
+#pragma omp directiva clausulas
 \end{lstlisting}
 
-El primer elemento, \code{\#pragma omp}, indica al compilador que la línea contiene una directiva OpenMP denominada \code{nombre\_directiva}.
+El primer elemento, \code{\#pragma omp}, indica al compilador que la línea contiene una \code{directiva} OpenMP\@.
 Las directivas pueden recibir cláusulas que delimitan su comportamiento.
 Las veremos con más profundidad en la práctica~\ref{clausulas-openmp}.
 Es imperativo que, tras definir la directiva, se introduzca un salto de línea, ya que ésta es la forma que tiene el preprocesador de conocer el espacio en el que debe introducir el código propio de la misma.
@@ -31,7 +31,7 @@ Para compilar con OpenMP en \code{gcc} y \code{g++} usamos el \textit{flag} \cod
 gcc -fopenmp main.c
 \end{lstlisting}
 
-Si no es incluye esta bandera, el compilador ignora las directivas, pero no las funciones.
+Si no se incluye esta bandera, el compilador ignora las directivas, pero no las funciones.
 Para que éstas se ignoren podemos comprobar la existencia de OpenMP en el programa, que se muestra mediante la definición de \code{\_OPENMP}:
 
 \begin{lstlisting}[language=C]
@@ -99,7 +99,9 @@ int main () {
 \end{lstlisting}
 
 Al ejecutar varias veces este programa, veremos que las hebras que imprimen el mensaje lo hacen en un orden no determinista.
-También podemos modificar el número de hebras que ejecutan el código mediante la variable de entorno \code{OMP\_NUM\_THREADS}.
+También podemos modificar el número de hebras que ejecutan el código mediante la variable de entorno \code{OMP\_NUM\_THREADS}\footnote{%
+	A lo largo del resto de los apuntes se deja el valor de \code{OMP\_NUM\_THREADS} a $4$ para simplificar la muestra de la salida estándar.
+}.
 
 \begin{lstlisting}[language=sh]
 gcc -fopenmp -O2 main.c -o main
@@ -184,7 +186,7 @@ for (unsigned i=0; i<MAX; i++)
 \end{lstlisting}
 
 Esta directiva permite ejecutar un bucle \code{for} por varias hebras de forma que cada una ejecuta una de las iteraciones y, al final, el resultado es el mismo que si se ejecutara secuencialmente.
-Para hacer esto, el cuerpo del bucle debe ser paralelizable y el número de iteraciones debe ser conocido en tiempo de compilación.
+Para hacer esto, el cuerpo del bucle debe ser paralelizable y el número de iteraciones debe ser conocido en tiempo de ejecución en el momento de entrar en el bucle.
 Aplicando esta directiva junto con \code{parallel}, podemos ampliar el ejemplo de~\ref{directivas-openmp-directivas-parallel} para incluir un bucle en su cuerpo:
 
 \begin{lstlisting}[language=C]
@@ -193,7 +195,7 @@ Aplicando esta directiva junto con \code{parallel}, podemos ampliar el ejemplo d
 int main () {
 	const int ITERACIONES = 10;
 
-	#pragma omp parallel private(ID)
+	#pragma omp parallel
 	{
 		#pragma omp for
 		for (unsigned i=0; i<ITERACIONES; i++)
@@ -351,14 +353,14 @@ Podemos combinar estas directivas con su \code{parallel} para simplificar la lec
 	#pragma omp section
 	// ...
 
-	#pragma imp section
+	#pragma omp section
 	// ...
 
 	// ...
 }
 \end{lstlisting}
 
-La combinación de directivas acepta todas las cláusulas de ambas directivas combinadas excepto \code{nowait}, que veremos en (TODO\@: Especificar dónde lo veremos cuando acabe el tema de las cláusulas).
+La combinación de directivas acepta todas las cláusulas de ambas directivas combinadas excepto \code{nowait}, cuyo funcionamiento no forma parte del contenido de estos apuntes.
 
 \subsection{Directivas para comunicación y sincronización}\label{directivas-openmp-directivas}
 
@@ -503,13 +505,13 @@ int main () {
 
 		#pragma omp atomic
 		suma += sumalocal;
+
+		#pragma omp barrier
+
+		#pragma omp master
+		printf ("La hebra master (%d) indica que la suma total vale %d\n",
+		        omp_get_thread_num(), suma);
 	}
-
-	#pragma omp barrier
-
-	#pragma omp master
-	printf ("La hebra master (%d) indica que la suma total vale %d\n",
-	        omp_get_thread_num(), suma);
 
 	return 0;
 }

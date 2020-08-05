@@ -1,0 +1,133 @@
+\chapter{Programación paralela}
+
+\section{}\label{ej-2-1}
+
+\subsection{Enunciado}
+
+Indique las diferencias entre OpenMP y MPI\@.
+
+\subsection{Solución}
+
+OpenMP es una API de directivas de paralelización a bajo nivel mientras que MPI es una API de funciones de paso de mensajes a alto nivel.
+
+\section{}\label{ej-2-2}
+
+\subsection{Enunciado}
+
+Ventajas e inconvenientes de una asignación estática de tareas a procesos/hebras frente a una asignación dinámica.
+
+\subsection{Solución}
+
+Mientras que la asignación estática es más difícil de programar por tener que referirse a las hebras y procesos de forma explícita, su sintaxis es menos ambigua que en la asignación dinámica, que es más fácil de programar pero de sintaxis más ambigua.
+
+\section{}\label{ej-2-3}
+
+\subsection{Enunciado}
+
+¿Qué se entiende por escalabilidad lineal y por escalabilidad superlineal? Indique las causas por las que se puede obtener una escalabilidad superlineal.
+
+\subsection{Solución}
+
+La escalabilidad se produce cuando todos los bloques son paralelizables y la sobrecarga es nula, de forma que $S(p)=p$.
+La escalabilidad es superlineal si $S(p)>p$, caso que se da cuando se realiza \textit{backtracking} paralelo o en implementaciones paralelas de ramificación y poda para optimización.
+
+\section{}\label{ej-2-4}
+
+\subsection{Enunciado}
+
+Enuncie la ley de Amdahl en el contexto de procesamiento paralelo.
+
+\subsection{Solución}
+
+\section{}\label{ej-2-5}
+
+\subsection{Enunciado}
+
+Deduzca la expresión matemática que se suele utilizar para caracterizar la ley de Gustafson.
+Defina claramente y sin ambigüedad el punto de partida que va a utilizar para deducir esta expresión y cada una de las etiquetas que utilice.
+¿Qué nos quiere decir Gustafson con esta ley?
+
+\subsection{Solución}
+
+\section{}\label{ej-2-6}
+
+\subsection{Enunciado}
+
+Deduzca la expresión que caracteriza a la ley de Amdahl. Defina claramente el punto de partida y todas las etiquetas que utilice.
+
+\subsection{Solución}
+
+\section{}\label{ej-2-7}
+
+\subsection{Enunciado}
+
+Un programa tarda $40s$ en ejecutarse en un multiprocesador.
+Durante un $20\%$ de ese tiempo se ha ejecutado en cuatro procesadores; durante un $60\%$, en tres; y durante el $20\%$ restante, en un procesador (consideramos que se ha distribuido la carga de trabajo por igual entre los procesadores que colaboran en la ejecución en cada momento, despreciamos sobrecarga).
+¿Cuánto tiempo tardaría en ejecutarse el programa en un único procesador?
+¿Cuál es la ganancia en velocidad obtenida con respecto al tiempo de ejecución secuencial?
+¿Y la eficiencia?
+
+\subsection{Solución}
+
+Tenemos que un $20\%$ de $40s$ son $8$ segundos y que un $60\%$, $24s$.
+Teniendo en cuenta el número de procesadores en los que se ha ejecutado en cada segmento, sumamos los tiempos de ejecución en paralelo:
+
+\[8\cdot4+24\cdot3+8=112\]
+
+\textbf{El programa tardaría $\boldsymbol{112s}$ en ejecutarse en un único procesador.}
+
+Calculamos la ganancia teniendo en cuenta unas prestaciones de cuatro procesadores y un $20\%$ de ejecución secuencial:
+
+\[S(4)=\frac{112}{40}=2.8\]
+
+\textbf{El programa obtiene una ganancia de $\boldsymbol{2.8}$ con respecto al tiempo de ejecución secuencial.}
+
+Por último, calculamos la eficiencia como la razón entre la ganancia y las prestaciones:
+
+\[eficiencia=\frac{ganancia}{procesadores}=\frac{2.8}{4}=0.7\]
+
+\section{}\label{ej-2-8}
+
+\subsection{Enunciado}
+
+Un programa tarda $20s$ en ejecutarse en un procesador $P_1$, y requiere $30s$ en otro procesador $P_2$.
+Si se dispone de los dos procesadores para la ejecución del programa (despreciamos sobrecarga):
+
+\begin{itemize}
+	\item ¿Qué tiempo tarda en ejecutarse el programa si la carga de trabajo se distribuye por igual entre los procesadores $P_1$ y $P_2$?
+	\item ¿Qué distribución de carga entre los dos procesadores $P_1$ y $P_2$ permite el menor tiempo de
+ejecución utilizando los dos procesadores en paralelo? ¿Cuál es este tiempo?
+\end{itemize}
+
+\subsection{Solución}
+
+El programa tardaría $15s$ en ejecutarse distribuyendo el trabajo por igual entre ambos procesadores, ya que $P_2$ es el que más tarda en ejecutarlo.
+La distribución de carga óptima entre ambos procesadores sería asignar un $60\%$ a $P_1$ y un $40\%$ a $P_2$, de forma que ambos tarden $12s$ en ejecutar el programa.
+
+\section{}\label{ej-2-9}
+
+\subsection{Enunciado}
+
+¿Cuál es la fracción de código paralelo de un programa secuencial que, ejecutado en paralelo en $8$ procesadores, tarda un tiempo de $100ns$, durante $50ns$ utiliza un único procesador y durante otros $50ns$ utiliza $8$ procesadores (distribuyendo la carga de trabajo por igual entre los procesadores)?
+
+\subsection{Solucíón}
+
+Tenemos que el programa se ejecuta $50ns$ de forma secuencial y $50ns$ de forma paralela con $8$ procesadores.
+Ejecutado secuencialmente, este programa tardaría $450ns$, de forma que determinamos que \textbf{cuenta con $\boldsymbol{\frac{8}{9}}$ de código paralelo}.
+
+\section{}\label{ej-2-10}o
+
+\subsection{Enunciado}
+
+Un $25\%$ de un programa no se puede paralelizar, el resto se puede distribuir por igual entre cualquier número de procesadores.
+¿Cuál es el máximo valor de ganancia de velocidad que se podría conseguir al paralelizarlo en $p$ procesadores?
+¿Y con infinitos procesadores?
+¿A partir de qué número de procesadores se podrían conseguir ganancias mayores o iguales que $2$?
+
+\subsection{Solución}
+
+Estamos trabajando con un programa de escalabilidad limitada en el aprovechamiendo del grado de paralelismo, por lo que \textbf{el máximo valor de ganancia de velocidad que se podría conseguir al paralelizarlo con $\boldsymbol{p}$ procesadores viene determinado por la siguiente fórmula}:
+
+\[\frac{1}{s+\frac{1-s}{p}}\]
+
+Desarrollamos para infinitos procesadores:

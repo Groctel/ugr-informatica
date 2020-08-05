@@ -1,4 +1,4 @@
-\chapter{Herramientas de programación paralela II\@: Cláusulas OpemMP}\label{clausulas-openmp}
+\chapter{Herramientas de programación paralela II\@: Cláusulas OpenMP}\label{clausulas-openmp}
 
 \section{Definiciones}\label{clausulas-openmp-definiciones}
 
@@ -128,10 +128,6 @@ gcc -fopenmp -O2 private.c -o private
 # Resultado: 1
 # Resultado: 3
 # Resultado: 6
-# Resultado: 0
-# Resultado: 1
-# Resultado: 3
-# Resultado: 6
 # Resultado indeterminado: -754834318
 # Resultado indeterminado: -754834315
 # Resultado indeterminado: 0
@@ -256,21 +252,21 @@ Formalmente, \code{reduction} (en el caso de \code{reduction (+:k)}) transformar
 Al usar esta cláusula, las variables especificadas toman un valor de entrada al bloque por defecto en función del operador:
 
 \begin{table}[!h]
-	\begin{center}
-		\begin{tabular}{c c}
-			\textbf{Operador} & \textbf{Valor inicial}     \\
-			\toprule
-			\code{+}          & $0$                        \\
-			\code{-}          & $0$                        \\
-			\code{*}          & $1$                        \\
-			\code{\&}         & $0$ (todos los bits a $1$) \\
-			\code{|}          & $0$                        \\
-			\code{\^{}}       & $0$                        \\
-			\code{\&\&}       & $1$                        \\
-			\code{||}         & $0$                        \\
-		\end{tabular}
-	\end{center}
-	\caption{Cláusulas aceptadas por las diferentes directivas estudiadas}\label{clausulas-omp-definiciones-aceptacion}
+\begin{center}
+\begin{tabular}{c c}
+	\textbf{Operador} & \textbf{Valor inicial}     \\
+	\toprule
+	\code{+}          & $0$                        \\
+	\code{-}          & $0$                        \\
+	\code{*}          & $1$                        \\
+	\code{\&}         & $0$ (todos los bits a $1$) \\
+	\code{|}          & $0$                        \\
+	\code{\^{}}       & $0$                        \\
+	\code{\&\&}       & $1$                        \\
+	\code{||}         & $0$                        \\
+\end{tabular}
+\end{center}
+\caption{Valores de inicialización para los operadores de la cláusula \code{reduction}}\label{clausulas-omp-reduction-valores-inicializacion}
 \end{table}
 
 \begin{lstlisting}[language=C]

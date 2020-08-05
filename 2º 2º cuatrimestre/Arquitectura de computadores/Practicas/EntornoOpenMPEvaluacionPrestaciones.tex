@@ -1,0 +1,116 @@
+\chapter{Herramientas de programación paralela III\@: Interacción con el entorno en OpenMP y evaluación de prestaciones}
+
+\section{Funciones y variables de entorno y control}
+
+Las variables de entorno especifican el comportamiento de los programas paralelizados con OpenMP a partir de la \textit{shell} en la que éstos se ejecutan.
+Para declarar una variable de entorno usamos \code{export} o \code{setenv}:
+
+\begin{lstlisting}[language=sh]
+export variable=valor
+setenv variable=valor
+\end{lstlisting}
+
+Podemos asignar las siguiente variables de entorno:
+
+\begin{itemize}
+	\item\code{OMP\_DYNAMIC=(TRUE)|(FALSE)}\textbf{:} Determina el ajuste dinámico del número de hebras. Su valor inicial depende de la implementación de OpenMP\@.
+	\item\code{OMP\_NUM\_THREADS=[0-9]+}\textbf{:} Determina el número de hebras que se ejecutarán en las secciones paralelas. Su valor inicial depende de la implementación de OpenMP\@.
+	\item\code{OMP\_THREAD\_LIMIT=[0-9]+}\textbf{:} Determina el máximo número de hebras que se ejecutarán a la ves. Su valor inicial depende de la implementación de OpenMP\@.
+	\item\code{OMP\_NESTED=(TRUE)|(FALSE)}\textbf{:} Determina si el programa permite paralelismo anidado. Se inicializa a \code{false} por defecto.
+	\item\code{OMP\_SCHEDULE=\{kind\}(,[0-9]+)?}\textbf{:} Determina el sistema de planificación de los bucles en tiempo de ejecución mediante el tipo (\code{kind}), que se detallará en~\ref{hfdjgksfd} y, opcionalmente, el \textit{chunk}. Su valor inicial depende de la implementación de OpenMP\@.
+\end{itemize}
+
+Todas estas variables de entorno se corresponden con una variable de control que puede consultarse y modificarse:
+
+\begin{center}
+\begin{table}[!h]
+\begin{tabular}{l l l l}
+	\textbf{Variables de entorno} & \textbf{Variables de contro} & \textbf{Consultores}             & \textbf{Modificadores}           \\
+	\toprule
+	\code{OMP\_DYNAMIC}           & \code{dyn-var}               & \code{omp\_get\_dynamic()}       & \code{omp\_set\_dynamic()}       \\
+	\code{OMP\_NUM\_THREADS}      & \code{nthreads-var}          & \code{omp\_get\_num\_threads()}  & \code{omp\_set\_num\_threads()}  \\
+	\code{OMP\_THREAD\_LIMIT}     & \code{thread-limit-var}      & \code{omp\_get\_thread\_limit()} & \code{thread\_limit [cláusulas]} \\
+	\code{OMP\_NESTED}            & \code{nest-var}              & \code{omp\_get\_nested()}        & \code{omp\_set\_nested()}        \\
+	\code{OMP\_SCHEDULE}          & \code{run-sched-var}         & \code{omp\_get\_schedule()}      & \code{omp\_set\_schedule()}      \\
+\end{tabular}
+\caption{Correspondencia entre variales de entorno, variables de control interna y sus funciones}
+\end{table}
+\end{center}
+
+Todas estas variables de entorno y control afectan a los bloques \code{parallel} a exceipción de \code{OMP\_SCHEDULE}, que afecta únicamente a los bucles \code{for}.
+Junto con esta variable, podemos definir para los bucles \code{def-sched-var}, que determina la planificación por defecto de los bucles.
+Esta variable no cuenta con una variable de entorno correspondiente ni con funciones de consulta o modificación.
+
+Cabe destacar las siguientes funciones del entorno de ejecución:
+
+\begin{itemize}
+	\item\code{omp\_get\_thread\_num()}\textbf{:} Devuelve a la hebra invocante su identificador de hebra.
+	\item\code{omp\_get\_num\_threads()}\textbf{:} Devuelve el número total de hebras ejecutando el bloque paralelo en el que se encuentra.
+	\item\code{omp\_get\_num\_procs()}\textbf{:} Devuelve el número de procesadores disponibles para el programa en tiempo de ejecución.
+	\item\code{omp\_in\_parallel()}\textbf{:} Devuelve \code{(true)|(false)} en función de si la llamada se hace desde un bloque \code{parallel}.
+\end{itemize}
+
+\section{Cláusulas de interacción con el entorno}
+
+Junto a las cláusulas detalladas en la práctica~\ref{clausulas-openmp}, podemos definir las cláusulas \code{if()}, \code{num\_threads()} y \code{schedule()}, que cumplen con las limitaciones de aplicación mostradas en el cuadro~\ref{clausulas-omp-definiciones-aceptacion}.
+
+\subsection{Definición del número de hebras a utilizar}
+
+En orden descendente de prioridad, las hebras se definen por los siguientes valores:
+
+\begin{itemize}
+	\item El valor devuelto por la cláusula \code{if}.
+	\item El valor fijado por la cláusula \code{num\_threads}.
+	\item El valor fijado por la función \code{omp\_set\_num\_threads()}.
+	\item El valor de la variable de entorno \code{OMP\_NUM\_THREADS}.
+	\item El valor fijado por defecto por la implementación de OpenMP\@.
+\end{itemize}
+
+\subsection{Cláusula \code{if}}
+
+\begin{lstlisting}[language=C]
+#pragma omp [directiva] if (expr)
+\end{lstlisting}
+
+Determina en tiempo de ejecución si el bloque posterior debe ejecutarse de forma paralela en función del valor de verdad de la expresión \code{expr}.
+
+\begin{lstlisting}[language=C]
+#include <stdio.h>
+#include <stdlib.h>
+#include <omp.h>
+
+int main (int argc, char ** argv) {
+	int ID,
+		 valor;
+
+	valor = atoi(argv[1]);
+
+	#pragma omp parallel private(ID) if (valor % 2 == 0)
+	{
+		ID = omp_get_thread_num();
+		printf("Impresión ejecutada por la hebra %d\n", ID);
+	}
+
+	return 0;
+}
+\end{lstlisting}
+
+\begin{lstlisting}[language=sh]
+./prueba 1
+# Impresión ejecutada por la hebra 0
+./prueba 2
+# Impresión ejecutada por la hebra 0
+# Impresión ejecutada por la hebra 2
+# Impresión ejecutada por la hebra 3
+# Impresión ejecutada por la hebra 1
+\end{lstlisting}
+
+\subsection{Cláusula \code{schedule}}
+
+\begin{lstlisting}[language=C]
+#pragma omp [directiva] schedule (kind[,chunk])
+\end{lstlisting}
+
+\section{Clasificación de las funciones de OpenMP}
+
+\section{Funciones para obtener el tiempo de ejecución}

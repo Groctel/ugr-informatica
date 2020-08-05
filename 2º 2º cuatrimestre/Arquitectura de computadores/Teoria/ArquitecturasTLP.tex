@@ -1,0 +1,90 @@
+\section{Arquitecturas \textit{TLP}}
+
+\subsection{Clasificación y estructura de arquitecturas con \textit{TLP} explícito y una instancia del SO}
+
+Distinguimos entre tres tipos de arquitectura:
+
+\begin{itemize}
+	\item\textbf{Multiprocesador:} Ejecutan varias hebras en paraleo en un computador con varios núcleos o procesadores, de forma que cada hebra se ejecuta en un procesador distinto.
+	\item\textbf{Multinúcleos:} Ejecutan varias hebras en paralelo en un único procesador multinúcleo, de forma que cada hebra se ejecuta en un núcleo distinto.
+	\item\textbf{Núcleos multihebra:} Núcleos que modifican su arquitectura \textit{ILP} para ejecutar varias hebras de forma concurrente o paralela.
+\end{itemize}
+
+A lo largo de esta sección ahondaremos en las características de cada uno de éstos.
+
+\subsection{Multiprocesadores}
+
+Podemos clasificar las arquitecturas multiprocesador según dos criterios.
+
+Según el sistema de memoria, distinguimos entre multiprocesadores con memoria centralizada (UMA) y con memoria distribuida (NUMA).
+Los primeros tienen mayor latencia y son poco escalables, mientras que los segundos tienen menor latencia y son más escalablas, aunque requieren de distribución de datos y código para ello.
+A lo largo del tiempo se ha pasado de utilizar arquitecturas UMA a NUMA haciendo que el controlador de memoria pase de encontrarse en el chipset al chip de cada procesador y transformar la red de conexión desde un bus compartido hasta enlaces que crean conexiones individuales entre dos puntos y conmutadores en el chip de cada procesador.
+
+Por otro lado, según el nivel de empaquetamiento o la conexión, distinguimos, de mayor a menor tamaño y nivel de empaquetamiento, entre sistemas, armarios (\textit{cabinet}), placas (\textit{board}) y chips.
+
+\subsubsection{Multiprocesador en una placa: Evolución de UMA a NUMA}
+
+Los multiprocesadores con arquitecturas UMA se basan en un \textit{chipset} compuesto por dos controladores (\textit{borthbridge} y \textit{southbridge}) de forma que el primero se encarga de los gráficos y la memoria y el segundo de la E/S.
+En ellos, un bus del sistema compartido se comunica con los distintos procesadores.
+
+Por otro lado, los multiprocesadores con arquitecturas NUMA se basan en un sistema \textit{chipset} en el que la memoria está localizada en cada uno de los procesadores, de forma que en lugar de un bus compartido existen enlaces entre los procesadores y el \textit{chipset} y los propios procesadores.
+
+\subsection{Núcleos multihebra}
+
+Estas arquitecturas se caracterizan por el uso de procesadores segmentados de tipo \textbf{VLIW} (\textit{Very Large Instruction Word}) y superescalares que ejecutan instrucciones concurrente en caso de la segmentación y paralelamente cuando tienen múltiples unidades funcionales.
+
+En los procesadores VLIW, las instrucciones que se ejecutan en paralelo se captan juntas de la memoria principal, formando una palabra de instrucción muy larga.
+En ellas, el hardware presupone que las instrucciones de una palabra son idependientes, es decir, no tiene que hacer el trabajo de discernir qué instrucciones pueden ejecutarse paralelamente.
+
+Por su parte, los procesadores superescalares tienen que encontrar instrucciones que puedan ejecutarse paralelamente, por lo que tienen hardware que les permite extraer paralelismo a nivel de instrucción.
+
+Podemos modificar estas arquitecturas en el almacenamiento, que se multiplexa, reparte o comparte entre hebras o se replica; y en el hardware dentro de las etapas del procesador segmentado, que se multiplexa o se reparte o comparte entre hebras.
+
+\subsubsection{Clasificación de núcleos multihebra}
+
+Podemos clasificar los núcleos multihebra en función de su forma de gestionar las hebras:
+
+\begin{itemize}
+	\item\textbf{TMT (\textit{Temporal Multithreading}):} Ejecutan varias hebras concurrentemente en el mismo núcleo, de forma que la conmutación entre ellas la decide y controla el hardware y emite instrucciones de una única hebra en un ciclo.
+	\item\textbf{SMT (\textit{Simultaneous Multithread}):} También llamado \textit{horizontal multithread}, ejecutan paralelamente varias hebras en un núcleo superescalar, de form aque pueden emitir instrucciones de varias hebras es un único ciclo.
+\end{itemize}
+
+Por suparte, podemos clasificar los núcleos con \textbf{TMT} en función de la granularidad:
+
+\begin{itemize}
+	\item\textbf{FGMT (\textit{Fine-grain Multithreading}):} La comunicación ebtre hebras la decide el hardware en cada ciclo sin coste de sobrecarga ya sea mediante \textit{round-robin} o mediante eventos con algo de latencia que combinan técnicas de planificación.
+	\item\textbf{CGMT (\textit{Coarse-grain Multithreading} o \textit{blocked multithreading}):} La conmutación entre hebras la decide el hardware sin coste de sobrecarga a varis ciclos. Esto se hace tras intervalios de tiempo prefijados (\textit{timeslice multithreading}) o por eventos con algo de latencia (\textit{switch-on-event multithreading}).
+\end{itemize}
+
+De nuevo, podemos clasificar los núcleos con CGMT en función del modelo de conmutación:
+
+\begin{itemize}
+	\item\textbf{Conmutación estática:} Se lleva a cabo explícitamente (por instrucciones añadidas al repertorio) o implícitamente (mediante instrucciones de carga, almacenamiento o salto). Aunque el coste de cambio de contexto es bajo, se realizan cambios de contexto innecesarios.
+	\item\textbf{Conmutación dinámica:} La conmutación se realiza típicamente por un fallo en la última caché dentro del chip de procesamiento o por una interrupción. Aunque reduce el número de cambios de contextos innecesarios, estos cambios presentan una mayor sobrecarga.2
+\end{itemize}
+
+\subsection{Trabajo con hebras}
+
+En un núcleo escalar se emite una instrucción por cada ciclo de reloj.
+Si el núcleo ejecuta una única hebra, se producen pérdidas de ciclos en los que dicha hebra no se encuentra en ejecución, a lo que denominamo \textbf{pérdida vertical}.
+Para subsanar esto, trabajamos con varias hebras que obligan al procesador a realizar más o menos cambios de contexto en función de su granularidad.
+
+En un núcleo superescalar, podemos trabajar con una única hebra, pero se pierden instrucciones emisibles en un único ciclo, a lo que llamamos \textbf{pérdida horizontal}, además de sufir de pérdida vertical.
+De la misma forma que en los procesadores escalares, podemos trabajar con hebras que realizan cambios de contexto con más o menos frecuencia en función de su granularidad.
+Aunque esto soluciona parte de las pérdidas verticales, siguen existendo pérdidas horizontales por la naturaleza del procesador.
+
+Por último, los núcleos multihebra y los multiprocesadores solucionan el problema de las pérdidas permitiendo que varios procesos de ejecuten en un mismo cliclo, de forma que se aprovechan al máximo las capacidades de procesamiento paralelo y se experimentan menos problemas de pérdida vertical gracias al entrelazado de las tareas realizadas por los procesos.
+
+\subsection{Hardware y arquitecturas TLP en un chip}
+
+\begin{center}
+\begin{tabular}{p{4.5cm} p{2cm} p{3.25cm} p{3.25cm} p{1.75cm}}
+\textbf{Hardware}                                     & \textbf{CGMP} & \textbf{FGMT}                                                                 & \textbf{SMT}                                                           & \textbf{CMP} \\
+\toprule
+Registros                                             & Replicado     & Replicado                                                                     & Replicado                                                              & Replicado    \\
+Alamacenamiento                                       & Multiplexado  & Multiplexado, compartido, repartido o replicado                               & Compartido, repartido o replicado                                      & Replicado                            \\
+Otro hardware de las etapas del cauce                 & Multiplexado  & \underline{Captación} repartida o compartida; \underline{Resto} multiplexadas & \underline{UF} compartidas; \underline{Resto} repartidas o compartidas & Replicado                                \\
+Etiquetas para distinguir la hebra de una instrucción & Sí            & Sí                                                                            & Sí                                                                     & No           \\
+Hardware de comunicación entre hebras                 & Sí            & Sí                                                                            & No                                                                     & No           \\
+\end{tabular}
+\end{center}
