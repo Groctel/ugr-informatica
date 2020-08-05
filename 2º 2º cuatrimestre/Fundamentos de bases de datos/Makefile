@@ -1,5 +1,3 @@
-OUT = ../../bin/Fundamentos\ de\ bases\ de\ datos
-
 all: teoria
 
 teoria:

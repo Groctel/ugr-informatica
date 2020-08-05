@@ -1,5 +1,3 @@
-OUT = ../../bin/Algorítmica
-
 all: saludo practicas teoria relocalizacion
 
 saludo:

@@ -1,5 +1,3 @@
-OUT = ../../bin/Fundamentos\ de\ la\ ingeniería\ del\ software
-
 all: teoria
 
 teoria:

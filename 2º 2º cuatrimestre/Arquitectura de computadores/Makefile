@@ -1,5 +1,3 @@
-OUT = ../../bin/Arquitectura\ de\ computadores
-
 all: saludo cuadernos practicas teoria relocalizacion
 
 saludo:

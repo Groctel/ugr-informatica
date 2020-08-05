@@ -1,5 +1,3 @@
-OUT = ../../bin/Inteligencia\ artificial
-
 all: teoria
 
 teoria:

@@ -1,5 +1,3 @@
-OUT = ../../bin/Estructuras\ de\ datos
-
 all: saludo practica3 reto2 reto3 relocalizacion
 
 saludo:

@@ -1,5 +1,3 @@
-OUT = ../../bin/Sistemas\ operativos
-
 all: practicas
 
 practicas:

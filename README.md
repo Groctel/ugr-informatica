@@ -2,6 +2,19 @@
 
 Apuntes y material del Grado en Ingeniería Informática en la UGR.
 
+## Compilación
+
+Estos apuntes están diseñados para ser compilados en Linux y presumen una instalación completa y actualizada de [LaTeX](https://www.latex-project.org/).
+Los apuntes utilizan [aqademia](https://github.com/Groctel/aqademia), una plantilla de LaTeX de elaboración propia.
+Puedes instalarla en tu directorio `~/texmf` a mano o mediante la orden `make aqademia`, que clonará o actualizará la plantilla para compilar siempre con la última versión de la misma.
+La receta principal del `Makefile` (`all`) actualiza la plantilla automáticamente cada vez que se compila, por lo que no es necesario actualizar manualmente.
+Para compilar sin actualizar la plantilla, ejecuta `make build`.
+
+Cada cuatrimestre y asignatura están identificados por una receta.
+Los cuatrimestres siguen todos la expresión `c[0-9][0-9]`, siendo el primer dígito el curso y el segundo, el cuatrimestre en sí.
+Las recetas de las asignaturas siguen todas su propio código **en minúsculas**.
+Dichos códigos pueden consultarse en la declaración de variables del `Makefile` o pueden ser recuperados por las funciones de autocompletar de la shell.
+
 ## Obituario
 
 El 5 de agosto de 2020 me levanté con un proyecto: ¡Reformar el repositorio para hacer más fácil trabajar con él!
