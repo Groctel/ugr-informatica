@@ -7,21 +7,21 @@ module Civitas
 
 module TipoSorpresa
   ## Envía al jugador objetivo a la cárcel.
-  IR_CARCEL      = :ir_carcel
+  IR_CARCEL     = :ir_carcel
 
   ## Envía al jugador objetivo a una casilla.
-  IR_CASILLA     = :ir_casilla
+  IR_CASILLA    = :ir_casilla
 
   ## Añade o sustrae dinero al jugador objetivo.
-  PAGAR_COBRAR   = :pagar_cobrar
+  PAGAR_COBRAR  = :pagar_cobrar
 
   ## El jugador objetivo paga en función de su rendimiento inmobiliario.
-  POR_CASA_HOTEL = :por_casa_hotel
+  POR_EDIFICIO  = :por_edificio
 
   ## El resto de jugadores a pagan una cantidad al jugador objetivo.
-  POR_JUGADOR    = :por_jugador
+  POR_JUGADOR   = :por_jugador
 
   ## El jugador objetivo sale de la cárcel automáticamente y pierde la Sorpresa.
-  SALIR_CARCEL   = :salir_carcel
+  SALVOCONDUCTO = :salvoconducto
 end
 end

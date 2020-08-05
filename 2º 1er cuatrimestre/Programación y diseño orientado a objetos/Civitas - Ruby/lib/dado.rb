@@ -15,9 +15,6 @@ module Civitas
 class Dado
   include Singleton
 
-  ## Valor mínimo necesario para salir de la cárcel tirando el dado.
-  SALIDA_CARCEL = 5
-
   ## Valor producido por la última tirada del dado.
   attr_reader :ultimo_resultado
 
@@ -26,6 +23,8 @@ class Dado
   # semilla del PRNG.
 
   def initialize
+    @@SALIDA_CARCEL = 5.freeze
+
     @debug            = false
     @ultimo_resultado = nil
 
@@ -41,8 +40,8 @@ class Dado
   #
   # Devuelve el índice del jugador que empieza la partida.
 
-  def quien_empieza num_jugadores
-    return (tirar num_jugadores) - 1
+  def quien_empieza(num_jugadores)
+    tirar(num_jugadores) - 1
   end
 
   ##
@@ -53,16 +52,16 @@ class Dado
   # Devuelve la condición booleana de salida de la cárcel.
 
   def salgo_de_la_carcel
-    return @debug ? true : self.tirar >= SALIDA_CARCEL
+    @debug ? true : tirar >= SALIDA_CARCEL
   end
 
   ##
   # Modifica el estado del modo de depuración del dado y deja constancia de ello
   # en el Diario.
 
-  def set_debug debug
-    Diario.instance.ocurre_evento "Debug del dado modificado de #{@debug} a " \
-                                  "#{debug}"
+  def set_debug(debug)
+    Diario.instance.ocurre_evento("Debug del dado modificado de #{@debug} a " \
+                                  "#{debug}")
     @debug = debug
   end
 
@@ -72,14 +71,14 @@ class Dado
   #
   # Devuelve el valor de la tirada.
 
-  def tirar caras=6
+  def tirar(caras=6)
     @ultimo_resultado = 1
 
     if !@debug
-      @ultimo_resultado = (Random.rand caras) + 1
+      @ultimo_resultado = Random.rand(caras) + 1
     end
 
-    return @ultimo_resultado
+    @ultimo_resultado
   end
 end
 end

@@ -10,8 +10,11 @@ module Civitas
 # Está formado por diferentes casillas en un orden cíclico predefinido.
 
 class Tablero
-  ## Posición en la que se encuentra la casilla de la cárcel
+  ## Posición en la que se encuentra la casilla de la cárcel.
   attr_reader :num_casilla_carcel
+
+  ## Vector donde se almacenan las casillas que componen el tablero.
+  attr_reader :casillas
 
   ##
   # Crea un tablero inicializando el contenedor subyacente a un vector vacío de
@@ -21,7 +24,7 @@ class Tablero
   #
   # num_casilla_carcel:: Posición en la que se encontrará la cárcel.
 
-  def initialize num_casilla_carcel
+  def initialize(num_casilla_carcel)
     @casillas           = []
     @num_casilla_carcel = [1, num_casilla_carcel].max
     @por_salida         = 0
@@ -36,7 +39,7 @@ class Tablero
 
   def aniade_carcel
     if @casillas.length == @num_casilla_carcel
-      carcel = Casilla.new "Cárcel"
+      carcel = Casilla.new_descanso("Mazmorras reales")
       @casillas << carcel
     end
   end
@@ -48,7 +51,7 @@ class Tablero
   # Devuelve booleanamente si el tablero es correcto.
 
   def correcto
-    return @casillas.length > @num_casilla_carcel && @tiene_juez
+    @casillas.length > @num_casilla_carcel && @tiene_juez
   end
 
   ##
@@ -61,8 +64,8 @@ class Tablero
   #
   # Devuelve booleanamente si el índice de la casilla es correcto.
 
-  def casilla_correcta num_casilla
-    return self.correcto && @num_casilla < @casillas.length
+  def casilla_correcta(num_casilla)
+    correcto && @num_casilla < @casillas.length
   end
 
   public
@@ -74,10 +77,10 @@ class Tablero
   #
   # casilla:: Casilla a añadir al final del tablero.
 
-  def aniade_casilla casilla
-    self.aniade_carcel
+  def <<(casilla)
+    aniade_carcel
     @casillas << casilla
-    self.aniade_carcel
+    aniade_carcel
   end
 
   ##
@@ -86,7 +89,7 @@ class Tablero
 
   def aniade_juez
     if !@tiene_juez
-      juez = Casilla.new "Juez"
+      juez = Casilla.new_juez("Guardia real", @num_casilla_carcel)
       @casillas << juez
 
       @tiene_juez = true
@@ -103,8 +106,8 @@ class Tablero
   # Devuelve el número de casillas que el jugador necesita recorrer para llegar
   # a la casilla de destino.
 
-  def calcular_tirada origen, destino
-    return (tirada = destino - origen) > 0 ? tirada : tirada + @casillas.length
+  def calcular_tirada(origen, destino)
+    (tirada = destino - origen) > 0 ? tirada : tirada + @casillas.length
   end
 
   ##
@@ -115,8 +118,8 @@ class Tablero
   #
   # Devuelve el objeto de la casilla identificada por el índice especificado.
 
-  def get_casilla num_casilla
-    return num_casilla <= @casillas.length ? @casillas[num_casilla] : nil
+  def [](num_casilla)
+    num_casilla <= @casillas.length ? @casillas[num_casilla] : nil
   end
 
   ##
@@ -131,7 +134,7 @@ class Tablero
     por_salida_original = @por_salida
     @por_salida         = [0, por_salida - 1].max
 
-    return por_salida_original
+    por_salida_original
   end
 
   ##
@@ -147,10 +150,10 @@ class Tablero
   # Devuelve la posición en la que el jugador acaba tras avanzar tantas casillas
   # como indica la tirada.
 
-  def nueva_posicion actual, tirada
+  def nueva_posicion(actual, tirada)
     nueva = nil
 
-    if self.correcto
+    if correcto
       nueva = (actual + tirada) % @casillas.length
 
       if nueva != actual + tirada
@@ -158,7 +161,7 @@ class Tablero
       end
     end
 
-    return nueva
+    nueva
   end
 end
 end

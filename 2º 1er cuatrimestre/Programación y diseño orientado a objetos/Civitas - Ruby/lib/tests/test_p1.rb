@@ -28,23 +28,23 @@ class TestP1
 
     puts "#{Figuras::SECCION}Test1: " \
          "Distribución equitativa en Dado::quien_empieza"
-    self.test_quien_empieza
+    test_quien_empieza
 
     puts "#{Figuras::SECCION}Test2: " \
          "Resultados de Dado::tirar en función de :debug"
-    self.test_tirar
+    test_tirar
 
     puts "#{Figuras::SECCION}Test3: " \
-         "Mustra de los enumerados disponibles"
-    self.test_enum
+         "Muestra de los enumerados disponibles"
+    test_enum
 
     puts "#{Figuras::SECCION}Test4: " \
          "Funcionamiento del mazo de sorpresas"
-    self.test_mazo_sorpresas
+    test_mazo_sorpresas
 
     puts "#{Figuras::SECCION}Test5: " \
          "Funcionamiento del tablero"
-    self.test_tablero
+    test_tablero
   end
 
   private
@@ -64,7 +64,7 @@ class TestP1
          "#{OperacionesJuego::COMPRAR} " \
          "#{OperacionesJuego::GESTIONAR} " \
          "#{OperacionesJuego::PASAR_TURNO} " \
-         "#{OperacionesJuego::SALIR_CARCEL}"
+         "#{OperacionesJuego::SALVOCONDUCTO}"
 
     puts "#{Figuras::ELEMENTO}TipoCasilla: " \
          "#{TipoCasilla::CALLE} " \
@@ -77,7 +77,7 @@ class TestP1
          "#{TipoSorpresa::IR_CARCEL} " \
          "#{TipoSorpresa::IR_CASILLA} " \
          "#{TipoSorpresa::PAGAR_COBRAR} " \
-         "#{TipoSorpresa::POR_CASA_HOTEL} " \
+         "#{TipoSorpresa::POR_EDIFICIO} " \
          "#{TipoSorpresa::POR_JUGADOR} " \
          "#{TipoSorpresa::SALIR_CARCEL}"
   end
@@ -91,21 +91,21 @@ class TestP1
     @mazo = MazoSorpresas.new
 
     4.times do |i|
-      sorpresa = Sorpresa.new "Sorpresa #{i}"
-      @mazo.al_mazo sorpresa
+      sorpresa = Sorpresa.new("Sorpresa #{i}")
+      @mazo.al_mazo(sorpresa)
     end
 
-    especial = Sorpresa.new "Carta especial"
-    @mazo.al_mazo especial
+    especial = Sorpresa.new("Carta especial")
+    @mazo.al_mazo(especial)
 
     5.times do
       puts "#{Figuras::ELEMENTO}#{@mazo.siguiente.inspect}"
     end
 
-    @mazo.inhabilitar_carta_especial especial
+    @mazo.inhabilitar_carta_especial(especial)
     puts "#{Figuras::ELEMENTO}#{Diario.instance.leer_evento}"
 
-    @mazo.habilitar_carta_especial especial
+    @mazo.habilitar_carta_especial(especial)
     puts "#{Figuras::ELEMENTO}#{Diario.instance.leer_evento}"
   end
 
@@ -122,7 +122,7 @@ class TestP1
     end
 
     100000.times do
-      @quien_empieza[Dado.instance.quien_empieza 4] += 1
+      @quien_empieza[Dado.instance.quien_empieza(4)] += 1
     end
 
     print "#{Figuras::ELEMENTO}Jugador 0 -> #{@quien_empieza[0]}\n" \
@@ -141,8 +141,8 @@ class TestP1
     posicion  = 0
 
     3.times do |i|
-      casilla = Casilla.new "Casilla #{i}"
-      @tablero.aniade_casilla casilla
+      casilla = Casilla.new("Casilla #{i}")
+      @tablero.aniade_casilla(casilla)
     end
 
     10.times do
@@ -152,7 +152,7 @@ class TestP1
     print "#{Figuras::ELEMENTO}Avance por el tablero:"
 
     50.times do
-      posicion = @tablero.nueva_posicion posicion, Dado.instance.tirar
+      posicion = @tablero.nueva_posicion(posicion, Dado.instance.tirar)
       print " #{posicion}"
     end
 
@@ -165,7 +165,7 @@ class TestP1
   # cárcel, mostrando lo ocurrido por la salida estándar.
 
   def test_tirar
-    Dado.instance.set_debug true
+    Dado.instance.set_debug(true)
     puts "#{Figuras::ELEMENTO}#{Diario.instance.leer_evento}"
 
     print "#{Figuras::ELEMENTO}:debug = true -> tirar:"
@@ -180,7 +180,7 @@ class TestP1
 
     print "\n"
 
-    Dado.instance.set_debug false
+    Dado.instance.set_debug(false)
     puts "#{Figuras::ELEMENTO}#{Diario.instance.leer_evento}"
 
     print "#{Figuras::ELEMENTO}:debug = false -> tirar:"

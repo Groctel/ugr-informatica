@@ -26,7 +26,7 @@ class Diario
   #
   # evento:: Cadena de caracteres a añadir como evento a la lista.
 
-  def ocurre_evento evento
+  def ocurre_evento(evento)
     @eventos << evento
   end
 
@@ -36,7 +36,7 @@ class Diario
   # Devuelve booleanamente si existen eventos en el contenedor subyacente.
 
   def eventos_pendientes
-    return @eventos.length > 0
+    @eventos.length > 0
   end
 
   ##
@@ -45,7 +45,7 @@ class Diario
   # Devuelve dicho evento.
 
   def leer_evento
-    return @eventos.shift
+    @eventos.shift
   end
 end
 end

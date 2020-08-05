@@ -11,29 +11,18 @@ module Civitas
 
 class MazoSorpresas
   ##
-  # Crea el mazo llamando al método privado +init+ e inicializando su opción de
-  # depuración a la especificada o +false+ por defecto. Recibe la siguiente
-  # lista de argumentos:
+  # Crea el mazo llamando al método privado inicializando su opción de
+  # depuración a la especificada o +false+ por defecto y con el resto de
+  # elementos nulos o vacíos. Recibe la siguiente lista de argumentos:
   #
   # debug=false:: Indicador de la opción de depuración.
 
-  def initialize debug=false
-    self.init
-
-    @debug             = debug
-    @ultima_sorpresa   = nil
-  end
-
-  private
-
-  ##
-  # Inicializa el mazo a dos vectores vacíos para las cartas especiales y las
-  # sorpresas almacenadas, estando éste último sin barajar y sin cartas usadas.
-
-  def init
+  def initialize(debug=false)
     @barajado          = false
     @cartas_especiales = []
+    @debug             = debug
     @sorpresas         = []
+    @ultima_sorpresa   = nil
     @usadas            = 0
   end
 
@@ -45,7 +34,7 @@ class MazoSorpresas
   #
   # sorpresa:: Sorpresa a introducir en el mazo.
 
-  def al_mazo sorpresa
+  def al_mazo(sorpresa)
     if !@barajado
       @sorpresas << sorpresa
     end
@@ -59,15 +48,15 @@ class MazoSorpresas
   #
   # sorpresa:: Sorpresa a habilitar.
 
-  def habilitar_carta_especial sorpresa
-    carta = @cartas_especiales.find_index sorpresa
+  def habilitar_carta_especial(sorpresa)
+    carta = @cartas_especiales.find_index(sorpresa)
 
     if carta != nil
-      Diario.instance.ocurre_evento "Habilitada " \
-                                    "\"#{@cartas_especiales[carta]}\""
+      Diario.instance.ocurre_evento("Habilitada " \
+                                    "\"#{@cartas_especiales[carta]}\"")
 
       @sorpresas << @cartas_especiales[carta]
-      @cartas_especiales.delete_at carta
+      @cartas_especiales.delete_at(carta)
     end
   end
 
@@ -79,14 +68,14 @@ class MazoSorpresas
   #
   # sorpresa:: Sorpresa a inhabilitar.
 
-  def inhabilitar_carta_especial sorpresa
-    carta = @sorpresas.find_index sorpresa
+  def inhabilitar_carta_especial(sorpresa)
+    carta = @sorpresas.find_index(sorpresa)
 
     if carta != nil
-      Diario.instance.ocurre_evento "Inhabilitada \"#{@sorpresas[carta]}\""
+      Diario.instance.ocurre_evento("Inhabilitada \"#{@sorpresas[carta]}\"")
 
       @cartas_especiales << @sorpresas[carta]
-      @sorpresas.delete_at carta
+      @sorpresas.delete_at(carta)
     end
   end
 
@@ -110,7 +99,7 @@ class MazoSorpresas
     @ultima_sorpresa  = @sorpresas.first
     @sorpresas.rotate!
 
-    return @ultima_sorpresa
+    @ultima_sorpresa
   end
 end
 end
