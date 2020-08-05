@@ -1,0 +1,203 @@
+\chapter{Introducción a la programación}
+
+\section{El ordenador, algoritmos y programas}
+
+\subsection{Conceptos básicos}
+
+Un \textbf{algoritmo} es una secuencia ordenada de instrucciones que resuelve un problema concreto cumpliendo las siguientes características:
+
+\begin{itemize}
+	\item\textbf{Corrección:} Las instrucciones deben ejecutarse in errores.
+	\item\textbf{Precisión:} Las instrucciones no pueden ser ambiguas.
+	\item\textbf{Repetitividad:} La ejecución del algoritmo siembre obtendrá el mismo resultado en las mismas condiciones.
+	\item\textbf{Finitud:} El algoritmo debe acabar en algún momento. Un número finito de instrucciones no implica finitud (\code{no deje de sumar 1}).
+	\item\textbf{Validez:} Debe resolver el problema pedido.
+	\item\textbf{Eficiencia:} Debe resolverlo en un tiempo aceptable (es absurdo sumar $1$ un millón de veces pudiendo multiplicar una vez por un millón).
+\end{itemize}
+
+Un \textbf{dato} es una representación simbólica de una característica o propiedad de una entidad u objeto con el que trabajamos.
+Por lo general, se puede representar cualquier cosa como un dato, pero debemos tener en cuenta que la complejidad de la representación escala con la complejidad del dato (no es lo mismo representar la nota de un examen que las cartas que han llegado esta semana al buzón).
+Los algoritmos trabajan con datos.
+Normalmente toman unos datos de \textbf{entrada}, operan con ellos, y devuelven unos datos de \textbf{salida}, aunque puede no ser así, como iremos viendo a lo largo de esta asignatura.
+
+Un ejemplo de algoritmo podría ser calcular la distancia entre un punto $a$ y un punto $b$ en el plano bidimensional.
+Este algoritmo tomaría como datos de entrada las coordenadas $x$ e $y$ de ambos puntos y calcularía la distancia entre ambos, devolviéndola como el valor de $\|\vec{ab}\|$.
+
+\subsection{Lenguages de programación}
+
+Un \textbf{lenguaje de programación} es un lenguaje formal que utilizamos para comunicarnos con los computadores y especificar la secuencia de instrucciones que queremos que ejecuten.
+En esta asignatura trabajaremos con C++, un \textbf{lenguaje de alto nivel}.
+Los lenguajes de alto nivel son lenguajes de un nivel de abstracción alto, más cercanos al problema que a la máquina.
+Por ejemplo, así mostramos texto por pantalla en C++:
+
+\begin{lstlisting}[language=C++]
+#include <iostream>
+using namespace std;
+
+int main () {
+	cout << "¡Hola, mundo!" << endl;
+
+	return 0;
+}
+\end{lstlisting}
+
+De lo contrario, los \textbf{lenguajes de bajo nivel} tienen un nivel de abstracción bajo con respecto a la máquina, de forma que son más cercano a ellos que al problema.
+Éste es el caso de ensamblador, que se estudiará en Estructura de Computadores.
+Éste sería un extracto del equivalente a ensamblador del \textit{hola mundo} de C++:
+
+\begin{lstlisting}[language={[x86masm]Assembler}]
+.LFB1544:
+	.cfi_startproc
+	subq  $8, %rsp
+	.cfi_def_cfa_offset 16
+	movl  $14, %edx
+	leaq  .LC0(%rip), %rsi
+	leaq  _ZSt4cout(%rip), %rdi
+	call  _ZSt16__ostream_insertIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_PKS3_l@PLT
+	leaq  _ZSt4cout(%rip), %rdi
+	call  _ZSt4endlIcSt11char_traitsIcEERSt13basic_ostreamIT_T0_ES6_@PLT
+	movl  $0, %eax
+	addq  $8, %rsp
+	.cfi_def_cfa_offset 8
+	ret
+	.cfi_endproc
+\end{lstlisting}
+
+\textbf{Implementar} un algoritmo es transcribirlo a un lenguaje de programación.
+Cada lenguaje tiene sus propias instrucciones y sus filosofías de diseño.
+Los principios de diseño de C++ son lo suficientemente restrictivos pero a su vez flexibles como para ser un lenguaje ideal para aprender a programar con pocos vicios\footnote{Es muy importante empezar a programar con unos principios de diseño y unas normas de estilo sólidas y coherentes. Un código poco legible es una desgracia para quien necesite interpretarlo y entenderlo.}.
+El \textbf{código fuente} de un lenguaje se escribe en ficheros de texto sin formato (producidos por Gedit en Linux o el Bloc de notas de Windows, por ejemplo).
+Los ficheros de código fuente de C++ llevan la extensión \code{.cpp} (C plus plus).
+En este código fuente debemos incluir todos los datos con los que queremos trabajar, todos los recursos externos y todas las instrucciones.
+Todo esto constituye un \textbf{programa}, que es un conjunto de instrucciones especificadas en un lenguaje de programación ejecutables por un computador.
+
+La \textbf{programación} es el proceso de diseño, implementación, \textbf{depuración} (búsqueda y resolución de defectos) y \textbf{mantenimiento} (modificación a lo largo del tiempo) de un programa.
+La \textbf{compilación} es el proceso transformar un programa escrito en código fuente en un fichero ejecutable.
+Este proceso se lleva a cabo mediante un programa \textbf{compilador}, que se encarga de automatizar el proceso, que se verá con más profundidad en Metodología de la Programación, por nosotros.
+
+\section{Especificación de programas}
+
+En C++ los programas pueden organizarse en múltiples ficheros a lo largo de varios directorios; sin embargo, en FP trabajaremos con programas implementados enteramente en un único fichero, ya que la gestión de código fuente no forma parte del objetivo de la asignatura.
+Alrededor del código de un programa se pueden escribir \textbf{comentarios} en lenguaje natural.
+En C++, los comentarios de una sola línea vienen precedidos por \code{//} y los comentarios multilínea empiezan con \code{/*} y acaban con \code{*/}:
+
+\begin{lstlisting}[language=C++]
+/*
+ *	¡Hola, mundo!
+ *	Este programa imprime "¡Hola, mundo!" y un salto de línea y finaliza.
+ */
+#include <iostream>
+using namespace std;
+
+int main () {
+	cout << "¡Hola, mundo!" << endl; // Impresión del mensaje
+
+	return 0; // Finalización del programa
+}
+\end{lstlisting}
+
+Al principio de cada fichero debemos indicar las \textbf{bibliotecas} que va a utilizar mediante la sintaxis \code{\#include <biblioteca>}.
+Estas bibliotecas son grupos de instrucciones, datos y otros recursos que podemos utilizar sin tener que programar desde cero.
+Por ejemplo, la biblioteca \code{iostream}, flujo de entrada/salida (in/out), define \code{cout} (\textit{console out}) como una forma de mostrar código por pantalla y \code{endl} como una forma de imprimir un salto de línea con \code{cout}.
+La finalidad de \code{using namespace std} se verá más adelante.
+
+Tras las bibliotecas encontramos la línea \code{int main () \{}.
+Esta línea indica el comienzo del \textbf{bloque} principal del programa.
+Los bloques son fragmentos de código encerrados entre dos llaves (\code{\{} y \code{\}}).
+Debemos tener en cuenta que todos los bloques abiertos deben cerrarse y que una llave de cierre siempre cerrará el último bloque que se abrió.
+Los bloques se dividen en \textbf{sentencias}, que son instrucciones separadas por punto y coma (\code{;}) ejecutadas secuencialmente de principio a fin del fichero.
+Dentro del bloque principal, las sentencias se ejecutan una a una hasta llegar a la sentencia \code{return 0}, en la cual el programa pasa el control al sistema operativo para finalizar la ejecución si no ha habido errores.
+
+\subsection{Trabajo con datos}
+
+Para trabajar con datos debemos \textbf{declararlos} primero junto con su \textbf{tipo de dato} y su \textbf{identificador}.
+Los tipos de datos indican al compilador cómo debe interpretar los datos a los que se asocian.
+Por ejemplo, un tipo de dato \code{int} (número entero) no se interpretará de la misma forma que un \textit{double} (número real) o un \code{char} (carácter).
+Como ya iremos viendo más adelante, es muy importante elegir el tipo de dato con el que vamos a trabajar.
+Los identificadores son el nombre que le ponemos a los datos y se indican después del tipo:
+
+\begin{lstlisting}[language=C++]
+double nota_examen1;
+double nota_examen2;
+\end{lstlisting}
+
+También podemos separarlos por \code{,} en lugar de por \code{;} y declarar varios datos del mismo tipo especificándolo una única vez:
+
+\begin{lstlisting}[language=C++]
+double nota_examen1, nota_examen2;
+\end{lstlisting}
+
+Incluso podemos hacerlo en diferentes líneas:
+
+\begin{lstlisting}[language=C++]
+double nota_examen1,
+       nota_examen2;
+\end{lstlisting}
+
+Para darle \textbf{valor} a un dato usamos sentencias de \textbf{asignación}.
+Para ellos usamos el \textbf{operador de asignación} \code{=}, que tiene un sentido diferente a la igualdad matemática.
+Cuando usamos la sintaxis \code{dato = valor} estamos \textit{igualando} el valor del dato al \code{valor} que indicamos a la derecha de la asignación.
+Podemos realizar asignaciones al declarar los datos o en cualquier otro punto del programa.
+
+\begin{lstlisting}[language=C++]
+int calabacines = 3, // Tengo tres calabacines...
+    cebollas    = 8, // ...ocho cebollas...
+    patatas     = 5; // ... y cinco patatas
+
+calabacines = calabacines + 2; // Ahora tengo 5 calabacines
+cebollas    = patatas - 1;     // Ahora tengo 4 cebollas
+patatas     = 9;               // Ahora tengo 9 patatas
+\end{lstlisting}
+
+Aquí tenemos un caso interesante que puede llevar a confusiones.
+Hemos dicho que \code{cebollas = patatas -1}, de forma que \code{cebollas} pasa a valer \code{4}.
+Luego incrementamos \code{patatas} a \code{9}.
+¿Incrementa también el valor de \code{cebollas}?
+No.
+El operador de asignación asigna el valor al dato en un instante concreto de la ejecución del programa, pero nunca liga el valor de dos variables.
+
+También hemos utilizado los \textbf{operadores} de suma (\code{+}) y de resta (\code{-}).
+¿Y si tuviéramos que hacer una operación más complicada?
+Podemos hacer uso de \textbf{funciones} importadas de bibliotecas para realizar operaciones más complejas.
+Aunque las veremos con detalle más adelante, ponemos como ejemplo la función \code{sqrt()} de \code{cmath}, que nos permite realizar raíces cuadradas:
+
+\begin{lstlisting}[language=C++]
+#include <cmath>
+
+int main () {
+	double raiz = sqrt(2);
+	return 0;
+}
+\end{lstlisting}
+
+\subsection{Entrada y salida de datos}
+
+Es normal que queramos que sea el usuario quien introduzca los datos.
+Sería absurdo tener que rehacer cada programa para cada combinación de valores posible.
+Para esto, utilizamos sentencias de \textbf{entrada de datos} que nos permiten leer valores de diferentes dispositivos y asignarlos a datos.
+En esta asignatura utilizaremos el recurso externo \code{cin} (\textit{console in}) incluido en \code{iostream}.
+Para introducir un dato con \code{cin} utilizamos el operador \code{>{}>}, que ``apunta'' al dato en el que introducimos el valor:
+
+\begin{lstlisting}[language=C++]
+double cateto1, cateto2, hipotenusa;
+
+cin >> cateto1;
+cin >> cateto2;
+
+hipotenusa = sqrt(cateto1 * cateto1 + cateto2 * cateto2);
+\end{lstlisting}
+
+Hay muchísimas formas de introducir datos en el programa, pero \code{cin} nos facilita el formato de los datos para que no tengamos que preocuparnos por ellos.
+También toma como dispositivo de entrada por defecto el teclado, de forma que el programa se para al llegar a una sentencia \code{cin} y no reanuda hasta que el usuario haya introducido un dato válido.
+
+Para mostrar los datos al usuario usaremos sentencias de \textbf{salida de datos}.
+Para ello, usaremos \code{cout}, que ya hemos presentado.
+Este recurso utiliza el operador \code{<{}<}, que ``saca'' los datos y los muestra en pantalla.
+
+\begin{lstlisting}[language=c++]
+cout << "Sus pantalones le costarán " << precio_pantalones << "€." << endl;
+\end{lstlisting}
+
+Como vemos, podemos concatenar varios operadores \code{<{}<} para mostrar varios datos en pantalla.
+Lo que escribamos entre comillas se mostrará literalmente, mientras que lo que no esté entrecomillado debe referirse a datos que hayamos declarado anteriormente.
+En este ejemplo, si \code{precio\_pantalones} vale \code{39.99}, la sentencia imprimirá \code{Sus pantalones le costarán 39.99€.} seguido de un salto de línea (\code{endl}).
