@@ -3,7 +3,7 @@
 \section{Introducción a OpenMP}\label{directivas-openmp-introduccion}
 
 OpenMP (\textit{Open Multi-Processing}) es una API (\textit{Application Programming Interface}) de escritura de código paralelo entre varias hebras comunicadas por variables compartidas.
-La API, incluida de \code{<omp.h>} ofrece una capa de abstracción que permite al programador trabajar sin tener que acceder a las herramientras de paralelismo de bajo nivel.
+La API, incluida de \texttt{<omp.h>} ofrece una capa de abstracción que permite al programador trabajar sin tener que acceder a las herramientras de paralelismo de bajo nivel.
 Para ello ofrece directivas del compilador, funciones de biblioteca y variables de entorno.
 
 Esta herramienta no extrae el paralelismo implícito, por lo que se trabaja con paralelización no automática.
@@ -19,20 +19,20 @@ Estas directivas siguen la siguiente sintaxis:
 #pragma omp nombre_directiva clausulas
 \end{lstlisting}
 
-El primer elemento, \code{\#pragma omp}, indica al compilador que la línea contiene una directiva OpenMP denominada \code{nombre\_directiva}.
+El primer elemento, \texttt{\#pragma omp}, indica al compilador que la línea contiene una directiva OpenMP denominada \texttt{nombre\_directiva}.
 Las directivas pueden recibir cláusulas que delimitan su comportamiento.
 Las veremos con más profundidad en la práctica~\ref{clausulas-openmp}.
 Es imperativo que, tras definir la directiva, se introduzca un salto de línea, ya que ésta es la forma que tiene el preprocesador de conocer el espacio en el que debe introducir el código propio de la misma.
-Para dividir una directiva en múltiples líneas, puede usarse el carácter \code{\textbackslash} para ``escapar'' el salto de línea.
+Para dividir una directiva en múltiples líneas, puede usarse el carácter \texttt{\textbackslash} para ``escapar'' el salto de línea.
 
-Para compilar con OpenMP en \code{gcc} y \code{g++} usamos el \textit{flag} \code{openmp} de la siguiente forma:
+Para compilar con OpenMP en \texttt{gcc} y \texttt{g++} usamos el \textit{flag} \texttt{openmp} de la siguiente forma:
 
 \begin{lstlisting}[language=sh]
 gcc -fopenmp main.c
 \end{lstlisting}
 
 Si no es incluye esta bandera, el compilador ignora las directivas, pero no las funciones.
-Para que éstas se ignoren podemos comprobar la existencia de OpenMP en el programa, que se muestra mediante la definición de \code{\_OPENMP}:
+Para que éstas se ignoren podemos comprobar la existencia de OpenMP en el programa, que se muestra mediante la definición de \texttt{\_OPENMP}:
 
 \begin{lstlisting}[language=C]
 #ifdef _OPENMP
@@ -59,9 +59,9 @@ for (unsigned i=0; i<MAX; i++)
 
 También se incluyen en el ámbito de operación de las directivas las subrutinas llamadas desde el bloque posterior a las mismas.
 
-Los bloques paralelizados por las directivas tendrán al final una única salida y nunca permiten instrucciones de entrada y salida como \code{goto}.
+Los bloques paralelizados por las directivas tendrán al final una única salida y nunca permiten instrucciones de entrada y salida como \texttt{goto}.
 
-\subsection{Directiva \code{parallel}}\label{directivas-openmp-directivas-parallel}
+\subsection{Directiva \texttt{parallel}}\label{directivas-openmp-directivas-parallel}
 
 \begin{lstlisting}[language=C]
 #pragma omp parallel
@@ -99,7 +99,7 @@ int main () {
 \end{lstlisting}
 
 Al ejecutar varias veces este programa, veremos que las hebras que imprimen el mensaje lo hacen en un orden no determinista.
-También podemos modificar el número de hebras que ejecutan el código mediante la variable de entorno \code{OMP\_NUM\_THREADS}.
+También podemos modificar el número de hebras que ejecutan el código mediante la variable de entorno \texttt{OMP\_NUM\_THREADS}.
 
 \begin{lstlisting}[language=sh]
 gcc -fopenmp -O2 main.c -o main
@@ -124,9 +124,9 @@ export OMP_NUM_THREADS=4
 # Impresión ejecutada por la hebra 1
 \end{lstlisting}
 
-Como vemos en este ejemplo, la hebra \textit{master} es la de índice \code{0} y se ejecutan tantas hebras como tenga disponible el procesador o, en su defecto, las definidas en la variable de entorno \code{OMP\_NUM\_THREADS}.
+Como vemos en este ejemplo, la hebra \textit{master} es la de índice \texttt{0} y se ejecutan tantas hebras como tenga disponible el procesador o, en su defecto, las definidas en la variable de entorno \texttt{OMP\_NUM\_THREADS}.
 
-Dado que \code{omp\_get\_thread\_num()} devuelve el número de la hebra que se está ejecutando, podemos definir el comportamiento del programa en función del número de la hebra:
+Dado que \texttt{omp\_get\_thread\_num()} devuelve el número de la hebra que se está ejecutando, podemos definir el comportamiento del programa en función del número de la hebra:
 
 \begin{lstlisting}[language=C]
 #include <stdio.h>
@@ -175,7 +175,7 @@ gcc -fopenmp -O2 divididas.c -o divididas
 
 Con OpenMP podemos realizar cómputos de trabajo compartido aprovechando paralelismo de datos, de tareas y obligando a que sea una de las hebras quien ejecute una sección de código secuencial.
 
-\subsubsection{Paralelismo de datos: \code{\#pragma omp for}}
+\subsubsection{Paralelismo de datos: \texttt{\#pragma omp for}}
 
 \begin{lstlisting}[language=C]
 #pragma omp for
@@ -183,9 +183,9 @@ for (unsigned i=0; i<MAX; i++)
 	// ...
 \end{lstlisting}
 
-Esta directiva permite ejecutar un bucle \code{for} por varias hebras de forma que cada una ejecuta una de las iteraciones y, al final, el resultado es el mismo que si se ejecutara secuencialmente.
+Esta directiva permite ejecutar un bucle \texttt{for} por varias hebras de forma que cada una ejecuta una de las iteraciones y, al final, el resultado es el mismo que si se ejecutara secuencialmente.
 Para hacer esto, el cuerpo del bucle debe ser paralelizable y el número de iteraciones debe ser conocido en tiempo de compilación.
-Aplicando esta directiva junto con \code{parallel}, podemos ampliar el ejemplo de~\ref{directivas-openmp-directivas-parallel} para incluir un bucle en su cuerpo:
+Aplicando esta directiva junto con \texttt{parallel}, podemos ampliar el ejemplo de~\ref{directivas-openmp-directivas-parallel} para incluir un bucle en su cuerpo:
 
 \begin{lstlisting}[language=C]
 // ...
@@ -205,7 +205,7 @@ int main () {
 }
 \end{lstlisting}
 
-\subsubsection{Paralelismo de tareas: \code{\#pragma omp sections}}
+\subsubsection{Paralelismo de tareas: \texttt{\#pragma omp sections}}
 
 \begin{lstlisting}[language=C]
 #pragma omp sections
@@ -263,7 +263,7 @@ gcc -fopenmp -O2 sections.c -o sections
 # La hebra 0 manda el mensaje "Hola, mundo"
 \end{lstlisting}
 
-\subsubsection{Ejecución secuencial: \code{\#pragma omp single}}
+\subsubsection{Ejecución secuencial: \texttt{\#pragma omp single}}
 
 \begin{lstlisting}[language=C]
 #pragma omp single
@@ -308,11 +308,11 @@ gcc -fopenmp -O2 single.c -o single
 # La hebra 2 recibió el valor compartido 1337
 \end{lstlisting}
 
-\subsubsection{Combinación de \code{parallel} con directivas de trabajo compartido}
+\subsubsection{Combinación de \texttt{parallel} con directivas de trabajo compartido}
 
-Podemos combinar estas directivas con su \code{parallel} para simplificar la lectura del código de forma que son equivalentes las singuientes expresiones:
+Podemos combinar estas directivas con su \texttt{parallel} para simplificar la lectura del código de forma que son equivalentes las singuientes expresiones:
 
-\code{for}\textbf{:}
+\texttt{for}\textbf{:}
 
 \begin{lstlisting}[language=C]
 #pragma omp parallel
@@ -327,7 +327,7 @@ Podemos combinar estas directivas con su \code{parallel} para simplificar la lec
 // ...
 \end{lstlisting}
 
-\code{sections}\textbf{:}
+\texttt{sections}\textbf{:}
 
 \begin{lstlisting}[language=C]
 #pragma omp parallel
@@ -358,18 +358,18 @@ Podemos combinar estas directivas con su \code{parallel} para simplificar la lec
 }
 \end{lstlisting}
 
-La combinación de directivas acepta todas las cláusulas de ambas directivas combinadas excepto \code{nowait}, que veremos en (TODO\@: Especificar dónde lo veremos cuando acabe el tema de las cláusulas).
+La combinación de directivas acepta todas las cláusulas de ambas directivas combinadas excepto \texttt{nowait}, que veremos en (TODO\@: Especificar dónde lo veremos cuando acabe el tema de las cláusulas).
 
 \subsection{Directivas para comunicación y sincronización}\label{directivas-openmp-directivas}
 
-\subsubsection{Directiva \code{barrier}}
+\subsubsection{Directiva \texttt{barrier}}
 
 \begin{lstlisting}[language=C]
 #pragma omp barrier
 \end{lstlisting}
 
 Esta directiva crea una barrera explícita, un punto en el código en el que todas las hebras deben esperar a que las otras lleguen al mismo punto.
-Implícitamente, al final de \code{parallel} siempre hay una barrera que no es necesario declarar.
+Implícitamente, al final de \texttt{parallel} siempre hay una barrera que no es necesario declarar.
 
 \begin{lstlisting}[language=C]
 #include <omp.h>
@@ -409,7 +409,7 @@ gcc -fopenmp -O2 barrier.c -o barrier
 # La hebra 1 ha esperado 0 segundos
 \end{lstlisting}
 
-\subsubsection{Directiva \code{critical}}
+\subsubsection{Directiva \texttt{critical}}
 
 \begin{lstlisting}[language=C]
 #pragma omp critical
@@ -418,7 +418,7 @@ gcc -fopenmp -O2 barrier.c -o barrier
 
 Esta directiva evita que varias hebras accedan a variables compartidas a la vez en lo que llamamos una \textbf{sección crítica}.
 Si dos hebras tratan de escribir a la vez en la misma variable compartida, existe la probabilidad de que se produzca un problema de sincronización en la escritura y el resultado no sea el mismo que al sumar los valores secuencialmente, lo cual es un error inconcebible en un programa bien escrito.
-Para evitar que ocurra, encerramos la sección crítica con la directiva \code{critical}:
+Para evitar que ocurra, encerramos la sección crítica con la directiva \texttt{critical}:
 
 \begin{lstlisting}[language=C]
 #include <omp.h>
@@ -459,18 +459,18 @@ gcc -fopenmp -O2 critical.c -o critical
 # La suma total vale 45
 \end{lstlisting}
 
-\subsubsection{Directiva \code{atomic}}
+\subsubsection{Directiva \texttt{atomic}}
 
 \begin{lstlisting}[language=C]
 #pragma omp atomic
 // ...
 \end{lstlisting}
 
-Esta directiva es una alternativa a \code{critical} más eficiente.
+Esta directiva es una alternativa a \texttt{critical} más eficiente.
 La sintaxis es la misma que la de la directiva anterior, pero tiene la ventaja de que aprovecha el hardware para realizar las operaciones atómicas con mucha menos sobrecarga.
-También asegura que cada sección \code{atomic} sea distinguible de las otras, mientras que todos los bloques \code{critical} se consideran iguales a menos que contengan una cláusula \code{name}.
+También asegura que cada sección \texttt{atomic} sea distinguible de las otras, mientras que todos los bloques \texttt{critical} se consideran iguales a menos que contengan una cláusula \texttt{name}.
 
-\subsection{Directiva \code{master}}\label{directivas-openmp-directivas}
+\subsection{Directiva \texttt{master}}\label{directivas-openmp-directivas}
 
 \begin{lstlisting}[language=C]
 #pragma omp master

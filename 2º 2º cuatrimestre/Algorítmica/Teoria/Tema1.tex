@@ -96,7 +96,7 @@ Para estudiarla, debemos definir previamente cuatro conceptos:
 
 \begin{itemize}
 	\item\textbf{Problema:} Problema general a resolver expresado sin especificar unidades. Por ejemplo, ordenar ascendentemente un vector.
-	\item\textbf{Instancia del problema:} Problema concreto derivado del problema general expresado con unidades. Por ejemplo, ordenar el vector \code{[3,5,1,2]}.
+	\item\textbf{Instancia del problema:} Problema concreto derivado del problema general expresado con unidades. Por ejemplo, ordenar el vector \texttt{[3,5,1,2]}.
 
 \pagebreak
 
@@ -106,7 +106,7 @@ Para estudiarla, debemos definir previamente cuatro conceptos:
 		\item\textbf{Caso promedio:} Instancia en la que tarda un tiempo medio. Se da generalmente cuando los datos iniciales son aleatorios.
 		\item\textbf{Caso mejor:} Instancia en la que el algoritmo ejecuta el mínimo de posible. Por ejemplo, ordenar ascendentemente un vector previamente ordenado ascendentemente.
 	\end{itemize}
-	\item\textbf{Tamaño del caso:} tamaño de la instancia a resolver. Por ejemplo, el vector \code{[3,5,1,2]} es un caso de tamaño $n=4$.
+	\item\textbf{Tamaño del caso:} tamaño de la instancia a resolver. Por ejemplo, el vector \texttt{[3,5,1,2]} es un caso de tamaño $n=4$.
 \end{itemize}
 
 Usaremos la notación $O(n)$ para indicar la eficiencia de un algoritmo en el caso peor y $\Omega(n)$ para su eficiencia en el caso mejor.
@@ -127,9 +127,9 @@ void InsertionSort (double* v, int a, int b) {
 }
 \end{lstlisting}
 
-Este algoritmo ordena ascendentemente un vector \code{v} desde la posición \code{a} hasta la posición \code{b}, ambas inclusive.
-Para ello, va comparando todos los valores desde la posición \code{a+1} hasta la posición \code{b} con el valor inmediatamente anterior a ellos (por ejemplo, cuando \code{i=1}, comparamos \code{a+1} con \code{a}) y lo intercambiamos con éste tantas veces como sea necesario hasta que el valor que estamos ordenando sea mayor que el anterior o esté en la primera posición a ordenar.
-Éste es un caso de tamaño $n=a-b+1$ cuyo mejor caso es cuando \code{v} se introduce ordenado ascendentemente y cuyo peor caso es cuando \code{v} se introduce ordenado descendentemente.
+Este algoritmo ordena ascendentemente un vector \texttt{v} desde la posición \texttt{a} hasta la posición \texttt{b}, ambas inclusive.
+Para ello, va comparando todos los valores desde la posición \texttt{a+1} hasta la posición \texttt{b} con el valor inmediatamente anterior a ellos (por ejemplo, cuando \texttt{i=1}, comparamos \texttt{a+1} con \texttt{a}) y lo intercambiamos con éste tantas veces como sea necesario hasta que el valor que estamos ordenando sea mayor que el anterior o esté en la primera posición a ordenar.
+Éste es un caso de tamaño $n=a-b+1$ cuyo mejor caso es cuando \texttt{v} se introduce ordenado ascendentemente y cuyo peor caso es cuando \texttt{v} se introduce ordenado descendentemente.
 
 A la hora de medir la eficiencia de un algoritmo podemos usar tres métodos:
 
@@ -317,7 +317,7 @@ Para una sentencia con una condición de eficiencia $c(n)$ y un bloque de eficie
 
 Esto se debe a que primero evaluamos la condición ($c(n)$) y luego ejecutamos $f(n)$ veces el bucle, que ejecuta el bloque y luego la condición ($b(n)+c(n)$) en cada iteración hasta finalizar.
 
-Como caso particular del bucle \code{while}, tenemos el bucle \code{do while}:
+Como caso particular del bucle \texttt{while}, tenemos el bucle \texttt{do while}:
 
 \begin{lstlisting}[language=C]
 do {
@@ -329,7 +329,7 @@ Su orden de eficiencia, que debe tener en cuenta que el bloque se ejecuta siempr
 
 \[O\Big(b(n)+c(n)+f(n)\cdot\big(b(n)+c(n)\big)\Big)\]
 
-Por último, tenemos el caso del bucle \code{for}:
+Por último, tenemos el caso del bucle \texttt{for}:
 
 \begin{lstlisting}[language=C]
 for (int i=0; i<vector.size(); i++) { // Inicialización; Condición; Actualización
@@ -341,7 +341,7 @@ Para un bucle con una inicialización de eficiencia $i(n)$, una condición de ef
 
 \[O\Big(i(n)+c(n)+f(n)\cdot\big(b(n)+a(n)+c(n)\big)\Big)\]
 
-A continuación se muestran como ejemplo el cálculo de la eficiencia de un bucle \code{while} y un bucle \code{for}:
+A continuación se muestran como ejemplo el cálculo de la eficiencia de un bucle \texttt{while} y un bucle \texttt{for}:
 
 \begin{lstlisting}[language=C]
 int main (int argc, char** argv) {
@@ -357,12 +357,12 @@ int main (int argc, char** argv) {
 }
 \end{lstlisting}
 
-Fijémonos primero en el interior del bucle \code{for}.
-La eficiencia de la llamada a \code{printf} es siempre $O(1)$, al igual que lo son su inicialización, condición y actualización.
+Fijémonos primero en el interior del bucle \texttt{for}.
+La eficiencia de la llamada a \texttt{printf} es siempre $O(1)$, al igual que lo son su inicialización, condición y actualización.
 El bucle se ejecuta de $i$ a $n$ en saltos de $2i$, por lo que se ejecutará siempre $\log_2(i)$ veces.
 El orden de eficiencia del bucle for es $O\big(\log(n)\big)$.
-Resulelto esto, calculamos la eficiencia del bloque del bucle \code{while}.
-Como las otras dos sentencias son de orden de eficiencia $O(1)$, la eficiencia del bloque del bucle \code{while} es $O\big(\log(n)\big)+2\cdot O(1)=O\big(\log(n)\big)$.
+Resulelto esto, calculamos la eficiencia del bloque del bucle \texttt{while}.
+Como las otras dos sentencias son de orden de eficiencia $O(1)$, la eficiencia del bloque del bucle \texttt{while} es $O\big(\log(n)\big)+2\cdot O(1)=O\big(\log(n)\big)$.
 Por último, la condición del bucle while es una sentencia se orden de eficiencia $O(1)$ y este bucle se ejecuta $n$ veces, por lo que la eficiencia total de este bucle es $O\big(n\cdot\log(n)\big)$.
 
 \pagebreak
@@ -393,8 +393,8 @@ bool EsPrimo (unsigned num) {
 }
 \end{lstlisting}
 
-El bucle \code{for} tiene un orden de eficiencia de $O(n)$ (en el caso peor itera hasta \code{i<=max}), pero \code{max} se calcula como \code{sqrt(num)}, por lo que la eficiencia del algorimo es $O(\surd n)$.
-Veamos cuatro ejemplos de bucles que incorporan una llamada a \code{EsPrimo()} y sus respectivas eficiencias:
+El bucle \texttt{for} tiene un orden de eficiencia de $O(n)$ (en el caso peor itera hasta \texttt{i<=max}), pero \texttt{max} se calcula como \texttt{sqrt(num)}, por lo que la eficiencia del algorimo es $O(\surd n)$.
+Veamos cuatro ejemplos de bucles que incorporan una llamada a \texttt{EsPrimo()} y sus respectivas eficiencias:
 
 \begin{lstlisting}[language=C]
 for (unsigned i=0; i<n; i++) {
@@ -403,7 +403,7 @@ for (unsigned i=0; i<n; i++) {
 }
 \end{lstlisting}
 
-Este algoritmo tiene eficiencia $O(n)$, ya que la llamada \code{EsPrimo(1337)} no varía en el función del caso y se ejecuta en tiempo constante.
+Este algoritmo tiene eficiencia $O(n)$, ya que la llamada \texttt{EsPrimo(1337)} no varía en el función del caso y se ejecuta en tiempo constante.
 
 \begin{lstlisting}[language=C]
 for (unsigned i=0; i<n; i++) {
@@ -412,7 +412,7 @@ for (unsigned i=0; i<n; i++) {
 }
 \end{lstlisting}
 
-Este algoritmo tiene eficiencia $O(n\surd n)$, ya que aquí la eficiencia de llamada a \code{EsPrimo(i)} sí depende del tamaño del caso.
+Este algoritmo tiene eficiencia $O(n\surd n)$, ya que aquí la eficiencia de llamada a \texttt{EsPrimo(i)} sí depende del tamaño del caso.
 
 \begin{lstlisting}[language=C]
 for (unsigned i=0; i<2000; i++) {
@@ -421,7 +421,7 @@ for (unsigned i=0; i<2000; i++) {
 }
 \end{lstlisting}
 
-Este algoritmo tiene eficiencia $O(1)$, ya que siempre se va a ejecutar $2000$ veces y va a calcular \code{EsPrimo(i)} de los mismos $2000$ valores.
+Este algoritmo tiene eficiencia $O(1)$, ya que siempre se va a ejecutar $2000$ veces y va a calcular \texttt{EsPrimo(i)} de los mismos $2000$ valores.
 
 \pagebreak
 
@@ -432,7 +432,7 @@ for (unsigned i=n; i>0; i/=2) {
 }
 \end{lstlisting}
 
-Por último, este algoritmo tiene eficiencia $O\big(\log(n)\cdot\surd n\big)$, ya que el bucle \code{for} ejecuta $\log_2(n)$ veces una llamada de eficiencia $O(\surd n)$.
+Por último, este algoritmo tiene eficiencia $O\big(\log(n)\cdot\surd n\big)$, ya que el bucle \texttt{for} ejecuta $\log_2(n)$ veces una llamada de eficiencia $O(\surd n)$.
 
 \subsection{Llamadas a funciones recursivas}
 
@@ -453,4 +453,3 @@ Ejemplo factorial:
 
 
 \section{Resolución de recurrencias}
-

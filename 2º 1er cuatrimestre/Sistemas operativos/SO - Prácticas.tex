@@ -1,47 +1,48 @@
-\documentclass[10pt]{report}
+\documentclass[10pt, a4paper]{aqademic}
+
 \usepackage[spanish]{babel}
+	\selectlanguage{spanish}
+
+% Document packages
+
+\usepackage[type=CC, modifier=by-nc-sa, version=4.0]{doclicense}
 
 % Document settings
 
-\usepackage{titling}
-	\author{Atanasio José Rubio Gil}
-	\title{Sistemas\ operativos}
-	\date{\today}
+\author{Atanasio José Rubio Gil}
+\title{Sistemas\ operativos}
+\date{\today}
 
-\usepackage[title=\thetitle]{aqademia}
-
-\aqchap{Módulo }
-\aqsec{Sesión }
+\AqSetChapter{Módulo }
+\AqSetSection{Sesión }
 
 % Document composition
 
 \begin{document}
 
-\aqtitlepage{Grado en Ingeniería Informática}
-            {Ejercicios}
-            {https://github.com/Groctel/ugr-informatica}
+\AqMaketitle[cover    = logo-ugr.png,
+             org      = Grado en Ingeniería Informática,
+             subtitle = Prácticas,
+             url      = https://github.com/Groctel/ugr-informatica]
 \tableofcontents
 
 \chapter{Administración de Linux}
-\input{Practicas/Modulo1-Sesion1.tex} \pagebreak
-\input{Practicas/Modulo1-Sesion2.tex} \pagebreak
-\input{Practicas/Modulo1-Sesion3.tex} \pagebreak
-\input{Practicas/Modulo1-Sesion4.tex}
+	\input{Practicas/Modulo1-Sesion1.tex}
+	\input{Practicas/Modulo1-Sesion2.tex}
+	\input{Practicas/Modulo1-Sesion3.tex}
+	\input{Practicas/Modulo1-Sesion4.tex}
 
 \chapter{Uso de los servicios del SO mediante la API}
-\input{Practicas/Modulo2-Sesion1.tex} \pagebreak
-\input{Practicas/Modulo2-Sesion2.tex} \pagebreak
-\input{Practicas/Modulo2-Sesion3.tex} \pagebreak
-\input{Practicas/Modulo2-Sesion4.tex} \pagebreak
-\input{Practicas/Modulo2-Sesion5.tex}
+	\input{Practicas/Modulo2-Sesion1.tex}
+	\input{Practicas/Modulo2-Sesion2.tex}
+	\input{Practicas/Modulo2-Sesion3.tex}
+	\input{Practicas/Modulo2-Sesion4.tex}
+	\input{Practicas/Modulo2-Sesion5.tex}
 
-\aqapp{Apéndice }
-\aqsec{\S}
-\aqssec{}
-
-\input{Practicas/Apendice-Llamadas.tex} \pagebreak
-\input{Practicas/Apendice-Dirent.tex}   \pagebreak
-\input{Practicas/Apendice-Otras.tex}    \pagebreak
-\input{Practicas/Apendice-RutinasComunes.tex}
+\appendix
+	\input{Practicas/Apendice-Llamadas.tex}
+	\input{Practicas/Apendice-Dirent.tex}
+	\input{Practicas/Apendice-Otras.tex}
+	\input{Practicas/Apendice-RutinasComunes.tex}
 
 \end{document}

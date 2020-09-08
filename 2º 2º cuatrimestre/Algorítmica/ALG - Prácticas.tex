@@ -1,31 +1,36 @@
-\documentclass[10pt]{report}
+\documentclass[10pt, a4paper]{aqademic}
+
 \usepackage[spanish]{babel}
+	\selectlanguage{spanish}
 
-% Document settings
+% Document packages
 
-\usepackage{titling}
-	\author{Atanasio José Rubio Gil}
-	\title{Algorítmica}
-	\date{\today}
-
-\usepackage[title=\thetitle]{aqademia}
-
-\aqchap{Práctica }
-\aqssec{}
-
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage[type=CC, modifier=by-nc-sa, version=4.0]{doclicense}
 \usepackage{pgfplots}
 \usepackage{pgfplotstable}
 \usepackage{tikz}
 \usepackage{tikz-qtree}
-	\tikzset{blank/.style={draw=none}}
+
+% Document settings
+
+\author{Atanasio José Rubio Gil}
+\title{Algorítmica}
+\date{\today}
+
+\AqSetChapter{Práctica }
+
+\tikzset{blank/.style={draw=none}}
 
 % Document composition
 
 \begin{document}
 
-\aqtitlepage{Grado en Ingeniería Informática}
-            {Prácticas}
-            {}
+\AqMaketitle[cover    = logo-ugr.png,
+             org      = Grado en Ingeniería Informática,
+             subtitle = Teoría,
+             url      = https://github.com/Groctel/ugr-informatica]
 \tableofcontents
 
 \input{Practicas/Eficiencia.tex}

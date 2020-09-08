@@ -64,7 +64,7 @@ dfs (v):
 	push v at the end of e
 \end{lstlisting}
 
-Mediante una búsqueda en profundidad (\code{dfs}) y usando una lista de abiertos (\code{color[v] = gray}) y cerrados (\code{color[v] = black}), la autora resuelve el problema mediante técnicas de inteligencia artificial y recursividad.
+Mediante una búsqueda en profundidad (\texttt{dfs}) y usando una lista de abiertos (\texttt{color[v] = gray}) y cerrados (\texttt{color[v] = black}), la autora resuelve el problema mediante técnicas de inteligencia artificial y recursividad.
 Yadav también implementa una búsqueda en profundidad, pero aborda el problema asegurándose de que las aristas a eliminar no son puentes para reducir el número de casos:
 
 \begin{lstlisting}[language=Pascal]
@@ -92,7 +92,7 @@ Begin
 End
 \end{lstlisting}
 
-Esta implementación comienza con un nodo \code{start}, que se selecciona de la siguiente forma:
+Esta implementación comienza con un nodo \texttt{start}, que se selecciona de la siguiente forma:
 
 \begin{lstlisting}[language=Pascal]
 findStartVert(graph)
@@ -131,11 +131,11 @@ Begin
 End
 \end{lstlisting}
 
-Esta función devuelve busca los vértices adyacentes al vértice \code{v}, que es el vértice candidato para formar la siguiente arista del circuito, de forma que devuelve \code{true} si la única arista que parte de dicho vértice es la que lo conecta con el vértice \code{u}.
+Esta función devuelve busca los vértices adyacentes al vértice \texttt{v}, que es el vértice candidato para formar la siguiente arista del circuito, de forma que devuelve \texttt{true} si la única arista que parte de dicho vértice es la que lo conecta con el vértice \texttt{u}.
 
 \section{Implementación del algoritmo}\label{voraces-implementacion}
 
-Teniendo en cuenta las implementaciones presentadas en el apartado anterior, definimos una clase \code{Grafo} con los siguientes prototipos:
+Teniendo en cuenta las implementaciones presentadas en el apartado anterior, definimos una clase \texttt{Grafo} con los siguientes prototipos:
 
 \begin{lstlisting}[language=C++]
 class Grafo {
@@ -156,8 +156,8 @@ public:
 Esta clase es similar a la que propone Singh, pero con dos importantes modificaciones en la estructura:
 
 \begin{itemize}
-	\item\textbf{Sustituir el array dinámico de vértices por un \code{std::vector}:} De esta forma, el número de vértices del grafo no queda determinado en el momento de su construcción y su estructura es modificable sin ser necesario modificar los parámetros de construcción.
-	\item\textbf{Modificar el \code{std::list} de vértices adyacentes por un \code{std::set}:} De esta forma, nos aseguramos de que el grafo no sea un multigrafo\footnote{%
+	\item\textbf{Sustituir el array dinámico de vértices por un \texttt{std::vector}:} De esta forma, el número de vértices del grafo no queda determinado en el momento de su construcción y su estructura es modificable sin ser necesario modificar los parámetros de construcción.
+	\item\textbf{Modificar el \texttt{std::list} de vértices adyacentes por un \texttt{std::set}:} De esta forma, nos aseguramos de que el grafo no sea un multigrafo\footnote{%
 		Un multigrafo es un grafo en el que existen vértices unidos por varias aristas (Weisstein, 2004).
 	} para no complicar en exceso el recorrido del mismo.
 \end{itemize}
@@ -198,7 +198,7 @@ Siguiendo la implementación de Yadav, comprobamos si una arista es un puente me
 Todos los autores consultados coinciden en el mismo método de búsqueda en profundidad, que debe seguir las siguientes pautas:
 
 \begin{itemize}
-	\item Recibir los vértices que forman la arista y un vector de vértices visitados inicializado a \code{false}.
+	\item Recibir los vértices que forman la arista y un vector de vértices visitados inicializado a \texttt{false}.
 	\item Inicializar la cuenta de vértices accesibles a $1$.
 	\item Si se encuentra una arista no visitada, hacer una llamada recursiva a la búsqueda.
 	\item Devolver la cuenta de vértices accesibles.
@@ -232,7 +232,7 @@ Utilizaremos esta búsqueda para comprobar si una arista es válida, que puede s
 	\item La eliminación de la arista no aumenta el número de componentes conexos del grafo.
 \end{itemize}
 
-Por tanto, definimos la función \code{EsPuente} de la siguiente forma:
+Por tanto, definimos la función \texttt{EsPuente} de la siguiente forma:
 
 \begin{lstlisting}[language=C++]
 bool Grafo :: EsPuente (size_t vertice1, size_t vertice2) {
@@ -307,15 +307,15 @@ void Grafo :: Fleury () {
 
 Definido completamente el algoritmo, pasamos a calcular su eficiencia en el caso peor.
 
-Comenzamos con la búsqueda en profundidad, que contiene un bucle \code{for} que recorre todos los vértices adyacentes al vértice que recibe secuencialmente y se llama a sí mismo si encuentra un vértice no visitado por las llamadas ancestras.
+Comenzamos con la búsqueda en profundidad, que contiene un bucle \texttt{for} que recorre todos los vértices adyacentes al vértice que recibe secuencialmente y se llama a sí mismo si encuentra un vértice no visitado por las llamadas ancestras.
 En el caso peor nos encontraríamos ante un grafo completo $K_n$\footnote{%
 	Un grafo completo es un grafo $K_n$ en el que de cada vértice parten $n-1$ aristas, una hacia cada uno de los otros vértices.
 } para $n$ vértices, por lo que este bucle debería recorrerse $n$ veces en cada ejecución.
 Tenemos, por tanto, que el tiempo $T(n)$ que tarda esta búsqueda en ejecutarse viene dado por la expresión $T(n)=nT(n-1)$, que equivale por definición a una eficiencia $O(n!)$.
 
-Esta búsqueda en profundidad es accedida dos veces desde \code{EsPuente}, que contiene dos bucles \code{for} de eficiencia $O(n)$ y la llama dos veces, por lo que \code{EsPuente} también tiene eficiencia $O(n!)$.
-Por último, llamamos a \code{EsPuente} en \code{ImprimeElemento} que, aparte de esta llamada, sólo contiene operaciones elementales y una llamada recursiva.
-Como en el caso peor estamos trabajando en un grafo $K_n$, sabemos que éste se va a ejecutar $n$ veces y va a llamar a \code{EsPuente} para que opere con $n-1$ vértices.
+Esta búsqueda en profundidad es accedida dos veces desde \texttt{EsPuente}, que contiene dos bucles \texttt{for} de eficiencia $O(n)$ y la llama dos veces, por lo que \texttt{EsPuente} también tiene eficiencia $O(n!)$.
+Por último, llamamos a \texttt{EsPuente} en \texttt{ImprimeElemento} que, aparte de esta llamada, sólo contiene operaciones elementales y una llamada recursiva.
+Como en el caso peor estamos trabajando en un grafo $K_n$, sabemos que éste se va a ejecutar $n$ veces y va a llamar a \texttt{EsPuente} para que opere con $n-1$ vértices.
 Por definición, $n(n-1)=n!$, por lo que \textbf{la eficiencia total del algoritmo es $\boldsymbol{O(n!)}$}.
 
 \section{Ejecución del algoritmo}\label{voraces-ejecucion}

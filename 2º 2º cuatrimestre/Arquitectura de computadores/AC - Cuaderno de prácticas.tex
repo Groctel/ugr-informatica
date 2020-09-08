@@ -1,27 +1,32 @@
-\documentclass[10pt]{report}
+\documentclass[10pt, a4paper]{aqademic}
+
 \usepackage[spanish]{babel}
+	\selectlanguage{spanish}
+
+% Document packages
+
+\usepackage{amsmath}
+\usepackage[type=CC, modifier=by-nc-sa, version=4.0]{doclicense}
+\usepackage{gensymb}
+\usepackage{pgfplots}
 
 % Document settings
 
-\usepackage{titling}
-	\author{Atanasio José Rubio Gil}
-	\title{Arquitectura~de~computadores}
-	\date{\today}
+\author{Atanasio José Rubio Gil}
+\title{Arquitectura~de~computadores}
+\date{\today}
 
-\usepackage[title=\thetitle]{aqademia}
-	\aqchap{Bloque práctico }
-	\aqsec{Ejercicio }
-
-\usepackage{gensymb}
-\usepackage{pgfplots}
+\AqSetChapter{Bloque práctico }
+\AqSetSection{Ejercicio }
 
 % Document composition
 
 \begin{document}
 
-\aqtitlepage{Grado en Ingeniería Informática}
-            {Cuaderno de prácticas}
-            {https://github.com/Groctel/ugr-informatica}
+\AqMaketitle[cover    = logo-ugr.png,
+             org      = Grado en Ingeniería Informática,
+             subtitle = Cuaderno de prácticas,
+             url      = https://github.com/Groctel/ugr-informatica]
 \tableofcontents
 
 \setcounter{chapter}{-1}

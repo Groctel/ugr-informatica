@@ -19,21 +19,21 @@ Back To The Future:Robert Zemeckis:1985;
 The Breakfast Club:John Hughes:1985;
 \end{lstlisting}
 
-En este ejemplo, el director de \textit{Ferris Bueller's Day Off} y \textit{The Breakfast Club}\footnote{Dos peliculones, director recomendadísimo.}, John Hughes, aparece escrito erróneamente (\code{Jon Huges}) en la segunda línea.
+En este ejemplo, el director de \textit{Ferris Bueller's Day Off} y \textit{The Breakfast Club}\footnote{Dos peliculones, director recomendadísimo.}, John Hughes, aparece escrito erróneamente (\texttt{Jon Huges}) en la segunda línea.
 Debido a esto, se realiza una actualización de la misma que, por algún fallo típico de una práctica de Estructuras de Datos, añade el dato de nuevo en la última fila pero no elimina el anterior.
-Si buscamos secuencialmente el \code{DIRECTOR} de \code{The Breakfast Club}, ¿deberíamos quedarnos con el primer resultado o recorrer el fichero en su plenitud hasta encontrar otro dato? ¿Cómo sabemos cuál es el correcto?
+Si buscamos secuencialmente el \texttt{DIRECTOR} de \texttt{The Breakfast Club}, ¿deberíamos quedarnos con el primer resultado o recorrer el fichero en su plenitud hasta encontrar otro dato? ¿Cómo sabemos cuál es el correcto?
 Por otro lado, tenemos dos películas estrenadas en 1985 pero, debido a este error, un análisis del fichero podría resolver que tenemos tres películas estrenadas en este año.
 
 Una alternativa al uso de ficheros que solventa todos estos errores es el uso de bases de datos (\textbf{BD}) y sistemas de gestión de bases de datos (\textbf{SGBD}).
 Definimos una \textbf{BD} como un \textit{conjunto de datos comunes a un proyecto almacenados sin redundancia para ser útiles a diferentes aplicaciones} y un \textbf{SGBD} como un \textit{conjunto de elementos software con capacidad para definir, mantener y utilizar una base de datos}.
 
-Los SGBD debe permitir, como mínimo, definir estructuras de almacenamiento, acceder a los datos de su BD de forma eficiente y segura, organizar la actualización de los datos y el acceso multiusuario y otras funcionalidades que se verán a lo largo de la asignatura. Las operaciones que se pueden realizar sobre los SGBD son referidos como \code{CRUD}:
+Los SGBD debe permitir, como mínimo, definir estructuras de almacenamiento, acceder a los datos de su BD de forma eficiente y segura, organizar la actualización de los datos y el acceso multiusuario y otras funcionalidades que se verán a lo largo de la asignatura. Las operaciones que se pueden realizar sobre los SGBD son referidos como \texttt{CRUD}:
 
 \begin{itemize}
-	\item\code{Create}\textbf{:} Insertar datos en la BD\@.
-	\item\code{Read}\textbf{:} Obtener datos previamente insertados en la BD\@.
-	\item\code{Update}\textbf{:} Modificar los datos existenten en la BD\@.
-	\item\code{Delete}\textbf{:} Borrar datos existenten en la BD\@.
+	\item\texttt{Create}\textbf{:} Insertar datos en la BD\@.
+	\item\texttt{Read}\textbf{:} Obtener datos previamente insertados en la BD\@.
+	\item\texttt{Update}\textbf{:} Modificar los datos existenten en la BD\@.
+	\item\texttt{Delete}\textbf{:} Borrar datos existenten en la BD\@.
 \end{itemize}
 
 Todas estas operaciones se realizan de forma transparente al usuario, es decir, éste no tiene que programar código adicional para manejar los ficheros que la conforman.

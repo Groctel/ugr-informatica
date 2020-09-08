@@ -1,7 +1,7 @@
 \section{Herramientas de administración básicas}
 
 \textbf{Antes de empezar:} A lo largo de este módulo se mostrarán órdenes ejecutadas en una shell de Linux y su correspondiente salida.
-La salida de estas órdenes se mostrará en forma de comentario (precedida de \code{\#}) para facilitar su lectura.
+La salida de estas órdenes se mostrará en forma de comentario (precedida de \texttt{\#}) para facilitar su lectura.
 
 \subsection{Inicialización del kernel}
 
@@ -19,10 +19,10 @@ chmod +x /tmp/kernel132-3.0.4 /tmp/Fedora14-x86-root_fs
 Consideraciones sobre el kernel:
 
 \begin{itemize}
-	\item El nombre de usuario es \code{root} y no tiene contraseña.
+	\item El nombre de usuario es \texttt{root} y no tiene contraseña.
 	\item No incorpora entorno de escritorio ni usuarios por defecto.
-	\item Aunque se puede ejecutar en el directorio donde se encuentra comprimido, lo movemos a \code{/tmp} para eliminar los cambios cada vez que cerramos el ordenador.
-	\item El editor de texto incorporado es una versión mínima de \code{vim}, ejecutable como \code{vi}. Es importante tener en cuenta que no son lo mismo. Una compilación real de \code{vi} sería insufrible.
+	\item Aunque se puede ejecutar en el directorio donde se encuentra comprimido, lo movemos a \texttt{/tmp} para eliminar los cambios cada vez que cerramos el ordenador.
+	\item El editor de texto incorporado es una versión mínima de \texttt{vim}, ejecutable como \texttt{vi}. Es importante tener en cuenta que no son lo mismo. Una compilación real de \texttt{vi} sería insufrible.
 \end{itemize}
 
 \subsection{Administración de usuarios y grupos en Linux}
@@ -30,12 +30,12 @@ Consideraciones sobre el kernel:
 \subsubsection{Usuario administrador del sistema en Linux: root}
 
 El administrador del sistema (o superusuario) es aquel que tiene todos los privilegios sobre cualquier aspecto del mismo.
-El Linux, este usuario se llama \code{root} y su directorio personal es \code{/root}.
+El Linux, este usuario se llama \texttt{root} y su directorio personal es \texttt{/root}.
 Debido a la responsabilidad del trabajo del administrador, éste debe conocer el sistema y saber tomar decisiones en situacione críticas de forma eficaz y responsable, ya que el trabajo dle resto de usuarios está en sus manos en todo momento.
 A lo largo de este módulo exploraremos varias de las tareas que realiza.
 
-Para entrar en un sistema como administrador, debemos iniciar sesión como el usuario \code{root} con la contraseña designada.
-Desde una terminal iniciada por otro usuario se puede acceder mediante la orden \code{su} (\emph{superuser}), que pedirá la contraseña de \code{root} y abrirá una subshell como \code{root}.
+Para entrar en un sistema como administrador, debemos iniciar sesión como el usuario \texttt{root} con la contraseña designada.
+Desde una terminal iniciada por otro usuario se puede acceder mediante la orden \texttt{su} (\emph{superuser}), que pedirá la contraseña de \texttt{root} y abrirá una subshell como \texttt{root}.
 
 \begin{lstlisting}[language=Bash]
 whoami
@@ -46,9 +46,9 @@ whoami
 # root
 \end{lstlisting}
 
-Debido a que las decisiones que toma \code{root} en Linux son definitivas, no es responsable trabajar siempre desde su cuenta.
+Debido a que las decisiones que toma \texttt{root} en Linux son definitivas, no es responsable trabajar siempre desde su cuenta.
 Sólo se debe acceder a ella cuando sea estrictamente necesario.
-Como dice \code{sudo} la primera vez que se ejecuta:
+Como dice \texttt{sudo} la primera vez que se ejecuta:
 
 \begin{lstlisting}[language=Bash]
 # We trust you have received the usual lecture from the local System Administrator. It usually boils down to these three things:
@@ -65,47 +65,47 @@ Un usuario es una persona que trabaja en un sistema Linux identificada en todo m
 Esta cuenta de usuario lo identifica mediante los siguientes campos:
 
 \begin{itemize}
-	\item\code{Username}\textbf{:} Nombre de usuario.
-	\item\code{UID}\textbf{:} Identificador de usuario. Un número entero asignado interna y unívocamente desde el sistema. El \code{UID} de \code{root} es \code{0}.
-	\item\code{GID}\textbf{:} Identificador de grupo. Los usuarios pueden pertenecer a varios grupos de usuarios, perteneciendo siempre a un \textbf{grupo principal} y a tantos \textbf{grupos secundarios} como quieran. El grupo principal del usuario se puede consultar en \code{/etc/passwd} y los grupos secuendarios en \code{/etc/groups}.
+	\item\texttt{Username}\textbf{:} Nombre de usuario.
+	\item\texttt{UID}\textbf{:} Identificador de usuario. Un número entero asignado interna y unívocamente desde el sistema. El \texttt{UID} de \texttt{root} es \texttt{0}.
+	\item\texttt{GID}\textbf{:} Identificador de grupo. Los usuarios pueden pertenecer a varios grupos de usuarios, perteneciendo siempre a un \textbf{grupo principal} y a tantos \textbf{grupos secundarios} como quieran. El grupo principal del usuario se puede consultar en \texttt{/etc/passwd} y los grupos secuendarios en \texttt{/etc/groups}.
 \end{itemize}
 
 La información relativa a los usuarios del sistema se guarda en los siguientes ficheros:
 
 \begin{itemize}
-	\item\code{/etc/group}\textbf{:} Definición de grupos de usuarios y sus miembros.
-	\item\code{/etc/passwd}\textbf{:} Información sobre las cuentas de usuario.
-	\item\code{/etc/shadow}\textbf{:} Contraseñas encriptadas e información de envejecimiento de las cuentas.
+	\item\texttt{/etc/group}\textbf{:} Definición de grupos de usuarios y sus miembros.
+	\item\texttt{/etc/passwd}\textbf{:} Información sobre las cuentas de usuario.
+	\item\texttt{/etc/shadow}\textbf{:} Contraseñas encriptadas e información de envejecimiento de las cuentas.
 \end{itemize}
 
-Crear una cuenta de usuario implica modificar los archivos anteriores con su nombre, contraseña y grupos; crear su propio directorio \code{home} con permisos de acceso únicos para él; establecer parámetros de la cuenta como su envejecimiento, cuotas o permisos de impresión; copiar los ficheros de inicialización relevantes (almacenados en \code{/etc/skel}) en su directorio \code{home} y probarla.
-Debido a que esto es una tarea muy larga que puede dar pie a numerosos errores, la orden \code{useradd} nos permite automatizarla:
+Crear una cuenta de usuario implica modificar los archivos anteriores con su nombre, contraseña y grupos; crear su propio directorio \texttt{home} con permisos de acceso únicos para él; establecer parámetros de la cuenta como su envejecimiento, cuotas o permisos de impresión; copiar los ficheros de inicialización relevantes (almacenados en \texttt{/etc/skel}) en su directorio \texttt{home} y probarla.
+Debido a que esto es una tarea muy larga que puede dar pie a numerosos errores, la orden \texttt{useradd} nos permite automatizarla:
 
 \begin{lstlisting}[language=Bash]
 useradd -m nombreusuario
 \end{lstlisting}
 
-El argumento \code{-m} crea automáticamente el directorio \code{home}.
-Esta orden toma los valores por defecto de creación de usuarios especificados en \code{/etc/default/useradd} y \code{/etc/login.defs} a menos que se le pasen argumentos que los modifiquen.
+El argumento \texttt{-m} crea automáticamente el directorio \texttt{home}.
+Esta orden toma los valores por defecto de creación de usuarios especificados en \texttt{/etc/default/useradd} y \texttt{/etc/login.defs} a menos que se le pasen argumentos que los modifiquen.
 
 Los valores asoociados a una cuenta pueden modificarse mediante las siguientes órdenes:
 
 \begin{itemize}
-	\item\code{newusers}\textbf{:} Crea tantas cuentas de usuario como las especificadas en un fichero de texto pasado como argumento, que debe tener el mismo formato que \code{/etc/passwd}.
-	\item\code{userdel}\textbf{:} Elimina una cuenta de usuario, pero no su directorio \code{home} si no se indica.
-	\item\code{usermod}\textbf{:} Modifica una cuenta de usuario ya existente.
+	\item\texttt{newusers}\textbf{:} Crea tantas cuentas de usuario como las especificadas en un fichero de texto pasado como argumento, que debe tener el mismo formato que \texttt{/etc/passwd}.
+	\item\texttt{userdel}\textbf{:} Elimina una cuenta de usuario, pero no su directorio \texttt{home} si no se indica.
+	\item\texttt{usermod}\textbf{:} Modifica una cuenta de usuario ya existente.
 \end{itemize}
 
 Los ficheros de inicialización de un usuario son ficheros que se ejecutan en momentos específicos y están diseñados para la shell que ejecuta dicho usuario.
-Son los siguientes (supongamos que el usuario trabaja con \code{zsh}):
+Son los siguientes (supongamos que el usuario trabaja con \texttt{zsh}):
 
 \begin{itemize}
-\item\code{.zsh\_logout}\textbf{:} Se ejecuta cuando el usuario cierra su sesión.
-\item\code{.zsh\_profile}\textbf{:} Se ejecuta cuando el usuario abre sesión.
-\item\code{.zshrc}\textbf{:} Se ejecuta cada vez que se abre la shell.\footnote{Los ficheros ocultos acabados en \code{rc} se conocen como \textbf{run command files}. Son ficheros que se ejecutan cada vez que se inicia el programa al que se refieren. Por ejemplo, \code{.vimrc} se ejecuta cada vez que se inicia \code{vim}.}
+\item\texttt{.zsh\_logout}\textbf{:} Se ejecuta cuando el usuario cierra su sesión.
+\item\texttt{.zsh\_profile}\textbf{:} Se ejecuta cuando el usuario abre sesión.
+\item\texttt{.zshrc}\textbf{:} Se ejecuta cada vez que se abre la shell.\footnote{Los ficheros ocultos acabados en \texttt{rc} se conocen como \textbf{run command files}. Son ficheros que se ejecutan cada vez que se inicia el programa al que se refieren. Por ejemplo, \texttt{.vimrc} se ejecuta cada vez que se inicia \texttt{vim}.}
 \end{itemize}
 
-Para cambiar la contraseña de un usuario basta con usar la orden \code{passwd} y especificar el usuario cuya contraseña se quiere cambiar como argumento.
+Para cambiar la contraseña de un usuario basta con usar la orden \texttt{passwd} y especificar el usuario cuya contraseña se quiere cambiar como argumento.
 
 \begin{lstlisting}[language=Bash]
 passwd groctel
@@ -115,40 +115,40 @@ passwd groctel
 # Retype new password:
 \end{lstlisting}
 
-Para cambiar la shell que ejecuta el usuario, podemos modificar el último parámetro de la línea del mismo en \code{/etc/passwd} a una de las shells definidas en \code{/etc/shells} o podemos simplemente usar la orden \code{chsh}.
-El argumento \code{-s} nos permite indicar la shell que queremos asignar:
+Para cambiar la shell que ejecuta el usuario, podemos modificar el último parámetro de la línea del mismo en \texttt{/etc/passwd} a una de las shells definidas en \texttt{/etc/shells} o podemos simplemente usar la orden \texttt{chsh}.
+El argumento \texttt{-s} nos permite indicar la shell que queremos asignar:
 
 \begin{lstlisting}[language=Bash]
 chsh -s /usr/bin/zsh
 \end{lstlisting}
 
-Si un usuario no tiene ninguna shell asignada, se usa por defecto aquella a la que apunta \code{/bin/sh}.
-Si se quiere privar a un usuario de usar una shell, se le pueden asignar tanto \code{/bin/false} como \code{/sbin/nologin}.
+Si un usuario no tiene ninguna shell asignada, se usa por defecto aquella a la que apunta \texttt{/bin/sh}.
+Si se quiere privar a un usuario de usar una shell, se le pueden asignar tanto \texttt{/bin/false} como \texttt{/sbin/nologin}.
 También se puede asignar cualquier ejecutable como shell, de forma que el usuario estará restringido a la ejecución del mismo.
 
 Por último, las cuentas de usuario pueden estar restringidas por parámetros temporales llamados \textbf{parámetros de envejecimiento}.
-Estos valores se almacenan en \code{/etc/shadow} y son los siguientes:
+Estos valores se almacenan en \texttt{/etc/shadow} y son los siguientes:
 
 \begin{itemize}
-	\item\code{changed}\textbf{:} Fecha del último cambio de contraseña.
-	\item\code{expired}\textbf{:} Fecha en la que la cuenta expira y se deshabilita automáticamente.
-	\item\code{inactive}\textbf{:} Número de días tras la expiración de la contraseña tras los que se deshabilita automáticamente la cuenta.
-	\item\code{maxlife}\textbf{:} Número máximo de días que puede permanecer una contraseña sin cambiarla.
-	\item\code{minlife}\textbf{:} Número mínimo de días que deben pasar para cambiar la contraseña.
-	\item\code{warn}\textbf{:} Número de días antes de que la contraseña expire en los que se debe informar al usuario de que debe hacerlo.
+	\item\texttt{changed}\textbf{:} Fecha del último cambio de contraseña.
+	\item\texttt{expired}\textbf{:} Fecha en la que la cuenta expira y se deshabilita automáticamente.
+	\item\texttt{inactive}\textbf{:} Número de días tras la expiración de la contraseña tras los que se deshabilita automáticamente la cuenta.
+	\item\texttt{maxlife}\textbf{:} Número máximo de días que puede permanecer una contraseña sin cambiarla.
+	\item\texttt{minlife}\textbf{:} Número mínimo de días que deben pasar para cambiar la contraseña.
+	\item\texttt{warn}\textbf{:} Número de días antes de que la contraseña expire en los que se debe informar al usuario de que debe hacerlo.
 \end{itemize}
 
-Estos valores se establecen mediante las órdenes \code{chage} y \code{passwd} y se toman por defecto de \code{/etc/login.defs}.
+Estos valores se establecen mediante las órdenes \texttt{chage} y \texttt{passwd} y se toman por defecto de \texttt{/etc/login.defs}.
 
 \subsubsection{Gestión de grupos}
 
 Un grupo es un conjunto de usuarios que comparten recursos o archivos del sistema.
 Sirven para garantizar permisos concretos a un conjunto de usuarios sin tener que asignarlos individualmente cada vez que se cambien.
-Los grupos se identifican mediante los siguientes campos, que se encuentran almacenados en \code{/etc/group}:
+Los grupos se identifican mediante los siguientes campos, que se encuentran almacenados en \texttt{/etc/group}:
 
 \begin{itemize}
-	\item\code{groupname}\textbf{:} Nombre que se le da al grupo.
-	\item\code{GID}\textbf{:} Número entero que actúa como identificador unívoco del grupo.
+	\item\texttt{groupname}\textbf{:} Nombre que se le da al grupo.
+	\item\texttt{GID}\textbf{:} Número entero que actúa como identificador unívoco del grupo.
 \end{itemize}
 
 \pagebreak
@@ -156,15 +156,15 @@ Los grupos se identifican mediante los siguientes campos, que se encuentran alma
 Los grupos se pueden gestionar mediante las siguientes órdenes:
 
 \begin{itemize}
-	\item\code{id}\textbf{:} Muestra la información sobre los grupos a los que pertenece el usuario pasado como argumento.
-	\item\code{newgrp}\textbf{:} Cambia de grupo activo al pasado como argumento, lanzando una shell con el mismo.
-	\item\code{gpasswd}\textbf{:} Asigna una contraseña al grupo pasado como argumento.
-	\item\code{gpasswd -a}\textbf{:} Añade el usuario pasado como segundo argumento al grupo pasado como tercer argumento.
-	\item\code{groupadd}\textbf{:} Crea un nuevo grupo con el nombre pasado como argumento.
-	\item\code{groupdel}\textbf{:} Elimina el grupo pasado como argumento.
-	\item\code{groupmod}\textbf{:} Modifica el grupo pasado como argumento.
-	\item\code{groups}\textbf{:} Muestra los grupos a los que pertenece el usuario pasado como argumento.
-	\item\code{grpck}\textbf{:} Comprueba la consistencia del fichero de grupos.
+	\item\texttt{id}\textbf{:} Muestra la información sobre los grupos a los que pertenece el usuario pasado como argumento.
+	\item\texttt{newgrp}\textbf{:} Cambia de grupo activo al pasado como argumento, lanzando una shell con el mismo.
+	\item\texttt{gpasswd}\textbf{:} Asigna una contraseña al grupo pasado como argumento.
+	\item\texttt{gpasswd -a}\textbf{:} Añade el usuario pasado como segundo argumento al grupo pasado como tercer argumento.
+	\item\texttt{groupadd}\textbf{:} Crea un nuevo grupo con el nombre pasado como argumento.
+	\item\texttt{groupdel}\textbf{:} Elimina el grupo pasado como argumento.
+	\item\texttt{groupmod}\textbf{:} Modifica el grupo pasado como argumento.
+	\item\texttt{groups}\textbf{:} Muestra los grupos a los que pertenece el usuario pasado como argumento.
+	\item\texttt{grpck}\textbf{:} Comprueba la consistencia del fichero de grupos.
 \end{itemize}
 
 \subsubsection{Usuarios especiales y grupos estándar}
@@ -176,18 +176,18 @@ Aquí mostramos algunos de ellos:
 \begin{itemize}
 	\item\textbf{Usuarios especiales:}
 	\begin{itemize}
-		\item\textbf{Administrador del sistema:} \code{root}.
-		\item\textbf{Ejecución de servicios:} \code{bin}, \code{daemon}, \code{lp}, \code{sync}, \code{shutdown}\ldots
-		\item\textbf{Herramientas y otras utilidades:} \code{mail}, \code{news}, \code{ftp}\ldots
-		\item\textbf{Creados por herramientras para ejecutar sus servicios:} \code{postgres}, \code{mysql}, \code{xfs}\ldots
-		\item\textbf{NFS y otras utilidades:} \code{nobody}, \code{nfsnobody}.
+		\item\textbf{Administrador del sistema:} \texttt{root}.
+		\item\textbf{Ejecución de servicios:} \texttt{bin}, \texttt{daemon}, \texttt{lp}, \texttt{sync}, \texttt{shutdown}\ldots
+		\item\textbf{Herramientas y otras utilidades:} \texttt{mail}, \texttt{news}, \texttt{ftp}\ldots
+		\item\textbf{Creados por herramientras para ejecutar sus servicios:} \texttt{postgres}, \texttt{mysql}, \texttt{xfs}\ldots
+		\item\textbf{NFS y otras utilidades:} \texttt{nobody}, \texttt{nfsnobody}.
 	\end{itemize}
 	\item\textbf{Grupos estándar:}
 	\begin{itemize}
-		\item\textbf{Preconfigurados (GID inferior a 500):} \code{root}, \code{sys}, \code{bin}, \code{daemon}, \code{adm}, \code{lp}, \code{disk}, \code{main}, \code{ftp}, \code{nobody}.
-		\item\textbf{Específicos para dispositivos:} \code{tty}, \code{dialout}, \code{disk}, \code{cdrom}, \code{audio}, \code{video}.
-		\item\textbf{Propietario del kernel:} \code{kernel}.
-		\item\textbf{Por defecto para todos los usuarios:} \code{users}.
+		\item\textbf{Preconfigurados (GID inferior a 500):} \texttt{root}, \texttt{sys}, \texttt{bin}, \texttt{daemon}, \texttt{adm}, \texttt{lp}, \texttt{disk}, \texttt{main}, \texttt{ftp}, \texttt{nobody}.
+		\item\textbf{Específicos para dispositivos:} \texttt{tty}, \texttt{dialout}, \texttt{disk}, \texttt{cdrom}, \texttt{audio}, \texttt{video}.
+		\item\textbf{Propietario del kernel:} \texttt{kernel}.
+		\item\textbf{Por defecto para todos los usuarios:} \texttt{users}.
 	\end{itemize}
 \end{itemize}
 
@@ -198,7 +198,7 @@ Esta estructura se compone de ficheros directorios que contienen ficheros que pu
 Los ficheros pueden referenciarse de dos formas:
 
 \begin{itemize}
-	\item\textbf{Ruta absoluta:} Se indican todos los directorios que han de seguirse desde el directorio raíz (\code{/}) hasta el fichero.
+	\item\textbf{Ruta absoluta:} Se indican todos los directorios que han de seguirse desde el directorio raíz (\texttt{/}) hasta el fichero.
 	\item\textbf{Ruta relativa:} Se indican todos los directorios que han de seguirse desde el direcotorio actual hasta el fichero.
 \end{itemize}
 
@@ -208,21 +208,21 @@ FHS (\emph{Filesystem Hierarchy Standard}) es un estándar mantenido por la Linu
 Este estándar divide los ficheros en los siguientes directorios:
 
 \begin{itemize}
-	\item\code{/bin}\textbf{:} Programas ejecutables por cualquier usuario.
-	\item\code{/boot}\textbf{:} Ficheros de arranque del sistema.
-	\item\code{/dev}\textbf{:} Ficheros especiales de dispositivos.
-	\item\code{/etc}\textbf{:} Ficheros de configuración del sistema.
-	\item\code{/home}\textbf{:} Directorios personales de los usuarios.
-	\item\code{/lib}\textbf{:} Bibliotecas dependencia de los programas ubicados en \code{/bin} y \code{/sbin}.
-	\item\code{/media}\textbf{:} Punto de montaje de dispositivos extraíbles.
-	\item\code{/mnt}\textbf{:} Punto de montaje de sistemas de archivos temporales.
-	\item\code{/opt}\textbf{:} Programas que no forman parte de la distribución del sistema.
-	\item\code{/proc}\textbf{:} Sistema de archivos virtual (VFS).
-	\item\code{/root}\textbf{:} Directorio personal de \code{root}.
-	\item\code{/sbin}\textbf{:} Programas ejecutables por \code{root}.
-	\item\code{/tmp}\textbf{:} Ficheros temporales que se eliminan al apagar el sistema.
-	\item\code{/usr}\textbf{:} Recursos universales del sistema.
-	\item\code{var}\textbf{:} Ficheros de contenido variable durante el funcionamiento del sistema.
+	\item\texttt{/bin}\textbf{:} Programas ejecutables por cualquier usuario.
+	\item\texttt{/boot}\textbf{:} Ficheros de arranque del sistema.
+	\item\texttt{/dev}\textbf{:} Ficheros especiales de dispositivos.
+	\item\texttt{/etc}\textbf{:} Ficheros de configuración del sistema.
+	\item\texttt{/home}\textbf{:} Directorios personales de los usuarios.
+	\item\texttt{/lib}\textbf{:} Bibliotecas dependencia de los programas ubicados en \texttt{/bin} y \texttt{/sbin}.
+	\item\texttt{/media}\textbf{:} Punto de montaje de dispositivos extraíbles.
+	\item\texttt{/mnt}\textbf{:} Punto de montaje de sistemas de archivos temporales.
+	\item\texttt{/opt}\textbf{:} Programas que no forman parte de la distribución del sistema.
+	\item\texttt{/proc}\textbf{:} Sistema de archivos virtual (VFS).
+	\item\texttt{/root}\textbf{:} Directorio personal de \texttt{root}.
+	\item\texttt{/sbin}\textbf{:} Programas ejecutables por \texttt{root}.
+	\item\texttt{/tmp}\textbf{:} Ficheros temporales que se eliminan al apagar el sistema.
+	\item\texttt{/usr}\textbf{:} Recursos universales del sistema.
+	\item\texttt{var}\textbf{:} Ficheros de contenido variable durante el funcionamiento del sistema.
 \end{itemize}
 
 \subsubsection{Órdenes básicas para la gestión del sistema de archivos}
@@ -230,15 +230,15 @@ Este estándar divide los ficheros en los siguientes directorios:
 Para gestionar los ficheros de un sistema podemos usar las siguientes órdenes:
 
 \begin{itemize}
-	\item\textbf{Exploración del sistema:} \code{cd}, \code{ls}, \code{pwd}.
-	\item\textbf{Creación y borrado de ficheros:} \code{mkdir}, \code{rm}, \code{rmdir}, \code{touch}.
-	\item\textbf{Copia y movimiento de ficheros:} \code{cp}, \code{mv}.
-	\item\textbf{Modificación de atributos:} \code{chmod}, \code{touch}.
-	\item\textbf{Consulta de fichero:} \code{cat}, \code{file}, \code{ls}.
+	\item\textbf{Exploración del sistema:} \texttt{cd}, \texttt{ls}, \texttt{pwd}.
+	\item\textbf{Creación y borrado de ficheros:} \texttt{mkdir}, \texttt{rm}, \texttt{rmdir}, \texttt{touch}.
+	\item\textbf{Copia y movimiento de ficheros:} \texttt{cp}, \texttt{mv}.
+	\item\textbf{Modificación de atributos:} \texttt{chmod}, \texttt{touch}.
+	\item\textbf{Consulta de fichero:} \texttt{cat}, \texttt{file}, \texttt{ls}.
 \end{itemize}
 
-La información relativa al sistema de archivos se almacena en \code{/etc}.
-El fichero \code{/etc/fstab} contiene información sobre los parámetros de montaje de los sistemas de archivos disponibles en el sistema.
+La información relativa al sistema de archivos se almacena en \texttt{/etc}.
+El fichero \texttt{/etc/fstab} contiene información sobre los parámetros de montaje de los sistemas de archivos disponibles en el sistema.
 Su sintaxis es la siguiente:
 
 \begin{itemize}
@@ -247,20 +247,20 @@ Su sintaxis es la siguiente:
 \item\textbf{Tipo de sistema:} Tipo de sistema de archivos.
 \item\textbf{Opciones de montaje:}
 \begin{itemize}
-	\item\textbf{Modos de acceso:} \code{rw|ro}.
-	\item\textbf{Modo de acceso SUID:} \code{suid|nosuid}.
-	\item\textbf{Montaje automático:} \code{auto|noauto}.
-	\item\textbf{Ejecución de archivos:} \code{exec|noexec}.
-	\item\textbf{Cuotas de usuario y grupo:} \code{usrquota}, \code{grpquota}.
-	\item\textbf{Valores por defecto (\code{defaults}):} \code{rw}, \code{suid}, \code{dev}, \code{exec}, \code{auto}, \code{nouser}, \code{async}.
-	\item\textbf{Permiso de montaje para usuarios:} \code{user}, \code{users}, \code{owner}.
-	\item\textbf{Propietario y grupo propietario:} \code{uid=500}, \code{gid=100}.
-	\item\textbf{Máscara por defecto para ficheros nuevos:}\footnote{Ver \S2.1.1} \code{umask=750}.
+	\item\textbf{Modos de acceso:} \texttt{rw|ro}.
+	\item\textbf{Modo de acceso SUID:} \texttt{suid|nosuid}.
+	\item\textbf{Montaje automático:} \texttt{auto|noauto}.
+	\item\textbf{Ejecución de archivos:} \texttt{exec|noexec}.
+	\item\textbf{Cuotas de usuario y grupo:} \texttt{usrquota}, \texttt{grpquota}.
+	\item\textbf{Valores por defecto (\texttt{defaults}):} \texttt{rw}, \texttt{suid}, \texttt{dev}, \texttt{exec}, \texttt{auto}, \texttt{nouser}, \texttt{async}.
+	\item\textbf{Permiso de montaje para usuarios:} \texttt{user}, \texttt{users}, \texttt{owner}.
+	\item\textbf{Propietario y grupo propietario:} \texttt{uid=500}, \texttt{gid=100}.
+	\item\textbf{Máscara por defecto para ficheros nuevos:}\footnote{Ver \S2.1.1} \texttt{umask=750}.
 \end{itemize}
 \item\textbf{Frecuencia de volcado:} Frecuencia con la que se realizan copias de seguridad del sistema.
 \item\textbf{Orden de arranque:} Orden en el que se arrancan los sistemas de archivos al arrancar el sistema.
 \end{itemize}
 
-También podemos encontrar información sobre el sistema en \code{/etc/mtab} y \code{/proc}, que contiene ficheros de texto con información sobre el estado del sistema.
-Ejemplos de esto son \code{/proc/filesystems}, que contiene todos los sistemas de archivos disposibles, y \code{/proc/mounts}, que contiene todos los sistemas de archivos montados actualmente, ya sea de forma manual o automática.
+También podemos encontrar información sobre el sistema en \texttt{/etc/mtab} y \texttt{/proc}, que contiene ficheros de texto con información sobre el estado del sistema.
+Ejemplos de esto son \texttt{/proc/filesystems}, que contiene todos los sistemas de archivos disposibles, y \texttt{/proc/mounts}, que contiene todos los sistemas de archivos montados actualmente, ya sea de forma manual o automática.
 

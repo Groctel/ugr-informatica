@@ -4,7 +4,7 @@
 
 \subsubsection{Enunciado}
 
-Ejecutar \code{lscpu} en el PC y en un nodo de cómputo de \textit{atcgrid}.
+Ejecutar \texttt{lscpu} en el PC y en un nodo de cómputo de \textit{atcgrid}.
 
 \begin{itemize}
 	\item Mostrar el resultado de estas ejecuciones.
@@ -13,7 +13,7 @@ Ejecutar \code{lscpu} en el PC y en un nodo de cómputo de \textit{atcgrid}.
 
 \subsubsection{Solución}
 
-Ejecución de \code{lscpu} en el PC:
+Ejecución de \texttt{lscpu} en el PC:
 
 \begin{lstlisting}[language=sh]
 lscpu
@@ -47,7 +47,7 @@ lscpu
 
 \pagebreak
 
-Ejecución de \code{lscpu} en el \textit{atcgrid}:
+Ejecución de \texttt{lscpu} en el \textit{atcgrid}:
 
 \begin{lstlisting}[language=sh]
 lscpu
@@ -90,11 +90,11 @@ PC\ \      & 1\cdot6\cdot2=12 \\
 
 \subsubsection{Enunciado}
 
-Compilar y ejecutar en el PC el código \code{HelloOMP.c} del seminario.
+Compilar y ejecutar en el PC el código \texttt{HelloOMP.c} del seminario.
 
 \begin{itemize}
 	\item Mostar la compilación y ejecución en el PC\@.
-	\item Justificar el número de ``Hello world'' que se imprimen en pantalla teniendo en cuenta la salida que devuelve \code{lscpu}.
+	\item Justificar el número de ``Hello world'' que se imprimen en pantalla teniendo en cuenta la salida que devuelve \texttt{lscpu}.
 \end{itemize}
 
 \pagebreak
@@ -118,14 +118,14 @@ gcc -O2 -fopenmp HelloOMP.c -o HelloOMP
 # (6:Hello, World!!!)
 \end{lstlisting}
 
-Se imprimen $12$ ``Hello World'', uno por cada hebra (o núcleo lógico) del sistema identificado por un número en el rango $[0-11]$ mediante la llamada \code{omp\_get\_thread\_num()}.
+Se imprimen $12$ ``Hello World'', uno por cada hebra (o núcleo lógico) del sistema identificado por un número en el rango $[0-11]$ mediante la llamada \texttt{omp\_get\_thread\_num()}.
 
 \section{}\label{ej1-3}
 
 \subsubsection{Enunciado}
 
-Copiar el ejecutable de \code{HelloOMP.c} que ha generado en~\ref{ej1-2} y que se encuentra en su directorio del PC al directorio de su \code{\$HOME} en el \textit{front-end} de \textit{atcgrid}.
-Ejecutar este código en un nodo de cómputo de \textit{atcgrid} a través de cola \code{ac} del gestor de colas (no use ningún script) utilizando directamente en la línea de comandos:
+Copiar el ejecutable de \texttt{HelloOMP.c} que ha generado en~\ref{ej1-2} y que se encuentra en su directorio del PC al directorio de su \texttt{\$HOME} en el \textit{front-end} de \textit{atcgrid}.
+Ejecutar este código en un nodo de cómputo de \textit{atcgrid} a través de cola \texttt{ac} del gestor de colas (no use ningún script) utilizando directamente en la línea de comandos:
 
 \begin{lstlisting}[language=sh]
 srun -p ac -n1 --cpus-per-task=12 --hint=nomultithread HelloOMP
@@ -135,7 +135,7 @@ srun -p ac -n1 HelloOMP
 
 Mostrar el envío a la cola de la ejecución y el resultado de esta ejecución tal y como la devuelve el gestor de colas.
 
-¿Qué orden \code{srun} usaría para que \code{HelloOMP} utilice los $12$ núcleos físicos de un nodo de cómputo de \textit{atcgrid} (se debe imprimir un único mensaje desde cada uno de ellos, $12$ en total)?
+¿Qué orden \texttt{srun} usaría para que \texttt{HelloOMP} utilice los $12$ núcleos físicos de un nodo de cómputo de \textit{atcgrid} (se debe imprimir un único mensaje desde cada uno de ellos, $12$ en total)?
 
 \subsubsection{Solución}
 
@@ -191,7 +191,7 @@ srun -p ac -n1 HelloOMP
 # (0:Hello, World!!!)
 \end{lstlisting}
 
-Para que \code{HelloOMP} utilize los $12$ núcleos físicos de un nodo de cómputo de \textit{atcgrid} se debe usar la siguiente orden:
+Para que \texttt{HelloOMP} utilize los $12$ núcleos físicos de un nodo de cómputo de \textit{atcgrid} se debe usar la siguiente orden:
 
 \begin{lstlisting}[language=sh]
 srun -p ac -n1 --cpus-per-task=12 --hint=nomultithread HelloOMP
@@ -201,19 +201,19 @@ srun -p ac -n1 --cpus-per-task=12 --hint=nomultithread HelloOMP
 
 \subsubsection{Enunciado}
 
-Modificar en su PC \code{HelloOMP.c} para que se imprima ``world'' en un \code{printf} distinto al usado para ``Hello''.
-En ambos \code{printf} se debe imprimir el identificador de la hebra que escribe en pantalla.
-Nombrar al código resultante \code{HelloOMP2.c}.
+Modificar en su PC \texttt{HelloOMP.c} para que se imprima ``world'' en un \texttt{printf} distinto al usado para ``Hello''.
+En ambos \texttt{printf} se debe imprimir el identificador de la hebra que escribe en pantalla.
+Nombrar al código resultante \texttt{HelloOMP2.c}.
 Compilar este nuevo código en el PC y ejecutarlo.
 Copiar el fichero ejecutable resultante al \textit{front-end} de \textit{atcgrid}.
-Ejecutar el código en un nodo de cómputo de \textit{atcgrid} usando el script \code{script\_helloomp.sh} del seminario.
+Ejecutar el código en un nodo de cómputo de \textit{atcgrid} usando el script \texttt{script\_helloomp.sh} del seminario.
 
 Utilizar la siguiente orden\footnote{%
-	Utilizar siempre con \code{sbatch} las opciones \code{-n1}, \code{--cpus-per-task}, \code{--exclusive} y, para usar núcleos físicos y no lógicos, no olvidar incluir \code{--hint=nomultithread}.
-	Utilizar siempre con \code{srun}.
-	Si lo usa fuera de un script, usar las mismas opcioens que con \code{sbatch} a excepción de \code{--exclusive}.
-	Recordar que los \code{srun} dentro de un script heredan las opciones utilizadas en el \code{sbatch} que se usa para enviar el script a la cola \code{slurm}.
-	Se recomienda usar \code{sbatch} en lugar de \code{srun} para enviar trabajos a ejecutar a través \code{slurm} porque éste último deja bloqueada la ventana hasta que termina la ejecución, mientras que usando \code{sbatch} la ejecución se realiza en segundo plano.
+	Utilizar siempre con \texttt{sbatch} las opciones \texttt{-n1}, \texttt{--cpus-per-task}, \texttt{--exclusive} y, para usar núcleos físicos y no lógicos, no olvidar incluir \texttt{--hint=nomultithread}.
+	Utilizar siempre con \texttt{srun}.
+	Si lo usa fuera de un script, usar las mismas opcioens que con \texttt{sbatch} a excepción de \texttt{--exclusive}.
+	Recordar que los \texttt{srun} dentro de un script heredan las opciones utilizadas en el \texttt{sbatch} que se usa para enviar el script a la cola \texttt{slurm}.
+	Se recomienda usar \texttt{sbatch} en lugar de \texttt{srun} para enviar trabajos a ejecutar a través \texttt{slurm} porque éste último deja bloqueada la ventana hasta que termina la ejecución, mientras que usando \texttt{sbatch} la ejecución se realiza en segundo plano.
 }:
 
 \begin{lstlisting}[language=sh]
@@ -227,7 +227,7 @@ Explicar cómo ha obtenido esta información.
 
 \subsubsection{Solución}
 
-\code{HelloOMP2.c}:
+\texttt{HelloOMP2.c}:
 \lstinputlisting[language=C]{CuadernoDePracticas/Ej0.4/HelloOMP2.c}
 
 Ejecución en el PC\@:
@@ -263,7 +263,7 @@ cat slurm-54392.out
 #   - Para 1 threads:(0:Hello)(0:World)[AtanasioRubioGil d1estudiante24@atcgrid:~/bp0/ejer3] 2020-06-11 jueves
 \end{lstlisting}
 
-El script se ha ejecutado por el nodo \code{atcgrid1}, como indica la línea \code{Nodos asignados al trabajo}.
+El script se ha ejecutado por el nodo \texttt{atcgrid1}, como indica la línea \texttt{Nodos asignados al trabajo}.
 
 \pagebreak
 
@@ -271,8 +271,8 @@ El script se ha ejecutado por el nodo \code{atcgrid1}, como indica la línea \co
 
 \subsubsection{Enunciado}
 
-Generar en el PC el ejecutable del código fuente C del \textit{Listado 1} para vectores locales (para ello, antes de compilar, debe descomentar la definición de \code{VECTOR\_LOCAL} y comentar las definiciones de \code{VECTOR\_GLOBAL} y \code{VECTOR\_DYNAMIC}).
-El comentario inicial del código muestra la orden para compilar (siempre hay que usar \code{-O2} al compilar como se indica en las normas de prácticas).
+Generar en el PC el ejecutable del código fuente C del \textit{Listado 1} para vectores locales (para ello, antes de compilar, debe descomentar la definición de \texttt{VECTOR\_LOCAL} y comentar las definiciones de \texttt{VECTOR\_GLOBAL} y \texttt{VECTOR\_DYNAMIC}).
+El comentario inicial del código muestra la orden para compilar (siempre hay que usar \texttt{-O2} al compilar como se indica en las normas de prácticas).
 Mostrar la compilación y la ejecución correcta del código en el PC\@.
 
 \subsubsection{Solución}
@@ -304,20 +304,20 @@ gcc -O2 SumaVectores.c -o SumaVectores -lrt
 \section{}\label{ej1-6}
 
 \subsubsection{Enunciado}
-En el código del \textit{Listado 1} se utiliza la función \code{clock\_gettime()} para obtener el tiempo de ejecución del trozo de código que calcula la suma de vectores.
-El código se imprime la variable \code{ncgt}.
+En el código del \textit{Listado 1} se utiliza la función \texttt{clock\_gettime()} para obtener el tiempo de ejecución del trozo de código que calcula la suma de vectores.
+El código se imprime la variable \texttt{ncgt}.
 ¿Qué contiene esta variable?
 
-¿En qué estructura de datos devuelve \code{clock\_gettime()} la información de tiempo?
+¿En qué estructura de datos devuelve \texttt{clock\_gettime()} la información de tiempo?
 Indicar el tipo de estructura de datos, describir la estructura de datos, e indicar los tipos de datos que usa.
 ¿Qué información devuelve exactamente esta función en su estructura de datos?
 ¿Qué representan los valores numéricos que devuelve?
 
 \subsubsection{Solución}
 
-La variable \code{ncgt} contiene el tiempo que tarda el programa en realizar los cómputos con los tres vectores.
+La variable \texttt{ncgt} contiene el tiempo que tarda el programa en realizar los cómputos con los tres vectores.
 
-La llamada a \code{clock\_gettime()} devuelve el tiempo en una estructura \code{timespec}, que es una estructura definida en \code{<time.h>} y que está compuesta por un dato \code{time\_t} que contiene el número de segundos desde el 1 de enero de 1970 y un dato \code{long} que contiene el número de nanosegundos pasados desde el último segundo.
+La llamada a \texttt{clock\_gettime()} devuelve el tiempo en una estructura \texttt{timespec}, que es una estructura definida en \texttt{<time.h>} y que está compuesta por un dato \texttt{time\_t} que contiene el número de segundos desde el 1 de enero de 1970 y un dato \texttt{long} que contiene el número de nanosegundos pasados desde el último segundo.
 
 \section{}\label{ej1-7}
 
@@ -347,7 +347,7 @@ En la columna ``Bytes de un vector'' hay que poner el total de bytes reservado p
 33554432                & 268435456                   & core dumped               & 0.13                       & 0.11                        \\
 67108864                & 536870912                   & core dumped               & 0.13                       & 0.22                        \\
 \end{tabular}
-\caption{Resultados de \code{SumaVectores.c} en mi PC}
+\caption{Resultados de \texttt{SumaVectores.c} en mi PC}
 \end{table}
 
 \begin{table}[!h]
@@ -366,7 +366,7 @@ En la columna ``Bytes de un vector'' hay que poner el total de bytes reservado p
 33554432             & 268435456                 & core dumped               & 0.13                       & 0.13                        \\
 67108864             & 536870912                 & core dumped               & 0.13                       & 0.25                        \\
 \end{tabular}
-\caption{Resultados de \code{SumaVectores.c} en el \textit{atcgrid}}
+\caption{Resultados de \texttt{SumaVectores.c} en el \textit{atcgrid}}
 \end{table}
 \end{center}
 
@@ -402,10 +402,10 @@ La única forma de que no se pudisese reservar memoria sería que no quedara esp
 
 \subsubsection{Enunciado}
 
-¿Cuál es el máximo valor que se puede almacenar en la variable \code{N} teniendo en cuenta su tipo?
+¿Cuál es el máximo valor que se puede almacenar en la variable \texttt{N} teniendo en cuenta su tipo?
 Razonar la respuesta.
 
-Modificar el código fuente C (en el PC) para que el límite de los vectores cuando se declaran como variables globales sea igual al máximo número que se puede almacenar en la variable \code{N} y generar el ejecutable.
+Modificar el código fuente C (en el PC) para que el límite de los vectores cuando se declaran como variables globales sea igual al máximo número que se puede almacenar en la variable \texttt{N} y generar el ejecutable.
 ¿Qué ocurre?
 ¿A qué es debido?
 Mostrar lo que ocurre.
@@ -414,8 +414,8 @@ Mostrar lo que ocurre.
 
 \subsubsection{Solución}
 
-El máximo valor almacenable en \code{N} es $2^{32}-1 = 4294967295$, definido en la constante \code{UINT\_MAX} de \code{<limits.h>}.
-Es el valor máximo almacenable en un \code{unsigned} en x86\_64.
+El máximo valor almacenable en \texttt{N} es $2^{32}-1 = 4294967295$, definido en la constante \texttt{UINT\_MAX} de \texttt{<limits.h>}.
+Es el valor máximo almacenable en un \texttt{unsigned} en x86\_64.
 
 \begin{lstlisting}[language=sh]
 gcc -O2 SumaVectores.c -o SumaVectores -lrt

@@ -1,55 +1,55 @@
 \section{Llamadas al sistema para el sistema de archivos (parte 1)}
 
-A lo largo de este módulo se presupone que se tiene acceso a las bibliotecas \code{libc} y \code{glibc} y conocimientos sobre C y las diferencias que presenta con C++.
-Las llamadas al sistema que se discuten de aquí en adelante pueden referenciarse en el manual del sistema con el prefijo \code{2} (más información en \code{man man}).
-También cabe destacar el uso de \code{errno} y \code{perror} para devolver errores y la posibilidad de usar \code{strace} para analizar la traza de los programas ejecutados a la hora de depurarlos.
+A lo largo de este módulo se presupone que se tiene acceso a las bibliotecas \texttt{libc} y \texttt{glibc} y conocimientos sobre C y las diferencias que presenta con C++.
+Las llamadas al sistema que se discuten de aquí en adelante pueden referenciarse en el manual del sistema con el prefijo \texttt{2} (más información en \texttt{man man}).
+También cabe destacar el uso de \texttt{errno} y \texttt{perror} para devolver errores y la posibilidad de usar \texttt{strace} para analizar la traza de los programas ejecutados a la hora de depurarlos.
 
 \subsection{Entrada/Salida de archivos regulares}
 
-A la hora de abrir un fichero lo hacemos con \code{open} (\S\ref{open}), que lo crea en caso de que no exista, y lo cerramos con \code{close} (\S\ref{close}).
-Podemos leer su contenido con \code{read} (\S\ref{read}) y escribirlo con \code{write}.
+A la hora de abrir un fichero lo hacemos con \texttt{open} (\S\ref{open}), que lo crea en caso de que no exista, y lo cerramos con \texttt{close} (\S\ref{close}).
+Podemos leer su contenido con \texttt{read} (\S\ref{read}) y escribirlo con \texttt{write}.
 
-Todos los ficheros abiertos por un proceso se identifican mediante un descriptor de fichero (\code{fd}), que es un entero no negativo que lo identifica unívocamente en el fichero en el que se encuentra.
+Todos los ficheros abiertos por un proceso se identifican mediante un descriptor de fichero (\texttt{fd}), que es un entero no negativo que lo identifica unívocamente en el fichero en el que se encuentra.
 De esta manera, podemos asignar un número a un fichero en función de la función (valga la redundancia) que va a realizar en el programa sin necesitar especificar su ruta cada vez que lo referenciamos.
-Por convenio, POSIX incorpora tres descriptores propios de las shell definidos en \code{unistd.h}:
+Por convenio, POSIX incorpora tres descriptores propios de las shell definidos en \texttt{unistd.h}:
 
 \begin{itemize}
-	\item\textbf{0:} Entrada estándar (\code{STDIN\_FILENO}).
-	\item\textbf{1:} Salida estándar (\code{STDOUT\_FILENO}).
-	\item\textbf{2:} Salida de error estándar (\code{STDERR\_FILENO}).
+	\item\textbf{0:} Entrada estándar (\texttt{STDIN\_FILENO}).
+	\item\textbf{1:} Salida estándar (\texttt{STDOUT\_FILENO}).
+	\item\textbf{2:} Salida de error estándar (\texttt{STDERR\_FILENO}).
 \end{itemize}
 
 Los ficheros abiertos incorporan una posición de lectura/escritura actual, que es el índice entero no negativo ($[0,n-1]$) del byte del mismo al que se está accediendo, al que llamamos \emph{current file offset}.
-Esta posición se define como \code{0} por defecto a menos que especifiquemos \code{O\_APPEND} a la hora de abrir el fichero, en cuyo caso será \code{n-1}.
-Podemos buscar una posición exacta del fichero con \code{lseek} (\S\ref{lseek}).
+Esta posición se define como \texttt{0} por defecto a menos que especifiquemos \texttt{O\_APPEND} a la hora de abrir el fichero, en cuyo caso será \texttt{n-1}.
+Podemos buscar una posición exacta del fichero con \texttt{lseek} (\S\ref{lseek}).
 
 \subsubsection{Trabajo con llamadas de gestión y procesamiento sobre archivos regulares}
 
-A la hora de crear un fichero utilizamos \code{open}, que permite, entre otras, dos flags:
+A la hora de crear un fichero utilizamos \texttt{open}, que permite, entre otras, dos flags:
 
 \begin{itemize}
-	\item\code{O\_APPEND}\textbf{:} Colocar el offset en el último byte del fichero al abrirlo.
-	\item\code{O\_CREAT}\textbf{:} Crear el fichero en caso de que no exista.
+	\item\texttt{O\_APPEND}\textbf{:} Colocar el offset en el último byte del fichero al abrirlo.
+	\item\texttt{O\_CREAT}\textbf{:} Crear el fichero en caso de que no exista.
 \end{itemize}
 
-Estas \code{flags} son realmente enteros que se pueden referenciar por sus nombres de constante del sistema y combinar en un sólo entero mediante el uso del \code{or} lógico.
+Estas \texttt{flags} son realmente enteros que se pueden referenciar por sus nombres de constante del sistema y combinar en un sólo entero mediante el uso del \texttt{or} lógico.
 
-El \code{mode} (también llamado \code{umask}) nos permite indicar los permisos del fichero a crear si \code{O\_CREAT} está activado.
-Podemos definir dichos permisos en su valor octal (precedido de \code{0}) o mediante un \code{or} lógico de los diferentes permisos:
+El \texttt{mode} (también llamado \texttt{umask}) nos permite indicar los permisos del fichero a crear si \texttt{O\_CREAT} está activado.
+Podemos definir dichos permisos en su valor octal (precedido de \texttt{0}) o mediante un \texttt{or} lógico de los diferentes permisos:
 
 \begin{itemize}
-	\item\code{S\_IRWXU}\textbf{:} El usuario tiene los tres permisos sobre el fichero.
-	\item\code{S\_IRUSR}\textbf{:} El usuario puede leer el fichero.
-	\item\code{S\_IWUSR}\textbf{:} El usuario puede escribir sobre el fichero.
-	\item\code{S\_IXUSR}\textbf{:} El usuario puede ejecutar el fichero.
-	\item\code{S\_IRWXG}\textbf{:} El grupo tiene los tres permisos sobre el fichero.
-	\item\code{S\_IRGRP}\textbf{:} El grupo puede leer el fichero.
-	\item\code{S\_IWGRP}\textbf{:} El grupo puede escribir sobre el fichero.
-	\item\code{S\_IXGRP}\textbf{:} El grupo puede ejecutar el fichero.
-	\item\code{S\_IRWXO}\textbf{:} El resto de usuarios tiene los tres permisos sobre el fichero.
-	\item\code{S\_IROTH}\textbf{:} El resto de usuarios puede leer el fichero.
-	\item\code{S\_IWOTH}\textbf{:} El resto de usuarios puede escribir sobre el fichero.
-	\item\code{S\_IXOTH}\textbf{:} El resto de usuarios puede ejecutar el fichero.
+	\item\texttt{S\_IRWXU}\textbf{:} El usuario tiene los tres permisos sobre el fichero.
+	\item\texttt{S\_IRUSR}\textbf{:} El usuario puede leer el fichero.
+	\item\texttt{S\_IWUSR}\textbf{:} El usuario puede escribir sobre el fichero.
+	\item\texttt{S\_IXUSR}\textbf{:} El usuario puede ejecutar el fichero.
+	\item\texttt{S\_IRWXG}\textbf{:} El grupo tiene los tres permisos sobre el fichero.
+	\item\texttt{S\_IRGRP}\textbf{:} El grupo puede leer el fichero.
+	\item\texttt{S\_IWGRP}\textbf{:} El grupo puede escribir sobre el fichero.
+	\item\texttt{S\_IXGRP}\textbf{:} El grupo puede ejecutar el fichero.
+	\item\texttt{S\_IRWXO}\textbf{:} El resto de usuarios tiene los tres permisos sobre el fichero.
+	\item\texttt{S\_IROTH}\textbf{:} El resto de usuarios puede leer el fichero.
+	\item\texttt{S\_IWOTH}\textbf{:} El resto de usuarios puede escribir sobre el fichero.
+	\item\texttt{S\_IXOTH}\textbf{:} El resto de usuarios puede ejecutar el fichero.
 \end{itemize}
 
 \subsection{Metadatos de un fichero}
@@ -71,18 +71,18 @@ En Linux podemos diferenciar entre varios tipos de ficheros:
 El estándar POSIX define las siguientes macros para comprobar el tipo de fichero:
 
 \begin{itemize}
-	\item\code{S\_ISREG (st\_mode)}\textbf{:} El fichero es de tipo regular
-	\item\code{S\_ISDIR (st\_mode)}\textbf{:} El fichero es un directorio
-	\item\code{S\_ISCHR (st\_mode)}\textbf{:} El fichero es un dispositivo de caracteres
-	\item\code{S\_ISBLK (st\_mode)}\textbf{:} El fichero es un dispositivo de bloques
-	\item\code{S\_ISFIFO (st\_mode)}\textbf{:} El fichero es un cauce con nombre
-	\item\code{S\_ISLNK (st\_mode)}\textbf{:} El fichero es un enlace simbólico
-	\item\code{S\_ISSOCK (st\_mode)}\textbf{:} El fichero es un nombre
+	\item\texttt{S\_ISREG (st\_mode)}\textbf{:} El fichero es de tipo regular
+	\item\texttt{S\_ISDIR (st\_mode)}\textbf{:} El fichero es un directorio
+	\item\texttt{S\_ISCHR (st\_mode)}\textbf{:} El fichero es un dispositivo de caracteres
+	\item\texttt{S\_ISBLK (st\_mode)}\textbf{:} El fichero es un dispositivo de bloques
+	\item\texttt{S\_ISFIFO (st\_mode)}\textbf{:} El fichero es un cauce con nombre
+	\item\texttt{S\_ISLNK (st\_mode)}\textbf{:} El fichero es un enlace simbólico
+	\item\texttt{S\_ISSOCK (st\_mode)}\textbf{:} El fichero es un nombre
 \end{itemize}
 
-\subsubsection{Estructura \code{stat}}
+\subsubsection{Estructura \texttt{stat}}
 
-Los metadatos de un fichero se pueden consultar con la orden \code{stat} (\S\ref{stat}), que realiza una llamada al sistema homónima y devuelve los datos de la siguiente estructura:
+Los metadatos de un fichero se pueden consultar con la orden \texttt{stat} (\S\ref{stat}), que realiza una llamada al sistema homónima y devuelve los datos de la siguiente estructura:
 
 \begin{lstlisting}[language=C]
 struct stat {
@@ -102,36 +102,36 @@ struct stat {
 };
 \end{lstlisting}
 
-El tamaño de bloque designado en \code{st\_blksize} puede diferir del tamaño de bloque del sistema de archivos, pues se asigna buscando la mayor eficiencia en las tareas de E/S.
+El tamaño de bloque designado en \texttt{st\_blksize} puede diferir del tamaño de bloque del sistema de archivos, pues se asigna buscando la mayor eficiencia en las tareas de E/S.
 Aunque en ext4 sí ocurre, no todos los sistemas de archivos implementan todos los campos de hora.
-Generalmente, \code{st\_atime} se modifica mediante \code{mknod}, \code{utime}, \code{read}, \code{write} y \code{truncate}; \code{st\_mtime} por \code{mknod}, \code{utime} y \code{write}, pero no por las modificaciones en el propietario, grupo, cuenta de enlaces físicos o modo; y \code{st\_ctime} al escribir o modificar la información  del inodo.
+Generalmente, \texttt{st\_atime} se modifica mediante \texttt{mknod}, \texttt{utime}, \texttt{read}, \texttt{write} y \texttt{truncate}; \texttt{st\_mtime} por \texttt{mknod}, \texttt{utime} y \texttt{write}, pero no por las modificaciones en el propietario, grupo, cuenta de enlaces físicos o modo; y \texttt{st\_ctime} al escribir o modificar la información  del inodo.
 
-Las siguientes flags permiten trabajar con \code{st\_mode}:
+Las siguientes flags permiten trabajar con \texttt{st\_mode}:
 
 \begin{itemize}
-	\item\code{S\_IFMT (0170000)} Máscara de bits para los campos de bit del tipo de archivo (no POSIX).
-	\item\code{S\_IFSOCK (0140000)}\textbf{:} Socket (no POSIX).
-	\item\code{S\_IFLNK (0120000)}\textbf{:} Enlace simbólico (no POSIX).
-	\item\code{S\_IFREG (0100000)}\textbf{:} Archivo regular (no POSIX).
-	\item\code{S\_IFBLK (0060000)}\textbf{:} Dispositivo de bloques (no POSIX).
-	\item\code{S\_IFDIR (0040000)}\textbf{:} Directorio (no POSIX).
-	\item\code{S\_IFCHR (0020000)}\textbf{:} Dispositivo de caracteres (no POSIX).
-	\item\code{S\_IFIFO (0010000)}\textbf{:} Cauce con nombre (FIFO) (no POSIX).
-	\item\code{S\_ISUID (0004000)}\textbf{:} Bit SUID\@.
-	\item\code{S\_ISGID (0002000)}\textbf{:} Bit SGID\@.
-	\item\code{S\_ISVTX (0001000)}\textbf{:} Sticky bit (no POSIX).
-	\item\code{S\_IRWXU (0000700)}\textbf{:} User (propietario del archivo) tiene permisos de lectura, escritura y  ejecución.
-	\item\code{S\_IRUSR (0000400)}\textbf{:} User tiene permiso de lectura (igual que S\_IREAD, no POSIX).
-	\item\code{S\_IWUSR (0000200)}\textbf{:} User tiene permiso de escritura (igual que S\_IWRITE, no POSIX).
-	\item\code{S\_IXUSR (0000100)}\textbf{:} user tiene permiso de ejecución (igual que S\_IEXEC, no POSIX).
-	\item\code{S\_IRWXG (0000070)}\textbf{:} Group tiene permisos de lectura, escritura y ejecución.
-	\item\code{S\_IRGRP (0000040)}\textbf{:} Group tiene permiso de lectura.
-	\item\code{S\_IWGRP (0000020)}\textbf{:} Group tiene permiso de escritura.
-	\item\code{S\_IXGRP (0000010)}\textbf{:} Group tiene permiso de ejecución.
-	\item\code{S\_IRWXO (0000007)}\textbf{:} Other tienen permisos de lectura, escritura y ejecución.
-	\item\code{S\_IROTH (0000004)}\textbf{:} Other tienen permiso de lectura.
-	\item\code{S\_IWOTH (0000002)}\textbf{:} Other tienen permiso de escritura.
-	\item\code{S\_IXOTH (0000001)}\textbf{:} Other tienen permiso de ejecución.
+	\item\texttt{S\_IFMT (0170000)} Máscara de bits para los campos de bit del tipo de archivo (no POSIX).
+	\item\texttt{S\_IFSOCK (0140000)}\textbf{:} Socket (no POSIX).
+	\item\texttt{S\_IFLNK (0120000)}\textbf{:} Enlace simbólico (no POSIX).
+	\item\texttt{S\_IFREG (0100000)}\textbf{:} Archivo regular (no POSIX).
+	\item\texttt{S\_IFBLK (0060000)}\textbf{:} Dispositivo de bloques (no POSIX).
+	\item\texttt{S\_IFDIR (0040000)}\textbf{:} Directorio (no POSIX).
+	\item\texttt{S\_IFCHR (0020000)}\textbf{:} Dispositivo de caracteres (no POSIX).
+	\item\texttt{S\_IFIFO (0010000)}\textbf{:} Cauce con nombre (FIFO) (no POSIX).
+	\item\texttt{S\_ISUID (0004000)}\textbf{:} Bit SUID\@.
+	\item\texttt{S\_ISGID (0002000)}\textbf{:} Bit SGID\@.
+	\item\texttt{S\_ISVTX (0001000)}\textbf{:} Sticky bit (no POSIX).
+	\item\texttt{S\_IRWXU (0000700)}\textbf{:} User (propietario del archivo) tiene permisos de lectura, escritura y  ejecución.
+	\item\texttt{S\_IRUSR (0000400)}\textbf{:} User tiene permiso de lectura (igual que S\_IREAD, no POSIX).
+	\item\texttt{S\_IWUSR (0000200)}\textbf{:} User tiene permiso de escritura (igual que S\_IWRITE, no POSIX).
+	\item\texttt{S\_IXUSR (0000100)}\textbf{:} user tiene permiso de ejecución (igual que S\_IEXEC, no POSIX).
+	\item\texttt{S\_IRWXG (0000070)}\textbf{:} Group tiene permisos de lectura, escritura y ejecución.
+	\item\texttt{S\_IRGRP (0000040)}\textbf{:} Group tiene permiso de lectura.
+	\item\texttt{S\_IWGRP (0000020)}\textbf{:} Group tiene permiso de escritura.
+	\item\texttt{S\_IXGRP (0000010)}\textbf{:} Group tiene permiso de ejecución.
+	\item\texttt{S\_IRWXO (0000007)}\textbf{:} Other tienen permisos de lectura, escritura y ejecución.
+	\item\texttt{S\_IROTH (0000004)}\textbf{:} Other tienen permiso de lectura.
+	\item\texttt{S\_IWOTH (0000002)}\textbf{:} Other tienen permiso de escritura.
+	\item\texttt{S\_IXOTH (0000001)}\textbf{:} Other tienen permiso de ejecución.
 \end{itemize}
 
 \subsubsection{Permisos de acceso a archivos}
@@ -140,10 +140,10 @@ Los permisos de lectura, escritura y ejecución se utilizan de forma diferente s
 Las más relevantes son las siguientes:
 
 \begin{itemize}
-	\item\textbf{Lectura:} Determina si podemos abrir un fichero y leer su contenido. Está relacionado con los flags \code{O\_RDONLY} y \code{O\_RDWR} de la llamada \code{open}.
-	\item\textbf{Escritura:} Determina si podemos abrir un fichero y modificar su contenido. Está relacionado con los flags \code{O\_WRONLY} y \code{O\_RDWR} de la llamada \code{open}.
+	\item\textbf{Lectura:} Determina si podemos abrir un fichero y leer su contenido. Está relacionado con los flags \texttt{O\_RDONLY} y \texttt{O\_RDWR} de la llamada \texttt{open}.
+	\item\textbf{Escritura:} Determina si podemos abrir un fichero y modificar su contenido. Está relacionado con los flags \texttt{O\_WRONLY} y \texttt{O\_RDWR} de la llamada \texttt{open}.
 	\begin{itemize}
-		\item Necesitamos tener permisos de escritura en un fichero para poder especifiar el flag \code{O\_TRUNC} en la llamada \code{open}.
+		\item Necesitamos tener permisos de escritura en un fichero para poder especifiar el flag \texttt{O\_TRUNC} en la llamada \texttt{open}.
 	\end{itemize}
 	\item\textbf{Lectura y ejecución de directorios:} Los directorios con permiso de lectura permiten leer su contenido, pero sólo los ejecutables permiten pasar a través de ellos. Al acceder a un fichero regular necesitamos permiso de ejecución en cada directorio de su pathname. Por esto, llamamos bit de búsqueda al bit de permiso de ejecución para directorios.
 	\begin{itemize}

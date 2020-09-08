@@ -44,21 +44,21 @@ El tamaño del caso es $j-i$, siendo $i$ la posición de inicio del vector con e
 
 \textbf{Eficiencia en el caso peor:}
 
-En este caso, el algoritmo entra en el bucle \code{while (i <= j)}, que está compuesto de dos bucles que analizamos individualmente:
+En este caso, el algoritmo entra en el bucle \texttt{while (i <= j)}, que está compuesto de dos bucles que analizamos individualmente:
 
 \begin{itemize}
-	\item\code{while (v[i] < pivote \&\& i </ j)}\textbf{:} La ejecución más larga posible de este bucle se da cuando \code{v[i]} siempre es menor que \code{pivote}, de forma que se ejecuta el bucle hasta que \code{i} es igual que \code{j}, iterando ascendentemente por todo el vector menos el primer elemento, de forma que la eficiencia es $O(n-1)=O(n)$.
-	\item\code{while (v[j] >= pivote \&\& j >= i)}\textbf{:} La ejecución más larga posible de este vector se da cuando \code{v[j]} siempre es mayor o igual que \code{pivote}, iterando descendentemente por todo el vector menos el primer elemento, de forma que la eficiencia es $O(n-1)=O(n)$.
+	\item\texttt{while (v[i] < pivote \&\& i </ j)}\textbf{:} La ejecución más larga posible de este bucle se da cuando \texttt{v[i]} siempre es menor que \texttt{pivote}, de forma que se ejecuta el bucle hasta que \texttt{i} es igual que \texttt{j}, iterando ascendentemente por todo el vector menos el primer elemento, de forma que la eficiencia es $O(n-1)=O(n)$.
+	\item\texttt{while (v[j] >= pivote \&\& j >= i)}\textbf{:} La ejecución más larga posible de este vector se da cuando \texttt{v[j]} siempre es mayor o igual que \texttt{pivote}, iterando descendentemente por todo el vector menos el primer elemento, de forma que la eficiencia es $O(n-1)=O(n)$.
 \end{itemize}
 
 Por la regla del máximo, la eficiencia del cuerpo del bucle es $O(n)$.
-Al ejecutarse el cuerpo en el caso peor, tenemos que \code{i} es mayor que \code{j}, por lo que el bucle \code{while (i <= j)} se ejecuta una única vez, siendo su eficiencia $O(n)$.
+Al ejecutarse el cuerpo en el caso peor, tenemos que \texttt{i} es mayor que \texttt{j}, por lo que el bucle \texttt{while (i <= j)} se ejecuta una única vez, siendo su eficiencia $O(n)$.
 
 De esta forma determinamos que \textbf{la eficiencia de este algoritmo en caso peor es $\boldsymbol{O(n)}$}.
 
 \textbf{Eficiencia en el caso mejor:}
 
-En el caso mejor, el algoritmo no llega a entrar en el primer bucle, ya que \code{i} es mayor que \code{j}, por lo que sólo se ejecutan operaciones en tiempo constante.
+En el caso mejor, el algoritmo no llega a entrar en el primer bucle, ya que \texttt{i} es mayor que \texttt{j}, por lo que sólo se ejecutan operaciones en tiempo constante.
 \textbf{La eficiencia de este algoritmoe en el caso mejor es $\boldsymbol{\Omega(1)}$}.
 
 \subsubsection{Algoritmo iterativo 2}
@@ -87,17 +87,17 @@ int Busqueda (int* v, int n, int elem) {
 
 \textbf{Tamaño del caso:}
 
-El tamaño del caso es \code{n}, ya que se toma el \code{inicio} del vector como \code{0} y el \code{fin}, como \code{n-1}.
+El tamaño del caso es \texttt{n}, ya que se toma el \texttt{inicio} del vector como \texttt{0} y el \texttt{fin}, como \texttt{n-1}.
 
 \textbf{Eficiencia en el caso peor:}
 
-En el caso peor el algoritmo entra en el bucle \code{while} y éste se ejecuta hasta que \code{inicio} sea mayor que \code{fin}, es decir, no se encuentra \code{elem}.
-En este caso, el bucle ejecuta una búsqueda binaria a lo largo del vector, posicionando \code{elem} en una de las dos mitades, ignorando la otra y dividiendo la mitad en la que se encuentra \code{elem} en dos hasta que sólo quedan dos elementos y se descartan ambos.
+En el caso peor el algoritmo entra en el bucle \texttt{while} y éste se ejecuta hasta que \texttt{inicio} sea mayor que \texttt{fin}, es decir, no se encuentra \texttt{elem}.
+En este caso, el bucle ejecuta una búsqueda binaria a lo largo del vector, posicionando \texttt{elem} en una de las dos mitades, ignorando la otra y dividiendo la mitad en la que se encuentra \texttt{elem} en dos hasta que sólo quedan dos elementos y se descartan ambos.
 Por tanto, \textbf{la eficiencia de este algoritmo en el caso peor es $\boldsymbol{O(logn)}$}.
 
 \textbf{Eficiencia en el caso mejor:}
 
-En el caso mejor, \code{v[centro]} es el valor que busca \code{elem}, por lo que no es necesario entrar en el bucle y el resto de operaciones se ejecutan en tiempo constante.
+En el caso mejor, \texttt{v[centro]} es el valor que busca \texttt{elem}, por lo que no es necesario entrar en el bucle y el resto de operaciones se ejecutan en tiempo constante.
 \textbf{La eficiencia de este algoritmo en el caso mejor es $\boldsymbol{\Omega(1)}$}.
 
 \pagebreak
@@ -135,21 +135,21 @@ void EliminaRepetidos (double original[], int & nOriginal) {
 
 \textbf{Tamaño del caso:}
 
-El tamaño del caso es \code{nOriginal}, el número de elementos del vector \code{original}.
+El tamaño del caso es \texttt{nOriginal}, el número de elementos del vector \texttt{original}.
 
 \textbf{Eficiencia en el caso peor:}
 
-En este caso, todos los elementos del vector son iguales y deben eliminarse, entrando en el bloque \code{if (original[j] == original[i])} tantas veces como elementos haya menos uno.
-Este bloque contiene un bucle \code{for} cuyo cuerpo, inicialización, comprobación y actualización se ejecutan en tiempo constante.
-Este bucle se ejecuta de \code{i+2} a \code{nOriginal}, avanzando de uno en uno, por lo que su eficiencia es $O(n)$.
+En este caso, todos los elementos del vector son iguales y deben eliminarse, entrando en el bloque \texttt{if (original[j] == original[i])} tantas veces como elementos haya menos uno.
+Este bloque contiene un bucle \texttt{for} cuyo cuerpo, inicialización, comprobación y actualización se ejecutan en tiempo constante.
+Este bucle se ejecuta de \texttt{i+2} a \texttt{nOriginal}, avanzando de uno en uno, por lo que su eficiencia es $O(n)$.
 
-En cualquier caso, el bucle \code{do while} siempre se ejecuta \code{nOriginal-j} veces, ya sea por incremento de \code{j} o decremento de \code{nOriginal}, por lo que la eficiencia de este bucle es siempre $O(n)$.
-Teniendo esto en cuenta y siguiendo la regla del producto, determinamos que la eficiencia total del buclde \code{do while} es $O(n^2)$ y que \textbf{la eficiencia de este algoritmo en el caso peor es $\boldsymbol{O(n^2)}$}.
+En cualquier caso, el bucle \texttt{do while} siempre se ejecuta \texttt{nOriginal-j} veces, ya sea por incremento de \texttt{j} o decremento de \texttt{nOriginal}, por lo que la eficiencia de este bucle es siempre $O(n)$.
+Teniendo esto en cuenta y siguiendo la regla del producto, determinamos que la eficiencia total del buclde \texttt{do while} es $O(n^2)$ y que \textbf{la eficiencia de este algoritmo en el caso peor es $\boldsymbol{O(n^2)}$}.
 
 \textbf{Eficiencia en el caso mejor:}
 
-Como hemos visto en el análisis del caso peor, el bucle \code{do while} siempre se ejecuta con eficiencia $O(n)$.
-En el caso mejor, no hay ningún elemento repetido, por lo que el bucle \code{for} del cuerpo no se ejecuta nunca y la eficiencia total del cuerpo es $O(1)$.
+Como hemos visto en el análisis del caso peor, el bucle \texttt{do while} siempre se ejecuta con eficiencia $O(n)$.
+En el caso mejor, no hay ningún elemento repetido, por lo que el bucle \texttt{for} del cuerpo no se ejecuta nunca y la eficiencia total del cuerpo es $O(1)$.
 Por tanto, teniendo en cuenta la regla del producto, \textbf{la eficiencia de este algoritmo en el caso mejor es $\boldsymbol{\Omega(n)}$}.
 
 \pagebreak
@@ -271,9 +271,9 @@ void reestructurarRaiz (double* apo, int pos, int tamapo) {
 }
 \end{lstlisting}
 
-Vamos a dividir este algoritmo en tres partes, calculando primero la eficiencia de \code{reestructurarRaiz}, luego la de \code{insertarEnPos} y, finalmente, la de \code{HeapSort}.
+Vamos a dividir este algoritmo en tres partes, calculando primero la eficiencia de \texttt{reestructurarRaiz}, luego la de \texttt{insertarEnPos} y, finalmente, la de \texttt{HeapSort}.
 
-\textbf{\code{insertarEnPos}:}
+\textbf{\texttt{insertarEnPos}:}
 
 Identificamos los casos:
 
@@ -312,15 +312,15 @@ Deshacemos el cambio de variable:
 
 Por tanto, \textbf{la eficiencia de este algoritmo es $\boldsymbol{O(\log n)}$}.
 
-\textbf{\code{reestructurarRaiz}:}
+\textbf{\texttt{reestructurarRaiz}:}
 
-Este algoritmo también tiene eficiencia $O(\log n)$, ya que en el caso general $T(n)=1+T(\frac{n}{2})$, desarrollándose igual que \code{insertarEnPos}.
+Este algoritmo también tiene eficiencia $O(\log n)$, ya que en el caso general $T(n)=1+T(\frac{n}{2})$, desarrollándose igual que \texttt{insertarEnPos}.
 
-\textbf{\code{HeapSort}}
+\textbf{\texttt{HeapSort}}
 
 Por último, queda analizar este algoritmo, que consideramos iterativo habiendo analizado sus bloques recursivos.
-Este algoritmo está compuesto por dos bucles \code{for}, ambos con cuerpos de eficiencia $O(\log n)$ y con inicialización, comprobación y actualización de eficiencia $O(1)$ que se repiten $n$ veces cada uno, por lo que tienen cada uno eficiencia $O(n\cdot\log n)$.
-Aplicando la regla del máximo, determinamos que \textbf{la eficiencia de \code{HeapSort} es $\boldsymbol{O(n\cdot\log n)}$}.
+Este algoritmo está compuesto por dos bucles \texttt{for}, ambos con cuerpos de eficiencia $O(\log n)$ y con inicialización, comprobación y actualización de eficiencia $O(1)$ que se repiten $n$ veces cada uno, por lo que tienen cada uno eficiencia $O(n\cdot\log n)$.
+Aplicando la regla del máximo, determinamos que \textbf{la eficiencia de \texttt{HeapSort} es $\boldsymbol{O(n\cdot\log n)}$}.
 
 \pagebreak
 
@@ -328,7 +328,7 @@ Aplicando la regla del máximo, determinamos que \textbf{la eficiencia de \code{
 
 Para medir la eficiencia práctica se han tomado para todos muestras de $10000$ a $500000$ en incrementos de $10000$.
 
-Para el algoritmo \code{MergeSort} se han obtenido (entre otros\footnote{Los valores obtenidos han sido para todos los tamaños de $10000$ a $500000$ en incrementos de $10000$, se omiten algunos para facilitar la lectura}) los siguientes resultados:
+Para el algoritmo \texttt{MergeSort} se han obtenido (entre otros\footnote{Los valores obtenidos han sido para todos los tamaños de $10000$ a $500000$ en incrementos de $10000$, se omiten algunos para facilitar la lectura}) los siguientes resultados:
 
 \begin{center}
 \begin{tabular}{r r || r r}
@@ -347,7 +347,7 @@ Para el algoritmo \code{MergeSort} se han obtenido (entre otros\footnote{Los val
 \end{tabular}
 \end{center}
 
-Para el algoritmo \code{HeapSort} se han obtenido (entre otros) los siguientes resultados:
+Para el algoritmo \texttt{HeapSort} se han obtenido (entre otros) los siguientes resultados:
 
 \begin{center}
 \begin{tabular}{r r || r r}
@@ -397,14 +397,14 @@ Se puede observar la progresión del tiempo de ejecución de ambos algoritmos en
 \end{axis}
 \end{tikzpicture}
 \end{center}
-\caption{Tiempos de ejecución de \code{MergeSort} (izquierda) y \code{HeapSort} (derecha)}
+\caption{Tiempos de ejecución de \texttt{MergeSort} (izquierda) y \texttt{HeapSort} (derecha)}
 \end{figure}
 
 \section{Cálculo de la constante oculta}\label{eficiencia-oculta}
 
-\subsection{\code{MergeSort}}\label{eficiencia-oculta-mergesort}
+\subsection{\texttt{MergeSort}}\label{eficiencia-oculta-mergesort}
 
-Calculamos la constante $K$ haciendo uso de \code{gnuplot}:
+Calculamos la constante $K$ haciendo uso de \texttt{gnuplot}:
 
 \begin{lstlisting}[language=tcl]
 gnuplot> f(x)=a*x*log(x)
@@ -452,14 +452,14 @@ Calculando el tiempo teórico y comparándolo con el tiempo de ejecución tenemo
 \end{axis}
 \end{tikzpicture}
 \end{center}
-\caption{Comparación entre los tiempos de ejecución práctico y teórico del algoritmo \code{MergeSort}}
+\caption{Comparación entre los tiempos de ejecución práctico y teórico del algoritmo \texttt{MergeSort}}
 \end{figure}
 
 \pagebreak
 
-\subsection{\code{HeapSort}}\label{eficiencia-oculta-heapsort}
+\subsection{\texttt{HeapSort}}\label{eficiencia-oculta-heapsort}
 
-Calculamos la constante $K$ haciendo uso de \code{gnuplot}:
+Calculamos la constante $K$ haciendo uso de \texttt{gnuplot}:
 
 \begin{lstlisting}
 gnuplot> f(x)=a*x*log(x)
@@ -510,5 +510,5 @@ Calculando el tiempo teórico y comparándolo con el tiempo de ejecución tenemo
 \end{axis}
 \end{tikzpicture}
 \end{center}
-\caption{Comparación entre los tiempos de ejecución práctico y teórico del algoritmo \code{HeapSort}}
+\caption{Comparación entre los tiempos de ejecución práctico y teórico del algoritmo \texttt{HeapSort}}
 \end{figure}

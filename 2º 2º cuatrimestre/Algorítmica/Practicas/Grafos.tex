@@ -97,7 +97,7 @@ Tomando como ejemplo las piezas mostradas en \S\ref{grafos-enunciado}, el cuadra
 Por otro lado, definimos el total de casillas accesibles $c_a$ de una casilla $c$ como el número de casillas vacías distintas a las que se puede viajar desde $c$ mediante saltos a las casillas ortogonalmente colindantes.
 
 De esta forma, podemos afirmar que el puzle será irresoluble si $\exists c_a:c_a<\min(t(p_i)),\forall p\in P$.
-En la práctica tomaremos estos valores mediante una búsqueda en profundidad (\code{DFS}), de forma que $\min(t(p_i)),\forall p\in P$ valdrá $54$ para la configuración inicial del puzle propuesto en \S\ref{grafos-enunciado} y $0$ o un valor nulo cuando todas las piezas estén colocadas correctamente.
+En la práctica tomaremos estos valores mediante una búsqueda en profundidad (\texttt{DFS}), de forma que $\min(t(p_i)),\forall p\in P$ valdrá $54$ para la configuración inicial del puzle propuesto en \S\ref{grafos-enunciado} y $0$ o un valor nulo cuando todas las piezas estén colocadas correctamente.
 
 \section{Diseño del algoritmo}\label{grafos-algoritmo}
 
@@ -107,14 +107,14 @@ Para el diseño de este algoritmo definimos primero qué compone y qué operacio
 
 \subsubsection{Pieza}\label{grafos-algoritmo-definiciones-pieza}
 
-Definimos una pieza como una matriz $h\times b$ en la que cada elemento puede identificarse booleanamente como \code{true} si se corresponde con un componente del modelo o como \code{false} si se corresponde con un espacio vacío.
+Definimos una pieza como una matriz $h\times b$ en la que cada elemento puede identificarse booleanamente como \texttt{true} si se corresponde con un componente del modelo o como \texttt{false} si se corresponde con un espacio vacío.
 
 Las piezas tienen las siguientes características:
 
 \begin{itemize}
 	\item\textbf{Altura:} Valor $h$ de la matriz.
 	\item\textbf{Anchura:} Valor $b$ de la matriz.
-	\item\textbf{Tamaño:} Total de elementos \code{true} de la matriz.
+	\item\textbf{Tamaño:} Total de elementos \texttt{true} de la matriz.
 \end{itemize}
 
 Podemos realizar las siguientes operaciones sobre una pieza:
@@ -126,7 +126,7 @@ Podemos realizar las siguientes operaciones sobre una pieza:
 
 \subsubsection{Tablero}\label{grafos-algoritmo-definiciones-tablero}
 
-Definimos el tablero como una matriz $h\times b$ en la que cada elemento puede identificarse booleanamente como \code{true} si una pieza está ocupando su lugar o como \code{false} si se encuentra libre.
+Definimos el tablero como una matriz $h\times b$ en la que cada elemento puede identificarse booleanamente como \texttt{true} si una pieza está ocupando su lugar o como \texttt{false} si se encuentra libre.
 
 El tablero tiene las siguientes características:
 
@@ -177,19 +177,19 @@ Algoritmo (tablero, piezas, indice, resuelto)
 Este algoritmo llama a las siguientes funciones auxiliares:
 
 \begin{itemize}
-	\item\code{Colocar}\textbf{:} Intenta colocar una pieza en el tablero y devuelve un valor booleano correspondiente al éxito de la operación.
-	\item\code{TestAccesibilidad}\textbf{:} Devuelve el menor valor de casillas accesibles distinto de $0$ en todo el tablero.
-	\item\code{MinimoTamanio}\textbf{:} Devuelve el tamaño mínimo de las piezas a partir del índice indicado.
+	\item\texttt{Colocar}\textbf{:} Intenta colocar una pieza en el tablero y devuelve un valor booleano correspondiente al éxito de la operación.
+	\item\texttt{TestAccesibilidad}\textbf{:} Devuelve el menor valor de casillas accesibles distinto de $0$ en todo el tablero.
+	\item\texttt{MinimoTamanio}\textbf{:} Devuelve el tamaño mínimo de las piezas a partir del índice indicado.
 \end{itemize}
 
 Dado que el comportamiento de estas funciones depende del modelo sobre el cual se implementen, dejamos los detalles de su implementación para el siguiente punto.
 
 \section{Implementación del algoritmo}\label{grafos-implementacion}
 
-Para este problema vamos a crear las clases \code{Pieza} y \code{Tablero} y desarrollar el algoritmo sobre ellas.
+Para este problema vamos a crear las clases \texttt{Pieza} y \texttt{Tablero} y desarrollar el algoritmo sobre ellas.
 Mostramos aquí sus prototipos:
 
-\subsection{Clase \code{Pieza}}\label{grafos-implementacion-pieza}
+\subsection{Clase \texttt{Pieza}}\label{grafos-implementacion-pieza}
 
 \begin{lstlisting}[language=C++]
 class Pieza {
@@ -228,14 +228,14 @@ public:
 \end{lstlisting}
 
 Para ahorrar tiempo de ejecución con un coste marginal de memoria, incluimos las cuatro rotaciones en los datos privados de la clase, que se generan con sus correspondientes funciones miembro de rotación.
-También incluimos en estos datos privados si la pieza es un cuadrado o un rectángulo y su \code{id}, que es un número que la identifica en su representación en el tablero.
+También incluimos en estos datos privados si la pieza es un cuadrado o un rectángulo y su \texttt{id}, que es un número que la identifica en su representación en el tablero.
 
-En las funciones miembro públicas, aparte de los consultores de sus atributos, se incluyen una función para mostrar por salida estándar la forma de la pieza y un operador \code{<} para ordenar las piezas, como veremos en~\ref{grafos-implementacion-algoritmo}.
-Varias de las funciones de esta clase reciben como argumento una rotación proveniente de la clase \code{Rotacion}, que definimos en el siguiente apartado.
+En las funciones miembro públicas, aparte de los consultores de sus atributos, se incluyen una función para mostrar por salida estándar la forma de la pieza y un operador \texttt{<} para ordenar las piezas, como veremos en~\ref{grafos-implementacion-algoritmo}.
+Varias de las funciones de esta clase reciben como argumento una rotación proveniente de la clase \texttt{Rotacion}, que definimos en el siguiente apartado.
 
 \pagebreak
 
-\subsection{Enumerado \code{Rotacion}}\label{grafos-implementacion-rotacion}
+\subsection{Enumerado \texttt{Rotacion}}\label{grafos-implementacion-rotacion}
 
 \begin{lstlisting}[language=]
 enum class Rotacion {
@@ -249,13 +249,13 @@ enum class Rotacion {
 Cada uno de estos elementos representan las siguientes rotaciones:
 
 \begin{itemize}
-	\item\code{CW}\textbf{:} Rotación de $90^{\circ}$.
-	\item\code{CCW}\textbf{:} Rotación de $270^{\circ}$.
-	\item\code{PI}\textbf{:} Rotación de $180^{\circ}$.
-	\item\code{Original}\textbf{:} Rotación de $0^{\circ}$.
+	\item\texttt{CW}\textbf{:} Rotación de $90^{\circ}$.
+	\item\texttt{CCW}\textbf{:} Rotación de $270^{\circ}$.
+	\item\texttt{PI}\textbf{:} Rotación de $180^{\circ}$.
+	\item\texttt{Original}\textbf{:} Rotación de $0^{\circ}$.
 \end{itemize}
 
-\subsection{Clase \code{Tablero}}\label{grafos-implementacion-tablero}
+\subsection{Clase \texttt{Tablero}}\label{grafos-implementacion-tablero}
 
 \begin{lstlisting}[language=C++]
 class Tablero {
@@ -282,12 +282,12 @@ public:
 \end{lstlisting}
 
 Esta clase contiene una matriz en la que se representa el tablero.
-Esta matriz es de \code{char} para poder identificar las piezas que se colocan en cada casilla, de forma que cada pieza se identifica con un carácter alfanumérico y las casillas vacías con el carácter \code{-}.
+Esta matriz es de \texttt{char} para poder identificar las piezas que se colocan en cada casilla, de forma que cada pieza se identifica con un carácter alfanumérico y las casillas vacías con el carácter \texttt{-}.
 Aparte de los consultores y una función de impresión, implementa las siguientes funciones miembro:
 
 \pagebreak
 
-\subsubsection{\code{Accesibles}}\label{grafos-implementacion-tablero-accesibles}
+\subsubsection{\texttt{Accesibles}}\label{grafos-implementacion-tablero-accesibles}
 
 \begin{lstlisting}[language=C++]
 size_t Tablero :: Accesibles () const {
@@ -322,7 +322,7 @@ size_t Tablero :: Accesibles (size_t fila, size_t columna) const {
 La versión sin argumentos devuelve el valor mínimo de casillas accesibles como se expuso en \S\ref{grafos-analisis} y la versión con argumentos, el valor de cada una de las casillas a las que accede la anterior.
 Esta operación se realiza mediante una búsqueda en profundidad.
 
-\subsubsection{\code{DFS}}\label{grafos-implementacion-tablero-dfs}
+\subsubsection{\texttt{DFS}}\label{grafos-implementacion-tablero-dfs}
 
 \begin{lstlisting}[language=C++]
 size_t Tablero :: DFS (size_t fila, size_t columna, std::vector<std::vector<char> > & matriz) const {
@@ -348,7 +348,7 @@ size_t Tablero :: DFS (size_t fila, size_t columna, std::vector<std::vector<char
 
 Esta búsqueda en profundidad (\textit{Depth First Search}) recibe una copia de la matriz como lista de abiertos y va pasándola por referencia a llamadas recursivas para actualizar su lista de cerrados sumando $1$ por cada casilla accesible en la lista de abiertos.
 
-\subsubsection{\code{Coloca}}\label{grafos-implementacion-tablero-coloca}
+\subsubsection{\texttt{Coloca}}\label{grafos-implementacion-tablero-coloca}
 
 \begin{lstlisting}[language=C++]
 size_t Tablero :: Coloca (size_t fila, size_t columna, Pieza pieza, Rotacion rotacion) {
@@ -376,16 +376,16 @@ size_t Tablero :: Coloca (size_t fila, size_t columna, Pieza pieza, Rotacion rot
 }
 \end{lstlisting}
 
-Para colocar una pieza en el tablero, primero clonamos la matriz en una matriz de \code{prueba}, de forma que sólo sobreescribimos la original si conseguimos colocarla.
+Para colocar una pieza en el tablero, primero clonamos la matriz en una matriz de \texttt{prueba}, de forma que sólo sobreescribimos la original si conseguimos colocarla.
 La colocación se realiza casilla a casilla de forma que se considera colocada si todos los componentes de la pieza se corresponden con una casilla vacía del tablero.
-Para agilizar el trabajo del programador, una vez se comprueba que la pieza está correctamente colocada y se sustituye la matriz original por la clonada, se realiza una llamada a \code{Accesibles()} para obtener el \textit{hueco} de menor tamaño que deja la pieza al ser colocada y se devuelve.
+Para agilizar el trabajo del programador, una vez se comprueba que la pieza está correctamente colocada y se sustituye la matriz original por la clonada, se realiza una llamada a \texttt{Accesibles()} para obtener el \textit{hueco} de menor tamaño que deja la pieza al ser colocada y se devuelve.
 De esta forma, podemos aprovechar los cómputos de esta función miembro para determinar si la colocación de la pieza es correcta sin realizar más operaciones.
 
 \subsection{Algoritmo principal}\label{grafos-implementacion-algoritmo}
 
 Para este algoritmo contamos con una función para inicializar las piezas, y tres funciones sobre las que trabajaremos:
 
-\subsubsection{\code{MinimoTamanio}}\label{grafos-implementacion-algoritmo-minimotamanio}
+\subsubsection{\texttt{MinimoTamanio}}\label{grafos-implementacion-algoritmo-minimotamanio}
 
 \begin{lstlisting}[language=C++]
 size_t MinimoTamanio (const std::vector<Pieza> & piezas, const size_t inicio) {
@@ -398,11 +398,11 @@ size_t MinimoTamanio (const std::vector<Pieza> & piezas, const size_t inicio) {
 }
 \end{lstlisting}
 
-Esta función simplemente devuelve el tamaño mínimo de las piezas del vector \code{piezas} a partir de la posición de \code{inicio} indicada.
+Esta función simplemente devuelve el tamaño mínimo de las piezas del vector \texttt{piezas} a partir de la posición de \texttt{inicio} indicada.
 
 \pagebreak
 
-\subsubsection{\code{Resuelve}}\label{grafos-implementacion-algoritmo-resuelve}
+\subsubsection{\texttt{Resuelve}}\label{grafos-implementacion-algoritmo-resuelve}
 
 \begin{lstlisting}[language=C++]
 bool Resuelve (const Tablero & tablero, std::vector<Pieza> & piezas, const size_t & inicio, bool & resuelto) {
@@ -444,7 +444,7 @@ bool Resuelve (const Tablero & tablero, std::vector<Pieza> & piezas, const size_
 \end{lstlisting}
 
 Para cada fila, columna y rotación, creamos un tablero para el nodo hijo del árbol y comprobamos si la rotación es válida en función de la cuadrangularidad o rectangularidad de la pieza de trabajo e intentamos colocarla.
-Si, al colocarla, obtenemos un valor de mínimo de casillas accesibles no nulo (\code{UINT\_MAX}), comprobamos que sea mayor que $0$.
+Si, al colocarla, obtenemos un valor de mínimo de casillas accesibles no nulo (\texttt{UINT\_MAX}), comprobamos que sea mayor que $0$.
 En caso positivo, el puzle sigue sin estar resuelto y se llama recursivamente a la función con la nueva pieza de trabajo.
 Si no podemos colocar la pieza en ningún caso, se retrocede en el árbol y se prueba con otros valores.
 En caso de que el mínimo de casillas accesibles sea $0$, entendemos que el ejercicio está resuelto (sin importar si se han usado todas las piezas) y propagamos la resolución a nodos anteriores para finalizar la ejecución del algoritmo.
@@ -456,7 +456,7 @@ de forma que la solución es la última configuración que se muestra.
 
 \pagebreak
 
-\subsubsection{\code{main}}\label{grafos-implementacion-algoritmo-main}
+\subsubsection{\texttt{main}}\label{grafos-implementacion-algoritmo-main}
 
 \begin{lstlisting}[language=C++]
 int main (int argc, char ** argv) {
@@ -476,14 +476,14 @@ int main (int argc, char ** argv) {
 }
 \end{lstlisting}
 
-Aparte de inicializar el tablero y las piezas, se optimiza enormemente el algoritmo ordenando el vector de \code{piezas} de mayor a menor tamaño de las mismas, reduciendo el factor de ramificación y el tiempo de ejecución con \code{-O3} de $2m\ 32s$ a menos de $1s$\footnote{%
+Aparte de inicializar el tablero y las piezas, se optimiza enormemente el algoritmo ordenando el vector de \texttt{piezas} de mayor a menor tamaño de las mismas, reduciendo el factor de ramificación y el tiempo de ejecución con \texttt{-O3} de $2m\ 32s$ a menos de $1s$\footnote{%
 	Estos números suprimen la llamada a la impresión del tablero.
 	Sin optimización de compilación ni impresión se consiguen $2s$ con la reordenación del vector y un abandono de la operación pasados $10m$ sin ésta por parte del usuario porque tiene mejores cosas que hacer con su tiempo.
 }.
 
 \section{Ejemplo de resolución}\label{grafos-resolucion}
 
-Para compilar y ejecutar el proyecto basta con ejecutar \code{make \&\& bin/maleta}.
+Para compilar y ejecutar el proyecto basta con ejecutar \texttt{make \&\& bin/maleta}.
 Para el puzle propuesto, el algoritmo curiosamente no devuelve la solución propuesta en \S\ref{grafos-enunciado}, sino la siguiente\footnote{%
 	Las piezas están numeradas de $0$ a $7$ en el orden en el que se muestran en \S\ref{grafos-enunciado}.
 }:

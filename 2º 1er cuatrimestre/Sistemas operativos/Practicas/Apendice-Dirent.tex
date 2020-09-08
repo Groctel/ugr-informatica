@@ -1,6 +1,6 @@
-\chapter{Biblioteca \code{dirent.h}}
+\chapter{Biblioteca \texttt{dirent.h}}
 
-\section{\code{closedir}}\label{closedir}
+\section{\texttt{closedir}}\label{closedir}
 
 \begin{lstlisting}[language=C]
 #include <sys/types.h>
@@ -9,12 +9,12 @@
 int closedir (DIR* dirp);
 \end{lstlisting}
 
-Cierra el directorio \code{dirp} y su descriptor de fichero.
+Cierra el directorio \texttt{dirp} y su descriptor de fichero.
 El directorio deja de estar disponible después de la operación.
-En caso de éxito, devuelve \code{0}.
-En caso de fracaso, devuelve \code{-1} acompañado por el \code{errno} apropiado.
+En caso de éxito, devuelve \texttt{0}.
+En caso de fracaso, devuelve \texttt{-1} acompañado por el \texttt{errno} apropiado.
 
-\section{\code{opendir}}\label{opendir}
+\section{\texttt{opendir}}\label{opendir}
 
 \begin{lstlisting}[language=C]
 #include <sys/types.h>
@@ -24,11 +24,11 @@ DIR* opendir   (const char* name);
 DIR* fdopendir (int fd);
 \end{lstlisting}
 
-Abre un flujo al directorio de nombre \code{name}.
+Abre un flujo al directorio de nombre \texttt{name}.
 En caso de éxito, devuelve un puntero al flujo del directorio abierto posicionado al inicio del mismo.
-En caso de fracaso, devuelve \code{NULL} acompañado por el \code{errno} apropiado.
+En caso de fracaso, devuelve \texttt{NULL} acompañado por el \texttt{errno} apropiado.
 
-\section{\code{readdir}}\label{readdir}
+\section{\texttt{readdir}}\label{readdir}
 
 \begin{lstlisting}[language=C]
 #include <dirent.h>
@@ -36,11 +36,11 @@ En caso de fracaso, devuelve \code{NULL} acompañado por el \code{errno} apropia
 struct dirent* readdir (DIR* dirp);
 \end{lstlisting}
 
-Accede a la siguiente entrada del flujo de directorio \code{dirp}.
-En caso de éxito, devuelve un puntero a una estructura \code{dirent} que representa dicha entrada.
-En caso de fracaso o de haber llegado al final del directorio, devuelve \code{NULL} acompañado por el \code{errno} apropiado, que se cambia únicamente en caso de error.
+Accede a la siguiente entrada del flujo de directorio \texttt{dirp}.
+En caso de éxito, devuelve un puntero a una estructura \texttt{dirent} que representa dicha entrada.
+En caso de fracaso o de haber llegado al final del directorio, devuelve \texttt{NULL} acompañado por el \texttt{errno} apropiado, que se cambia únicamente en caso de error.
 
-\section{\code{rewinddir}}\label{rewinddir}
+\section{\texttt{rewinddir}}\label{rewinddir}
 
 \begin{lstlisting}[language=C]
 #include <sys/types.h>
@@ -49,10 +49,10 @@ En caso de fracaso o de haber llegado al final del directorio, devuelve \code{NU
 void rewinddir (DIR* dirp);
 \end{lstlisting}
 
-Reajusta la posición del flujo de directorio \code{dirp} al inicio del directorio.
+Reajusta la posición del flujo de directorio \texttt{dirp} al inicio del directorio.
 No devuelve ningún valor.
 
-\section{\code{seekdir}}\label{seekdir}
+\section{\texttt{seekdir}}\label{seekdir}
 
 \begin{lstlisting}[language=C]
 #include <dirent.h>
@@ -60,11 +60,11 @@ No devuelve ningún valor.
 void seekdir (DIR* dirp, long loc);
 \end{lstlisting}
 
-Ajusta la posición del flujo de directorio \code{dirp}.
-Esta posición debe haber sido devuelta por \code{telldir} con anterioridad para que sea válida.
+Ajusta la posición del flujo de directorio \texttt{dirp}.
+Esta posición debe haber sido devuelta por \texttt{telldir} con anterioridad para que sea válida.
 No devuelve ningún valor.
 
-\section{\code{telldir}}\label{telldir}
+\section{\texttt{telldir}}\label{telldir}
 
 \begin{lstlisting}[language=C]
 #include <dirent.h>
@@ -72,7 +72,7 @@ No devuelve ningún valor.
 long telldir (DIR* dirp);
 \end{lstlisting}
 
-Lee la posición dentro del directorio en la que se encuentra el flujo de directorio \code{dirp}.
+Lee la posición dentro del directorio en la que se encuentra el flujo de directorio \texttt{dirp}.
 En caso de éxito, devuelve esta posición.
-En caso de fracaso, devuelve \code{-1} acompañado por el \code{errno} apropiado.
+En caso de fracaso, devuelve \texttt{-1} acompañado por el \texttt{errno} apropiado.
 

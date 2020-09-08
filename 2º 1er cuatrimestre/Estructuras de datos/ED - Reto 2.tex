@@ -1,34 +1,39 @@
-\documentclass[10pt]{report}
+\documentclass[10pt, a4paper]{aqademic}
+
 \usepackage[spanish]{babel}
+	\selectlanguage{spanish}
+
+% Document packages
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{csquotes}
+\usepackage[type=CC, modifier=by-nc-sa, version=4.0]{doclicense}
+\usepackage{tikz}
+\usepackage{tikz-qtree}
 
 % Document settings
 
-\usepackage{titling}
-	\author{Atanasio José Rubio Gil}
-	\title{Estructuras de datos}
-	\date{\today}
+\author{Atanasio José Rubio Gil}
+\title{Estructuras de datos}
+\date{\today}
 
-\usepackage[title=\thetitle]{aqademia}
-
-\aqchap{Capítulo }
-\aqssec{}
-
-\usepackage{tikz}
-\usepackage{tikz-qtree}
+\AqSetChapter{Capítulo }
 
 % Document composition
 
 \begin{document}
 
-\aqtitlepage{Grado en Ingeniería Informática}
-            {Reto 2: Cifras y letras}
-            {https://github.com/Groctel/ugr-informatica}
+\AqMaketitle[cover    = logo-ugr.png,
+             org      = Grado en Ingeniería Informática,
+             subtitle = Reto 2: Cifras y letras,
+             url      = https://github.com/Groctel/ugr-informatica]
 \tableofcontents
 
-\input{Retos/Reto2/Enunciado.tex}       \pagebreak
-\input{Retos/Reto2/Consideraciones.tex} \pagebreak
-\input{Retos/Reto2/Desarrollo.tex}      \pagebreak
-\input{Retos/Reto2/Exitoso.tex}         \pagebreak
+\input{Retos/Reto2/Enunciado.tex}
+\input{Retos/Reto2/Consideraciones.tex}
+\input{Retos/Reto2/Desarrollo.tex}
+\input{Retos/Reto2/Exitoso.tex}
 \input{Retos/Reto2/NoExitoso.tex}
 
 \end{document}

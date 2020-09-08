@@ -5,8 +5,8 @@
 Variables utilizadas:
 
 \begin{itemize}
-	\item\code{DIR* dir}\textbf{:} Flujo de directorio.
-	\item\code{long loc}\textbf{:} Posición sobre el directorio.
+	\item\texttt{DIR* dir}\textbf{:} Flujo de directorio.
+	\item\texttt{long loc}\textbf{:} Posición sobre el directorio.
 \end{itemize}
 
 \begin{lstlisting}[language=C]
@@ -22,7 +22,7 @@ seekdir(dir, loc);
 Variables utilizadas:
 
 \begin{itemize}
-	\item\code{DIR* dir}\textbf{:} Flujo de directorio.
+	\item\texttt{DIR* dir}\textbf{:} Flujo de directorio.
 \end{itemize}
 
 \begin{lstlisting}[language=C]
@@ -38,7 +38,7 @@ if (dir = opendir("Directorio") == NULL) {
 Variables utilizadas:
 
 \begin{itemize}
-	\item\code{int fd}\textbf{:} Descriptor de fichero.
+	\item\texttt{int fd}\textbf{:} Descriptor de fichero.
 \end{itemize}
 
 \begin{lstlisting}[language=C]
@@ -66,7 +66,7 @@ if (unlink("./fichero") < 0) {
 Variables utilizadas:
 
 \begin{itemize}
-	\item\code{int fd}\textbf{:} Descriptor de fichero.
+	\item\texttt{int fd}\textbf{:} Descriptor de fichero.
 \end{itemize}
 
 \begin{lstlisting}[language=C]
@@ -90,7 +90,7 @@ if (fchmod(fd, 0750) < 0) {
 Variables utilizadas:
 
 \begin{itemize}
-	\item\code{int fd}\textbf{:} Descriptor de fichero.
+	\item\texttt{int fd}\textbf{:} Descriptor de fichero.
 \end{itemize}
 
 \begin{lstlisting}[language=C]
@@ -116,7 +116,7 @@ if (chdir(fd) < 0) {
 Variables utilizadas:
 
 \begin{itemize}
-	\item\code{DIR* dir}\textbf{:} Flujo de directorio.
+	\item\texttt{DIR* dir}\textbf{:} Flujo de directorio.
 \end{itemize}
 
 \begin{lstlisting}[language=C]
@@ -132,7 +132,7 @@ if (closedir(dir) < 0) {
 Variables utilizadas:
 
 \begin{itemize}
-	\item\code{int fd}\textbf{:} Descriptor de fichero.
+	\item\texttt{int fd}\textbf{:} Descriptor de fichero.
 \end{itemize}
 
 \begin{lstlisting}[language=C]
@@ -160,9 +160,9 @@ if (mkfifo("./fifo", 0750) < 0) {
 Variables utilizadas:
 
 \begin{itemize}
-	\item\code{int pid}\textbf{:} Identificador de los procesos padre e hijo.
-	\item\code{int pipefd[2]}\textbf{:} Identificadores de los extremos del cauce.
-	\item\code{char c}\textbf{:} Carácter que se transmite por el cauce.
+	\item\texttt{int pid}\textbf{:} Identificador de los procesos padre e hijo.
+	\item\texttt{int pipefd[2]}\textbf{:} Identificadores de los extremos del cauce.
+	\item\texttt{char c}\textbf{:} Carácter que se transmite por el cauce.
 \end{itemize}
 
 \begin{lstlisting}[language=C]
@@ -186,7 +186,7 @@ else {
 Variables utilizadas:
 
 \begin{itemize}
-	\item\code{int pid}\textbf{:} Identificador de los procesos padre e hijo.
+	\item\texttt{int pid}\textbf{:} Identificador de los procesos padre e hijo.
 \end{itemize}
 
 \begin{lstlisting}[language=C]
@@ -203,7 +203,7 @@ else
 Variables utilizadas:
 
 \begin{itemize}
-	\item\code{DIR* dir}\textbf{:} Flujo de directorio.
+	\item\texttt{DIR* dir}\textbf{:} Flujo de directorio.
 \end{itemize}
 
 \begin{lstlisting}[language=C]
@@ -221,7 +221,7 @@ if (telldir(dir) < 0) {
 Variables utilizadas:
 
 \begin{itemize}
-	\item\code{char* arg}\textbf{:} Cadena de caracteres que se pasa como argumento.
+	\item\texttt{char* arg}\textbf{:} Cadena de caracteres que se pasa como argumento.
 \end{itemize}
 
 \begin{lstlisting}[language=C]
@@ -234,9 +234,9 @@ execlp("./ejecutable", arg, NULL);
 Variables utilizadas:
 
 \begin{itemize}
-	\item\code{char* buf}\textbf{:} Cadena de caracteres a escribir en el fichero.
-	\item\code{int fd}\textbf{:} Descriptor de fichero.
-	\item\code{int long\_buf}\textbf{:} Longitud de la cadena del  búfer (\code{buf}).
+	\item\texttt{char* buf}\textbf{:} Cadena de caracteres a escribir en el fichero.
+	\item\texttt{int fd}\textbf{:} Descriptor de fichero.
+	\item\texttt{int long\_buf}\textbf{:} Longitud de la cadena del  búfer (\texttt{buf}).
 \end{itemize}
 
 \begin{lstlisting}[language=C]
@@ -252,8 +252,8 @@ if (write(fd, buf, long_buf) != long_buf1) {
 Variables utilizadas:
 
 \begin{itemize}
-	\item\code{int numero}\textbf{:} Número entero a leer.
-	\item\code{char cadena[256]}\textbf{:} Cadena de hasta 256 caracteres a leer.
+	\item\texttt{int numero}\textbf{:} Número entero a leer.
+	\item\texttt{char cadena[256]}\textbf{:} Cadena de hasta 256 caracteres a leer.
 \end{itemize}
 
 \begin{lstlisting}[language=C]
@@ -266,8 +266,8 @@ scanf("%s, cadena);
 Variables utilizadas:
 
 \begin{itemize}
-	\item\code{DIR* dir}\textbf{:} Flujo de directorio.
-	\item\code{struct dirent* dnt}\textbf{:} Entrada del contenido de un directorio.
+	\item\texttt{DIR* dir}\textbf{:} Flujo de directorio.
+	\item\texttt{struct dirent* dnt}\textbf{:} Entrada del contenido de un directorio.
 \end{itemize}
 
 \begin{lstlisting}[language=C]
@@ -282,8 +282,8 @@ while ((dnt = readdir(dir)) != NULL)
 Variables utilizadas:
 
 \begin{itemize}
-	\item\code{int numero}\textbf{:} Número entero a mostrar.
-	\item\code{char* cadena}\textbf{:} Cadena de caracteres a mostrar.
+	\item\texttt{int numero}\textbf{:} Número entero a mostrar.
+	\item\texttt{char* cadena}\textbf{:} Cadena de caracteres a mostrar.
 \end{itemize}
 
 \begin{lstlisting}[language=C]
@@ -295,7 +295,7 @@ printf("%s %d\n", cadena, numero);
 Variables utilizadas:
 
 \begin{itemize}
-	\item\code{int fd}\textbf{:} Descriptor de fichero.
+	\item\texttt{int fd}\textbf{:} Descriptor de fichero.
 \end{itemize}
 
 \begin{lstlisting}[language=C]
@@ -311,7 +311,7 @@ if (lseek(fd, 40, SEEK_SET) < 0) {
 Variables utilizadas:
 
 \begin{itemize}
-	\item\code{DIR* dir}\textbf{:} Flujo de directorio.
+	\item\texttt{DIR* dir}\textbf{:} Flujo de directorio.
 \end{itemize}
 
 \begin{lstlisting}[language=C]

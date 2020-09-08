@@ -1,28 +1,30 @@
-\documentclass[10pt]{report}
+\documentclass[10pt, a4paper]{aqademic}
+
 \usepackage[spanish]{babel}
+	\selectlanguage{spanish}
+
+% Document packages
+
+\usepackage[type=CC, modifier=by-nc-sa, version=4.0]{doclicense}
+\usepackage{easytable}
+\usepackage{tikz}
 
 % Document settings
 
-\usepackage{titling}
-	\author{Atanasio José Rubio Gil}
-	\title{Inteligencia\ artificial}
-	\date{\today}
+\author{Atanasio José Rubio Gil}
+\title{Inteligencia artificial}
+\date{\today}
 
-\usepackage[title=\thetitle]{aqademia}
-
-\aqchap{Tema }
-\aqssec{}
-
-\usepackage{easytable}
-\usepackage{tikz}
+\AqSetChapter{Tema }
 
 % Document composition
 
 \begin{document}
 
-\aqtitlepage{Grado en Ingeniería Informática}
-            {Teoría}
-            {https://github.com/Groctel/ugr-informatica}
+\AqMaketitle[cover    = logo-ugr.png,
+             org      = Grado en Ingeniería Informática,
+             subtitle = Teoría,
+             url      = https://github.com/Groctel/ugr-informatica]
 \tableofcontents
 
 \input{Teoria/Tema1.tex}

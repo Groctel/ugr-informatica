@@ -4,9 +4,9 @@
 
 \subsubsection{Identificadores de procesos}
 
-Cada proceso tiene un identificador unívoco o \code{PID}, que es un entero no negativo.
-Se tiene que para el proceso principal del sistema, \code{init}, \code{PID=1}.
-Además del \code{PID}, existen otros identificadores asociados a procesos:
+Cada proceso tiene un identificador unívoco o \texttt{PID}, que es un entero no negativo.
+Se tiene que para el proceso principal del sistema, \texttt{init}, \texttt{PID=1}.
+Además del \texttt{PID}, existen otros identificadores asociados a procesos:
 
 \begin{lstlisting}[language=C]
 #include <unistd.h>
@@ -20,23 +20,23 @@ gid_t getegid(void); // GID del usuario invocante efectivo
 \end{lstlisting}
 
 Distinguimos entre usuario real y efectivo, siendo el primero el que ejecuta un proceso y el segundo aquél con el que se identifica el primero.
-Por ejemplo, al ejecutar una orden precedida de \code{sudo}, el usuario real es quien la ejecuta y el usuario efectivo es \code{root}.
+Por ejemplo, al ejecutar una orden precedida de \texttt{sudo}, el usuario real es quien la ejecuta y el usuario efectivo es \texttt{root}.
 
-\subsubsection{\code{fork}}
+\subsubsection{\texttt{fork}}
 
-La única forma de crear un proceso en UNIX es que un proceso llame a \code{fork} (\S\ref{fork}).
+La única forma de crear un proceso en UNIX es que un proceso llame a \texttt{fork} (\S\ref{fork}).
 Esta llamada crea un proceso idéntico al padre con varias diferencias, entre las que está el valor de retorno.
-Podemos identifical al padre del proceso hijo, es decir, el proceso que llamó a \code{fork} mediante una llamada a \code{getppid}.
-Tras la llamada, tanto el padre como el hijo ejecutan la instrucción siguiente a ella, pudiendo bifurcarse condicionalmente en función de su \code{PID}.
+Podemos identifical al padre del proceso hijo, es decir, el proceso que llamó a \texttt{fork} mediante una llamada a \texttt{getppid}.
+Tras la llamada, tanto el padre como el hijo ejecutan la instrucción siguiente a ella, pudiendo bifurcarse condicionalmente en función de su \texttt{PID}.
 
-\subsection{\code{exec}}
+\subsection{\texttt{exec}}
 
-Uno de los usos de \code{fork} es crear un proceso hijo que ejecute un programa distinto al del padre.
-Esto se consigue utilizando una de las llamadas al sistema de la familia \code{exec} (\S\ref{exec}).
+Uno de los usos de \texttt{fork} es crear un proceso hijo que ejecute un programa distinto al del padre.
+Esto se consigue utilizando una de las llamadas al sistema de la familia \texttt{exec} (\S\ref{exec}).
 
-\subsection{\code{clone}}
+\subsection{\texttt{clone}}
 
-Cada hebra que se ejecuta en un procesador viene identificada unívocamente por su \code{TID} (\emph{thread ID}).
-A la hora de crear un proceso, \code{fork} llama a \code{clone} (\S\ref{clone})  para crear una hebra con un mayor control de sus propiedados, de forma que la primera actúa como interfaz ante la segunda.
+Cada hebra que se ejecuta en un procesador viene identificada unívocamente por su \texttt{TID} (\emph{thread ID}).
+A la hora de crear un proceso, \texttt{fork} llama a \texttt{clone} (\S\ref{clone})  para crear una hebra con un mayor control de sus propiedados, de forma que la primera actúa como interfaz ante la segunda.
 \textbf{ME FALTAN LOS INDICADORES DE CLONACIÓN P101.}
 

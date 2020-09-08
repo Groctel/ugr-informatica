@@ -63,7 +63,7 @@ En este modelo identificamos dos tipos de clave:
 De entre todas las claves candidatas se toma una clave como prinicipal y la denominamos \textbf{clave primaria}.
 Para elegirla tomamos como criterio su tamaño, significado, capacidad para recordarla, capacidad de fusión con otras tablas\ldots
 
-Tomemos como ejemplo la siguiente BD, en la que representamos cada tabla mediante su esquema expresado como \code{Tabla (Atr1, Atr2, ...)}:
+Tomemos como ejemplo la siguiente BD, en la que representamos cada tabla mediante su esquema expresado como \texttt{Tabla (Atr1, Atr2, ...)}:
 
 \begin{lstlisting}[language=SQL]
 Trabajadores (id_trabajador, nombre, trf_h, tipo_de_oficio, id_supv);
@@ -75,10 +75,10 @@ Oficios      (tipo_de_oficio, prima, horas_por_semana);
 En esta BD podemos identificar las siguientes claves primarias:
 
 \begin{itemize}
-	\item\code{Trabajador}\textbf{:} \code{id\_trabajador}
-	\item\code{Edificios}\textbf{:} \code{id\_edificio}
-	\item\code{Asignaciones}\textbf{:} \code{id\_trabajador, id\_edificio}
-	\item\code{Oficio}\textbf{:} \code{tipo\_de\_oficio}
+	\item\texttt{Trabajador}\textbf{:} \texttt{id\_trabajador}
+	\item\texttt{Edificios}\textbf{:} \texttt{id\_edificio}
+	\item\texttt{Asignaciones}\textbf{:} \texttt{id\_trabajador, id\_edificio}
+	\item\texttt{Oficio}\textbf{:} \texttt{tipo\_de\_oficio}
 \end{itemize}
 
 Este modelo tiene como ventaja con respecto al modelo basado en grafos que sólo requiere de un elemento para la representación de los datos, que se relacionan mediante conexiones lógicas con representación de relaciones \textit{muchos a muchos} simétrica, dando identidad a los elementos por su valor.

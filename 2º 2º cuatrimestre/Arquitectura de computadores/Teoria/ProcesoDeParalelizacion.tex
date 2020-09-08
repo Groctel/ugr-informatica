@@ -52,7 +52,7 @@ En él, identificamos tres bloques principales:
 	\item Ajuste final de la aproximación.
 \end{itemize}
 
-Mientras que el primer y último bloque son indivisibles, el segundo podemos dividirlo en $n$ tareas que se ejecuten paralelamente para $n$ intervalos usados en la aproximación, de forma que cada uno de los valores de \code{i} en el bucle se ejecute de forma paralela a los otros.
+Mientras que el primer y último bloque son indivisibles, el segundo podemos dividirlo en $n$ tareas que se ejecuten paralelamente para $n$ intervalos usados en la aproximación, de forma que cada uno de los valores de \texttt{i} en el bucle se ejecute de forma paralela a los otros.
 
 \subsection{Asignación de tareas a procesos y hebras}\label{asignacion-tareas-procheb}
 
@@ -99,4 +99,4 @@ int main () {
 }
 \end{lstlisting}
 
-En este ejemplo de asignación estática con OpenMP\footnote{En MPI la asignación estática se explicita mediante los índices de los procesos a los que se envían los mensajes, mientras que en OpenMP es el compilador quien implicita la asignación.}, cada función \code{F[1-3]} se ejecuta paralelamente con las otras y, dentro de ellas, los bucles \code{for} se ejecutan paralelamente en sus $N$ iteraciones.
+En este ejemplo de asignación estática con OpenMP\footnote{En MPI la asignación estática se explicita mediante los índices de los procesos a los que se envían los mensajes, mientras que en OpenMP es el compilador quien implicita la asignación.}, cada función \texttt{F[1-3]} se ejecuta paralelamente con las otras y, dentro de ellas, los bucles \texttt{for} se ejecutan paralelamente en sus $N$ iteraciones.

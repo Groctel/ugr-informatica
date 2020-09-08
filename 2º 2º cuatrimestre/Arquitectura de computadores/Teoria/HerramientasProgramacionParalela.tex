@@ -168,13 +168,13 @@ En OpenMP podemos utilizar las siguientes directivas y cláusulas para crear sis
 \begin{tabular}{l l l}
 	\textbf{Servicio} & \textbf{Tipo} & \textbf{Directivas} \\
 	\toprule
-	\multirow{3}{*}{\textit{uno a todos}} &          & Cláusula \code{firstprivate} desde la hebra 0 \\
-	                                      & Difusión & Directiva \code{single} con cláusula \code{copyprivate} \\
-	                                      &          & Directiva \code{threadprivate} y cláusula \code{copyin} en directiva \code{parallel} \\
+	\multirow{3}{*}{\textit{uno a todos}} &          & Cláusula \texttt{firstprivate} desde la hebra 0 \\
+	                                      & Difusión & Directiva \texttt{single} con cláusula \texttt{copyprivate} \\
+	                                      &          & Directiva \texttt{threadprivate} y cláusula \texttt{copyin} en directiva \texttt{parallel} \\
 	\midrule
-	\textit{todos a uno} & Reducción & Cláusula \code{reduction} \\
+	\textit{todos a uno} & Reducción & Cláusula \texttt{reduction} \\
 	\midrule
-	\textit{servicios compuestos} & Barreras & Directiva \code{barrier}
+	\textit{servicios compuestos} & Barreras & Directiva \texttt{barrier}
 \end{tabular}
 \end{center}
 
@@ -184,19 +184,19 @@ En MPI podemos usar las siguientes funciones:
 \begin{tabular}{l l l}
 	\textbf{Servicio} & \textbf{Tipo} & \textbf{Función} \\
 	\toprule
-	\textit{uno a uno} & Asíncrona & \code{MPI\_Send()} o \code{MPI\_Receive()} \\
+	\textit{uno a uno} & Asíncrona & \texttt{MPI\_Send()} o \texttt{MPI\_Receive()} \\
 	\midrule
-	\multirow{2}{*}{\textit{uno a todos}} & Difusión   & \code{MPI\_Bcast()} \\
-	                                      & Dispersión & \code{MPI\_Scatter()} \\
+	\multirow{2}{*}{\textit{uno a todos}} & Difusión   & \texttt{MPI\_Bcast()} \\
+	                                      & Dispersión & \texttt{MPI\_Scatter()} \\
 	\midrule
-	\multirow{2}{*}{\textit{todos a uno}} & Reducción   & \code{MPI\_Reduce()} \\
-	                                      & Acumulación & \code{MPI\_Gather()} \\
+	\multirow{2}{*}{\textit{todos a uno}} & Reducción   & \texttt{MPI\_Reduce()} \\
+	                                      & Acumulación & \texttt{MPI\_Gather()} \\
 	\midrule
-	\textit{todos a todos} & Todos difunden & \code{MPI\_Allgather()} \\
+	\textit{todos a todos} & Todos difunden & \texttt{MPI\_Allgather()} \\
 	\midrule
-	\multirow{3}{*}{\textit{todos a uno}} & Todos combinan & \code{MPI\_Allreduce()} \\
-	                                      & Barreras       & \code{MPI\_Barrier()} \\
-	                                      & Recorrido      & \code{MPI\_Scan()} \\
+	\multirow{3}{*}{\textit{todos a uno}} & Todos combinan & \texttt{MPI\_Allreduce()} \\
+	                                      & Barreras       & \texttt{MPI\_Barrier()} \\
+	                                      & Recorrido      & \texttt{MPI\_Scan()} \\
 \end{tabular}
 \end{center}
 
@@ -217,7 +217,7 @@ Lenguajes como Ada o Java trabajan en este paradigma, así como APIs como OpenMP
 \subsubsection{Paralelismo de datos}
 
 Es la forma de trabajar de los procesadores matriciales, que requieren una gran potencia de procesamiento.
-Se implementa con lenguajes como HPF (\textit{High Performance Fortran}) o Fortran 95, en el que los bloques \code{forall} permiten paralelizar operaciones con matrices y vectores, y con APIs como Nvidia CUDA\@.
+Se implementa con lenguajes como HPF (\textit{High Performance Fortran}) o Fortran 95, en el que los bloques \texttt{forall} permiten paralelizar operaciones con matrices y vectores, y con APIs como Nvidia CUDA\@.
 
 \subsection{Estructuras típicas de códigos paralelos}\label{estructuras-codigos-paralelos}
 
@@ -232,7 +232,7 @@ Varios procesos \textit{cliente} mandan peticiones a un proceso \textit{servidor
 \subsubsection{Descomposición de dominio o datos}
 
 Cada proceso adquiere una parte de la computacióna a realizar y entre todos resuelven el problema dividiéndolo en partes equitativas.
-Un ejemplo de esto sería el uso de la directiva \code{omp for}:
+Un ejemplo de esto sería el uso de la directiva \texttt{omp for}:
 
 \begin{lstlisting}[language=C]
 omp_set_num_threads(hebras)

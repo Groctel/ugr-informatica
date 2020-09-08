@@ -48,15 +48,15 @@ De esta forma, esperamos simplificar las siguientes operaciones buscando aproxim
 
 \section{TDA ``Aproximación''}
 
-El tipo de dato abstracto \code{Aprox} está compuesto por tres atributos:
+El tipo de dato abstracto \texttt{Aprox} está compuesto por tres atributos:
 
 \begin{itemize}
-\item\code{int valor}\textbf{:} Entero cuyo valor es el de la aproximación.
-\item\code{int candidatos[]}\textbf{:} Vector dinámico que almacena, de forma ordenada, los candidatos (no los valores intermedios) utilizados para el cálculo de \code{valor}.
-\item\code{string operaciones}\textbf{:} Cadena de caracteres que almacena las operaciones utilizadas para llegar a \code{valor}.
+	\item\texttt{int valor}\textbf{:} Entero cuyo valor es el de la aproximación.
+	\item\texttt{int candidatos[]}\textbf{:} Vector dinámico que almacena, de forma ordenada, los candidatos (no los valores intermedios) utilizados para el cálculo de \texttt{valor}.
+	\item\texttt{string operaciones}\textbf{:} Cadena de caracteres que almacena las operaciones utilizadas para llegar a \texttt{valor}.
 \end{itemize}
 
-Un ejemplo de un \code{Aprox} sería el siguiente:
+Un ejemplo de un \texttt{Aprox} sería el siguiente:
 
 \begin{lstlisting}[language=C++]
 valor = 536;
@@ -64,7 +64,7 @@ candidatos = {0, 2, 3, 4}
 operaciones = "(4 * 9) + (10 * 50)"
 \end{lstlisting}
 
-Consideramos que dos \code{Aprox} son iguales si tienen el mismo \code{valor} y \code{candidatos}.
+Consideramos que dos \texttt{Aprox} son iguales si tienen el mismo \texttt{valor} y \texttt{candidatos}.
 
 \section{Cálculo de las sumas, diferencias, productos y cocientes de todas las combinaciones de candidatos}
 
@@ -144,10 +144,10 @@ Mediante el uso de este tipo de matrices nos aseguramos de considerar para la so
 
 Este orden nos asegura que, siempre que el vector de candidatos esté ordenado de menor a mayor, no se producirán valores negativos en la matriz de diferencias ni resultados menores que $1$ en la matriz de cocientes.
 
-Para realizar los cálculos sobre las matrices de forma consistente entre ejercicios, nos aseguraremos de que para cada índice \code{i} de \code{matriz}, \code{matriz[i] <= matriz[i+1]}.
+Para realizar los cálculos sobre las matrices de forma consistente entre ejercicios, nos aseguraremos de que para cada índice \texttt{i} de \texttt{matriz}, \texttt{matriz[i] <= matriz[i+1]}.
 Realizados los cálculos sobre ellas, debemos tener en cuenta que, aunque no se han obtenido valores negativos, sí se obtendrán valores no naturales en la matriz de cocientes, que habrá que descartar.
 
-Teniendo esto en cuenta, almacenamos cada valor en un elemento de un vector dinámico de \code{Aprox}, que ordenaremos en el paso siguiente.
+Teniendo esto en cuenta, almacenamos cada valor en un elemento de un vector dinámico de \texttt{Aprox}, que ordenaremos en el paso siguiente.
 
 En general, el número de aproximaciones que obtenemos de esta forma se calcula recursivamente:
 
@@ -162,19 +162,19 @@ Si durante el cálculo de los elementos de la matriz se llegara al objetivo, dam
 \section{Ordenación de todas las aproximaciones por cercanía a la solución}
 
 Obtenido el vector completo del paso anterior con las primeras aproximaciones, procedemos a ordenarlas por cercanía a la solución.
-Para ello, definimos la diferencia de cada \code{Aprox} al objetivo como $|valor-objetivo|$ y los ordenamos de menor a mayor diferencia.
+Para ello, definimos la diferencia de cada \texttt{Aprox} al objetivo como $|valor-objetivo|$ y los ordenamos de menor a mayor diferencia.
 
 \pagebreak
 
-Como consideramos antes de comenzar el ejercicio, si dos \code{Aprox} tuvieran la misma diferencia al objetivo, se considerará más cercano aquél cuyo vector de candidatos sea de menor tamaño.
-En caso de que dos \code{Aprox} tuvieran el mismo \code{valor} y el mismo \code{candidatos} **no** se eliminan por considerarse duplicados, ya que existe la posibilidad de que se elijan varios candidatos iguales al inicio del ejercicio.
+Como consideramos antes de comenzar el ejercicio, si dos \texttt{Aprox} tuvieran la misma diferencia al objetivo, se considerará más cercano aquél cuyo vector de candidatos sea de menor tamaño.
+En caso de que dos \texttt{Aprox} tuvieran el mismo \texttt{valor} y el mismo \texttt{candidatos} **no** se eliminan por considerarse duplicados, ya que existe la posibilidad de que se elijan varios candidatos iguales al inicio del ejercicio.
 
 \section{Iteraciones posteriores}
 
-Una vez ordenado el vector de \code{Aprox}, lo recorremos secuencialmente realizando las operaciones anteriores recursivamente hasta encontrar (o no) una combinación de operaciones cuyo resultado sea el valor objetivo.
+Una vez ordenado el vector de \texttt{Aprox}, lo recorremos secuencialmente realizando las operaciones anteriores recursivamente hasta encontrar (o no) una combinación de operaciones cuyo resultado sea el valor objetivo.
 
 Para construir las nuevas matrices tenemos en cuenta los candidatos que se han utilizado previamente.
-Por ejemplo, si hubiéramos aproximado a $536$ con los candidatos de índice \code{0}, \code{2}, \code{3} y \code{4}, tendríamos las siguientes matrices:
+Por ejemplo, si hubiéramos aproximado a $536$ con los candidatos de índice \texttt{0}, \texttt{2}, \texttt{3} y \texttt{4}, tendríamos las siguientes matrices:
 
 \begin{center}
 $\begin{matrix}
@@ -189,6 +189,6 @@ $\begin{matrix}
 \end{matrix}$
 \end{center}
 
-En estos pasos debemos tener en cuenta que los valores obtenidos en las matrices aritméticas no son válidos hasta que no se hayan sumado o restestado a, multiplicado por o dividido entre el \code{valor} de la aproximación de la que partimos.
+En estos pasos debemos tener en cuenta que los valores obtenidos en las matrices aritméticas no son válidos hasta que no se hayan sumado o restestado a, multiplicado por o dividido entre el \texttt{valor} de la aproximación de la que partimos.
 
-De forma recursiva, vamos realizando los mismo productos, sumas, diferencias y divisiones hasta obtener el valor objetivo o crear un nuevo vector de \code{Aprox}, que iremos recorriendo secuencialmente haciendo lo mismo hasta quedarnos sin aproximaciones.
+De forma recursiva, vamos realizando los mismo productos, sumas, diferencias y divisiones hasta obtener el valor objetivo o crear un nuevo vector de \texttt{Aprox}, que iremos recorriendo secuencialmente haciendo lo mismo hasta quedarnos sin aproximaciones.

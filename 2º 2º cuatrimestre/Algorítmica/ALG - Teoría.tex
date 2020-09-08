@@ -1,28 +1,33 @@
-\documentclass[10pt]{report}
+\documentclass[10pt, a4paper]{aqademic}
+
 \usepackage[spanish]{babel}
+	\selectlanguage{spanish}
+
+% Document packages
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage[type=CC, modifier=by-nc-sa, version=4.0]{doclicense}
+\usepackage{csquotes}
+\usepackage{tikz}
+\usepackage{pgfplots}
 
 % Document settings
 
-\usepackage{titling}
-	\author{Atanasio José Rubio Gil}
-	\title{Algorítmica}
-	\date{\today}
+\author{Atanasio José Rubio Gil}
+\title{Algorítmica}
+\date{\today}
 
-\usepackage[title=\thetitle]{aqademia}
-
-\aqchap{Tema }
-\aqssec{}
-
-\usepackage{tikz}
-\usepackage{pgfplots}
+\AqSetChapter{Tema }
 
 % Document composition
 
 \begin{document}
 
-\aqtitlepage{Grado en Ingeniería Informática}
-            {Teoría}
-            {https://github.com/Groctel/ugr-informatica}
+\AqMaketitle[cover    = logo-ugr.png,
+             org      = Grado en Ingeniería Informática,
+             subtitle = Teoría,
+             url      = https://github.com/Groctel/ugr-informatica]
 \tableofcontents
 
 \input{Teoria/Tema1.tex}

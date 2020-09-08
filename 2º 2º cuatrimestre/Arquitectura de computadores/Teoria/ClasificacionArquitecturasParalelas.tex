@@ -77,7 +77,7 @@ done
 \textbf{Arquitecturas SIMD}
 
 Aprovechan el paralelismo de datos para poder procesar un número de datos mayor en cada operación.
-Es el caso de los operadores vectoriales, que permiten trabajar con vectores mediantes instrucciones como \code{ADDV}, \code{SUBV} o \code{MULV}.
+Es el caso de los operadores vectoriales, que permiten trabajar con vectores mediantes instrucciones como \texttt{ADDV}, \texttt{SUBV} o \texttt{MULV}.
 Estas instrucciones permiten trabajar directamente con elementos de vectores con mayor rendimiento.
 Por su parte, los procesadores matriciales permiten trabajar con vectorialmente con múltiples vectores (por ejemplo, con matrices $EP_i$).
 
@@ -89,7 +89,7 @@ for all EPi(i in 1 to 4) do
 done
 \end{lstlisting}
 
-En este caso, el procesador vectorial ejecutará el bucle \code{for all} cuatro veces, aprovechando en cada una el paralelismo de las instrucciones \code{ADDV}, \code{SUBV} y \code{MULV}.
+En este caso, el procesador vectorial ejecutará el bucle \texttt{for all} cuatro veces, aprovechando en cada una el paralelismo de las instrucciones \texttt{ADDV}, \texttt{SUBV} y \texttt{MULV}.
 
 \textbf{Arquitecturas MISD}
 

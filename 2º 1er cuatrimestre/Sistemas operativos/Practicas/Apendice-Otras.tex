@@ -1,6 +1,6 @@
 \chapter{Otras bibliotecas}
 
-\section{\code{exec}}\label{exec}
+\section{\texttt{exec}}\label{exec}
 
 \begin{lstlisting}[language=C]
 #include <unistd.h>
@@ -19,32 +19,32 @@ int execvpe (const char* file, char* const argv[],
              char* const envp[]);
 \end{lstlisting}
 
-Todas las funciones de la familia \code{exec} reemplazan la imagen del proceso incovante con una del proceso invocado, actuando como interfaces de la llamada al sistema \code{execve}.
-Todas estas funciones devuelven, únicamente si ocurre un error, \code{-1} acompañado por el \code{errno} apropiado.
+Todas las funciones de la familia \texttt{exec} reemplazan la imagen del proceso incovante con una del proceso invocado, actuando como interfaces de la llamada al sistema \texttt{execve}.
+Todas estas funciones devuelven, únicamente si ocurre un error, \texttt{-1} acompañado por el \texttt{errno} apropiado.
 Reciben como primer argumento el nombre del fichero que se va a ejecutar y se dividen en varias categorías según sus sufijos:
 
-\subsection{\code{e}: \texttt{execle()} y \texttt{execvpe()}}
+\subsection{\texttt{e}: \texttt{execle()} y \texttt{execvpe()}}
 
-El entorno del invocante se especifica mediante el argumento \code{envp}, que es un array de punteros a cadenas de caracteres de finalización nula y debe acabar obligatoriamente en un puntero nulo.
-El resto de funciones \code{exec} (que no incluyen la \code{e}) toman el entorno para la nueva imagen del proceso de la variable externa \code{environ} en la invocación.
+El entorno del invocante se especifica mediante el argumento \texttt{envp}, que es un array de punteros a cadenas de caracteres de finalización nula y debe acabar obligatoriamente en un puntero nulo.
+El resto de funciones \texttt{exec} (que no incluyen la \texttt{e}) toman el entorno para la nueva imagen del proceso de la variable externa \texttt{environ} en la invocación.
 
-\subsection{\code{l}: \texttt{execl()}, \texttt{execlp()}y \texttt{execle()}}
+\subsection{\texttt{l}: \texttt{execl()}, \texttt{execlp()}y \texttt{execle()}}
 
-El argumento \code{arg} se interpreta como \code{arg0, arg1, ..., argn}, siendo todos cadenas de caracteres de finalización nula que representan los argumentos con los que se ejecuta el proceso.
-El último argumento debe ser obligatoriamente un puntero nulo casteado a \code{(char*) NULL}.
+El argumento \texttt{arg} se interpreta como \texttt{arg0, arg1, ..., argn}, siendo todos cadenas de caracteres de finalización nula que representan los argumentos con los que se ejecuta el proceso.
+El último argumento debe ser obligatoriamente un puntero nulo casteado a \texttt{(char*) NULL}.
 
-\subsection{\code{p}: \texttt{execlp()}, \texttt{execvp()} y \texttt{execvpe()}}
+\subsection{\texttt{p}: \texttt{execlp()}, \texttt{execvp()} y \texttt{execvpe()}}
 
-Duplican las acciones de la shell para la búsqueda del ejecutable si éste no contiene un carácter \code{/}.
-Éste se busca en \code{\$PATH}.
-En caso de que no esté definido, se busca por defecto en el valor que devuelve \code{confstr(\_CS\_PATH)} (generalmente \code{/bin:/usr/bin}).
-Si la ruta sí contiene \code{/}, se ignora \code{\$PATH} y se busca en la ruta especificada.
+Duplican las acciones de la shell para la búsqueda del ejecutable si éste no contiene un carácter \texttt{/}.
+Éste se busca en \texttt{\$PATH}.
+En caso de que no esté definido, se busca por defecto en el valor que devuelve \texttt{confstr(\_CS\_PATH)} (generalmente \texttt{/bin:/usr/bin}).
+Si la ruta sí contiene \texttt{/}, se ignora \texttt{\$PATH} y se busca en la ruta especificada.
 
-\subsection{\code{v}: \texttt{execv()}, \texttt{execvp()} y \texttt{execvpe()}}
+\subsection{\texttt{v}: \texttt{execv()}, \texttt{execvp()} y \texttt{execvpe()}}
 
-El argumento \code{argv} es un array de punteros a cadenas de caracteres de finalización nula que representa los argumentos con los que se inejecuta el proceso y que debe acabar obligatoriamente en un puntero nulo.
+El argumento \texttt{argv} es un array de punteros a cadenas de caracteres de finalización nula que representa los argumentos con los que se inejecuta el proceso y que debe acabar obligatoriamente en un puntero nulo.
 
-\section{\code{ntfw}}\label{ntfw}
+\section{\texttt{ntfw}}\label{ntfw}
 
 \begin{lstlisting}[language=C]
 #include <ftw.h>
@@ -55,29 +55,29 @@ int nftw (const char *dirpath,
           int nopenfd, int flags);
 \end{lstlisting}
 
-Recorre el árbol de directorios de raíz \code{fpath} y llama a la rutina \code{fn} una vez por cada entrada.
+Recorre el árbol de directorios de raíz \texttt{fpath} y llama a la rutina \texttt{fn} una vez por cada entrada.
 Por defecto, recorre el árbol en preorden transversal, es decir, primero lee recursivamente los directorios y luego los ficheros.
 
-Para evitar agotar el número de descriptores de ficheros, se establece \code{nopenfd} como máximo de ficheros abiertos posibles simultáneamente.
-Al rebasar este límite, \code{nftw} funciona más lento porque tiene que ir cerrando y abriendo directorios.
+Para evitar agotar el número de descriptores de ficheros, se establece \texttt{nopenfd} como máximo de ficheros abiertos posibles simultáneamente.
+Al rebasar este límite, \texttt{nftw} funciona más lento porque tiene que ir cerrando y abriendo directorios.
 Se usa como máximo un descriptor por fichero del árbol.
 
-Para cada entrada del árbol, \code{fn} recibe cuatro argumentos:
+Para cada entrada del árbol, \texttt{fn} recibe cuatro argumentos:
 
 \begin{itemize}
-	\item\code{fpath}\textbf{:} Ruta de la entrada expresada relativa o absolutamente de la misma forma que \code{dirpath}.
-	\item\code{sb}\textbf{:} Puntero a la estructura \code{stat} devuelta por \code{stat(fpath)}.
-	\item\code{typeflag}\textbf{:} Un entero que tiene uno de los siguientes valores:
+	\item\texttt{fpath}\textbf{:} Ruta de la entrada expresada relativa o absolutamente de la misma forma que \texttt{dirpath}.
+	\item\texttt{sb}\textbf{:} Puntero a la estructura \texttt{stat} devuelta por \texttt{stat(fpath)}.
+	\item\texttt{typeflag}\textbf{:} Un entero que tiene uno de los siguientes valores:
 	\begin{itemize}
-		\item\code{FTW\_D}\textbf{:} \code{fpath} es un directorio.
-		\item\code{FTW\_DNR}\textbf{:} \code{fpath} es un directorio que no puede leerse.
-		\item\code{FTW\_DP}\textbf{:} Recorriendo en postorden (\code{FTW\_DEPTH}), el contenido de este directorio ya ha sido recorrido.
-		\item\code{FTW\_F}\textbf{:} \code{fpath} es un fichero regular.
-		\item\code{FTW\_NS}\textbf{:} La llamada a \code{stat} ha fallado con este fichero (probablemente por restricciones de permisos), por lo que \code{statbuf} tiene un valor indefinido.
-		\item\code{FTW\_SL}\textbf{:} Desreferenciando enlaces simbólicos (\code{FTW\_PHYS}), el fichero es uno.
-		\item\code{FTW\_SLN}\textbf{:} Sin desreferenciar enlaces simbólicos, el fichero es uno, por lo que se pierde su referencia.
+		\item\texttt{FTW\_D}\textbf{:} \texttt{fpath} es un directorio.
+		\item\texttt{FTW\_DNR}\textbf{:} \texttt{fpath} es un directorio que no puede leerse.
+		\item\texttt{FTW\_DP}\textbf{:} Recorriendo en postorden (\texttt{FTW\_DEPTH}), el contenido de este directorio ya ha sido recorrido.
+		\item\texttt{FTW\_F}\textbf{:} \texttt{fpath} es un fichero regular.
+		\item\texttt{FTW\_NS}\textbf{:} La llamada a \texttt{stat} ha fallado con este fichero (probablemente por restricciones de permisos), por lo que \texttt{statbuf} tiene un valor indefinido.
+		\item\texttt{FTW\_SL}\textbf{:} Desreferenciando enlaces simbólicos (\texttt{FTW\_PHYS}), el fichero es uno.
+		\item\texttt{FTW\_SLN}\textbf{:} Sin desreferenciar enlaces simbólicos, el fichero es uno, por lo que se pierde su referencia.
 	\end{itemize}
-	\item\code{ftwbuf}\textbf{:} Puntero a una estructura de tipo \code{FTW}.
+	\item\texttt{ftwbuf}\textbf{:} Puntero a una estructura de tipo \texttt{FTW}.
 \end{itemize}
 
 \begin{lstlisting}[language=C]
@@ -87,20 +87,20 @@ struct FTW {
 };
 \end{lstlisting}
 
-Cada vez que se llama a \code{fn}, ésta devuelve un valor entero que valdrá \code{0} en caso de éxito, y cualquier otro número en caso de error.
-Al devolverse un error, \code{nftw} deja de recorrer el árbol y devuelve dicho valor.
-También devuelve \code{-1} si el error es de otro tipo.
+Cada vez que se llama a \texttt{fn}, ésta devuelve un valor entero que valdrá \texttt{0} en caso de éxito, y cualquier otro número en caso de error.
+Al devolverse un error, \texttt{nftw} deja de recorrer el árbol y devuelve dicho valor.
+También devuelve \texttt{-1} si el error es de otro tipo.
 
-Por último, \code{flags} indica banderas seleccionables múltiplemente con \code{OR}, que pueden ser una de las siguientes:
+Por último, \texttt{flags} indica banderas seleccionables múltiplemente con \texttt{OR}, que pueden ser una de las siguientes:
 
 \begin{itemize}
-	\item\code{FTW\_DIR}\textbf{:} Realizar un cambio de directorio (\code{chdir}) en cada uno antes de procesar su contenido.
-	\item\code{FTW\_DEPTH}\textbf{:} Realizar un recorrido postorden del árbol, es decir, se llama a \code{fn} sobre todos los ficheros y subdirectorios de un directorio antes de llamarla sobre él mismo.
-	\item\code{FTW\_MOUNT}\textbf{:} No salir del sistema de archivos, es decir, no cruzar puntos de montaje.
-	\item\code{FTW\_PHYS}\textbf{:} No seguir enlaces simbólicos.
+	\item\texttt{FTW\_DIR}\textbf{:} Realizar un cambio de directorio (\texttt{chdir}) en cada uno antes de procesar su contenido.
+	\item\texttt{FTW\_DEPTH}\textbf{:} Realizar un recorrido postorden del árbol, es decir, se llama a \texttt{fn} sobre todos los ficheros y subdirectorios de un directorio antes de llamarla sobre él mismo.
+	\item\texttt{FTW\_MOUNT}\textbf{:} No salir del sistema de archivos, es decir, no cruzar puntos de montaje.
+	\item\texttt{FTW\_PHYS}\textbf{:} No seguir enlaces simbólicos.
 \end{itemize}
 
-\section{\code{perror}}
+\section{\texttt{perror}}
 
 \begin{lstlisting}[language=C]
 #include <stdio.h>
@@ -108,14 +108,14 @@ Por último, \code{flags} indica banderas seleccionables múltiplemente con \cod
 void perror (const char* s);
 \end{lstlisting}
 
-Imprime un mensaje de error con la cadena de caracteres \code{s} por la salida de error estándar.
-Por la salud mental de quienes lo lean, se recomienda (porque la logística de obligarlo a la fuerza es demasiado compleja) que este error acabe en \code{\textbackslash{}n}.
+Imprime un mensaje de error con la cadena de caracteres \texttt{s} por la salida de error estándar.
+Por la salud mental de quienes lo lean, se recomienda (porque la logística de obligarlo a la fuerza es demasiado compleja) que este error acabe en \texttt{\textbackslash{}n}.
 
 \begin{lstlisting}[language=C]
 perror("Sa matao Paco!\n");
 \end{lstlisting}
 
-\section{\code{printf}}
+\section{\texttt{printf}}
 
 \begin{lstlisting}[language=C]
 #include <stdio.h>
@@ -125,13 +125,13 @@ int dprintf (int fd, const char* format, ...);
 int sprintf (char *str, const char* format, ...);
 \end{lstlisting}
 
-Imprime por salida estándar una cadena de caracteres formada por un formato \code{format} y tantos datos como se deseen añadir.
+Imprime por salida estándar una cadena de caracteres formada por un formato \texttt{format} y tantos datos como se deseen añadir.
 El formato es una cadena de caracteres que puede contener una cadena normal y (entre muchos otros) los siguientes especificadores:
 
 \begin{itemize}
-	\item\code{\%d}\textbf{:} Se sustituye por un número escrito en base decimal especificado en los argumentos siguientes.
-	\item\code{\%s}\textbf{:} Se sustituye por una cadena de caracteres especificada en los argumentos siguientes.
-	\item\code{\textbackslash{}n}\textbf{:} Se sustituye por un salto de línea.
+	\item\texttt{\%d}\textbf{:} Se sustituye por un número escrito en base decimal especificado en los argumentos siguientes.
+	\item\texttt{\%s}\textbf{:} Se sustituye por una cadena de caracteres especificada en los argumentos siguientes.
+	\item\texttt{\textbackslash{}n}\textbf{:} Se sustituye por un salto de línea.
 \end{itemize}
 
 Los argumentos a imprimir añadidos tras el formato deben corresponderse en orden y tipo con los especificados en el formato.
@@ -156,10 +156,10 @@ printf("En este examen voy a sacar un %d!\n", numero);
 printf("He sacado un %d. Oh! %s, no te había visto.\n", numero, saludo);
 \end{lstlisting}
 
-La variante \code{dprintf} introduce la salida en el fichero identificado por su descriptor \code{fd}\footnote{Estoy bastante seguro de que borra todos los datos incluso probando a abrir el fichero con \code{O\_APPEND}, pero es muy tarde y no me apetece ponerme a investigar movidas raras. Mucho que podemos escribir en un fichero con \code{printf}}.
-La variante \code{sprintf} introduce la salida en la cadena de caracteres \code{str}, permitiendo traducir cualquier dato a cadenas de caracteres.
+La variante \texttt{dprintf} introduce la salida en el fichero identificado por su descriptor \texttt{fd}\footnote{Estoy bastante seguro de que borra todos los datos incluso probando a abrir el fichero con \texttt{O\_APPEND}, pero es muy tarde y no me apetece ponerme a investigar movidas raras. Mucho que podemos escribir en un fichero con \texttt{printf}}.
+La variante \texttt{sprintf} introduce la salida en la cadena de caracteres \texttt{str}, permitiendo traducir cualquier dato a cadenas de caracteres.
 
-\section{\code{scanf}}
+\section{\texttt{scanf}}
 
 \begin{lstlisting}[language=C]
 #include <stdio.h>
@@ -167,8 +167,8 @@ La variante \code{sprintf} introduce la salida en la cadena de caracteres \code{
 int scanf  (const char* format, ...);
 \end{lstlisting}
 
-Lee de entrada estándar una cadena de caracteres y la traduce al tipo de dato especificado en el formato \code{format}, introduciéndola traducida en las variables pasadas como argumentos.
-El formato de lectura es idéntico al de \code{printf}.
+Lee de entrada estándar una cadena de caracteres y la traduce al tipo de dato especificado en el formato \texttt{format}, introduciéndola traducida en las variables pasadas como argumentos.
+El formato de lectura es idéntico al de \texttt{printf}.
 Las variables a sobreescribir se pasan a los argumentos posteriores al formato por referencia, excepto las cadena de caracteres, que pueden pasarse por valor (ya que apuntan al primer elemento de la misma) y deben estar inicializadas en tiempo de compilación, es decir, declaradas como vectores de caracteres o con un valor.
 
 \begin{lstlisting}[language=C]

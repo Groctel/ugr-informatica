@@ -18,23 +18,23 @@ Una señal recibida cuando ya está enmascarada es redundante y no se regista en
 POSIX define las siguientes señales:
 
 \begin{itemize}
-\item\code{SIGABRT}\textbf{:} Señal de aborto procedente de la llamada \code{abort}, que termina el proceso y realiza un volcado de memoria\footnote{\emph{Core dumped}.}.
-\item\code{SIGALRM}\textbf{:} Señal procedente de la llamada al sistema \code{alarm}, que termina el proceso.
-\item\code{SIGCONT}\textbf{:} Reanuda el proceso si estaba parado.
-\item\code{SIGFPE}\textbf{:} Excepción de coma flotante, que termina el proceso y realiza un volcado de memoria.
-\item\code{SIGHUP}\textbf{:} Desconexión de la terminal que termina el proceso. También reanuda los daemons \code{init}, \code{httpd} e \code{inetd}.
-\item\code{SIGILL}\textbf{:} Excepción producida por la ejecución de una instrucción ilegal, que termina el proceso y realiza un volcado de memoria.
-\item\code{SIGINT}\textbf{:} Interrupción de teclado \code{\^{}C}, que termina el proceso.
-\item\code{SIGKILL}\textbf{:} Señal para terminar un proceso que no se puede ignorar ni manejar.
-\item\code{SIGPIPE}\textbf{:} Señal de cauce roto (escritura sin lectores), que finaliza el proceso.
-\item\code{SIGQUIT}\textbf{:} Terminación procedente del teclado, que termina el proceso y realiza un volcado de memoria.
-\item\code{SIGSEGV}\textbf{:} Violación de segmento (referencia inválida a memoria), que termina el proceso y realiza un volcado de memoria.
-\item\code{SIGSTOP}\textbf{:} Señal para parar un proceso que no se puede ignorar ni manejar.
-\item\code{SIGTERM}\textbf{:} Señal para terminar un proceso que sí puede manejarse.
-\item\code{SIGTSTP}\textbf{:} Señal para parar la escritura en la tty, que detiene el proceso.
-\item\code{SIGTTIN}\textbf{:} Señal de entrada de la tty para un proceso de fondo, que detiene el proceso.
-\item\code{SIGTTOU}\textbf{:} Señal de salida a la tty para un proceso de fondo, que detiene el proceso.
-\item\code{SIGUSR1}\textbf{:} Señal definida por el usuario, que detiene el proceso.
-\item\code{SIGUSR2}\textbf{:} Señal definida por el usuario, que detiene el proceso.
+\item\texttt{SIGABRT}\textbf{:} Señal de aborto procedente de la llamada \texttt{abort}, que termina el proceso y realiza un volcado de memoria\footnote{\emph{Core dumped}.}.
+\item\texttt{SIGALRM}\textbf{:} Señal procedente de la llamada al sistema \texttt{alarm}, que termina el proceso.
+\item\texttt{SIGCONT}\textbf{:} Reanuda el proceso si estaba parado.
+\item\texttt{SIGFPE}\textbf{:} Excepción de coma flotante, que termina el proceso y realiza un volcado de memoria.
+\item\texttt{SIGHUP}\textbf{:} Desconexión de la terminal que termina el proceso. También reanuda los daemons \texttt{init}, \texttt{httpd} e \texttt{inetd}.
+\item\texttt{SIGILL}\textbf{:} Excepción producida por la ejecución de una instrucción ilegal, que termina el proceso y realiza un volcado de memoria.
+\item\texttt{SIGINT}\textbf{:} Interrupción de teclado \texttt{\^{}C}, que termina el proceso.
+\item\texttt{SIGKILL}\textbf{:} Señal para terminar un proceso que no se puede ignorar ni manejar.
+\item\texttt{SIGPIPE}\textbf{:} Señal de cauce roto (escritura sin lectores), que finaliza el proceso.
+\item\texttt{SIGQUIT}\textbf{:} Terminación procedente del teclado, que termina el proceso y realiza un volcado de memoria.
+\item\texttt{SIGSEGV}\textbf{:} Violación de segmento (referencia inválida a memoria), que termina el proceso y realiza un volcado de memoria.
+\item\texttt{SIGSTOP}\textbf{:} Señal para parar un proceso que no se puede ignorar ni manejar.
+\item\texttt{SIGTERM}\textbf{:} Señal para terminar un proceso que sí puede manejarse.
+\item\texttt{SIGTSTP}\textbf{:} Señal para parar la escritura en la tty, que detiene el proceso.
+\item\texttt{SIGTTIN}\textbf{:} Señal de entrada de la tty para un proceso de fondo, que detiene el proceso.
+\item\texttt{SIGTTOU}\textbf{:} Señal de salida a la tty para un proceso de fondo, que detiene el proceso.
+\item\texttt{SIGUSR1}\textbf{:} Señal definida por el usuario, que detiene el proceso.
+\item\texttt{SIGUSR2}\textbf{:} Señal definida por el usuario, que detiene el proceso.
 \end{itemize}
 

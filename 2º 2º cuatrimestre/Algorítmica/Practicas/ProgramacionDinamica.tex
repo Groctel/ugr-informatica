@@ -141,26 +141,26 @@ while i>0 and j>0
 \end{lstlisting}
 
 Con esta implementación procedemos a calcular la eficiencia del algoritmo.
-Este algoritmo está formado por cuatro bucles, tres \code{for} y un \code{while}.
-Tres de los bucles realizan tantas iteraciones como el tamaño de \code{PLATOS} mientras que uno de ellos (el segundo bucle \code{for}) las realiza sobre el valor de \code{CALORIAS}.
-De estos bucles, el tercero tiene un segundo bucle \code{for} dentro de él, que también itera sobre el valor de \code{CALORIAS}.
-De esta forma, la eficiencia del tercer bucle \code{for} en el caso peor es $O(ij)$ para una lista de $i$ platos y $k$ calorías totales, ya que el resto del bucle lo componen operaciones elmentales.
+Este algoritmo está formado por cuatro bucles, tres \texttt{for} y un \texttt{while}.
+Tres de los bucles realizan tantas iteraciones como el tamaño de \texttt{PLATOS} mientras que uno de ellos (el segundo bucle \texttt{for}) las realiza sobre el valor de \texttt{CALORIAS}.
+De estos bucles, el tercero tiene un segundo bucle \texttt{for} dentro de él, que también itera sobre el valor de \texttt{CALORIAS}.
+De esta forma, la eficiencia del tercer bucle \texttt{for} en el caso peor es $O(ij)$ para una lista de $i$ platos y $k$ calorías totales, ya que el resto del bucle lo componen operaciones elmentales.
 Por la regla del máximo, ya que $ij>\max(i,j)$, concluimos que \textbf{la eficiencia de este algoritmo es $\boldsymbol{O(ij)}$}.
 
 \section{Implementación del algoritmo}
 
-Se ha implementado el algoritmo en C++ haciendo uso de la STL, de forma que los platos y la lista de solución se han representado en un \code{std::vector} y la matriz de trabajo como un \code{std::vector<std::vector>}.
-Para todos los elementos se ha utilizado el tipo de dato \code{unsigned} para asegurar que todos los elementos pertenecen a $\mathbb{N}$.
+Se ha implementado el algoritmo en C++ haciendo uso de la STL, de forma que los platos y la lista de solución se han representado en un \texttt{std::vector} y la matriz de trabajo como un \texttt{std::vector<std::vector>}.
+Para todos los elementos se ha utilizado el tipo de dato \texttt{unsigned} para asegurar que todos los elementos pertenecen a $\mathbb{N}$.
 De la misma forma se ha asegurado que en ningún momento se produzca un \textit{underflow} en los bucles.
 
-Para compilar el proyecto es suficiente con ejecutar \code{g++} sobre el único fichero \code{main.cpp} que lo compone.
+Para compilar el proyecto es suficiente con ejecutar \texttt{g++} sobre el único fichero \texttt{main.cpp} que lo compone.
 
 \section{Ejecución del algoritmo}
 
-Para ejecutar el algoritmo simplemente debemos editar la constante \code{CALORIAS} y el \code{std::vector} de \code{PLATOS}, compilarlo y ejecutarlo.
+Para ejecutar el algoritmo simplemente debemos editar la constante \texttt{CALORIAS} y el \texttt{std::vector} de \texttt{PLATOS}, compilarlo y ejecutarlo.
 Aquí se muestran algunas salidas del mismo:
 
-\subsubsection{$\boldsymbol{100}$ calorías con el vector \code{\{75, 83, 19, 64, 25, 6\}}}
+\subsubsection{$\boldsymbol{100}$ calorías con el vector \texttt{\{75, 83, 19, 64, 25, 6\}}}
 
 \begin{lstlisting}
 Plato 5: 25 calorías
@@ -168,7 +168,7 @@ Plato 1: 75 calorías
 Total consumido: 100 calorías
 \end{lstlisting}
 
-\subsubsection{$\boldsymbol{100}$ calorías con el vector \code{\{75, 83, 19, 64, 21, 6\}}}
+\subsubsection{$\boldsymbol{100}$ calorías con el vector \texttt{\{75, 83, 19, 64, 21, 6\}}}
 
 \begin{lstlisting}
 Plato 6: 6 calorías
@@ -177,7 +177,7 @@ Plato 1: 75 calorías
 Total consumido: 100 calorías
 \end{lstlisting}
 
-\subsubsection{$\boldsymbol{313}$ calorías con el vector \code{\{75, 83, 19, 64, 21, 6, 33, 51, 22, 31, 51, 76, 40, 12, 45, 21, 84\}}}
+\subsubsection{$\boldsymbol{313}$ calorías con el vector \texttt{\{75, 83, 19, 64, 21, 6, 33, 51, 22, 31, 51, 76, 40, 12, 45, 21, 84\}}}
 
 \begin{lstlisting}
 Plato 8: 51 calorías

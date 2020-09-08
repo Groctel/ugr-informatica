@@ -71,9 +71,10 @@ build: saludo c21 c22 despedida
 aqademia:
 	@printf "\033[35;1m:: \033[0mActualizando aqademia...\n"
 	@  (find $(AQADEMIA) \
-	   && git -C $(AQADEMIA) pull) > /dev/null \
+	   && git -C $(AQADEMIA) pull) 1>/dev/null 2>&1\
 	|| (mkdir -p ~/texmf/tex/latex \
-	   && git clone https://github.com/Groctel/aqademia $(AQADEMIA)) > /dev/null
+	   && git clone https://github.com/Groctel/aqademia $(AQADEMIA)) \
+	      1>/dev/null 2>&1
 
 saludo:
 	@printf "\033[35;1m:: \033[0mComenzando compilación\n"

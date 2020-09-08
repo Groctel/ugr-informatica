@@ -1,27 +1,30 @@
-\documentclass[10pt]{report}
+\documentclass[10pt, a4paper]{aqademic}
+
 \usepackage[spanish]{babel}
+	\selectlanguage{spanish}
+
+% Document packages
+
+\usepackage[type=CC, modifier=by-nc-sa, version=4.0]{doclicense}
 
 % Document settings
 
-\usepackage{titling}
-	\author{Atanasio José Rubio Gil}
-	\title{Fundamentos de la ingeniería del software}
-	\date{\today}
+\author{Atanasio José Rubio Gil}
+\title{Fundamentos de la ingeniería del software}
+\date{\today}
 
-\usepackage[title=\thetitle]{aqademia}
-
-\aqchap{Ejercicio }
-\aqssec{}
+\AqSetChapter{Ejercicio }
 
 % Document composition
 
 \begin{document}
 
-\aqtitlepage{Grado en Ingeniería Informática}
-            {Ejercicios}
-            {https://github.com/Groctel/ugr-informatica}
+\AqMaketitle[cover    = logo-ugr.png,
+             org      = Grado en Ingeniería Informática,
+             subtitle = Ejercicios,
+             url      = https://github.com/Groctel/ugr-informatica]
 \tableofcontents
 
-\input{Ejercicios/Tema1.tex}
+%\input{Ejercicios/Tema1.tex}
 
 \end{document}

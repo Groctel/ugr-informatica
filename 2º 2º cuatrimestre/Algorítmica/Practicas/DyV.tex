@@ -97,10 +97,10 @@ for i in raiz..tope-1 do
 Podemos implementarlo en C++ aceptando cuatro argumentos:
 
 \begin{itemize}
-	\item\code{unsigned* pre}\textbf{:} El vector en preorden.
-	\item\code{unsigned raiz}\textbf{:} La posición de inicio del vector en preorden.
-	\item\code{unsigned tope}\textbf{:} La posición siguiente al fin del vector en preorden.
-	\item\code{bool** matriz}\textbf{:} La matriz de adyacencia a rellenar.
+	\item\texttt{unsigned* pre}\textbf{:} El vector en preorden.
+	\item\texttt{unsigned raiz}\textbf{:} La posición de inicio del vector en preorden.
+	\item\texttt{unsigned tope}\textbf{:} La posición siguiente al fin del vector en preorden.
+	\item\texttt{bool** matriz}\textbf{:} La matriz de adyacencia a rellenar.
 \end{itemize}
 
 \begin{lstlisting}[language=C++]
@@ -228,17 +228,17 @@ void DyV (unsigned* pre, unsigned raiz, unsigned tope, bool** matriz) {
 
 \subsection{Algoritmo básico}\label{dyv-eficiencia-basico}
 
-Este primer algoritmo contiene un bucle \code{for} externo con inicialización, comprobación y actualización de eficiencia constante, que se ejecuta de $tope-raiz$ veces, por lo que su eficiencia es $O(n)$.
-En su interior tenemos un bloque \code{if}, cuya comprobación y cuerpo se ejecutan todas en tiempo constante, por lo que su eficiencia total es $O(1)$.
-Contra este bloque \code{if} tenemos un bloque \code{else if} de comprobación en tiempo constante que contiene un bucle \code{for}.
+Este primer algoritmo contiene un bucle \texttt{for} externo con inicialización, comprobación y actualización de eficiencia constante, que se ejecuta de $tope-raiz$ veces, por lo que su eficiencia es $O(n)$.
+En su interior tenemos un bloque \texttt{if}, cuya comprobación y cuerpo se ejecutan todas en tiempo constante, por lo que su eficiencia total es $O(1)$.
+Contra este bloque \texttt{if} tenemos un bloque \texttt{else if} de comprobación en tiempo constante que contiene un bucle \texttt{for}.
 Este segundo bucle cuenta con inicialización, comprobación actualización y cuerpo constantes y que se ejecuta $i-raiz$ veces, siendo su eficiencia $O(n)$.
 
 Por tanto, por la regla del producto, \textbf{el algoritmo tiene una eficiencia de} $\boldsymbol{O(n^2)}$.
 
 \subsection{Algoritmo \textit{DyV}}\label{dyv-eficiencia-dyv}
 
-Para este algoritmo contamos con un bucle \code{for} sin cuerpo y con inicialización, comprobación y actualización de eficiencia constante que se ejecuta como máximo $tope-raiz$ veces, de forma que su eficiencia es $O(n)$.
-Tras este bucle, encontramos un bloque \code{if} de comprobación constante y cuerpo con dos llamadas recursivas y resto constante y un bloque \code{else if} de iguales características que el bloque \code{if} pero con una sola llamada recursiva, por lo que tomamos el bloque \code{if} para analizar la eficiencia.
+Para este algoritmo contamos con un bucle \texttt{for} sin cuerpo y con inicialización, comprobación y actualización de eficiencia constante que se ejecuta como máximo $tope-raiz$ veces, de forma que su eficiencia es $O(n)$.
+Tras este bucle, encontramos un bloque \texttt{if} de comprobación constante y cuerpo con dos llamadas recursivas y resto constante y un bloque \texttt{else if} de iguales características que el bloque \texttt{if} pero con una sola llamada recursiva, por lo que tomamos el bloque \texttt{if} para analizar la eficiencia.
 
 Como describimos en \S\ref{dyv-dyv}, este algoritmo divide el árbol en subárboles hasta encontrar las hojas, es decir, hasta que el tamaño de los mismos es $1$.
 Por tanto, identificamos los siguientes casos:

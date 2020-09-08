@@ -8,32 +8,32 @@ Aceptan cláusulas las siguientes directivas:
 \begin{table}[!h]
 \begin{center}
 \begin{tabular}{l c c c c c c}
-\textbf{Cláusula}         & \code{parallel} & \code{for} & \code{sections} & \code{single} & \code{parallel for} & \code{parallel sections} \\
+\textbf{Cláusula}           & \texttt{parallel} & \texttt{for} & \texttt{sections} & \texttt{single} & \texttt{parallel for} & \texttt{parallel sections} \\
 	\toprule
-	\code{if ()}           & \code{X}        &            &                 & \code{X}      & \code{X}            &                          \\
-	\code{num\_threads ()} & \code{X}        &            &                 & \code{X}      & \code{X}            &                          \\
-	\code{shared}          & \code{X}        &            &                 & \code{X}      & \code{X}            &                          \\
-	\code{private}         & \code{X}        & \code{X}   & \code{X}        & \code{X}      & \code{X}            & \code{X}                 \\
-	\code{firstprivate}    &                 & \code{X}   & \code{X}        &               & \code{X}            & \code{X}                 \\
-	\code{lastprivate}     & \code{X}        & \code{X}   & \code{X}        & \code{X}      & \code{X}            & \code{X}                 \\
-	\code{default ()}      & \code{X}        &            &                 & \code{X}      & \code{X}            &                          \\
-	\code{reduction}       & \code{X}        & \code{X}   & \code{X}        &               & \code{X}            & \code{X}                 \\
-	\code{copyin}          & \code{X}        &            &                 & \code{X}      & \code{X}            &                          \\
-	\code{copyprivate}     &                 &            &                 & \code{X}      &                     &                          \\
-	\code{schedule ()}     &                 & \code{X}   &                 &               & \code{X}            &                          \\
-	\code{ordered ()}      &                 & \code{X}   &                 &               & \code{X}            &                          \\
-	\code{nowait}          &                 & \code{X}   & \code{X}        & \code{X}      &                     &                          \\
+	\texttt{if ()}           & \texttt{X}        &              &                   & \texttt{X}      & \texttt{X}            &                            \\
+	\texttt{num\_threads ()} & \texttt{X}        &              &                   & \texttt{X}      & \texttt{X}            &                            \\
+	\texttt{shared}          & \texttt{X}        &              &                   & \texttt{X}      & \texttt{X}            &                            \\
+	\texttt{private}         & \texttt{X}        & \texttt{X}   & \texttt{X}        & \texttt{X}      & \texttt{X}            & \texttt{X}                 \\
+	\texttt{firstprivate}    &                   & \texttt{X}   & \texttt{X}        &                 & \texttt{X}            & \texttt{X}                 \\
+	\texttt{lastprivate}     & \texttt{X}        & \texttt{X}   & \texttt{X}        & \texttt{X}      & \texttt{X}            & \texttt{X}                 \\
+	\texttt{default ()}      & \texttt{X}        &              &                   & \texttt{X}      & \texttt{X}            &                            \\
+	\texttt{reduction}       & \texttt{X}        & \texttt{X}   & \texttt{X}        &                 & \texttt{X}            & \texttt{X}                 \\
+	\texttt{copyin}          & \texttt{X}        &              &                   & \texttt{X}      & \texttt{X}            &                            \\
+	\texttt{copyprivate}     &                   &              &                   & \texttt{X}      &                       &                            \\
+	\texttt{schedule ()}     &                   & \texttt{X}   &                   &                 & \texttt{X}            &                            \\
+	\texttt{ordered ()}      &                   & \texttt{X}   &                   &                 & \texttt{X}            &                            \\
+	\texttt{nowait}          &                   & \texttt{X}   & \texttt{X}        & \texttt{X}      &                       &                            \\
 \end{tabular}
 \end{center}
 \caption{Cláusulas aceptadas por las diferentes directivas estudiadas}\label{clausulas-omp-definiciones-aceptacion}
 \end{table}
 
 Por norma general, las variables declaradas fuera de la región paralela y las dinámicas son compartidas por las hebras dentro de las regiones paralelas, mientras que las variables declaradas dentro de las mismas son privadas.
-Son excepciones a esta norma los índices de los bucles \code{for}, que son privados por defecto, y las variables declaradas como \code{static}.
+Son excepciones a esta norma los índices de los bucles \texttt{for}, que son privados por defecto, y las variables declaradas como \texttt{static}.
 
 \section{Cláusulas relacionadas con la compartición de datos}\label{clausulas-openmp-comparticion-de-datos}
 
-\subsection{Cláusula \code{shared}}
+\subsection{Cláusula \texttt{shared}}
 
 \begin{lstlisting}[language=C]
 #pragma omp [directiva] shared (var, ...)
@@ -49,8 +49,8 @@ Debemos tener cuidado con las secciones críticas que se produzcan en estas secc
 #include <stdio.h>
 
 int main () {
-	int resultado         = 0,
-	    res_indeterminado = 0;
+	int resultado = 0,
+	 res_indeterminado = 0;
 
 	#pragma omp parallel for shared (resultado)
 	for (int i=0; i<10; i++)
@@ -62,7 +62,7 @@ int main () {
 		res_indeterminado += i;
 
 	printf("Resultado: %d\nResultado indeterminado: %d\n",
-	       resultado, res_indeterminado);
+	 resultado, res_indeterminado);
 
 	return 0;
 }
@@ -78,7 +78,7 @@ gcc -fopenmp -O2 shared.c -o shared
 # Resultado indeterminado: 13
 \end{lstlisting}
 
-\subsection{Cláusula \code{private}}
+\subsection{Cláusula \texttt{private}}
 
 \begin{lstlisting}[language=C]
 #pragma omp [directiva] private (var, ...)
@@ -86,15 +86,15 @@ gcc -fopenmp -O2 shared.c -o shared
 
 Las variables especificadas como argumentos a la cláusula se comportan como variables privadas de cada una de las hebras a lo largo de la sección paralela.
 Su valor de entrada y salida queda indefinido por mucho que la variable esté inicializada antes de la sección, por lo que es imperativo inicializarla dentro de la misma.
-Como vimos en \S\ref{clausulas-openmp-definiciones}, los índices de los bucles \code{for} son privados por defecto.
+Como vimos en \S\ref{clausulas-openmp-definiciones}, los índices de los bucles \texttt{for} son privados por defecto.
 
 \begin{lstlisting}[language=C]
 #include <omp.h>
 #include <stdio.h>
 
 int main () {
-	int resultado         = 0,
-	    res_indeterminado = 0;
+	int resultado = 0,
+	 res_indeterminado = 0;
 
 	omp_set_num_threads(2);
 
@@ -138,13 +138,13 @@ gcc -fopenmp -O2 private.c -o private
 # Resultado indeterminado: 1
 \end{lstlisting}
 
-\subsection{Cláusula \code{firstprivate}}
+\subsection{Cláusula \texttt{firstprivate}}
 
 \begin{lstlisting}[language=C]
 #pragma omp [directiva] firstprivate (var, ...)
 \end{lstlisting}
 
-Esta cláusula combina la cláusula \code{private} con la inicialización de las variables que toma como argumento al entrar en la región paralela al valor que tuvieran inmediatamente antes de entrar en ella, de forma que no es nececesario inicializarlas en el interior del bloque.
+Esta cláusula combina la cláusula \texttt{private} con la inicialización de las variables que toma como argumento al entrar en la región paralela al valor que tuvieran inmediatamente antes de entrar en ella, de forma que no es nececesario inicializarlas en el interior del bloque.
 
 \begin{lstlisting}[language=C]
 #include <omp.h>
@@ -175,13 +175,13 @@ gcc -fopenmp -O2 firstprivate.c -o firstprivate
 # Resultado final: 0
 \end{lstlisting}
 
-\subsection{Cláusula \code{lastprivate}}
+\subsection{Cláusula \texttt{lastprivate}}
 
 \begin{lstlisting}[language=C]
 #pragma omp [directiva] lastprivate (var, ...)
 \end{lstlisting}
 
-Esta cláusula combina la cláusula \code{private} con la copia del último valor que habrían tenido las variables pasadas como argumento si el bloque se hubiera ejecutado secuencialmente
+Esta cláusula combina la cláusula \texttt{private} con la copia del último valor que habrían tenido las variables pasadas como argumento si el bloque se hubiera ejecutado secuencialmente
 Para ello, es imperativo que haya una estructura secuencial clara, por lo que se imponen restricciones sobre su aplicación tal y como se muestra en el cuadro~\ref{clausulas-omp-definiciones-aceptacion}.
 
 \begin{lstlisting}[language=C]
@@ -213,13 +213,13 @@ gcc -fopenmp -O2 lastprivate.c -o lastprivate
 # Resultado final: 3
 \end{lstlisting}
 
-\subsection{Cláusula \code{default}}
+\subsection{Cláusula \texttt{default}}
 
 \begin{lstlisting}[language=C]
 #pragma omp [directiva] default (none | shared)
 \end{lstlisting}
 
-Si se indica \code{none} en esta cláusula, las variables que antes entraban como compartidas por defecto ahora deben ser declaradas para su compartición manualmente mediante \code{shared}, \code{private}, \code{firstprivate}, \code{lastprivate} y \code{reduction}.
+Si se indica \texttt{none} en esta cláusula, las variables que antes entraban como compartidas por defecto ahora deben ser declaradas para su compartición manualmente mediante \texttt{shared}, \texttt{private}, \texttt{firstprivate}, \texttt{lastprivate} y \texttt{reduction}.
 
 \begin{lstlisting}[language=C]
 #include <omp.h>
@@ -242,14 +242,14 @@ int main () {
 
 \section{Cláusulas relacionadas con comunicación y sincronización}
 
-\subsection{Cláusula \code{reduction}}
+\subsection{Cláusula \texttt{reduction}}
 
 \begin{lstlisting}[language=C]
 #pragma omp [directive] reduction (operador : var, ...)
 \end{lstlisting}
 
-Esta cláusula transforma las operaciones que se hacen en bucle (o de cualquier otra forma reiterada) a las variables pasadas como argumento mediante el \code{operador} especificado a una única operación.
-Formalmente, \code{reduction} (en el caso de \code{reduction (+:k)}) transformaría la expresión del lado izquierdo a la del lado derecho:
+Esta cláusula transforma las operaciones que se hacen en bucle (o de cualquier otra forma reiterada) a las variables pasadas como argumento mediante el \texttt{operador} especificado a una única operación.
+Formalmente, \texttt{reduction} (en el caso de \texttt{reduction (+:k)}) transformaría la expresión del lado izquierdo a la del lado derecho:
 
 \[\sum_{i=0}^{k}k=k_0+k_1+\cdots+k_{n-1}+k_n\]
 
@@ -258,16 +258,16 @@ Al usar esta cláusula, las variables especificadas toman un valor de entrada al
 \begin{table}[!h]
 	\begin{center}
 		\begin{tabular}{c c}
-			\textbf{Operador} & \textbf{Valor inicial}     \\
+			\textbf{Operador} & \textbf{Valor inicial} \\
 			\toprule
-			\code{+}          & $0$                        \\
-			\code{-}          & $0$                        \\
-			\code{*}          & $1$                        \\
-			\code{\&}         & $0$ (todos los bits a $1$) \\
-			\code{|}          & $0$                        \\
-			\code{\^{}}       & $0$                        \\
-			\code{\&\&}       & $1$                        \\
-			\code{||}         & $0$                        \\
+			\texttt{+} & $0$ \\
+			\texttt{-} & $0$ \\
+			\texttt{*} & $1$ \\
+			\texttt{\&} & $0$ (todos los bits a $1$) \\
+			\texttt{|} & $0$ \\
+			\texttt{\^{}} & $0$ \\
+			\texttt{\&\&} & $1$ \\
+			\texttt{||} & $0$ \\
 		\end{tabular}
 	\end{center}
 	\caption{Cláusulas aceptadas por las diferentes directivas estudiadas}\label{clausulas-omp-definiciones-aceptacion}
@@ -281,7 +281,7 @@ int main () {
 	int resultado = 0;
 
 	#pragma omp parallel for default (none) lastprivate (resultado) \
-	                         reduction(+ : resultado)
+	 reduction(+ : resultado)
 	for (int i=0; i<4; i++) {
 		resultado = i;
 		printf("Resultado: %d\n", resultado);
@@ -303,9 +303,9 @@ gcc -fopenmp -O2 reduction.c -o reduction
 # Resultado final: 6
 \end{lstlisting}
 
-\subsection{Cláusula \code{copyprivate}}
+\subsection{Cláusula \texttt{copyprivate}}
 
-Esta cláusula, que sólo puede usarse con la directiva \code{single}, permite que una variable privada de una hebra se copia a las variables privadas del mismo nombre del resto de hebras.
+Esta cláusula, que sólo puede usarse con la directiva \texttt{single}, permite que una variable privada de una hebra se copia a las variables privadas del mismo nombre del resto de hebras.
 Esto difunde el dato al resto de hebras de forma que todas pueden acceder a una actualización del mismo.
 
 \begin{lstlisting}[language=C]
@@ -324,7 +324,7 @@ int main () {
 		}
 
 		printf("La hebra %d recibió el valor compartido %d\n",
-	          omp_get_thread_num(), num);
+	 omp_get_thread_num(), num);
 	}
 
 	return 0;

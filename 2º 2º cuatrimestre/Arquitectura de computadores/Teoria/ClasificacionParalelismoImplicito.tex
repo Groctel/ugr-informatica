@@ -2,7 +2,7 @@
 
 A la hora de trabajar en un sistema informático es muy común encontrarnos con el caso de que hay tareas que podemos ejecutar paralelamente.
 Por ejemplo, si tenemos los vectores $\vec{A}$, $\vec{B}$, $\vec{C}$, $\vec{D}$, $\vec{E}$ y $\vec{F}$, podemos realizar paralelamente las operaciones $\vec{A}+\vec{B}=\vec{C}$ y $\vec{D}\times\vec{E}=\vec{F}$, ya que el resultado de una no afecta al resultado de la otra.
-A más bajo nivel, definimos un vector de dimensión $n$ en un sistema informático como una lista ordenada de $n$ elementos tal que \code{vector[n] = [0,1,2,\ldots,n-1]}, por lo que definimos la suma de dos vectores \code{v1[n]} y \code{v2[n]} de la siguiente forma:
+A más bajo nivel, definimos un vector de dimensión $n$ en un sistema informático como una lista ordenada de $n$ elementos tal que \texttt{vector[n] = [0,1,2,\ldots,n-1]}, por lo que definimos la suma de dos vectores \texttt{v1[n]} y \texttt{v2[n]} de la siguiente forma:
 
 \begin{lstlisting}[language=C]
 for (int i=0; i<n; i++)

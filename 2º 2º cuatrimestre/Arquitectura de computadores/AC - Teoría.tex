@@ -1,45 +1,48 @@
-\documentclass[10pt]{report}
+\documentclass[10pt, a4paper]{aqademic}
+
 \usepackage[spanish]{babel}
+	\selectlanguage{spanish}
+
+% Document packages
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage[type=CC, modifier=by-nc-sa, version=4.0]{doclicense}
+\usepackage{graphicx}
+\usepackage{multirow}
+\usepackage{tabu}
+\usepackage{tikz}
 
 % Document settings
 
-\usepackage{titling}
-	\author{Atanasio José Rubio Gil}
-	\title{Arquitectura~de~computadores}
-	\date{\today}
+\author{Atanasio José Rubio Gil}
+\title{Arquitectura~de~computadores}
+\date{\today}
 
-\usepackage[title=\thetitle]{aqademia}
-
-\aqchap{Tema }
-\aqssec{}
-
-\usepackage{array}
-	\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
-\usepackage{graphicx}
-	\graphicspath{{img/}}
-\usepackage{multirow}
-\usepackage{tabu}
-	\tabulinesep=1mm
-\usepackage{tikz}
+\AqSetChapter{Tema }
+\newcolumntype{M}[1]{>{\centering\arraybackslash}m{#1}}
+\graphicspath{{img/}}
+\tabulinesep=1mm
 
 % Document composition
 
 \begin{document}
 
-\aqtitlepage{Grado en Ingeniería Informática}
-            {Teoría}
-            {https://github.com/Groctel/ugr-informatica}
+\AqMaketitle[cover    = logo-ugr.png,
+             org      = Grado en Ingeniería Informática,
+             subtitle = Teoría,
+             url      = https://github.com/Groctel/ugr-informatica]
 \tableofcontents
 
 \chapter{Arquitecturas paralelas: Clasificación y prestaciones}\label{arqpar-clasificacion-prestaciones}
-\input{Teoria/ClasificacionParalelismoImplicito.tex}
-\input{Teoria/ClasificacionArquitecturasParalelas.tex}
-\input{Teoria/EvaluacionPrestacionesArquitectura.tex}
+	\input{Teoria/ClasificacionParalelismoImplicito.tex}
+	\input{Teoria/ClasificacionArquitecturasParalelas.tex}
+	\input{Teoria/EvaluacionPrestacionesArquitectura.tex}
 
 \chapter{Programación paralela}\label{progpar}
-\input{Teoria/HerramientasProgramacionParalela.tex}
-\input{Teoria/ProcesoDeParalelizacion.tex}
-\input{Teoria/EvaluacionPrestacionesProcesamientoParalelo.tex}
+	\input{Teoria/HerramientasProgramacionParalela.tex}
+	\input{Teoria/ProcesoDeParalelizacion.tex}
+	\input{Teoria/EvaluacionPrestacionesProcesamientoParalelo.tex}
 
 \chapter{Arquitecturas con paralelismo a nivel de hebra (\textit{TLP})}\label{tlp}
 

@@ -18,14 +18,14 @@ Tenemos varias formas de obtener el tiempo de ejecución de un programa:
 
 \begin{center}
 \begin{tabular}{l l c r}
-	\textbf{Función}         & \textbf{Fuente}      & \textbf{Tipo}         & \textbf{Precisión (ms)} \\
+	\textbf{Función}           & \textbf{Fuente}        & \textbf{Tipo}         & \textbf{Precisión (ms)} \\
 	\toprule
-	\code{time}              & \code{/usr/bin/time} & elapsed, user, system & 10000 \\
-	\code{clock()}           & \code{time.h}        & CPU                   & 10000 \\
-	\code{gettimeofday()}    & \code{sys/time.h}    & elapsed               & 1 \\
-	\code{clock\_gettime()}  & \code{time.h}        & elapsed               & 0.001 \\
-	\code{omg\_get\_wtime()} & \code{omp.h}         & elapsed               & 0.001 \\
-	\code{SYSTEM\_CLOCK()}   & Fortran              & elapsed               & 1 \\
+	\texttt{time}              & \texttt{/usr/bin/time} & elapsed, user, system & 10000                   \\
+	\texttt{clock()}           & \texttt{time.h}        & CPU                   & 10000                   \\
+	\texttt{gettimeofday()}    & \texttt{sys/time.h}    & elapsed               & 1                       \\
+	\texttt{clock\_gettime()}  & \texttt{time.h}        & elapsed               & 0.001                   \\
+	\texttt{omg\_get\_wtime()} & \texttt{omp.h}         & elapsed               & 0.001                   \\
+	\texttt{SYSTEM\_CLOCK()}   & Fortran                & elapsed               & 1                       \\
 \end{tabular}
 \end{center}
 
@@ -102,7 +102,7 @@ Distinguimos diferentes tipos de \textit{benchmarks}:
 	\item\textbf{De bajo nivel (\textit{microbenchmark}):} Evaluación de operaciones con números enteros o de coma flotante.
 	\item\textbf{Kernels:} Resolución de sistemas de ecuaciones, factorización y multiplicación de matrices\ldots
 	\item\textbf{Sintéticos:} Programas como Dhrystone o Whetstone utilizados para poner a prueba las capacidades de cálculo de las arquitecturas.
-	\item\textbf{Programas reales:} Puede usarse como \textit{benchmark} el rendimiento de \code{gcc}, \code{zip} u otros programas que realicen trabajos pesados con una gran cantidad de datos.
+	\item\textbf{Programas reales:} Puede usarse como \textit{benchmark} el rendimiento de \texttt{gcc}, \texttt{zip} u otros programas que realicen trabajos pesados con una gran cantidad de datos.
 	\item\textbf{Aplicaciones diseñadas:} Programas de predicción de tiempo o simulación de terremotos, entre otros, pueden utilizarse para evaluar las prestaciones del computador debido a la inmensa cantidad de datos que manejan.
 \end{itemize}
 
