@@ -11,7 +11,7 @@ La receta principal del `Makefile` (`all`) actualiza la plantilla automáticamen
 Para compilar sin actualizar la plantilla, ejecuta `make build`.
 
 Cada cuatrimestre y asignatura están identificados por una receta.
-Los cuatrimestres siguen todos la expresión `c[0-9][0-9]`, siendo el primer dígito el curso y el segundo, el cuatrimestre en sí.
+Los cuatrimestres siguen todos la expresión `c[1-4][1-2]`, siendo el primer dígito el curso y el segundo, el cuatrimestre en sí.
 Las recetas de las asignaturas siguen todas su propio código **en minúsculas**.
 Dichos códigos pueden consultarse en la declaración de variables del `Makefile` o pueden ser recuperados por las funciones de autocompletar de la shell.
 
@@ -19,9 +19,13 @@ Dichos códigos pueden consultarse en la declaración de variables del `Makefile
 
 El 5 de agosto de 2020 me levanté con un proyecto: ¡Reformar el repositorio para hacer más fácil trabajar con él!
 Durante media hora estuve arreglando tranquilamente la nueva rama AC, que creé pocos minutos antes del desastre.
+
 —Bien, ya tengo dos ramas, voy a verlas en GitHub—pensé.
+
 Y así, según entraba a GitHub, vi que me habían hecho un merge.
+
 —¡Oh! ¡Qué ilusión!—me dije.—Bueno, ya puedo borrar ese repo.
+
 Y así, abrí éste repositorio para consultarlo y el otro para borrarlo.
 Tabulación de pestañas, acceso a las opciones.
 ¡Zona peligrosa!
@@ -35,6 +39,7 @@ En ese momento mi cerebro se sobrecalienta.
 He perdido mis estrellitas.
 
 Moraleja de la historia:
+
 **No os toméis a la ligera el borrado de un repositorio.
 No os emabarquéis en operaciones potencialmente destructivas sin haberlo preparado todo.**
 En este caso, el proyecto no era muy grande, pero mi error podría haber sido catastrófico en cualquier otro caso.
