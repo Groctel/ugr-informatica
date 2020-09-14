@@ -1,0 +1,742 @@
+# COMPILACIÓN DE PROGRAMAS
+
+## 0 - UTILIDADES
+
+| **ar** | **g++** |
+| :---: | :---: |
+| **gcc** | **makefile** |
+
+`ar` → Crea, modifica y extrae datos de archivos.
+
+- `ar [lib]` → Crea la biblioteca [lib].
+- `ar -r` → Inserta los archivos indicados en la biblioteca reemplazando los ya existentes del mismo origen en caso de que los hubiera.
+- `ar -s` → Añade un índice al archivo o actualiza el ya existente en caso de que lo hubiera.
+- `ar -v` → Verboso.
+
+`g++` → Compila programas escrito en Fortran y C y derivados.
+- `g++ [file]` → Compila el archivo [file].
+- `g++ -c [file]` → Crea el módulo objeto `[file].o`.
+- `g++ -I[folder]` → Busca bibliotecas para enlazarlas con módulos objeto en el directorio [folder].
+- `g++ -L./` → Busca bibliotecas para enlazarlas con módulos objeto.
+- `g++ -l[lib]` → Utiliza la bibioteca [lib] precedida de lib (`-ltrig` sería `libtrig.a`) para el enlazador del programa.
+- `g++ -o [string] [file]` → Compila el archio [file] con el nombre [string].
+
+`make` → Crea un archivo ejecutable a partir de un archivo `makefile`.
+- `make -f [name]` → Crea un archivo ejecutable a partir del archivo `makefile` [name].
+
+## 1 - INTRODUCCIÓN A LA COMPILACIÓN DE PROGRAMAS CON GCC Y G++
+
+Los compiladores son programas capaces de generar un programa ejecutable (escrito en lenguaje máquina binario) a partir de archivos escritos en código fuente mediante un proceso de traducción e interpretación.
+
+**GCC** es un compilador integrado del proyecto GNU para C, C++, Objective C y Fortran. La siguiente imagen muestra un proceso normal de compilación en C y C++:
+
+# GCC.PNG
+
+El proceso consta de varios módulos que se van ejecutando en el orden del algoritmo de la imagen:
+- **Preprocesador:** Acepta archivos con extensiones de C o C++, como son `.c`, `.cpp` o `.h` y realiza las siguientes acciones sobre ellos:
+  - Elimina los comentarios.
+  - Interpreta las directivas de preprocesamiento. En el caso de `#include <iostream>`, sustituye dicha linea por todo el archivo `iostream.h`.
+- **Compilador:** Toma el código fuente preprocesado y realiza las siguientes acciones:
+  - Traduce el código fuente a código objeto.
+    - No se resuelven las posibles referencias externas al archivo (variables o funciones declaradas en otros archivos).
+  - Almacena el resultado en un archivo `codigo.o`, llamado **módulo objeto**.
+- **Enlazador:** Resuelve las referencias externas y genera un archivo ejecutable.
+  - Las referencias pueden estar en otros archivos `.o` o en bibliotecas.
+  - Para poder crear un archivo ejecutable, debe existir una función `main()`.
+
+Trabajemos con un archivo sencillo escrito en C++:
+
+###### main.cpp
+```c++
+#include <iostream>
+#include "functions.h"
+using namespace std;
+
+int main() {
+   print_hello();
+
+   cout << "El factorial de 5 es " << factorial(5) << "\n";
+
+   return 0;
+}
+```
+
+A partir de él podemos generar su módulo objeto mediante la opción `-c` de la orden `g++`. El módulo objeto creado tiene el siguiente contenido (traducido de hexadecimal a texto):
+
+###### main.o
+```
+.ELF..............>.................................@.....@.....UH..SH..
+......H.5....H.=.........H..............H.......H.5....H............H...
+[].UH..H....}..u..}..u2.}.....u)H.=.........H......H.5....H......H......
+....UH.................]..El factorial de 5 es ..................GCC: (G
+NU) 8.2.1 20181127...............zR..x.......... ...........S....A....C.
+.E...I..........@.......I....A....C...D..... ...`............A....C..P..
+........................................................................
+........................................................................
+................................%.......................4.......S.......
+I.......d...............................................................
+........................................................s...............
+S.......x...............................................................
+........................................................................
+........................................................................
+........6........................main.cpp._ZStL19piecewise_construct._ZS
+tL8__ioinit._Z41__static_initialization_and_destruction_0ii._GLOBAL__sub
+_I_main._GLOBAL_OFFSET_TABLE_._Z11print_hellov._ZSt4cout._ZStlsISt11char
+_traitsIcEERSt13basic_ostreamIcT_ES5_PKc._Z9factoriali._ZNSolsEi._ZNSt8i
+os_base4InitC1Ev.__dso_handle._ZNSt8ios_base4InitD1Ev.__cxa_atexit......
+........................................................................
+........................*.......................4.......................
+;.......................C.......................s.......................
+x.......................................................................
+........*...............................................................
+........................D...............S.......d.......................
+..symtab..strtab..shstrtab..rela.text..data..bss..rodata..rela.init_arra
+y..comment..note.GNU-stack..rela.eh_frame...............................
+........................................ .......................@.......
+........................................@...............X.......P.......
+........................&...............................................
+................,.......................................................
+........1...............................................................
+>...............................................................9.......
+@.......................................................J.......0.......
+................................................S.......................
+3.......................................h.......................8.......
+................................c.......@.......................H.......
+........................................................X...............
+................................................C.......................
+........................................r...............................
+```
+
+Aunque se puedan apreciar en él algunas trazas de código fuente y fragmentos de texto comprensible, está claro que este texto no está hecho para que lo lea un humano (al menos del siglo XXI).
+
+Vamos ahora a compilarlo normalmente:
+
+```
+$ g++ main.cpp 
+  /usr/bin/ld: /tmp/ccBwVxKe.o: in function `main':
+  main.cpp:(.text+0xa): undefined reference to `print_hello()'
+  /usr/bin/ld: main.cpp:(.text+0x2a): undefined reference to `factorial(int)'
+  collect2: error: ld returned 1 exit status
+```
+
+Nos ha dado un error (`ld returned 1 exit status` es lo mismo que `$?=1`) porque `ld`, que es el enlazador de GNU, no ha podido resolver las referencias externas (`print_hello()` y `factorial()`). Por ello, no se ha generado el archivo `main.o`.
+
+Para solucionar esto, vamos a cargar los archivos correspondientes a dichas referencias:
+
+###### hello.cpp
+```c++
+#include <iostream>
+#include "functions.h"
+using namespace std;
+
+void print_hello(){
+   cout << "Hello World!";
+}
+```
+
+###### factorial.cpp
+```c++
+#include "functions.h"
+
+int factorial(int n){
+   
+   if(n!=1){
+      return(n * factorial(n-1));
+   }
+   else return 1;
+}
+```
+
+###### functions.h
+```h
+void print_hello();
+int factorial(int n);
+```
+
+Ahora generamos sus módulos objeto correspondientes:
+
+    $ g++ -c factorial.cpp 
+    $ g++ -c hello.cpp 
+    $ g++ -c main.cpp
+
+Y ahora compilamos todos los módulos objeto en un sólo archivo ejecutable:
+
+    $ g++ main.o factorial.o hello.o
+
+El nombre que g++ le da por defecto a dicho archivo es `a.out`, pero podemos especificarlo como argumento de la opción `-o`.
+
+    $ g++ -o programa1 main.o factorial.o hello.o
+
+Esta es la forma completa y compleja de compilar un programa. En la práctica, podemos resumir todo el proceso anterior en una sola orden:
+
+    $ g++ -o programa1 main.cpp factorial.cpp hello.cpp
+
+## 2 - INTRODUCCIÓN A LAS BIBLIOTECAS
+
+Una biblioteca es una colección de módulos objeto que contienen constantes, variables y funciones que pueden ser utilizadas por otros módulos. Para crear una biblioteca usamos la orden `ar`.
+
+Por ejemplo, consideremos los siguientes programas:
+
+###### sin.cpp
+```c++
+#include "mates.h"
+
+using namespace std;
+
+void print_sin(float valor){
+   float local;
+
+   local=valor*M_PI/180.0;
+   cout << endl;
+   cout << "sin\(" << valor << ")=" << sin(local);
+   cout << endl;
+}
+```
+
+###### cos.cpp
+```c++
+#include "mates.h"
+
+using namespace std;
+
+void print_cos(float valor){
+   float local;
+
+   local=valor*M_PI/180.0;
+   cout << endl;
+   cout << "cos\(" << valor << ")=" << cos(local);
+   cout << endl;
+}
+```
+
+###### tan.cpp
+```c++
+#include "mates.h"
+
+using namespace std;
+
+void print_tan(float valor){
+   float local;
+
+   local=valor*M_PI/180.0;
+   cout << endl;
+   cout << "tan\(" << valor << ")=" << tan(local);
+   cout << endl;
+}
+```
+
+###### mates.h
+```h
+#include <iostream>
+#include <cmath>
+
+#ifndef M_PI
+#define M_PI 3.14159265358979323846
+#endif
+
+void print_sin(float valor);
+void print_cos(float valor);
+void print_tan(float valor);
+```
+
+Aunque sea un poco tonto porque `mates.h` ya incluye `cmath`, vamos a crear nuestra propia biblioteca a partir de estos archivos:
+
+```
+$ g++ -c sin.cpp
+$ g++ -c cos.cpp
+$ g++ -c tan.cpp
+$ ar -rvs libtrig.a sin.o cos.o tan.o
+```
+
+Nuestra biblioteca `libtrig.a` tiene una estructura similar al módulo objeto mostrado anteriormente, por lo que no la vamos a enseñar. Vamos a compilar ahora un programa a partir de los módulos objetos de `hello.cpp` y `factorial.cpp`, que ya se definieron anteriormente, y `main2.cpp`, cuya estructura es la siguiente:
+
+###### main2.cpp
+```c++
+#include <iostream>
+#include "functions.h"
+#include "mates.h"
+
+using namespace std;
+
+int main(){
+    print_hello();
+    cout << endl;
+    cout << "The factorial of 5 is " << factorial(5) << endl;
+    print_sin(90.0);
+    print_cos(90.0);
+    print_tan(90.0);
+
+    return 0;
+}
+```
+
+```
+$ g++ -c main.cpp
+$ g++ -o programa2 main2.o factorial.o hello.o
+  main2.o: In function 'main':
+  main2.cpp:(.text+0x58): undefined reference to 'print_sin(float)'
+  main2.cpp:(.text+0x65): undefined reference to 'print_cos(float)'
+  main2.cpp:(.text+0x72): undefined reference to 'print_tan(float)'
+  collect2: ld returned 1 exit status
+```
+
+Debido a la estructura de trabajo del compilador, `main.o` no ha tenido problemas para crearse porque el módulo objeto no necesita de bibliotecas para funcionar. Sin embargo, a la hora de crear una correspondencia entre los módulos objeto con las bibliotecas correspondientes, el enlazador las ha encontrado y es aquí donde se produce el error. La forma correcta de compilar un programa incluyendo bibilotecas es la siguiente:
+
+```
+g++ -L./ -o programa2 main2.o factorial.o hello.o -ltrig
+```
+
+Al trabajar con varios módulos se van generando **dependencias** entre ellos. A la hora de compilar de nuevo los programas para realizar actualizaciones es muy importante tener en cuenta los cambios que se han hecho a todos los archivos con los que se trabaja para que no existan errores. Por ejemplo, un cambio en una biblioteca puede requerir de cambios en las sentencias del programa principal.
+
+## 3 - USO DE ARCHIVOS DE TIPO MAKEFILE
+
+Para gestionar las dependencias de forma más automática y cómoda, podemos usar la utilidad `make`, que comprueba qué archivos se han modificado desde la ultima vez que se utilizó para crear el archivo ejecutable y hace cambios sólo en los sectores en los que sea necesario. Esto se hace mediante un documento de texto de tipo `makefile` que especifica las dependencias del programa.
+
+### 3.1 - ESTRUCTURA DE UN ARCHIVO MAKEFILE
+
+Los archivos `makefile` contienen reglas que indican el programa que se quiere compilar (el **objetivo**), las **dependencias** de dicho objetivo (que pueden estar vacías) y las órdenes que seguir para compilarlo. Siguen la siguiente estructura:
+
+```makefile
+objetivo1: dependencias
+	orden1
+	orden2
+...
+	ordenn
+objetivo2: dependencias
+...
+objetivon: dependencias
+...
+```
+
+Es importante dejar claro que antes de las órdenes hay que introducir un carácter de tabulación, no vale escribir espacios como en otros archivos.
+
+Vamos a construir el `makefile` para `programa1`:
+
+###### makefileA
+```makefile
+programa1:
+	g++ –o programa1 main.cpp hello.cpp factorial.cpp
+```
+
+```
+$ make -f makefileA
+  make: 'programa1' is up to date.
+```
+
+Como no hemos hecho ninguna modificación a `programa1`, simplemente nos avisa de que su versión es la más actualizada. Si cambiamos la línea `cout << "Hello World!!";` a `cout << "Dear World, Hello!";` nos da el mismo mensaje, pero porque él mismo ha actualizado el programa.
+
+### 3.2 - USO DE VARIABLES EN ARCHIVOS MAKEFILE
+
+`make` nos permite definir variables de la misma forma que en un script de bash. Tomemos como ejemplo el siguiente archivo:
+
+###### makefileg
+```makefile
+# Variable que indica el compilador que se va a utilizar
+CC=g++
+
+# Variable que indica el directorio en donde se encuentran los archivos de cabecera
+INCLUDE_DIR= ./includes
+
+# Variable que indica el directorio en donde se encuentran las bibliotecas
+LIB_DIR= ./
+
+programa2: main2.o factorial.o hello.o libmates.a
+   $(CC) -L$(LIB_DIR) -o programa2 main2.o factorial.o hello.o -lmates
+
+main2.o: main2.cpp
+   $(CC) -I$(INCLUDE_DIR) -c main2.cpp
+
+factorial.o: factorial.cpp
+   $(CC) -I$(INCLUDE_DIR) -c factorial.cpp
+
+hello.o: hello.cpp
+   $(CC) -I$(INCLUDE_DIR) -c hello.cpp
+
+libmates.a: sin.o cos.o tan.o
+   ar -rvs libmates.a sin.o cos.o tan.o
+
+sin.o: sin.cpp
+   $(CC) -I$(INCLUDE_DIR) -c sin.cpp
+
+cos.o: cos.cpp
+   $(CC) -I$(INCLUDE_DIR) -c cos.cpp
+
+tan.o: tan.cpp
+   $(CC) -I$(INCLUDE_DIR) -c tan.cpp
+```
+
+En él hemos declarado las variables `CC`, `INCLUDE_LIB` y `LIB_DIR`, a las que podemos llamar con la sintaxis `$()` habitual.
+
+`make` también tiene una serie de variables especiales que actúan cada vez que se procesa una regla. Aquí veremos cuatro de ellas:
+
+| VARIABLE | DESCRIPCIÓN |
+| :---: | --- |
+| `$@` | Representa el nombre del objetivo de la regla en la que nos encontramos |
+| `$<` | Representa la primera dependencia de la regla en la que nos encontramos |
+| `$?` | Representa las dependencias de la regla en la que nos encontramos que hayan sido actualizadas dentro del objetivo de la regla y separadas por espacios en blanco |
+| `$^` | Representa todas las dependencias separadas por espacios en blanco |
+
+Para mostrar el uso de estas variables vamos a suponer un archivo `makefile` que contenga las siguientes sentencias:
+
+```makefile
+CC = g++
+CPPFLAGS = -Wall
+SRCS = main.cpp factorial.cpp hello.cpp
+OBJS = main.o factorial.o hello.o
+HDRS = functions.h
+```
+
+La opción `-Wall` de la variable `CPPFLAGS` sirve para mostrar todas las advertencias (***W**arning all*) que pudieran aparecer durante la compilación.
+
+#### 3.2.1 - Uso de `$@`
+
+#### 3.2.2 - Uso de `$<`
+
+#### 3.2.3 - Uso de `$?`
+
+#### 3.2.4 - Uso de `$^`
+
+#### 3.2.5 - Uso de otras opciones y variables
+
+## 4 - EJERCICIOS
+
+### EJERCICIO 1
+
+Pruebe a comentar en el archivo fuente `main.cpp` la directiva de procesamiento `#include "functions.h"`. La línea quedaría así:
+
+    //#include "functions.h"
+
+Pruebe a generar ahora el módulo objeto de dicho archivo. ¿Qué ha ocurrido?
+
+### EJERCICIO 2
+
+Explique por qué fallan las siguientes órdenes y los tipos de errores que se encuentran en ellas:
+
+```
+$ mkdir includes
+$ mv *.h includes
+$ rm *.o programa2
+$ g++ -L./ -o programa2 main2.cpp factorial.cpp hello.cpp -lmates
+  main2.cpp:2:23: error: functions.h: No such file or directory
+  main2.cpp:3:19: error: mates.h: No such file or directory
+  main2.cpp: In function ‘int main()’:
+  main2.cpp:8: error: ‘print_hello’ was not declared in this scope
+  main2.cpp:10: error: ‘factorial’ was not declared in this scope
+  main2.cpp:11: error: ‘print_sin’ was not declared in this scope
+  main2.cpp:12: error: ‘print_cos’ was not declared in this scope
+  main2.cpp:13: error: ‘print_tan’ was not declared in this scope
+  factorial.cpp:1:23: error: functions.h: No such file or directory
+  hello.cpp:2:23: error: functions.h: No such file or directory
+```
+
+### EJERCICIO 3
+
+Copie el contenido del siguiente  makefile a un archivo llamado `makefileE` ubicado en el mismo directorio en el que están los archivos de código fuente `.cpp`. Pruebe a modificar distintos archivos `.cpp` (puede hacerlo usando la orden `touch` sobre uno o varios de esos archivos) y compruebe la secuencia de instrucciones que se muestra en el terminal al ejecutarse la orden `make`. ¿Se genera siempre la misma secuencia de órdenes cuando los archivos han sido modificados que cuando no? ¿A qué cree puede deberse tal comportamiento?
+
+```makefile
+programa2: main2.o factorial.o hello.o libmates.a
+	g++ -L./ -o programa2 main2.o factorial.o hello.o -lmates
+main2.o: main2.cpp
+	g++ -I./includes -c main2.cpp
+factorial.o: factorial.cpp
+	g++ -I./includes -c factorial.cpp
+hello.o: hello.cpp
+	g++ -I./includes -c hello.cpp
+libmates.a: sin.o cos.o tan.o
+	ar -rvs libmates.a sin.o cos.o tan.o
+sin.o: sin.cpp
+	g++ -I./includes -c sin.cpp
+cos.o: cos.cpp
+	g++ -I./includes -c cos.cpp
+tan.o: tan.cpp
+	g++ -I./includes -c tan.cpp
+```
+
+### EJERCICIO 4
+
+Obtener un nuevo `makefileF` a partir del makefile del ejercicio anterior que incluya además las dependencias sobre los archivos de cabecera. Pruebe a modificar cualquier archivo de cabecera (usando la orden `touch`) y compruebe la secuencia de instrucciones que se muestra en el terminal al ejecutarse la orden `make`.
+
+### EJERCICIO 5
+
+Usando como base el archivo `makefileG`, sustituya la línea de orden de la regla cuyo objetivo es `programa2` por otra en la que se use alguna de las variables especiales y cuya ejecución sea equivalente.
+
+### EJERCICIO 6
+
+Utilizando como base el archivo `makefileG` y los archivos fuente asociados, realice los cambios que considere oportunos para que, en la construcción de la biblioteca estática `libmates.a`, este archivo pase a estar en un subdirectorio denominado `libs` y se pueda enlazar correctamente con el resto de archivos objeto.
+
+### EJERCICIO 7
+
+Busque la variable predefinida de `make` que almacena la utilidad del sistema que permite construir bibliotecas. Recuerde que la orden para construir una biblioteca estática a partir de una serie de archivos objeto es `ar` (puede usar la orden `grep` para filtrar el contenido; no vaya a leer línea a línea toda la salida). Usando el archivo `makefileG`, sustituya la orden ar por su variable correspondiente.
+
+### EJERCICIO 8
+
+Dado el siguiente archivo makefile, explique las dependencias que existen y para qué sirve cada una de las líneas del mismo. Enumere las órdenes que se van a ejecutar a consecuencia de invocar la utilidad make sobre este archivo.
+
+```makefile
+
+CC=g++
+CPPFLAGS=-Wall –I./includes
+SOURCE_MODULES=main.cpp factorial.cpp hello.cpp
+OBJECT_MODULES=$(SOURCE_MODULES:.cpp=.o)
+EXECUTABLE=programa1
+
+all: $(OBJECT_MODULES) $(EXECUTABLE)
+
+$(EXECUTABLE): $(OBJECT_MODULES)
+	$(CC) $^ -o $@
+
+# Regla para obtener los archivos objeto .o que dependerán de los archivos .cpp
+# Aquí, $< y $@ tomarán valores respectivamente main.cpp y main.o y así sucesivamente
+.o: .cpp
+	$(CC) $(CPPFLAGS) $< -o $@
+```
+
+### EJERCICIO 9
+
+Con la siguiente especificación de módulos escriba un archivo denominado `makefilePolaca` que automatice el proceso de compilación del programa final de acuerdo a la siguiente descripción:
+- Compilador: gcc o g++.
+- Archivos cabecera: `calc.h` (ubicado en un subdirectorio denominado cabeceras).
+- Archivos fuente: `main.c`, `stack.c`, `getop.c` y `getch.c`.
+- Nombre del programa ejecutable: `calculadoraPolaca`
+
+Además, debe incluir una regla denominada `borrar`, sin dependencias, cuya funcionalidad sea la de eliminar los archivos objeto y el programa ejecutable.
+
+## 5 - SOLUCIONES
+
+### EJERCICIO 1
+
+Ejecutamos la compilación con dicha línea comentada:
+
+```console
+$ g++ -c main.cpp
+  main.cpp: In function ‘int main()’:
+  main.cpp:7:17: error: ‘print_hello’ was not declared in this scope
+  print_hello();
+              ^
+  main.cpp:9:52: error: ‘factorial’ was not declared in this scope
+  cout << "The factorial of 7 is " << factorial(7) << endl;
+```
+
+Esto ocurre porque, al comentar la línea, no se incluyen las bibliotecas pertinentes en el código fuente.
+
+### EJERCICIO 2
+
+Falla porque hemos movido las bibliotecas a la carpeta `./includes`, por lo que la orden de compilación correcta es la siguiente:
+
+```console
+$ g++ -L./ -o programa2 main2.o factorial.o hello.o -lmates
+```
+
+### EJERCICIO 3
+
+Usamos `make` por primera vez:
+
+```console
+$ make -f makefileE
+  g++ -I./includes -c main2.cpp
+  g++ -I./includes -c factorial.cpp
+  g++ -I./includes -c hello.cpp
+  g++ -I./includes -c sin.cpp
+  g++ -I./includes -c cos.cpp
+  g++ -I./includes -c tan.cpp
+  ar -rvs libmates.a sin.o cos.o tan.o
+  r - sin.o
+  r - cos.o
+  r - tan.o
+  g++ -L./ -o programa2 main2.o factorial.o hello.o libmates.a
+```
+
+Si hacemos `touch` en algunos algunas de las dependencias, `make` detecta que son más recientes y las actualiza.
+
+```console
+$ touch main2.cpp 
+$ make -f makefileE
+  g++ -I./includes -c main2.cpp
+  g++ -L./ -o programa2 main2.o factorial.o hello.o libmates.a
+$ touch hello.cpp sin.cpp
+$ make -f makefileE
+  g++ -I./includes -c hello.cpp
+  g++ -I./includes -c sin.cpp
+  ar -rvs libmates.a sin.o cos.o tan.o
+  r - sin.o
+  r - cos.o
+  r - tan.o
+  g++ -L./ -o programa2 main2.o factorial.o hello.o libmates.a
+```
+
+### EJERCICIO 4
+
+###### makefileF
+```makefile
+LIB_DIR=./
+
+programa2: main2.o factorial.o hello.o libmates.a
+	g++ -L./ -o programa2 main.o factorial.o hello.o libmates.a
+
+main2.o: main2.cpp ./includes/functions.h ./includes/mates.h 
+	g++ -I./includes -c main2.cpp
+
+factorial.o: factorial.cpp ./includes/functions.h
+	g++ -I./includes -c factorial.cpp
+
+hello.o: hello.cpp ./includes/functions.h
+	g++ -I./includes -c hello.cpp
+
+libmates.a: sin.o cos.o tan.o
+	ar -rvs libmates.a sin.o cos.o tan.o
+
+sin.o: sin.cpp ./includes/mates.h
+	g++ -I./includes -c sin.cpp
+
+cos.o: cos.cpp ./includes/mates.h
+	g++ -I./includes -c cos.cpp
+
+tan.o: tan.cpp ./includes/mates.h
+	g++ -I./includes -c tan.cpp
+
+cleanAll: cleanObj cleanLib
+	rm programa2
+
+cleanObj:
+	rm main2.o factorial.o hello.o
+
+cleanLib:
+	rm sin.o cos.o tan.o libmates.a
+```
+
+Asumimos, por tanto, que las bibliotecas se encuentran en `./includes` como en los ejercicios anteriores. Modificamos ahora la cabecera con `touch` y sucede lo mismo que en el ejercicio anterior:
+
+```console
+$ touch includes/mates.h 
+$ make -f makefileF
+  g++ -I./includes -c main2.cpp
+  g++ -I./includes -c sin.cpp
+  g++ -I./includes -c cos.cpp
+  g++ -I./includes -c tan.cpp
+  ar -rvs libmates.a sin.o cos.o tan.o
+  r - sin.o
+  r - cos.o
+  r - tan.o
+  g++ -L./ -o programa2 main2.o factorial.o hello.o libmates.a
+```
+
+### EJERCICIO 5
+
+###### makefileG
+```makefile
+CC=g++
+INCLUDE_DIR= ./includes
+LIB_DIR= ./
+
+#Variable que indica las opciones que se le va a pasar al compilador
+CPPFLAGS= -Wall
+
+programa2: main2.o factorial.o hello.o libmates.a
+	$(CC) -L$(LIB_DIR) -o $@ $^
+
+main2.o: main2.cpp
+	$(CC) -I$(INCLUDE_DIR) -c $<
+
+factorial.o: factorial.cpp
+	$(CC) -I$(INCLUDE_DIR) -c $<
+
+hello.o: hello.cpp
+	$(CC) -I$(INCLUDE_DIR) -c $<
+
+libmates.a: sin.o cos.o tan.o
+	ar -rvs libmates.a $^
+
+sin.o: sin.cpp
+	$(CC) -I$(INCLUDE_DIR) -c $<
+
+cos.o: cos.cpp
+	$(CC) -I$(INCLUDE_DIR) -c $<
+
+tan.o: tan.cpp
+	$(CC) -I$(INCLUDE_DIR) -c $<
+
+clean:
+	rm *.o programa2
+```
+
+### EJERCICIO 6
+
+###### MakefileG
+```makefile
+CC=g++
+INCLUDE_DIR= ./includes
+LIB_DIR= ./libs
+CPPFLAGS= -Wall
+
+programa2: main2.o factorial.o hello.o $(LIB_DIR)/libmates.a
+	$(CC) -L$(LIB_DIR) -o $@ $^
+
+main2.o: main2.cpp
+	$(CC) -I$(INCLUDE_DIR) -c $<
+
+factorial.o: factorial.cpp
+	$(CC) -I$(INCLUDE_DIR) -c $<
+
+hello.o: hello.cpp
+	$(CC) -I$(INCLUDE_DIR) -c $<
+	$(LIB_DIR)/libmates.a: sin.o cos.o tan.o
+	ar -rvs $@ $^
+
+sin.o: sin.cpp
+	$(CC) -I$(INCLUDE_DIR) -c $<
+
+cos.o: cos.cpp
+	$(CC) -I$(INCLUDE_DIR) -c $<
+
+tan.o: tan.cpp
+	$(CC) -I$(INCLUDE_DIR) -c $<
+
+clean:
+	rm *.o programa2
+```
+
+### EJERCICIO 7
+
+###### makefileG
+```makefile
+CC=g++
+INCLUDE_DIR= ./includes
+LIB_DIR= ./
+programa2: main2.o factorial.o hello.o libmates.a
+$(CC) -L$(LIB_DIR) -o programa2 main2.o factorial.o hello.o -lmates
+main2.o: main2.cpp
+      $(CC) -I$(INCLUDE_DIR) -c main2.cpp
+factorial.o: factorial.cpp
+$(CC) -I$(INCLUDE_DIR) -c factorial.cpp
+hello.o: hello.cpp
+      $(CC) -I$(INCLUDE_DIR) -c hello.cpp
+libmates.a: sin.o cos.o tan.o
+      $(AR) -rvs libmates.a sin.o cos.o tan.o
+sin.o: sin.cpp
+      $(CC) -I$(INCLUDE_DIR) -c sin.cpp
+cos.o: cos.cpp
+      $(CC) -I$(INCLUDE_DIR) -c cos.cpp
+tan.o: tan.cpp
+      $(CC) -I$(INCLUDE_DIR) -c tan.cpp
+```
+
+### EJERCICIO 8
+
+```makefile
+CC=g++
+CPPFLAGS=-Wall –I./includes
+#SOURCEMODUELS nos indica todos los archivos cpp
+SOURCE_MODULES=main.cpp factorial.cpp hello.cpp
+#OBJECTMODULES nos indica los archivos .o
+OBJECT_MODULES=$(SOURCE_MODULES:.cpp=.o)
+#EXECUTABLE nos indica el nombre del archivo ejecutable que se generara
+EXECUTABLE=programa1
+#all 
+all: $(OBJECT_MODULES) $(EXECUTABLE)
+$(EXECUTABLE): $(OBJECT_MODULES)
+       $(CC) $^ -o $@
+# Regla para obtener los archivos objeto .o que dependerán de los archivos .cpp
+# Aquí, $< y $@ tomarán valores respectivamente main.cpp y main.o y así sucesivamente
+.o: .cpp
+       $(CC) $(CPPFLAGS) $< -o $@
+```

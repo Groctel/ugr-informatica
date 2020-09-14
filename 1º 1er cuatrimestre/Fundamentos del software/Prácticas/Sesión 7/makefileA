@@ -1,0 +1,2 @@
+programa1:
+	g++ –o programa1 main.cpp hello.cpp factorial.cpp

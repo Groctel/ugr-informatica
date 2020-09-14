@@ -1,0 +1,16 @@
+#!/bin/bash
+
+# Título:      ejercicio1
+# Fecha:       2018/11/2
+# Autor:       Atanasio Rubio
+# Versión:     1.0
+# Descripción: Crea un archivo padre.txt con los archivos del directorio padre y otro
+#              archivo padre2.txt con las 4 últimas líneas de padre.txt.
+#
+# Opciones:    Ninguna
+# Uso:         Demostración académica
+
+ls .. > padre.txt
+tail -4 padre.txt > padre2.txt
+cat padre.txt >> padre2.txt
+printf "Proceso terminado.\n"

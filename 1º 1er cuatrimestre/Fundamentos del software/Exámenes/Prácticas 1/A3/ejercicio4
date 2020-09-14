@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Título:      ejercicio4
+# Fecha:       2018/11/2
+# Autor:       Atanasio Rubio
+# Versión:     1.0
+# Descripción: Recibe un argumento: Un archivo. Si el archivo existe y el usuario tiene
+#              permisos de lectura y escritura, lo convierte en ejecutable para el usuario
+#              y su grupo y muestra los permisos finales.
+#
+# Opciones:    Ninguna
+# Uso:         Demostración académica
+
+if [ "$1" == "" ]; then
+   printf "Introduzca como argumento un archivo sobre el que tenga permiso de lectura y escritura\n";
+elif [ -r $1 ] && [ -w $1 ]; then
+   chmod ug+x $1
+   printf "Los permisos finales de su archivo son:\n"
+   echo "$(ls -l $1)";
+else
+   printf "Introduzca como argumento un archivo sobre el que tenga permiso de lectura y escritura\n";
+fi

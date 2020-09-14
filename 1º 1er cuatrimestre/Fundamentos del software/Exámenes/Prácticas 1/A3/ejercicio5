@@ -1,0 +1,35 @@
+#!/bin/bash
+
+# Título:      ejercicio5
+# Fecha:       2018/11/2
+# Autor:       Atanasio Rubio
+# Versión:     1.0
+# Descripción: Recibe un argumento: Un archivo y la ruta de un directorio. Si el archivo
+#              del primer argumento existe y no se encuentra ubucado dentro del directorio
+#              del segundo argumento, copia dicho archivo a dicho directorio.
+#
+# Opciones:    Ninguna
+# Uso:         Demostración académica
+
+if [ "$1" == "" ]; then
+   printf "El primer argumento debe ser un archivo.\n";
+
+elif [ "$2" == "" ]; then
+   printf "El segundo argumento debe ser la ruta de un directorio.\n";
+
+elif [ -e $1 ]; then
+   if [ -d $2 ]; then
+      if ls $2 | grep $1 > /dev/null; then
+         printf "El archivo de origen ya existe en el directorio destino.\n";
+      else
+         cp $1 $2;
+         printf "Archivo copiado satisfactoriamente.\n";
+      fi
+
+   else
+      printf "Su segundo argumento no es la ruta de un directorio existente en el sistema.\n";
+   fi
+
+else
+   printf "Su primer argumento no es un archivo existente en el sistema.\n";
+fi

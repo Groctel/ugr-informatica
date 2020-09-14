@@ -1,0 +1,50 @@
+#!/bin/bash
+
+# Título:      ejercicio3
+# Fecha:       2018/11/2
+# Autor:       Atanasio Rubio
+# Versión:     1.0
+# Descripción: Recibe tres argumentos: Un carácter aritmético y dos números enteros
+#               - Si el 1er argumento es un "+": Suma ambos números.
+#               - Si el 2º argumento es un "-": Resta ambos números.
+#               - Si el 3er argumento es un "m": Multiplica ambos números.
+#               - Si el 4º argumento es un "/": Divide ambos números.
+#
+# Opciones:    Ninguna
+# Uso:         Demostración académica
+
+declare -i es_valido=1
+
+if [ "$1" == "" ]; then
+   printf "Introduzca como primer argumento \"+\" para sumar, \"-\" para restar, \"m\" para multiplicar o \"/\" para dividir.\n";
+
+elif [ "$2" == "" ] || [ "$3" == "" ]; then
+   printf "Introduzca dos números enteros como argumentos segundo y tercero para operar con ellos.\n";
+
+else
+   declare -i numero_1=$2
+   declare -i numero_2=$3
+
+   if [ "$1" == "+" ]; then
+      resultado=`expr $numero_1 + $numero_2`;
+
+   elif [ "$1" == "-" ]; then
+      resultado=`expr $numero_1 - $numero_2`;
+
+   elif [ "$1" == "m" ]; then
+      resultado=`expr $numero_1 \* $numero_2`;
+
+   elif [ "$1" == "/" ]; then
+      resultado=`expr $numero_1 / $numero_2`;
+
+   else
+      es_valido=`expr $es_valido - 1`;
+   fi
+fi
+
+if [ $es_valido == 1 ]; then
+   printf "%d\n" $resultado;
+
+else
+   printf "Introduzca como primer argumento \"+\" para sumar, \"-\" para restar, \"m\" para multiplicar o \"/\" para dividir.\n";
+fi

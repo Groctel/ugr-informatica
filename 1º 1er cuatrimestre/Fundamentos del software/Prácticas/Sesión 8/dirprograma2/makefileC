@@ -1,0 +1,11 @@
+programa1: main.o factorial.o hello.o
+	g++ -o programa1 main.o factorial.o hello.o
+
+main.o: main.cpp functions.h
+	g++ -c main.cpp
+
+factorial.o: factorial.cpp functions.h
+	g++ -c factorial.cpp
+
+hello.o: hello.cpp
+	g++ -c hello.cpp

@@ -1,0 +1,351 @@
+\chapter{Órdenes básicas de UNIX/Linux}
+
+\section{Los intérpretes de órdenes}
+
+Un intérprete de órdenes (\textit{shell} en la terminología UNIX) es un programa normal de usuario capaz de ejecutar órdenes escritas en él.
+Existen diferentes shells, como Bourne Again Shell (bash), TC Shell (tcsh) y Z Shell (zsh)\footnote{Al existir diferentes shells, estos apuntes siguen el estándar POSIX a menos que se especifique lo contrario. De esta forma, las instrucciones explicadas a lo largo de ellos pueden ejecutarse en cualquier shell.}.
+Al estar construidas como programas de usuario normales, tienen la ventaja de que se pueden elegir según las preferencias del usuario.
+
+Las shells instaladas en el sistema están registradas en el fichero \code{/etc/shell}.
+Para cambiar de shell podemos utilizar la siguiente orden:
+
+\begin{lstlisting}[language=sh]
+chsh -s /bin/zsh # Por ejemplo, para cambiar a zsh
+\end{lstlisting}
+
+Lógicamente, la shell debe estar instalada en el sistema para que esta orden tenga efecto.
+Tras ejecutarla, basta con cerrar y abrir sesión para ver los cambios.
+También puede ejecutarse el nombre de la shell en otra para iniziarla.
+Por ejemplo, trabajando en \code{bash} podemos ejecutar \code{zsh} para abrir una shell de \code{zsh} en esa misma terminal.
+Para cerrar la shell basta con ejecutar la orden \code{exit}.
+
+\subsection{La orden \code{man}}
+
+Como se comentó en la práctica anterior, \code{man} abre el paginador del manual del sistema.
+Al ejecutar la orden, \code{man} busca la página asociada a la consulta pasada como argumento y la muestra en caso de que exista.
+Si hubiera más de una página para dicha consulta, \code{man} sólo muestra la primera.
+
+El paginador utiliza los siguientes comandos para buscar o desplazarse por el texto:
+
+\begin{itemize}
+	\item\code{f}\textbf{:} Avanzar página.
+	\item\code{b}\textbf{:} Retrasar página.
+	\item\code{j}\textbf{:} Moverse una línea hacia arriba.
+	\item\code{k}\textbf{:} Moverse una línea hacia abajo.
+	\item\code{/string}\textbf{:} Busca la cadena \code{string} (incluyendo los espacios en blanco) desde la primera línea mostrada en la pantalla en adelante, marcando todas las ocurrencias encontradas.
+	\item\code{?string}\textbf{:} Busca la cadena \code{string} (incluyendo los espacios en blanco) desde la primera línea mostrada en la pantalla hacia atrás, marcando todas las ocurrencias encontradas.
+	\item\code{n}\textbf{:} Siguiente elemento en la búsqueda.
+	\item\code{N}\textbf{:} Elemento previo en la búsqueda.
+	\item\code{v}\textbf{:} Lanza (si es posible) el editor por defecto para editar el fichero que estamos viendo.
+	\item\code{q}\textbf{:} Cierra el manual.
+\end{itemize}
+
+\subsection{La jerarquía de permisos}
+
+Al ejecutar la orden \code{ls -l} podemos ver que a la izquierda de los ficheros se muestra una tabla de diez caracteres de ancho.
+Cada una de las filas representa los permisos de lectura, escritura y ejecución que tienen los diferentes usuarios sobre su respectivo fichero.
+
+El primer carácter es \code{-} si se trata de un fichero y \code{d} si se trata de un directorio.
+Los nueve caracteres restantes están divididos en tres grupos de tres caracteres.
+El primer grupo representa los permisos del usuario creador del fichero, los tres siguientes los de los usuarios pertenecientes al grupo de usuarios del creador y los tres últimos los del resto de usuarios.
+
+Cada uno de estos grupos define los siguentes permisos:
+
+\begin{itemize}
+	\item\code{r}\textbf{:} Lectura (\textit{read}).
+	\item\code{w}\textbf{:} Escritura (\textit{write}).
+	\item\code{x}\textbf{:} Ejecución (\textit{execute}).
+	\item\code{-}\textbf{:} Falta de permiso en la posición correspondiente.
+\end{itemize}
+
+\begin{lstlisting}[language=sh]
+ls -l
+# -rw-rw-r--  1 groctel groctel 84831 sep 22 18:56 'Fisica.zip'
+# drwxr-xr-x  4 groctel groctel  4096 sep 19 19:47  Games
+# drwxr-xr-x  7 groctel groctel  4096 oct  6 21:19  UGR
+\end{lstlisting}
+
+\section{Metacaracteres de ficheros}
+
+A la hora de nombrar ficheros y directorios es muy útil utilizar caracteres especiales que puedan servirnos de comodín para expresar combinaciones de caracteres o caracteres desconocidos en el momento, sobre todo si nos encontramos con muchos ficheros con nombres similares.
+Podemos utilizar cinco metacaracteres:
+
+\begin{itemize}
+\item\code{?}\textbf{:} Representa un sólo carácter cualquiera en la posición indicada.
+\item\code{*}\textbf{:} Representa de cero a infinitos caracteres cualesquiera en la posición indicada.
+\item\code{[]}\textbf{:} Designan varios caracteres individuales que pueden ocupar el espacio en el que se declaran.
+\item\code{\{\}}\textbf{:} Designan cadenas de caracteres separadas por comas que pueden ocupar el espacio en el que se declaran y rangos de caracteres separados por \code{..}.
+\item\code{\~{}}\textbf{:} Abrevia la ruta absoluta de \code{/home/\$USER}.
+\end{itemize}
+
+\section{Ejercicios}
+
+\titleformat{\subsection}[block]{\normalfont\bfseries\Large}{Ejercicio \thesubsection}{0pt}{}[]
+
+\subsection{}\label{ej1-1}
+
+\subsubsection{Enunciado}
+
+Cree el siguiente árbol de directorios a partir de un directorio de su cuenta de usuario:
+
+\begin{itemize}
+	\item\code{ejercicio1}
+	\begin{itemize}
+		\item\code{Ejer1}
+		\begin{itemize}
+			\item\code{Ejer21}
+		\end{itemize}
+		\item\code{Ejer2}
+		\item\code{Ejer3}
+	\end{itemize}
+\end{itemize}
+
+Indique también cómo sería posible crear toda esa estructura de directorios mediante una única orden (mire las opciones de la orden de creación de directorios mediante \code{man mkdir}).
+Posteriormente realice las siguientes acciones:
+
+\begin{itemize}
+	\item En \code{Ejer1}, cree los ficheros \code{arch100.txt}, \code{filetags.txt}, \code{practFS.ext} y \code{robet201.me}.
+	\item En \code{Ejer21}, cree los ficheros \code{robet202.me}, \code{ejer11sol.txt} y \code{blue.me}.
+	\item En \code{Ejer2}, cree los ficheros \code{ejer2arch.txt}, \code{ejer2filetags.txt} y \code{readme2.pdf}.
+	\item En \code{Ejer3}, cree los ficheros \code{ejer3arch.txt}, \code{ejer3filetags.txt} y \code{readme3.pdf}.
+\end{itemize}
+
+¿Podrían realizarse las acciones anteriores empleando una única orden?
+Indique cómo.
+
+\subsubsection{Solución}
+
+Creación del árbol de directorios en una única orden:
+
+\begin{lstlisting}[language=sh]
+mkdir -p ejercicio1/Ejer1/Ejer21 ejercicio1/Ejer2 ejercicio1/Ejer3
+\end{lstlisting}
+
+Creación de los ficheros en una única línea:
+
+\begin{lstlisting}[language=sh]
+touch Ejer1/arch100.txt Ejer1/filetags.txt Ejer1/practFS.ext Ejer1/robet201.me \
+      Ejer21/robet202.me Ejer21/ejerllsol.txt Ejer21/blue.me \
+      Ejer2/ejer2arch.txt Ejer2/ejer2filetags.txt Ejer2/readme2.pdf \
+      Ejer3/ejer3arch.txt Ejer3/ejer3filetags.txt Ejer3/readme3.pdf \
+\end{lstlisting}
+
+Aunque la orden \code{touch} ocupa varias líneas, se interpreta como una sola gracias a los caracteres \code{\\} que se encuentran al final de cada una.
+
+\subsection{}\label{ej1-2}
+
+\subsubsection{Enunciado}
+
+Situados en el directorio \code{ejercicio1} creado anteriormente, realice las siguientes acciones:
+
+\begin{itemize}
+	\item Mueva el directorio \code{Ejer21} al directorio \code{Ejer2}.
+	\item Copie los ficheros de \code{Ejer1} cuya extensión tenga una \code{x} al directorio \code{Ejer3}.
+	\item Si estamos situado en el directorio \code{Ejer2} y ejecutamos la orden \code{ls -la ../Ejer3/*arch*}, ¿qué fichero/s, en su caso, debería mostrar?
+\end{itemize}
+
+\subsubsection{Solución}
+
+\begin{lstlisting}[language=sh]
+mv Ejer1/Ejer21 Ejer2
+mv Ejer1/*.*x* Ejer3
+cd Ejer2
+ls -la ../Ejer3/*arch*
+# -rw-r--r-- 1 groctel groctel 0 oct  6 21:23 ../Ejer3/arch100.txt
+# -rw-r--r-- 1 groctel groctel 0 oct  6 21:26 ../Ejer3/ejer3arch.txt
+\end{lstlisting}
+
+\subsection{}\label{ej1-3}
+
+\subsubsection{Enunciado}
+
+Si estamos situados en el directorio \code{Ejer2}, indique la orden necesaria para listar sólo los nombres de todos los ficheros del directorio padre.
+
+\subsubsection{Solución}
+
+\begin{lstlisting}[language=sh]
+ls ..
+\end{lstlisting}
+
+\subsection{}\label{ej1-4}
+
+\subsubsection{Enunciado}
+
+Liste los ficheros que estén en su directorio actual y fíjese en alguno que no disponga de la fecha y hora actualizada, es decir, la hora actual y el día de hoy.
+Ejecute la orden \code{touch} sobre dicho fichero y observe qué sucede sobre la fecha del citado fichero cuando se vuelva a listar.
+
+\subsubsection{Solución}
+
+\begin{lstlisting}[language=sh]
+ls -l
+# total 4
+# drwxr-xr-x 2 groctel groctel 4096 oct  6 21:25 Ejer21
+# -rw-r--r-- 1 groctel groctel    0 oct  6 21:25 ejer2arch.txt
+# -rw-r--r-- 1 groctel groctel    0 oct  6 21:25 ejer2filetags.txt
+# -rw-r--r-- 1 groctel groctel    0 oct  6 21:25 readme2.pdf
+touch readme2.pdf
+ls -l readme2.pdf
+# -rw-r--r-- 1 groctel groctel 0 oct  6 21:38 readme2.pdf
+\end{lstlisting}
+
+\subsection{}\label{ej1-5}
+
+\subsubsection{Enunciado}
+
+La organización del espacio en directorios es fundamental para poder localizar fácilmente aquello que estemos buscando.
+En ese sentido, realice las siguientes acciones dentro de su directorio \code{\$HOME} (es el directorio por defecto sobre el que trabajamos al entrar en el sistema):
+
+\begin{itemize}
+	\item Obtenga en nombre de camino absoluto (absolute pathname) de su directorio \code{\$HOME}. ¿Es el mismo que el de su compañero/a?
+	\item Cree un directorio para cada asignatura en la que se van a realizar prácticas de laboratorio y, dentro de cada directorio, nuevos directorios para cada una de las prácticas realizadas hasta el momento.
+	\item Dentro del directorio de la asignatura fundamentos del software (llamado \code{fs}) y dentro del directorio creado para esta práctica, copie los ficheros \code{hosts} y \code{passwd} que se encuentran dentro del directorio \code{/etc}.
+	\item Muestre el contenido de cada uno de los ficheros.
+\end{itemize}
+
+\subsubsection{Solución}
+
+\begin{lstlisting}[language=sh]
+pwd
+# /home/groctel
+mkdir -p lab/fs/p1 lab/fp/p1 lab/calculo/p1 lab/algebra
+cp /etc/hosts lab/fs/p1
+cp /etc/passwd lab/fs/p1
+more lab/fs/p1/hosts
+# (Muestra del contenido del fichero)
+more lab/fs/p1/passwd
+# (Muestra del contenido del fichero)
+\end{lstlisting}
+
+\subsection{}\label{ej1-6}
+
+\subsubsection{Enunciado}
+
+Situados en algún lugar de su directorio principal de usuario (directorio \code{\$HOME}), cree los directorios siguientes: \code{Sesion.1}, \code{Sesion.10}, \code{Sesion.2}, \code{Sesion.3}, \code{Sesion.4}, \code{Sesion.27}, \code{Prueba.1} y \code{Sintaxis.2} y realice las siguientes tareas:
+
+\begin{itemize}
+	\item Borre el directorio \code{Sesion.4}.
+	\item Liste todos aquellos directorios que empiecen por \code{Sesion.} y a continuación tengan un único carácter.
+	\item Liste aquellos directorios cuyos nombres terminen en \code{.1}.
+	\item Liste aquellos directorios cuyos nombres terminen en \code{.1} o \code{.2}.
+	\item Liste aquellos directorios cuyos nombres contengan los caracteres \code{si}.
+	\item Liste aquellos directorios cuyos nombres contengan los caracteres \code{si} y terminen en \code{.2}.
+\end{itemize}
+
+\subsubsection{Solución}
+
+\begin{lstlisting}[language=sh]
+mkdir Sesion.1 Sesion.10 Sesion.2 Sesion.3 Sesion.4 Sesion. 27 Prueba.1
+rm Sesion.4
+ls Sesion.?
+# Sesion.1  Sesion.2  Sesion.3
+ls *.1 *.2
+# Prueba.1  Sesion.1  Sesion.2
+ls *si*.*
+# Sesion.1  Sesion.10  Sesion.2  Sesion.27  Sesion.3
+ls *si*.2
+# Sesion.2
+\end{lstlisting}
+
+\subsection{}\label{ej1-7}
+
+\subsubsection{Enunciado}
+
+Desplacémonos hasta el directorio \code{/bin}.
+Genere los siguientes listados de ficheros (siempre de la forma más compacta y utilizando los metacaracteres apropiados):
+
+\begin{itemize}
+	\item Todos los ficheros que contengan sólo cuatro caracteres en su nombre.
+	\item Todos los ficheros que comiencen por los caracteres \code{d}, \code{f}.
+	\item Todos los ficheros que comiencen por las parejas de caracteres \code{sa}, \code{se}, \code{ad}.
+	\item Todos los ficheros que comiencen por \code{t} y acaben en \code{r}.
+\end{itemize}
+
+\subsubsection{Solución}
+
+\begin{lstlisting}[language=sh]
+cd /bin
+ls ????
+ls d* f*
+ls sa* se* ad*
+ls t*r
+\end{lstlisting}
+
+\subsection{}\label{ej1-8}
+
+\subsubsection{Enunciado}
+
+Liste todos los ficheros que comiencen por \code{tem} y terminen por \code{.gz} o \code{.zip}:
+
+\begin{itemize}
+	\item De su directorio \code{\$HOME}.
+	\item Del directorio actual.
+\end{itemize}
+
+¿Hay alguna diferencia en el resultado de su ejecución? Razone la respuesta
+
+\subsubsection{Solución}
+
+\begin{lstlisting}[language=sh]
+ls ~/tem*.gz ~/tem*.zip
+# ls: cannot access '/home/tem*.gz': No such file or directory
+# ls: cannot access '/home/tem*.zip': No such file or directory
+ls tem*.gz tem*.zip
+# ls: cannot access 'tem*.gz': No such file or directory
+# ls: cannot access 'tem*.zip': No such file or directory
+\end{lstlisting}
+
+La única diferencia en este caso es la sintaxis.
+Siendo un rango de caracteres y tipo de ficheros tan acotados habría sido sorprendente que ambas órdenes encontraran ficheros.
+En cualquier otro caso, con otras restricciones más democráticas se conseguirían resultados similares a los del Ejercicio 2.
+
+\subsection{}\label{ej1-9}
+
+\subsubsection{Enunciado}
+
+Muestre del contenido de un fichero regular que contenga texto:
+
+\begin{itemize}
+	\item Las 10 primeras líneas
+	\item Las 5 últimas líneas
+\end{itemize}
+
+\subsubsection{Solución}
+
+\begin{lstlisting}[language=sh]
+head /etc/fstab
+tail -5 /etc/fstab
+\end{lstlisting}
+
+\subsection{}\label{ej1-10}
+
+\subsubsection{Enunciado}
+
+Cree un fichero empleando para ello cualquier editor de textos y escriba en el mismo varias palabras en diferentes líneas.
+A continuación trate de mostrar su contenido de manera ordenada empleando diversos criterios de ordenación.
+
+\subsubsection{Solución}
+
+\begin{lstlisting}[language=sh]
+sort -f excelente.txt
+# de
+# ejemplo
+# texto
+sort -r excelente.txt
+# texto
+# ejemplo
+# de
+\end{lstlisting}
+
+\subsection{}\label{ej1-11}
+
+\subsubsection{Enunciado}
+
+¿Cómo podría ver el contenido de todos los ficheros del directorio actual que terminen en \code{.txt} o \code{.c}?
+
+\subsubsection{Solución}
+
+\begin{lstlisting}[language=sh]
+cat *.txt *.c
+\end{lstlisting}
+
+\titleformat{\subsection}[block]{\normalfont\bfseries\Large}{\aqademia@subsection\thesubsection:\ }{0pt}{}[]

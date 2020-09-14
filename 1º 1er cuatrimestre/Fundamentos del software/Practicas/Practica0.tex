@@ -1,0 +1,104 @@
+\chapter{Introducción a UNIX y Linux}
+
+\setcounter{section}{-1}
+
+\section{Antes de empezar}
+
+A lo largo de estos apuntes se presupone que se está trabajando con un sistema Linux instalado en una partición de disco duro.
+La distribución de Linux utilizada por defecto en la Universidad de Granada es Ubuntu, sin embargo, estos apuntes están escritos teniendo en cuenta la portabilidad de los mismos, por lo que se evitan deliberadamente debianismos, bashismos u otras particularidades de algunas distribuciones.
+
+Gran parte de estos apuntes apoyan su conocimiento en la \href{https://wiki.archlinux.org/}{Arch Wiki}, que es una fuente de información excelente incluso para usuarios de Linux que no estén trabajando en Arch o distribuciones derivadas.
+Igualmente, te recomiendo personalmente instalar ArchLinux para aprender a utilizar tu sistema de forma experta.
+En la página principal de la wiki puedes encontrar una guía de instalación muy clara.
+
+Otra herramienta indispensable es el \code{man}, el manual del sistema que incorpora Linux y que nos permite buscar información sobre los programas instalados en él y multitud de funciones más.
+Se ahondará más en el al inicio de la siguiente práctica.
+
+Por último, a lo largo de este documento se mostrarán órdenes ejecutadas en una shell de Linux y su correspondiente salida.
+La salida de estas órdenes se mostrará en forma de comentario (precedida de \code{\#}) para facilitar su lectura.
+
+\section{Introducción a la interfaz}
+
+Al igual que en la sección anterior hablamos sobre diferentes distribuciones de Linux, existen diferentes formas de componer la interfaz gráfica del mismo, cada una con sus características.
+Mientras que Windows y MacOS estandarizan sus interfaces, en Linux podemos elegir con qué herramientas componer el enterno gráfico de nuestro sistema.
+Esto se consigue seleccionando el entorno de escritorio y el gestor de ventanas.
+
+\subsection{Entornos de escritorio}
+
+Los entornos de escritorio son una colección de programas que buscan dar al sistema la sensación de estar trabajando en un escritorio físico.
+Los más comunes son Gnome (instalado por defecto en Ubuntu), KDE, Budgie y XFCE\@; aunque existen otros como LXDE, LXQT o CDE, que pueden ser útiles en sistemas de menor rendimiento.
+Además de ofrecer un entorno gráfico, traen consigo programas de utilidad cuyas interfaces están diseñadas con la misma filosofía que el resto del escritorio y permiten a los usuarios realizar tareas comunes con ellos.
+
+\subsection{Gestores de ventanas}
+
+Los gestores de ventanas son los encargados de manejar la posición y jerarquía de las diferentes ventanas que aparecen en pantalla.
+Existen dos tipos de gestores de ventanas, los de ventanas superpuestas o \textbf{\textit{stacking}} y los de tipo mosaico o \textbf{\textit{tiling}}.
+
+\begin{itemize}
+	\item\textbf{\textit{Stacking}:} Son los más comunes. Representan la posición de cada ventana teniendo en cuenta que pueden superponerse, de manera que se puede arrastrar una ventana para colocarla encima de otra y taparla parcial o totalmente.
+	\item\textbf{\textit{Tiling}:} Organizan las ventanas de forma que ninguna se superponga sobre otra, sino que se encuentren distribuidas a lo largo del escritorio. Priorizan la limpieza en la organización de las ventanas y la eficiencia en el trabajo.
+\end{itemize}
+
+Como ejemplos de gestores \textit{stacking} tenemos Mutter, el gestor de Gnome u Openbox.
+Por otro lado, son ejemplos de gestores \textit{tiling} \code{i3wm} o \code{bspwm}.
+
+Dado su carácter minimalista, los gestores \textit{tiling} no se configuran mediante una interfaz gráfica, sino con ficheros de texto, por lo que es recomendable comenzar a usarlos copiando la configuración de algún usuario que la haya subido previamente a internet.
+
+\section{El árbol de directorios}
+
+En Linux y otros sitemas operativos basados en UNIX se sigue la filosofía de que todo es un fichero.
+Para garantizar la funcionalidad de este sistema, existe un estándar de organización de directorios que los ordena en función de su contenido.
+Todos los directorios parten del directorio raíz o \code{/} y los hijos de éste (los contenidos en \code{/}) son los siguientes:
+
+\begin{itemize}
+	\item\code{/bin}\textbf{:} Programas ejecutables por cualquier usuario.
+	\item\code{/boot}\textbf{:} Ficheros de arranque del sistema.
+	\item\code{/dev}\textbf{:} Ficheros especiales de dispositivos.
+	\item\code{/etc}\textbf{:} Ficheros de configuración del sistema.
+	\item\code{/home}\textbf{:} Directorios personales de los usuarios\footnote{Como abreviatura, llamamos al directorio \code{/home/\$USER} simplemente \code{\~{}}.}.
+	\item\code{/lib}\textbf{:} Bibliotecas dependencia de los programas ubicados en \code{/bin} y \code{/sbin}.
+	\item\code{/media}\textbf{:} Punto de montaje de dispositivos extraíbles.
+	\item\code{/mnt}\textbf{:} Punto de montaje de sistemas de archivos temporales.
+	\item\code{/opt}\textbf{:} Programas que no forman parte de la distribución del sistema.
+	\item\code{/proc}\textbf{:} Sistema de archivos virtual (VFS).
+	\item\code{/root}\textbf{:} Directorio personal del administrador del sistema.
+	\item\code{/sbin}\textbf{:} Programas ejecutables por el administrador del sistema.
+	\item\code{/tmp}\textbf{:} Ficheros temporales que se eliminan al apagar el sistema.
+	\item\code{/usr}\textbf{:} Recursos universales del sistema.
+	\item\code{/var}\textbf{:} Ficheros de contenido variable durante el funcionamiento del sistema.
+\end{itemize}
+
+\section{Tipos de ficheros y propiedades}
+
+Los fichero en Linux se identifican mediante su tipo \textbf{MIME} (\textit{Multipurpose Internet Mail Extensions}) sin necesidad de estar asociados a una extensión.
+Un fichero de texto no tiene por qué acabar en \code{.txt}.
+Las propiedades que tiene cada fichero según esta convención son las siguientes:
+
+\begin{itemize}
+	\item\textbf{Nombre:} El nombre por el que se identifica cada fichero.
+	\item\textbf{Tipo:} Definición sobre cómo deben tratarse los datos del fichero.
+	\item\textbf{Tamaño:} Espacio que el fichero ocupa en disco.
+	\item\textbf{Permisos:} Definiciones sobre qué acciones se pueden realizar sobre el fichero.
+\end{itemize}
+
+Distinguimos entre tres tipos de permisos.
+
+\begin{itemize}
+	\item\textbf{Lectura:} Acceso al fichero y visualización de su contenido.
+	\item\textbf{Escritura:} Modificación del contenido del fichero.
+	\item\textbf{Ejecución:} Ejecución del contenido del fichero o permiso de acceso a directorios.
+\end{itemize}
+
+Estos permisos están definidos para tres grupos de usuarios:
+
+\begin{itemize}
+	\item\textbf{Propietario:} El creador del fichero.
+	\item\textbf{Grupo:} Usuarios del mismo grupo que el propietario.
+	\item\textbf{Otros:} El resto de usuarios.
+\end{itemize}
+
+\section{Editores de texto}
+
+En Linux podemos utilizar varios editores de texto ejecutándolos tanto en la terminal como en una interfaz gráfica.
+En terminal podemos ejecutar \code{nano} por defecto en la mayoría de distribuciones, \code{vim}\footnote{Para cerrar \code{vim} debe pulsarse la secuencia de teclas \code{<Esc>:wq}.} para una experiencia de escritura mucho más efectiva y \code{emacs} para disfrutar de las numerosas herramientas que incorpora.
+Como editores de interfaz gráfica destacamos Gedit, incorporado en Gnome; Kate, el editor por defecto de KDE\@; y editores como Atom, Sublime Text y VSCode para código y Typora para escribir en Markdown.

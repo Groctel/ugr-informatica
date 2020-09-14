@@ -1,0 +1,32 @@
+\documentclass[10pt]{report}
+\usepackage[spanish]{babel}
+
+% Document settings
+
+\usepackage{titling}
+	\author{Atanasio José Rubio Gil}
+	\title{Fundamentos del software}
+	\date{\today}
+
+\usepackage[title=\thetitle]{aqademia}
+
+\aqchap{Tema }
+\aqssec{}
+
+\graphicspath{{img/}}
+
+% Document composition
+
+\begin{document}
+
+\aqtitlepage{Grado en Ingeniería Informática}
+            {Prácticas}
+            {https://github.com/Groctel/ugr-informatica}
+\tableofcontents
+
+\setcounter{chapter}{-1}
+
+\input{Practicas/Practica0.tex} \pagebreak
+\input{Practicas/Practica1.tex}
+
+\end{document}

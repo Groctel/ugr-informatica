@@ -1,0 +1,386 @@
+# DEPURACIÓN Y CONTROL DE TRABAJOS
+
+## 0 - ÓRDENES SHELL BASH
+
+| **%** | **bg** | **disown** | **fg** | **jobs** |
+| :---: | :---: | :---: | :---: | :---: |
+|**kill** | **killall** | **ps** | **source** | **sleep** |
+|  | **top** | **trap** | **wait** | |
+
+`bg` → Envía un trabajo a segundo plano.
+`bg [job]` → Envía el trabajo [job], que puede indicarse mediante su PID, a segundo plano.
+
+`disown` → Suprime un trabajo de la lista de trabajos activos.
+- `disown [job]` → Suprime el trabajo [job], que puede indicarse mediante su PID.
+- `disown -a` → Suprime todos los trabajos si no se da ningún argumento.
+- `disown -r` → Suprime sólo los trabajos en ejecución.
+
+`fg` → Trae a primer plano un trabajo que se encuentra en segundo plano.
+`fg [job]` → Trae el trabajo [job], que puede indicarse mediante su PID, a primer plano.
+
+`jobs` → Lista los trabajos activos bajo el control del usuario.
+- `jobs -l` → Muestra el PID de  cada uno de los trabajos.
+- `jobs -p` → Sólo muestra el PID de cada uno de los trabajos.
+
+`kill` → Finaliza la ejecución de un proceso enviando una señal especificada.
+- `kill [process]` → Finaliza la ejecución del proceso [process] indicado mediante su PID.
+- `kill 0` → 
+- `kill -l` Muestra la lista de señales que se pueden enviar a los procesos.
+
+`killall` → Finaliza la ejecución de todos los procesos. 
+
+`ps` → Muestra el estado de los procesos actuales en el sistema.
+
+`source` → Ejecuta scripts estrictamente dentro de la instancia bash en la que se da la orden.
+
+`sleep` → Pausa la ejecución de un trabajo.
+
+- `sleep [int]` → Pausa la ejecución de un trabajo durante un número [int] de segundos.
+
+`top` → Muestra los procesos en ejecución actualizados en tiempo real.
+
+`trap` → Evalúa un script cada vez que recibe una señal.
+
+`wait` → Espera que finalice la ejecución del programa en primer plano.
+
+## 1 - CARACTERÍSTICAS DE LA DEPURACIÓN EN BASH
+
+Bash no contiene órdenes para depuración de scripts y sus mensajes de error son, siguiendo el estándar, de poca ayuda.
+
+Los errores que pueden producir los scripts pueden estar producidos por un fallo en la sintaxis o en las operaciones aritmético-lógicas. Al ser un lenguaje interpretado, todos los errores se producen en tiempo de ejecución.
+
+### 1.1 - OPCIONES DE DEPURACIÓN
+
+| OPCIÓN | DESCRIPCIÓN | &nbsp;EQUIVALENCIAS&nbsp; |
+| :---: | --- | :---: |
+| `echo` | Introducimos un `echo` en los puntos críticos del script y comprobamos la salida. Es el método más arcaico y tercermundista del mundo, pero funciona. | |
+| `-n` | Busca errores sintácticos sin ejecutar el script. | `set -o noexec` `set -n` |
+| `-v` | Visualiza cada orden antes de ejecutarla. | `set -o verbose` `set -v` |
+| `-x` | Versión abreviada de `-v`. La visualización de órdenes aparece con todas las sustituciones y expansiones ya realizadas. | `set -o xtrace` `set -x` |
+
+Al depurar archivos se ignora la línea `#!/bin/bash`, ya que las opciones de depuración se ejecutan después de la orden `bash`.
+
+Vamos a trabajar con el siguiente script:
+
+###### leearchivo
+```shell
+contador=1
+
+while read lineaLectura; do
+   echo "Línea $contador: $lineaLectura"
+   contador=$[ $contador + 1];
+done < archivotest
+
+echo "Finalizado el procesamiento del archivo"
+```
+
+Junto a él, vamos a trabajar con un archivo de texto para la redirección:
+
+###### archivotest
+```
+Esta es la línea 1 de archivotest
+Esta es la segunda línea de archivotest
+```
+
+Configurados ambos archivos, vamos a ver su progreso línea a línea con `-x`:
+
+```
+$ bash -x lee_archivo
+  + contador=1
+  + read lineaLectura
+  + echo 'Línea 1: Esta es la línea 1 de archivotest'
+  Línea 1: Esta es la línea 1 de archivotest
+  + contador=2
+  + read lineaLectura
+  + echo 'Línea 2: Esta es la segunda línea de archivotest'
+  Línea 2: Esta es la segunda línea de archivotest
+  + read lineaLectura
+  + echo ' Finalizado el procesamiento del archivo '
+  Finalizado el procesamiento del archivo
+```
+
+Para cambiar nuestro entorno de lectura de la depuración podemos modificar la variable `PS4` con la salida que queremos que aparezca en cada instancia de `xtrce`:
+
+```
+$ export PS4='*** línea $LINENO: '
+$ bash -x lee_archivo
+  *** línea 1: contador=1
+  *** línea 2: read linea
+  *** línea 4: echo 'Línea 1: Esta es la línea 1 de archivotest'
+  Línea 1: Esta es la línea 1 de archivotest
+  *** línea 5: contador=2
+  *** línea 2: read linea
+  *** línea 4: echo 'Línea 2: Esta es la segunda línea de archivotest'
+  Línea 2: Esta es la segunda línea de archivotest
+  *** línea 5: contador=3
+  *** línea 2: read linea
+  *** línea 7: echo 'Finalizado el procesamiento del archivo'
+  Finalizado el procesamiento del archivo
+```
+
+## 1.2 - TRAZAS CON LA ORDEN TRAP
+
+La orden `trap` crea un *trigger* que se activa cada vez que se recibe una señal. Las señales son un mecanismo de comunicación entre procesos que permite notificar que un evento concreto ha ocurrido en ellos.
+
+Para invocar un `trap`, introducimos la orden `trap '[command]' [fakesignal]`, en la que'[command] es una orden que se ejecuta cada vez que se activa el trap y [fakesignal] es un argumento que indica el comportamiento del `trap`.
+
+Si usamos `DEBUG` como *fake signal* se ejecuta el `trap` a cada paso del script, realizandoasí una depuración extensiva del mismo.
+
+###### trapdebug
+```shell
+trap 'echo TRAZA -> contador= $contador lineaLectura= $lineaLectura' DEBUG
+
+contador=1
+
+while read lineaLectura; do
+   echo "Línea $contador: $lineaLectura"
+   contador=$[ $contador + 1];
+done < archivotest
+
+echo "Finalizado el procesamiento del archivo"
+```
+
+Su ejecución es la siguiente:
+
+```
+$ export PS4='+ '
+$ bash -x trapdebug
+  + trap 'echo TRAZA --- contador= $contador lineaLectura= $lineaLectura' DEBUG
+  ++ echo TRAZA --- contador= lineaLectura=
+  TRAZA --- contador= lineaLectura=
+  + contador=1
+  ++ echo TRAZA --- contador= 1 lineaLectura=
+  TRAZA --- contador= 1 lineaLectura=
+  + read lineaLectura
+  ++ echo TRAZA --- contador= 1 lineaLectura= Esta es la linea 1 de archivotest
+  TRAZA --- contador= 1 lineaLectura= Esta es la linea 1 de archivotest
+  + echo 'Línea 1: Esta es la linea 1 de archivotest'
+  Línea 1: Esta es la linea 1 de archivotest
+  ++ echo TRAZA --- contador= 1 lineaLectura= Esta es la linea 1 de archivotest
+  TRAZA --- contador= 1 lineaLectura= Esta es la linea 1 de archivotest
+  + contador=2
+  ++ echo TRAZA --- contador= 2 lineaLectura= Esta es la linea 1 de archivotest
+  TRAZA --- contador= 2 lineaLectura= Esta es la linea 1 de archivotest
+  + read lineaLectura
+  ++ echo TRAZA --- contador= 2 lineaLectura= Esta es la segunda linea de archivotest
+  TRAZA --- contador= 2 lineaLectura= Esta es la segunda linea de archivotest
+  + echo 'Línea 2: Esta es la segunda linea de archivotest'
+  Línea 2: Esta es la segunda linea de archivotest
+  ++ echo TRAZA --- contador= 2 lineaLectura= Esta es la segunda linea de archivotest
+  TRAZA --- contador= 2 lineaLectura= Esta es la segunda linea de archivotest
+  + contador=3
+  ++ echo TRAZA --- contador= 3 lineaLectura= Esta es la segunda linea de archivotest
+  TRAZA --- contador= 3 lineaLectura= Esta es la segunda linea de archivotest
+  + read lineaLectura
+  ++ echo TRAZA --- contador= 3 lineaLectura=
+  TRAZA --- contador= 3 lineaLectura=
+  + echo 'Finalizado el procesamiento del archivo'
+  Finalizado el procesamiento del archivo
+```
+
+Si usamos `EXIT` como *fake signal* sólo se ejecutará el `trap` cuando finaliza la ejecución del script.
+
+###### trapexit
+```shell
+trap 'echo Finalizada la ejecución de $0' EXIT
+contador=1
+
+while read lineaLectura; do
+   echo "Línea $contador: $lineaLectura"
+   contador=$[ $contador + 1];
+done < archivotest
+
+echo "Finalizado el procesamiento del archivo"
+```
+
+Su ejecución es la siguiente:
+
+```
+$ bash trapexit
+  Línea 1: Esta es la linea 1 de archivotest
+  Línea 2: Esta es la segunda linea de archivotest
+  Finalizado el procesamiento del archivo
+  Finalizada la ejecución de trapexit
+```
+
+Si usamos `ERR` como *fake signal*, sólo se ejecutará el `trap` cuando se produzca un error en la ejecución (`$? == 1`).
+
+### ASERCIONES
+
+Las aserciones son funciones que comprueban variables o condiciones en puntos críticos del script y realizan una acción en caso de detectar un error.
+
+###### asercion
+```shell
+#!/bin/bash
+
+_asercion() {
+   E_PARAMETRO_ERROR=98
+   E_ASERCION_FALLIDA=99
+
+   if [ -z "$2" ] ; then # $FILENO
+      return $E_PARAMETRO_ERROR
+   fi
+
+   lineno=$2
+
+   if [ ! $1 ] ; then # $condicion
+      echo “Falla la aserción: \”$1\””
+      echo “Archivo \”$0\”, línea $lineno”
+      exit $E_ASERCION_FALLIDA
+   fi
+}
+
+a=5
+b=4
+condicion=”$a -lt $b”
+
+_asercion “$condicion” $FILENO # $condicion -> $1
+                               #    $FILENO -> $2
+echo “Si llega aquí es porque la aserción es correcta”
+```
+
+## 2 - CONTROL DE TRABAJOS EN BASH
+
+Llamamos trabajos a las órdenes que se ejecutan en el shell. Estos trabajos pueden estar en varios estados:
+- **Foreground:** En primer plano, se está ejecutando con prioridad alta
+- **Background:** En segundo plano, se está ejecutando sin prioridad alta
+- **Suspended:** El proceso se encuentra en estado *detenido*
+
+Para ejecutar una orden en segundo plano la sucedemos del operador `&`. En el siguiente ejemplo, el shell se queda bloqueado hasta que se cierre el editor en la primera orden, pero permite seguir usando otros
+
+```
+$ (echo "Dardido de Ana pal cuerpo"; sleep 6; echo "A seguir defendiendo el punto.") &
+  [1] 6951
+  Dardido de Ana pal cuerpo
+$ A seguir defendiendo el punto.
+^C
+  [1]+  Done  ( echo "Dardido de ana pal cuerpo"; sleep 6; echo "A seguir defendiendo el punto." )
+```
+
+En este caso hemos tenido que cancelar manualmente el proceso para que deje de estar suspendido, si hubiéramos cargado un programa (como Gedit) él mismo se habría ocupado de esto. Es importante notar que el shell permite introducir órdenes nada más empezar la ejecución en segundo plano de la primera.
+
+```
+$ (echo "Dardido de Ana pal cuerpo"; sleep 6; echo "A seguir defendiendo el punto.") &
+  [1] 4890
+  Dardido de Ana pal cuerpo
+$ echo holi
+  holi
+$ A seguir defendiendo el punto.
+  ^C
+  [1]+  Done  ( echo "Dardido de Ana pal cuerpo"; sleep 6; echo "A seguir defendiendo el punto." )
+```
+
+Los trabajos pueden manipularse mediante órdenes de la shell. Una forma de hacerlo es mediante el carácter `%`:
+
+| ESPECIFICADOR | TRABAJO AL QUE SE REFIERE |
+| :---: | --- |
+| `%` | Trabajo actual, sinónimo de `%+` y `%%`. |
+| `%-` | Trabajo previo al actual. |
+| `%n` | Trabajo número `n`. |
+| `%[string]` | Trabajo cuya línea de órdenes empieza por la cadena [string]. |
+| `%?[string]` | Trabajo cuya línea de órdenes contiene la cadena [string]. |
+
+### 2.1 LAS ÓRDENES `FG` Y `BG` CON `%`
+
+
+
+## 3 - EJERCICIOS
+
+### EJERCICIO 1
+
+Copie el siguiente script en un archivo y ejecútelo:
+
+###### pathmas
+```shell
+#!/bin/bash
+
+if ! echo $PATH | /bin/egrep -q "(^|:)$1($|:)"; then
+   if ["$2" = "after" ]; then
+      PATH=$PATH:$1;
+   else
+      PATH=$1:$PATH;
+   fi
+else
+   echo "$1 ya está en el path";
+fi
+```
+
+Compruebe que recibe el siguiente mensaje de error:
+
+```
+$ ./pathmas
+  ./pathmas: line 4: [: =: unary operator expected
+```
+
+¿Cuál es el error y cómo debería corregirse?
+
+### EJERCICIO 2
+
+Escriba un script que nos dé el nombre del proceso del sistema que consume más memoria.
+
+### EJERCICIO 3
+
+Escriba un script que escriba números desde el 1 en adelante en intervalos de un segundo. ¿Cómo se podría, desde otro terminal, detener la ejecución de dicho proceso, reanudarlo y terminar definitivamente su ejecución?
+
+### EJERCICIO 4
+
+¿Se puede matar un proceso que se encuentra suspendido? En su caso, ¿cómo?
+
+### EJERCICIO 5
+
+¿Qué debemos hacer a la orden `top` para que nos muestre sólo los procesos nuestros?
+
+## 4 - SOLUCIONES
+
+### EJERCICIO 1
+
+Como indica el mensaje de error, hay un fallo en la línea 4. Este fallo se debe a que no se ha dejado un espacio en blanco tras el carácter `[`. Para solucionarlo, debería cambiarse la línea de esta manera:
+
+```shell
+   if [ "$2" = "after" ]; then
+```
+
+### EJERCICIO 2
+
+```shell
+ps -u $USER -o cmd --sort=-%mem --no-headers | head -1
+```
+
+`ps`, muestra todos los procesos activos, `-u $USER` delimita la muestra de procesos al usuario activo, `-o cmd` permite sólo mostrar el nombre del comando `--sort=-%mem` ordena por memoria ocupada descendentemente (máximo arriba), `no-headers` no muestra la cabecera.
+
+### EJERCICIO 3
+
+###### contadorsegundos
+```shell
+declare -i a=0
+
+while true; do
+   sleep 1
+   echo $((++a));
+done
+```
+
+```
+$ ./contadorsegundos &
+  [1] 17020
+```
+
+El símbolo `&` pone el script en segundo plano y nos da su PID.
+
+
+    $ kill -TSTP 17020
+    $ kill -CONT 17020
+    $ kill -TERM 17020
+
+
+### EJERCICIO 4
+
+Sí, mediante la opción `-9` de la orden kill.
+
+    $ kill -9 [PID]
+
+### EJERCICIO 5
+
+Usar la opción `-u` con el argumento `$USER`.
+
+    $ top -u $USER

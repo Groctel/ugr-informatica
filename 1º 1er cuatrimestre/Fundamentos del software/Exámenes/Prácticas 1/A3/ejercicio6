@@ -1,0 +1,25 @@
+#!/bin/bash
+
+# Título:      ejercicio6
+# Fecha:       2018/11/2
+# Autor:       Atanasio Rubio
+# Versión:     1.0
+# Descripción: Recibe un argumento: La ruta de un directorio. Muestra el número de archivos
+#              de dicho directorio, así como el número de archivos ejecutables y del resto
+#              archivos de dicho directorio.
+#
+# Opciones:    Ninguna
+# Uso:         Demostración académica
+
+if [ "$1" == "" ];then
+   printf "Introduzca la ruta de un directorio como argumento.\n";
+
+elif [ -d $1 ]; then
+   declare -i archivos_totales=`find $1 | wc -l`
+   declare -i archivos_ejecutables=`find $1 -executable | wc -l`
+   declare -i archivos_no_ejecutables=`expr $archivos_totales - $archivos_ejecutables`
+   printf "Hay un total de %d archivos en su directorio, de los cuales %d son ejecutables y %d, no.\n" $archivos_totales $archivos_ejecutables $archivos_no_ejecutables;
+
+else
+   printf "Su segundo argumento no es la ruta de un directorio existente en el sistema.\n";
+fi

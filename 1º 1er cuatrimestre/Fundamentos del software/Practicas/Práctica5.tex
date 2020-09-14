@@ -1,0 +1,789 @@
+# PROGRAMACIÓN DEL SHELL
+
+## 0 - ÓRDENES LINUX
+
+| **:** | **break** | **case** | **continue** | **cut** |
+| :---: | :---: | :---: | :---: | :---: |
+| **for** |**gzip** | **read** | **return** | **select** |
+| **seq** | **tar** | **true** | **until** | **while** |
+
+`:` → Orden nula. No hace nada pero cuenta como una acción.
+
+`break` → Sale de un bucle.
+
+`case` → Estructura de control similar a `if` en la que se enumeran los condicionales en columna.
+
+`continue` → Devuelve un bucle a su posición inicial usando como argumento el pasado en su línea.
+
+`cut`  → Elimina secciones de líneas de archivos en la salida. 
+
+`for` → Bucle que evalúa una lista y ejecuta acciones sobre ella.
+
+`gzip` → Almacena archivos de forma comprimida.
+
+`read` → Lee una cadena de caracteres introducida desde el teclado
+
+- `read [var]` → Lee una cadena de caracteres y la introduce en la variable [var]
+- `read -p [string] [var]` → Muestra la cadena [string] y ejecuta la orden justo después.
+
+`return` → Devuelve un valor de una función o un script.
+
+`seq` → Imprime una secuencia de números.
+
+- `seq [first][last]` → Imprime una secuencia de números desde [first] hasta [last].
+- `seq -f` → Imprime la secuencia en modo float.
+- `seq -s` → Usa strings para separar la cadena, con el separador `\n` por defecto.
+- `seq -w` → Iguala la anchura de las líneas añadiendo `0` a las izquierda.
+
+`tar` → Almacena archivos de forma comprimida.
+
+`until` → Bucle que se ejecuta hasta que una expresión sea verdadera.
+
+`while` → Bucle que se ejecuta mientras una expresión sea verdadera.
+
+## 1 - LECTURA DEL TECLADO
+
+Para leer una cadena de caracteres desde el teclado usamos la orden `read`, que detiene el script hasta que reciba dicha cadena.
+
+## 2 - LA ORDEN FOR
+
+<<<<<<< HEAD
+El bucle `for` permite repetir las órdenes definidas dentro de él un número determinado de veces. El número de veces que dicha orden se repite viene determinado por su sintaxis, que es la siguiente:
+
+```shell
+for var in list; do
+   sentencias;
+done
+```
+
+La lista `list` a la que nos referimos puede venir declarada de tres formas distintas:
+- **Lista de elementos de la salida estándar:**
+```shell
+for archivo in $(ls); do  // Ejecutamos una orden
+   file $archivo;         // $archivo es cada una de las salidas
+done
+```
+- **Lista de elementos de una secuencia:**
+```shell
+for numero in `seq 0 1 4`; do  // seq [inicio] [incremento] [final]
+   let "numero="$numero * 2 + 1"
+   printf "Número impar %d\n" $numero;
+done
+```
+- **Lista de elementos con estructura clásica:**
+```shell
+for ((i=1; i<6; i++)); do
+   let i="$i * 2 - 1"
+   printf "Número impar %d\n" $i;
+done
+```
+
+## 3 - LA ORDEN CASE
+
+La orden `case` es el equivalente a un `switch` en otros lenguajes de programación. En lugar de estructurar una serie de condicionales como un árbol de `if` y `elif`, usamos la siguiente sintaxis equivalente:
+
+```shell
+case var in
+   patron1 )
+       sentencias;;
+   patron2
+       sentencias;;
+esac
+```
+
+Tomemos como ejemplo el siguiente script estructurado con un árbol de `if`:
+
+###### ejemploif
+```shell
+if [ -z "$1" ]; then
+   echo "$(ejemploif -h)";
+
+elif [ "$1" == "-h" ]; then
+   printf "This is an example program that uses an if tree.\n"
+
+elif [ "$1" == "-l" ]; then
+   printf "Tags available in this system:\n - %s\n" home;
+
+elif [ "$1" == "-o" ]; then
+   if [ -z "$2" ]; then
+      echo "$(ejemploif -l)";
+
+   elif [ "$2" == "home" ]; then
+      cd ~/home_server
+
+   else
+      echo "$(ejemploif -l)";
+   fi
+
+else
+   echo "$(ejemploif -h)";
+fi
+```
+
+Vamos a reconstruirlo ahora con un árbol de `case`:
+
+###### ejemplocase
+```shell
+case "$1" in
+   -h) printf "This is an example program that uses a case tree.\n";;
+   
+   -l) printf "Tags available in this system:\n - %s\n" home;;
+   
+   -o) case "$2" in
+      home) cd ~/home_server;;
+      
+      *) echo "$(ejemploif -l)";;
+   esac
+   
+   *) echo "$(ejemploif -h)";;
+esac
+```
+
+Como `case` nos permite usar metacaracteres, podemos abreviar `[ -z "$1" ]` y `else` en `*)`, ya que queremos que salga lo mismo en ambos casos. También podemos usar el símbolo `|` para asociar varios casos a una sola sentencia:
+
+```shell
+case "$1" in
+   -h | --help) printf "This is an example.\n";;
+esac
+```
+
+## 4 - LA ORDEN WHILE
+
+La orden `while` ejecuta una serie de sentencias mientras la expresión booleana a la que se asocia sea verdadera. Es importante dejar claro que en shell las expresiones booleanas no son únicamente expresiones que devuelven `true` o `false`, sino que también se conside `true` el hecho de que una sentencia se haya ejecutado correctamente. Tiene la siguiente sintaxis:
+
+```shell
+while expresion; do
+   sentencias
+done
+```
+
+Como ejemplo sencillo, vamos a comprobar si existen archivos en nuestro sistema:
+
+```shell
+while read -p "Introduzca el nombre de un archivo: " archivo; do
+   if [ -f "$archivo" ]; then
+      printf "%s\n" "El archivo $archivo existe";
+      
+   else
+      printf "%s\n" "El archivo $archivo NO existe";
+   fi
+done
+```
+
+También podemos redirigir la entrada de `read` indicando el archivo de redirección al final del bucle. Supongamos que tenemos el siguiente archivo:
+
+###### cuandotepasa
+```
+Cuando
+te
+pasa
+Si
+xD
+```
+
+Y supongamos que tenemos el siguiente script:
+
+###### redir
+
+```shell
+#!/bin/bash
+
+declare -i count=1
+
+while read line; do
+   echo "Line $count: $line"
+   count=$[ $count + 1 ]
+done < cuandotepasa
+echo "Fin de la cita"
+```
+
+Lo ejecutamos y tenemos la siguiente salida:
+
+```
+$ ./redir
+  Line 1: Cuando
+  Line 2: te
+  Line 3: pasa
+  Line 4: Si
+  Line 5: xD
+  Fin de la cita
+```
+
+Cualquier buclue `while` infinito (`while true`) puede detenerse mediante la combinación de teclas `Ctrl + D`, que detiene completamente la ejecución del archivo. Si queremos hacer bucles infinitos que no necesiten una parada de emergencia podemos usar la orden `break`. Ampliamos el ejemplo de la lectura de archivos:
+
+```shell
+while true; do
+   read -p "Introduzca el nombre de un archivo: " archivo; do
+   
+   if ["$archivo" == "FIN" ]; then
+      break;
+   
+   elif [ -f "$archivo" ]; then
+      printf "%s\n" "El archivo $archivo existe";
+      
+   else
+      printf "%s\n" "El archivo $archivo NO existe";
+   fi
+done
+```
+
+Sin embargo, `break` no detiene la ejecución del archivo, sino del bucle. El archivo seguirá ejecutándose a partir de ahí como de costumbre. También podemos inicializar una `var=true`, haciendo que la cabecera del bucle sea `while $var` y, en lugar de `break`, usar la sentencia `var=false`. Ya es cuestión de gustos (y de la amenazante presencia de Cubero).
+
+Dentro de los bucles también tenemos la orden `continue`,
+
+## 5 - LA ORDEN UNTIL
+
+La orden `until` es el opuesto a `while`. Lo que hace es ejecutar las sentencias declaradas en su cuerpo hasta que una expresión sea cierta. Es el equivalente a `while false`. Tiene la siguiente estructura:
+
+```shell
+until var; do
+   sentencias
+done
+```
+
+Podemos usar esta sintaxis para hacer más clara la intención de nuestro bucle, como es el caso del siguiente ejemplo:
+
+```shell
+n=1
+until [ $n -gt 10 ]; do
+   echo "$n"
+   n=$(( $n + 1 ))
+done
+```
+
+## 6 - CONSTRUCCIÓN DE MENÚS
+
+Mediante el uso de bucles y condicionales podemos escribir guiones que ofrezcan un menú de opciones al usuario. Ponemos de ejemplo un instalador:
+
+###### instalador
+```shell
+#!/bin/bash
+
+while :; do
+   printf "\n\nMenu de configuración:\n"
+   printf "\t¿Desea instalar el programa? [Y/N]\n"
+   printf "\tPara finalizar pulse 'q'\n"
+
+   read -n1 -p "Opción: " opcion
+
+   case $opcion in
+      Y | y ) printf "\nHas seleccionado %s \n" $opcion;;
+      N | n ) printf "\nHas seleccionado %s \n" $opcion;;
+      q ) printf "\n"
+          break;;
+      * ) printf "\n Selección inválida: %s \n";;
+   esac
+   sleep 1
+done
+```
+
+La orden `sleep` indica al programa cuántos segundos debe estar inactivo antes de realizar la siguiente acción.
+
+## 7 - FUNCIONES
+
+En Bash podemos definir funciones que, a diferencia de los scripts, se ejecutan dentro de la memoria del proceso Bash que las utiliza sin tener que abrir uno nuevo, como ocurre con los guiones. Podemos definir una función mediante cualquiera de las dos siguientes sintaxis:
+
+```shell
+function _nombre_funcion {
+   sentencias
+}
+```
+
+```shell
+_nombre_funcion() {
+   sentencias
+}
+```
+
+Utilizamos el caracter `_` como norma de estilo para indicar que nos estamos refiriendo al nombre de una función.
+
+Como puede darse el caso de que una función y un script tengan el mismo nombre, Bash asigna este orden de preferencia para resolver qué ejecutar:
+
+- Alias
+- Palabras reservadas
+- Funciones
+- Órdenes empotradas
+- Scripts y programas ejecutables
+
+Para utilizar funciones en guiones han de declararse primero y luego invocarse pasando sus parámetros correspondientes.
+
+###### existefile
+```shell
+#!/bin/bash
+
+_uso() {
+   echo "Uso: $0 nombre_archivo"
+   exit 1
+}
+
+_si_existe_file() {
+   local f="$1"
+   [ -f "$f" ] && return 0 || return 1
+}
+
+# llamamos a _uso() si no se da el nombre de archivo
+[ $# == 0 ] && _uso
+
+# invocamos a _si_existe_file()
+if ( _si_existe_file "$1" ); then
+   echo "El archivo existe";
+else
+   echo "El archivo no existe";
+fi
+```
+
+También podemos usar valores devueltos por una función:
+
+###### valorfuncion
+```shell
+#!/bin/bash
+
+# usamos echo para devolver un valor
+function _dbl {
+   read -p "Introduzca un valor: " valor
+   echo $[ $valor * 2 ]
+}
+
+resultado=`_dbl`
+
+echo "El nuevo valor es $resultado"
+```
+
+## 8 - EJEMPLOS REALISTAS DE GUIONES
+
+### 8.1 - ELIMINA DIRECTORIOS VACÍOS
+
+```shell
+#!/bin/bash
+
+[ $# -lt 1 ] && set -- .
+find "$@" -depth -print -type d |
+
+while read dir; do
+   [ `ls "$dir" | wc -l` -lt 1 ] || continue
+   echo >&2 "$0: removing empty directory: $dir"
+   rmdir "$dir" || exit $?
+done
+
+exit 0
+```
+
+### 8.2 - MUESTRA INFORMACIÓN DEL SISTEMA EN UNA PÁGINA HTML
+
+```shell
+#! /bin/bash
+
+_STAT=status.html
+
+echo "<html><title>`hostname` Status</title>" > $_STAT
+echo "<body bgcolor=white><font color=slategray>" >> $_STAT
+echo "<h2>`hostname` status <font size=-1>(updated every 1/2 hour) </h2></font></font>" >>
+
+$_STAT
+
+echo "<pre>" >> $_STAT
+echo "<b>Date:</b> `date`" >> $_STAT
+echo >> $_STAT
+echo "<b>Kernel:</b>" >> $_STAT
+
+uname -a >> $_STAT
+echo >> $_STAT
+echo "<b>Uptime:</b>" >> $_STAT
+
+uptime >> $_STAT
+echo >> $_STAT
+echo "<b>Memory Usage:</b>" >> $_STAT
+
+free >> $_STAT
+echo >> $_STAT
+echo "<b>Disk Usage:</b>" >> $_STAT
+
+df -h >> $_STAT
+echo >> $_STAT
+echo "<b>TCP connections:</b>" >> $_STAT
+
+netstat -t >> $_STAT
+echo >> $_STAT
+echo "<b>Users logged in</b> (not showing processes):" >> $_STAT
+
+w -hus >> $_STAT
+echo "</pre>" >> $_STAT
+```
+
+### 8.3 - ADAPTA EL SCRIPT A LA DISTRO DONDE SE EJECUTA
+
+```shell
+#!/bin/bash
+
+SO=`uname`
+
+case $SO in
+   Linux)
+      echo "Estamos en un Linux.\n" ;;
+   AIX)
+      echo "Estamos en un AIX.\n" ;;
+   SunOS)
+      echo "Estamos en un SunOS.\n" ;;
+   *)
+      echo "Distro sin soporte.\n"
+exit 1 ;;
+esac
+```
+
+### 8.4 - MUESTRA UNA LÍNEA GIRANDO MIENTRAS SE EJECUTA UNA ORDEN
+
+```shell
+#!/bin/bash
+
+function _rotar_linea {
+   INTERVAL=1 # Tiempo a dormir entre giro
+   TCOUNT="0" # Para cada TCOUNT la linea gira 45 grados
+
+   while true; do # Infinito hasta que acaba la función
+      TCOUNT=`expr $TCOUNT + 1` # Incrementa TCOUNT
+
+      case $TCOUNT in
+         "1") echo -e "-""\b\c"
+            sleep $INTERVAL ;;
+         "2") echo -e '\\'"\b\c"
+            sleep $INTERVAL ;;
+         "3") echo -e "|""\b\c"
+            sleep $INTERVAL ;;
+         "4") echo -e "/""\b\c"
+            sleep $INTERVAL ;;
+         *) TCOUNT="0" ;; # Pone a cero TCOUNT
+      esac
+   done
+}
+
+######## Cuerpo principal ############
+
+_rotar_linea & # Ejecuta la función _rotar_linea en background
+
+ROTAR_PID=$! # Captura el PID del último proceso que está en background.
+
+# Simulamos la ejecución de una orden que consume mucha CPU
+# durante la cual mostramos la línea rotando
+
+for ((CONT=1; CONT<400000; CONT++ )); do
+   :
+done
+
+# Paramos la función _rotar_linea
+
+kill -9 $ROTAR_PID # provoca la terminación del proceso cuyo PID es $ROTAR_PID
+
+# Limpiamos el trazo que queda tras finalizar
+echo -e "\b\b"
+```
+
+## 9 - ARCHIVOS DE CONFIGURACIÓN
+
+Existen archivos de configuración que el shell lee nada más lanzarse. Se trata de scripts que establecen su configuración, definiendo sus alias, funciones u otras variables. Estos archivos varían según el shell utilizado, pero Bash usa los siguientes:
+- `/etc/profile`
+- `$HOME/.bash_profile`
+-  `$HOME/.bash_login`
+- `$HOME/.profile`
+- `$HOME/.bashrc`
+- `$HOME/.bash_logout`
+
+El primero, al ser un archivo del sistema, sólo puede ser modificado por su administrador. El resto pueden ser modificados por los usuarios para adaptar el shell a sus necesidades.
+
+## 10 - EJERCICIOS
+
+### EJERCICIO 1
+
+Escriba un script que acepte dos argumentos. El primero será el nombre de un directorio y el segundo será un valor entero. El funcionamiento del guion será el siguiente: deberán anotarse en un archivo denominado `archivosSizN.txt` aquellos archivos del directorio dado como argumento y que cumplan la condición de tener un tamaño menor al valor aportado en el segundo argumento. Se deben tener en cuenta las comprobaciones sobre los argumentos, es decir, debe haber dos argumentos, el primero deberá ser un directorio existente y el segundo un valor entero.
+
+### EJERCICIO 2
+
+Escriba un script que acepte el nombre de un directorio como argumento y muestre como resultado el nombre de todos y cada uno de los archivos del mismo y una leyenda que diga `Directorio`, `Enlace` o `Archivo regular`, según corresponda. Incluya la comprobación necesaria sobre el argumento, es decir, determine si el nombre aportado se trata de un directorio existente.
+
+### EJERCICIO 3
+
+Escriba un script en el que, a partir de la pulsación de una tecla, detecte la zona del teclado donde se encuentre. Las zonas vendrán determinadas por las filas. La fila de los números `1` `2`, `3`, `4`, ... será la fila `1`; las teclas donde se encuentra la `Q`, `W`, `E`, ` R`, `T`, `Y`, ... serán de la fila 2; las teclas de la `A`, `S`, `D`, `F`, ... serán de la fila 3; y las teclas de la `Z`, `X`, `C`, `V`, ... serán de la fila 4. La captura de la tecla se realizará mediante la orden `read`.
+
+### EJERCICIO 4
+
+Escriba un script que acepte como argumento un parámetro en el que el usuario indica el mes que quiere ver, ya sea en formato numérico o usando las tres primeras letras del nombre del mes, y muestre el nombre completo del mes introducido. Si el número no está comprendido entre 1 y 12 o las letras no son significativas del nombre de un mes, el guion deberá mostrar el correspondiente mensaje de error.
+
+### EJERCICIO 5
+
+Escriba un script que solicite un número hasta que su valor esté comprendido entre 1 y 10. Deberá usar la orden `while` y, para la captura del número, la orden `read`.
+
+### EJERCICIO 6
+
+Copie este código y pruébelo en su sistema para ver su funcionamiento. ¿Qué podemos modificar para que el giro se vea más rápido o más lento? ¿Qué hace la opción `-e` de las órdenes `echo` del script?
+
+```shell
+#!/bin/bash
+
+function _rotar_linea {
+   INTERVAL=1  # Tiempo a dormir entre giro
+   TCOUNT="0"  # Para cada TCOUNT la linea gira 45 grados
+
+   while true; do  # Bucle infinito hasta que terminamos la funcion
+      TCOUNT=`expr $TCOUNT + 1` # Incrementa TCOUNT
+
+      case $TCOUNT in
+         "1") echo -e "-""\b\c"
+            sleep $INTERVAL ;;
+         "2") echo -e '\\'"\b\c"
+            sleep $INTERVAL ;;
+         "3") echo -e "|""\b\c"
+            sleep $INTERVAL ;;
+         "4") echo -e "/""\b\c"
+            sleep $INTERVAL ;;
+         *) TCOUNT="0" ;; # Pone a cero TCOUNT
+      esac
+   done
+}
+
+_rotar_linea &  # Ejecuta la función _rotar_linea en background
+ROTAR_PID=$!  # Captura el PID del último proceso que está en background.
+
+# Simulamos la ejecución de una orden que consume mucha CPU
+# durante la cual mostramos la línea rotando
+for ((CONT=1; CONT<4000000; CONT++ )); do
+   :
+done
+
+# Paramos la función _rotar_linea
+kill -9 $ROTAR_PID
+
+# Limpiamos el trazo que queda tras finalizar
+echo -e "\b\b"
+```
+
+### EJERCICIO 7
+
+Escriba un guion que admita como argumento el nombre de un tipo de shell (por ejemplo, *csh*, *sh*, *bash*, *tcsh*, etc.) y nos dé un listado ordenado alfabéticamente de los usuarios que tienen dicho tipo de shell por defecto cuando abren un terminal. Dicha información del tipo de shell asignado a un usuario se puede encontrar en el archivo `/etc/passwd`, cuyo contenido está delimitado por `:`. Cada información situada entre esos delimitadores representa un campo y precisamente el campo que nos interesa se encuentra situado en primer lugar. En definitiva, para quedarnos con lo que aparece justo antes del primer delimitador será útil la orden siguiente:
+
+    cut -d':' -f1 /etc/passwd
+
+Donde la opción `–d` indica cuál es el delimitador utilizado y la opción `–f1` representa a la secuencia de caracteres del primer campo. Realice, utilizando el mecanismo de cauces, el ejercicio pero usando la orden `cat` para mostrar el contenido de un archivo y encauzado con la orden `cut` para filtrar la información que aparece justo antes del delimitador `:` nº3 . Realice también la comprobación de la validez del tipo de Shell que se introduce como argumento. Use para ello la información que encontrará en el archivo `/etc/shells` donde encontrará los tipos de Shell que se pueden utilizar en el sistema.
+
+### EJERCICIO 8
+
+Dos órdenes frecuentes de Unix son `tar` y `gzip`. La orden `tar` permite almacenar/extraer varios archivos de otro archivo. Por ejemplo, podemos almacenar el contenido de un directorio en un archivo con `tar -cvf archivo.tar directorio` (la opción `-x` extrae los archivos de un archivo .tar).
+
+La orden `gzip` permite comprimir el contenido de un archivo para que ocupe menos espacio. Por ejemplo, `gzip archivo` comprime archivo y lo sustituye por otro con el mismo nombre y con la extensión `.gz`. La orden para descomprimir un archivo `.gz` o `.zip` es `gunzip`.
+
+Dadas estas órdenes construya un script, denominado `cpback` que, dado un directorio o lista de archivos como argumento(s). los archive y comprima en un archivo con nombre `copiaYYMMDD`, donde `YY` corresponde al año, `MM` al mes y `DD` al día, dentro de un directorio denominado `CopiasSeguridadp`. El script debe realizar las comprobaciones oportunas: los argumentos existen, el directorio de destino existe y si no, lo crea.
+
+### EJERCICIO 9
+
+Hacer un script en Bash denominado `newdirfiles` con los siguientes tres argumentos:
+
+| ARGUMENTO | DESCRIPCIÓN |
+| :---: | --- |
+| `dirname` | Nombre del directorio que, en caso de no existir, se debe crear para alojar en él los archivos que se han de crear. |
+| `num_files` | Número de archivos que se han de crear. |
+| `basefilename` | Cadena de caracteres que represente el nombre base de los archivos. |
+
+Ese script debe realizar lo siguiente:
+- Comprobar que el número de argumentos es el correcto y que el segundo argumento tenga un valor comprendido entre 1 y 99.
+- Crear, en caso de no existir, el directorio dado en el primer argumento a partir del directorio donde se esté situado y que posea permisos de lectura y escritura para el usuario `$USER`.
+- Dentro del directorio dado en el primer argumento, crear archivos cuyos contenidos estarán vacíos y cuyos nombres lo formarán el nombre dado como tercer argumento y un número que irá desde `01` hasta el número dado en el segundo argumento.
+
+## 11 - SOLUCIONES
+
+### EJERCICIO 1
+
+###### archivosmenorque
+```shell
+if [ $# == 2 ]; then
+   if [ -d $1 ]; then
+      if `echo $2 | grep -q '[0-9]\+'`; then
+         find $1 -size -$2 > archivosSizN.txt
+         echo "`cat archivosSizN.txt | wc -l` archivos guardados en archivosSizN.txt";
+      else
+         echo "Introduzca como segundo argumento un número entero";
+      fi
+   else
+     echo "El directorio $1 no existe";
+   fi
+else
+   echo "Necesarios dos argumento"
+   echo "Uso: ./archivosmenorque <directorio> <tamaño>"
+fi
+```
+
+### EJERCICIO 2
+
+###### tipoarchivo
+```shell
+if [ $# == 1 ]; then
+   if [ -d $1 ]; then
+      for archivo in `find $1`; do
+         tipo=`([ -L $archivo ] && echo "Enlace simbólico") || ([ -f $archivo ] && echo "Archivo regular") || ([ -d $archivo ] && echo "Directorio")`
+         echo "$archivo: $tipo";
+      done
+   else
+      echo "El directorio $1 no existe"
+      echo "Uso ./ej6x2 <directorio>";
+   fi
+else
+   echo "Introduzca sólo un argumento que indique un directorio.";
+fi
+```
+
+### EJERCICIO 3
+
+###### filacaracter
+```shell
+shopt -s nocasematch # También valen las mayúsculas
+declare -i fila;
+
+echo -n "Introduzca un caracter: "
+read caracter
+
+case $caracter in
+   [º0-9\'!]) fila=1;;
+   [qwertyuiop\`+]) fila=2;;
+   [asdfghjklñ´ç]) fila=3;;
+   [\<zxcvbnm,.-]) fila=4;;
+   *) fila=0
+esac
+
+echo "El caracter $caracter está en la fila $fila"
+```
+
+### EJERCICIO 4
+
+###### mescompleto
+```shell
+if [ $# == 1 ] ; then
+
+   case $1 in
+      ene|1) echo "Enero";;
+      feb|2) echo "Febrero";;
+      mar|3) echo "Marzo";;
+      abr|4) echo "Abril";;
+      may|5) echo "Mayo";;
+      jun|6) echo "Junio";;
+      jul|7) echo "Julio";;
+      ago|8) echo "Agosto";;
+      sep|9) echo "Septiembre";;
+      oct|10) echo "Octubre";;
+      nov|11) echo "Noviembre";;
+      dic|12) echo "Diciembre";;
+      *) echo "Introduzca un mes entre 1 y 12 (o las primeras 3 letras)";
+   esac
+
+else 
+   echo "Sólo se admite un argumento."
+   echo "Uso ./mescompleto (3 primeras letras mes o nº mes)";
+fi
+
+```
+
+### EJERCICIO 5
+
+###### buclenumero
+```shell
+declare -i num=0
+
+while [ "$num" -lt 1 ] || [ "$num" -gt 10 ]; do
+   read -p "Introduzca un número entre 1 y 10: " num
+done
+```
+
+### EJERCICIO 6
+
+Para hacer que la línea vaya más rápido podemos usar decimales en `INTERVAL`:
+
+    INTERVAL=0.1
+
+Para hacer que vaya más lento podemos aumentar el valor de `INTERVAL`:
+
+    INTERVAL=3
+
+La opción `-e` nos permite leer el carácter `\` como un carácter normal y no como un carácter de escape.
+
+### EJERCICIO 7
+
+###### compruebashell
+```shell
+if [ $# == 1 ]; then
+   shell=$1
+   
+   if `cat /etc/passwd | cut -d ':' --fields=1,7 | grep -q $shell`; then
+      echo "Los usuarios que utilizan $shell son: "
+      cat /etc/passwd | cut -d ':' --fields=1,7 | grep $shell | cut -d ':' -f1 | sort;
+      
+   else
+      echo "Ningún usuario utiliza $shell";
+   fi
+else
+   echo "Sólo se permite un argumento que indique el tipo de shell.";
+fi
+```
+
+### EJERCICIO 8
+
+###### cpback
+```shell
+carpeta_destino="CopiasSeguridad"
+archivo_destino="$carpeta_destino/copia`date +%y%m%d`"
+
+function _existen() {
+   for arg in $*; do
+      [ -e $arg ] || return 1
+   done
+   
+   return 0
+}
+
+if [ $# == 1 ]; then
+   if _existen $* ; then
+      if [ ! -d $carpeta_destino ] ; then
+         mkdir $carpeta_destino;
+      fi
+
+      echo "Los siguientes archivos van a ser almacenados y comprimidos en $archivo_destino.tar.gz: "
+      tar -cvf $archivo_destino $*
+      gzip $archivo_destino;
+   else
+      echo "Algunos de los archivos proporcionados no existen";
+   fi
+else
+   echo "Introduzca al menos un argumento que indique un archivo.";
+fi
+```
+
+### EJERCICIO 9
+
+###### newdirfiles
+```shell
+dirname=$1
+num_files=$2
+basefilename=$3
+
+if [ $# == 3 ]; then
+   function _crear_archivos() {
+      for ((i=1; i<=$1; i++)); do
+         if [ $i -lt 10 ]; then
+            touch "$2/$30$i";
+         else
+            touch "$2/$3$i";
+         fi
+      done
+   }
+
+   if [ $num_files -lt 1 ] || [ $num_files -gt 99 ] ; then
+      echo "El número de archivos debe estar comprendido entre 1 y 99"
+      exit 1;
+   fi
+
+   if [ ! -d $dirname ] ; then
+      mkdir $dirname
+   fi
+
+   chmod u+rw $dirname
+   _crear_archivos $num_files $dirname $basefilename
+   echo "Creados $num_files archivos en $dirname"
+else
+   echo "Debe introducir tres argumentos: un directorio, un entro y un nombre de archivo base."
+fi
+```

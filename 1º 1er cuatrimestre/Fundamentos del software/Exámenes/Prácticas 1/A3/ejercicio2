@@ -1,0 +1,30 @@
+#!/bin/bash
+
+# Título:      ejercicio2
+# Fecha:       2018/11/2
+# Autor:       Atanasio Rubio
+# Versión:     1.0
+# Descripción: Recibe tres argumentos: Un archivo de texto y un carácter
+#               - Si el 2º argumento es una A: Ordena las líneas del archivo del argumento
+#                 1 en orden ascendente.
+#		- Si el 2º argumento es una Z: Ordena las líneas del archivo del argumento
+#                 1 en orden descendente.
+#
+# Opciones:    Ninguna
+# Uso:         Demostración académica
+
+if [ "$1" == "" ]; then
+   printf "El primer argumento debe contener un archivo de texto plano.\n;";
+elif [ "$2" == "" ]; then
+   printf "El segundo argumento debe ser 'A' para orden ascendente o 'Z' para orden descendente.\n";
+elif [ -f $1 ]; then
+   if [ "$2" == "A" ]; then
+      sort -f $1;
+   elif [ "$2" == "Z" ]; then
+      sort -r $1;
+   else
+      printf "El segundo argumento debe ser 'A' para orden ascendente o 'Z' para orden descendente.\n";
+   fi;
+else
+   printf "Su primer argumento no es un archivo de texto plano existente en el sistema.\n";
+fi
