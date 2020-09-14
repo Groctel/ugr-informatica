@@ -1,0 +1,49 @@
+Módulos
+
+Sistema de adición
+- Drivers
+- Sistemas de archivos
+- Cosas generales
+
+No hace falta recompilar
+Ni reiniciar
+
+Ventajas
+
+- Precompilación de drivers
+  · Se añaden al sistema en
+    tiempo de instalación
+    según sus dispositivos
+
+- Portabilidad
+- Facilidad de uso
+
+Relocalizables
+
+Memoria relativa
+
+Carga de módulos
+- Modprobe
+  Módulo y dependencias
+  - Depmod
+- Insmod
+  Sólo el módulo
+
+Información del módulo
+- Modinfo
+
+Namespaces
+
+Virtualizar es costoso
+
+Los namespaces agrupan
+procesos en contenedores
+en un mismo kernel
+
+Separación personalizable
+Pueden compartir datos
+
+Grupos de control
+
+Entidades organizables
+- Organización en grupo

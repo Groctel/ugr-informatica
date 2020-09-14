@@ -1,0 +1,137 @@
+Hebras
+
+(Hilos)
+
+Dentro de procesos
+
+Monoprogramado:
+- Procesos monohebra
+- Procesos multihebra
+Multiprogramado:
+- Procesos monohebra
+- Procesos multihebra
+
+Proceso monohebra:
+- Bloque de control
+- Espacio dir usuario
+- Pila del usuario
+- Pila del kernel
+
+Proceso multihebra:
+- Bloque de control
+- Espacio dir usuario
+- Por cada hebra
+  - Bloque de control
+  - Pila del usuario
+  - Pila del kernel
+
+       Ventajas
+frente a procesos
+
+- Creación más rápida
+- Finalización más rápida
+- Cambio más rápido
+- Eficiencia comunicativa
+  - Sin acceso al kernel
+
+Aplicaciones
+
+- Segundo plano
+- Procesamiento asíncrono
+- Velocidad de ejecución
+- Modularización
+
+Estado
+
+Herencia del proceso
+
+Propios:
+- Ejecutando
+- Listo
+- Bloqueado
+
+> Proceso bloqueado
+> Hebra ejecutando
+
+Ejecución bloqueada
+A pesar del estado
+
+Más rápido no cambiarlo
+            Herencia
+
+Sincronización
+
+- Hebra gráfica
+- Hebra de eventos
+- Hebra de operaciones pesadas
+
+· Cargar el programa base
+· Mostrar menús en una hebra
+· Cargar lo gordo en otra hebra
+· ???
+· PROFIT
+
+ULT - User-level threads
+KLT - Kernel-level threads
+* Propio de Stallings
+
+ULT
+
+Biblioteca de hebras:
+- Gestiona las hebras
+- No llama al kernel
+- El kernel no sabe que
+  existen esas hebras
+
+Ventajas:
+- Cambio sin privilegios
+- Planificación a nivel de
+  aplicación
+  - Cada una la suya
+- Ejecutable en cualquier
+  sistema operativo
+
+Desventajas:
+- Llamadas al kernel
+  bloqueantes
+- No saca ventaja del
+  multiproceso
+
+Jacketing
+
+Jacketing:
+- Llamar a sistema
+- Mientras esté bloqueado
+  - Ejecutar otras hebras
+  - Volver a llamar al
+    volver a la hebra
+
+KLT
+
+API:
+- Las hebras son como
+  dice el fabricante
+  del sistema
+- Windows >:(
+
+Desventaja
+
+Cambio pasa por kernel
+
+Enfoques combinados
+
+ULT + KLT
+
+Combina las ventajas
+
+      Relación
+Hebras:Procesos
+
+1:1
+
+M:1
+
+1:M
+
+M:N
+

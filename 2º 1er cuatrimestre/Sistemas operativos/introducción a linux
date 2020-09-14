@@ -1,0 +1,63 @@
+Introducción al
+kernel de Linux
+
+1969
+
+· Dennis Ritchie
+· Ken Thompson
+
+Viene de Multics
+· SO fallido
+· Bell Labs
+
+Escrito en C
+· Sin precedentes!
+· Portabilidad
+
+BSD
+
+Bekeley Software Distributions
+
+Cosas buenas de UNIX
++ Pocas (~100) llamadas al sistema
++ (Casi) todo es un fichero
+    Simplicidad en llamadas básicas
++ Escrito en C
+    Muy portable
++ Velocidad creación procesos
++ fork()
++ IPC robusto
+
+"Do one thing and do it well"
+
+Linux
+
+Linus Torvalds ♥
+
+Basado en Minix
+- Distro de UNIX minima
+- No es libre
+
+Me monto mi SO
+
+NO ES UNIX
+
+POSIX
+
+GPL 2.0
+
+Linux es sólo el kernel
+
+Características
+
+- Carga dinámica de módulos
+- Multiprocesador simétrico
+- Preferente
+- No diferencia hebras y procesos
+
+- Sistema de dispositivos OO
+- Ignora prestaciones UNIX
+  difíciles de implementar
+- Libre
+
+Alta herencia de UNIX
