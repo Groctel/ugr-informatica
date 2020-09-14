@@ -1,0 +1,237 @@
+\section{}
+
+\textbf{Dado el conjunto de tareas periódicas y sus atributos temporales que se indica en la tabla de aquí abajo, determinar si se puede planificar el conjunto de dichas tareas utilizando un esquema de planificación basado en planificación cíclica.
+Diseña el plan cíclico determinando el marco secundario, y el entrelazamiento de las tareas sobre un cronograma.}
+
+\begin{center}
+	\begin{tabular}{|c|rrr|}
+		\hline
+		\textbf{Tarea} & $\boldsymbol{C_i}$ & $\boldsymbol{T_i}$ & $\boldsymbol{D_i}$ \\
+		\hline
+		\hline
+		$\boldsymbol{T_1}$ & $10$ & $40$ & $40$   \\
+		$\boldsymbol{T_2}$ & $18$ & $50$ & $50$   \\
+		$\boldsymbol{T_3}$ & $10$ & $200$ & $200$ \\
+		$\boldsymbol{T_4}$ & $20$ & $200$ & $200$ \\
+		\hline
+	\end{tabular}
+\end{center}
+
+Calculamos la duración del ciclo principal, que es el mínimo común múltiplo de los periodos de todas las tareas:
+
+\[T_m=mcm(40,50,200)=\boldsymbol{200}\]
+
+Especificamos una duración del ciclo secundario teniendo en cuenta que debe ser mayor o igual que el tiempo de cómputo más largo y divisor de $T_m$ y debería ser menor o igual que el plazo de respuesta máximo más corto.
+Con estas restricciones, vamos a probar con $\boldsymbol{40}$, ya que es un valor poco restrictivo en el que se pueden acomodar varias tareas además de las más largas.
+Hecho esto, vamos a comprobar que podemos crear una plafinifación que satisfaga estas propiedades:
+
+\begin{center}
+	\begin{ganttchart}[x unit=1.5mm, hgrid=true, vgrid={{dotted}}]{1}{100}
+		\gantttitle{$0$}  {20}
+		\gantttitle{$40$} {20}
+		\gantttitle{$80$} {20}
+		\gantttitle{$120$}{20}
+		\gantttitle{$160$}{20} \\
+
+		\ganttbar{$T_1$}{1} {5}
+		\ganttbar{}     {21}{25}
+		\ganttbar{}     {41}{45}
+		\ganttbar{}     {61}{65}
+		\ganttbar{}     {81}{85} \\
+		\ganttbar{$T_2$}{6} {14}
+		\ganttbar{}     {26}{34}
+		\ganttbar{}     {66}{74}
+		\ganttbar{}     {86}{94} \\
+		\ganttbar{$T_3$}{15}{19} \\
+		\ganttbar{$T_4$}{46}{55}
+	\end{ganttchart}
+\end{center}
+
+\pagebreak
+
+\section{}
+
+\textbf{El siguiente conjunto de tareas periódicas se puede planificar con ejecutivos cíclicos.
+Determina si esto es cierto calculando el marco secundario que debería tener.
+Dibuja el cronograma que muestre las ocurrencias de cada tarea y su entrelazamiento.
+¿Cómo se tendría que implementar? (escribe el pseudo-código de la implementación)}
+
+\begin{center}
+	\begin{tabular}{|c|rrr|}
+		\hline
+		\textbf{Tarea} & $\boldsymbol{C_i}$ & $\boldsymbol{T_i}$ & $\boldsymbol{D_i}$ \\
+		\hline
+		\hline
+		$\boldsymbol{T_1}$ & $2$ & $6$  & $6$  \\
+		$\boldsymbol{T_2}$ & $2$ & $8$  & $8$  \\
+		$\boldsymbol{T_3}$ & $3$ & $12$ & $12$ \\
+		\hline
+	\end{tabular}
+\end{center}
+
+Calculamos el marco principal, que es el mínimo común múltiplo de los periodos de todas las tareas:
+
+\[T_m=mcm(6,8,12)=\boldsymbol{24}\]
+
+Calculamos ahora un marco secundario sabiendo que debe ser mayor o igual que $3$, divisor de $24$ y debería ser menor o igual que $6$.
+Nos quedamos con $\boldsymbol{6}$ porque es el menos restrictivo de todos.
+Representamos el diagrama de planificación con estos datos:
+
+\begin{center}
+	\begin{ganttchart}[x unit=3mm, hgrid=true, vgrid={{dotted}}]{1}{24}
+		\gantttitle{$0$} {6}
+		\gantttitle{$6$} {6}
+		\gantttitle{$12$}{6}
+		\gantttitle{$18$}{6} \\
+
+		\ganttbar{$T_1$}{1} {2}
+		\ganttbar{}     {7} {8}
+		\ganttbar{}     {13}{14}
+		\ganttbar{}     {19}{20} \\
+		\ganttbar{$T_2$}{3} {4}
+		\ganttbar{}     {15}{16} \\
+		\ganttbar{$T_3$}{9} {11}
+		\ganttbar{}     {21}{23}
+	\end{ganttchart}
+\end{center}
+
+Este diagrama se implementaría de la siguiente manera:
+
+\begin{lstlisting}[language=Pascal]
+process EjecucionCiclica;
+	var inicio : time_point := now();
+begin
+	while true do begin
+		T1(); T2(); sleep_until(inicio+6);
+		T1(); T3(); sleep_until(inicio+12);
+		T1(); T2(); sleep_until(inicio+18);
+		T1(); T3(); sleep_until(inicio+24);
+
+		inicio = inicio + 24
+	end
+end
+\end{lstlisting}
+
+\pagebreak
+
+\section{}
+
+\textbf{Comprobar si el conjunto de procesos periódicos que se muestra en la siguiente tabla es planificable con el algoritmo RMS utilizando el test basado en el factor de utilización del tiempo del procesador.
+Si el test no se cumple, ¿debemos descartar que el sistema sea planificable?}
+
+\begin{center}
+	\begin{tabular}{|c|rr|}
+		\hline
+		\textbf{Tarea} & $\boldsymbol{C_i}$ & $\boldsymbol{T_i}$ \\
+		\hline
+		\hline
+		$\boldsymbol{T_1}$ & $9$  & $30$ \\
+		$\boldsymbol{T_2}$ & $10$ & $40$ \\
+		$\boldsymbol{T_3}$ & $10$ & $50$ \\
+		\hline
+	\end{tabular}
+\end{center}
+
+Calculamos el factor de utilización:
+
+\[U=\sum_{i=1}^{3}\frac{C_i}{T_i}=\frac{9}{30}+\frac{10}{40}+\frac{10}{50}=\boldsymbol{0.75}\]
+
+Calculamos el factor de utilización máximo:
+
+\[U_0(3)=3\cdot(\sqrt[3]{2}-1)=\boldsymbol{0.7797}\]
+
+Comprobamos que, efectivamente, este conjunto de procesos es planificable por RMS, ya que $U\leq U_0(n)$.
+En caso de que no fuera éste el caso, deberíamos analizar manualmente si se pudiese realizar un cronograma satifacible.
+
+\section{}
+
+\textbf{Considérese el siguiente conjunto de tareas compuesto por tres tareas periódicas:}
+
+\begin{center}
+	\begin{tabular}{|c|rr|}
+		\hline
+		\textbf{Tarea} & $\boldsymbol{C_i}$ & $\boldsymbol{T_i}$ \\
+		\hline
+		\hline
+		$\boldsymbol{T_1}$ & $10$ & $40$ \\
+		$\boldsymbol{T_2}$ & $20$ & $60$ \\
+		$\boldsymbol{T_3}$ & $20$ & $80$ \\
+		\hline
+	\end{tabular}
+\end{center}
+
+\textbf{Comprueba la planificabilidad del conjunto de tareas con el algoritmo RMS utilizando el test basado en el factor de utilización.
+Calcular el hiperperiodo y construir el correspondiente cronograma.}
+
+Calculamos el factor de utilización:
+
+\[U=\sum_{i=1}^{3}\frac{C_i}{T_i}=\frac{10}{40}+\frac{20}{60}+\frac{20}{80}=\boldsymbol{0.8\overline{3}}\]
+
+Calculamos el factor de utilización máximo:
+
+\[U_0(3)=3\cdot(\sqrt[3]{2}-1)=\boldsymbol{0.7797}\]
+
+\pagebreak
+
+Como $U>U_0(n)$, no podemos afirmar si es o no planificable por RMS, así que nos disponemos a analizar el cronograma:
+
+\[T_m=mcm(40,60,80)=\boldsymbol{240}\]
+
+\[T_s=\boldsymbol{80}\]
+
+\begin{center}
+	\begin{ganttchart}[x unit=3mm, hgrid=true, vgrid={{dotted}}]{1}{24}
+		\gantttitle{$0$}  {8}
+		\gantttitle{$80$} {8}
+		\gantttitle{$160$}{8} \\
+
+		\ganttbar[bar/.append style={fill=red!25}]{} {1} {4}
+		\ganttbar[bar/.append style={fill=red!25}]{} {5} {8}
+		\ganttbar[bar/.append style={fill=red!25}]{} {9} {12}
+		\ganttbar[bar/.append style={fill=red!25}]{} {13}{16}
+		\ganttbar[bar/.append style={fill=red!25}]{} {17}{20}
+		\ganttbar[bar/.append style={fill=red!25}]{} {21}{24}
+		\ganttbar[bar/.append style={fill=red!75}]{$T_1$} {1} {1}
+		\ganttbar[bar/.append style={fill=red!75}]{}      {6} {6}
+		\ganttbar[bar/.append style={fill=red!75}]{}      {9} {9}
+		\ganttbar[bar/.append style={fill=red!75}]{}      {14}{14}
+		\ganttbar[bar/.append style={fill=red!75}]{}      {17}{17}
+		\ganttbar[bar/.append style={fill=red!75}]{}      {22}{22} \\
+		\ganttbar[bar/.append style={fill=blue!25}]{} {1} {6}
+		\ganttbar[bar/.append style={fill=blue!25}]{} {7} {12}
+		\ganttbar[bar/.append style={fill=blue!25}]{} {13}{18}
+		\ganttbar[bar/.append style={fill=blue!25}]{} {19}{24}
+		\ganttbar[bar/.append style={fill=blue!75}]{$T_2$} {2} {3}
+		\ganttbar[bar/.append style={fill=blue!75}]{}      {10}{11}
+		\ganttbar[bar/.append style={fill=blue!75}]{}      {15}{16}
+		\ganttbar[bar/.append style={fill=blue!75}]{}      {20}{21} \\
+		\ganttbar[bar/.append style={fill=green!25}]{} {1} {8}
+		\ganttbar[bar/.append style={fill=green!25}]{} {9} {16}
+		\ganttbar[bar/.append style={fill=green!25}]{} {17}{24}
+		\ganttbar[bar/.append style={fill=green!75}]{$T_3$} {4} {5}
+		\ganttbar[bar/.append style={fill=green!75}]{}      {12}{13}
+		\ganttbar[bar/.append style={fill=green!75}]{}      {18}{19}
+	\end{ganttchart}
+\end{center}
+
+\section{}
+
+\textbf{Comprobar la planificabilidad y construir el cronograma de acuerdo al algoritmo de planificación RMS del siguiente conjunto de tareas periódicas:}
+
+\begin{center}
+	\begin{tabular}{|c|rr|}
+		\hline
+		\textbf{Tarea} & $\boldsymbol{C_i}$ & $\boldsymbol{T_i}$ \\
+		\hline
+		\hline
+		$\boldsymbol{T_1}$ & $10$ & $40$ \\
+		$\boldsymbol{T_2}$ & $20$ & $60$ \\
+		$\boldsymbol{T_3}$ & $20$ & $80$ \\
+		\hline
+	\end{tabular}
+\end{center}
+
+\section{}
+
+\section{}
+

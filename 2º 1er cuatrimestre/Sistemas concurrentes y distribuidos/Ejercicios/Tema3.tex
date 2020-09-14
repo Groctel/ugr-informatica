@@ -1,0 +1,123 @@
+\section{}
+
+\textbf{Una tribu de antropófagos comparte una olla en la que caben M misioneros.
+Cuando algún salvaje quiere comer, se sirve directamente de la olla, a no ser que ésta esté vacía.
+Si la olla está vacía, el salvaje despertará al cocinero y esperará a que éste haya rellenado la olla con otros M misioneros.}
+
+\begin{lstlisting}[language=Pascal]
+process Salvaje[ i : 0..2 ];
+begin
+	while true do begin
+		{ esperar a servirse un misionero: }
+		.....
+		{ comer }
+		Comer();
+	end
+end
+\end{lstlisting}
+
+\begin{lstlisting}[language=Pascal]
+process Cocinero;
+begin
+	while true do begin
+		{ dormir esperando solicitud para llenar: }
+		......
+		{ confirmar que se ha rellenado la olla }
+		......
+	end
+end
+\end{lstlisting}
+
+\textbf{Implementar los procesos salvajes y cocinero usando paso de mensajes, usando un proceso olla que incluye una construcción de espera selectiva que sirve peticiones de los salvajes y el cocinero para mantener la sincronización requerida, teniendo en cuenta que:}
+
+\begin{itemize}
+	\item\textbf{La solución no debe producir interbloqueo.}
+	\item\textbf{Los salvajes podrán comer siempre que haya comida en la olla.}
+	\item\textbf{Solamente se despertará al cocinero cuando la olla esté vacía.}
+\end{itemize}
+
+\pagebreak
+
+Asumimos las siguientes constantes globales:
+
+\begin{itemize}
+	\item\code{M}\textbf{:} Numero de misioneros.
+	\item\code{S}\textbf{:} Número de salvajes.
+\end{itemize}
+
+El cocinero sólo debe preocuparse de recibir peticiones de relleno de la olla por parte de los salvajes:
+
+\begin{lstlisting}[language=Pascal]
+process Cocinero
+	var peticion : integer := ...;
+begin
+	while true do begin
+		select for salvaje := 0 to S
+			when receive (peticion, Salvaje[salvaje]) do
+				send (peticion, Olla);
+				receive (peticion, Olla);
+				send (peticion, Salvaje[salvaje]);
+		end
+	end
+end
+\end{lstlisting}
+
+Los salvajes comienzam preguntándole a la olla cuántos misioneros quedan en ella.
+Si quedan misioneros, le pide uno para comérselo.
+En caso contrario, le pide al cocinero que la rellene y luego le pide a la olla un misionero.
+
+\begin{lstlisting}[language=Pascal]
+process Salvaje [ i : 0..S ];
+	var comida    : integer := ...;
+	    consulta  : integer := ...;
+	    relleno   : integer := ...;
+	    restantes : integer := 0;
+begin
+	while true do begin
+		send (consulta, Olla);
+		receive (restantes, Olla);
+
+		if restantes == 0 then
+			send (relleno, Cocinero);
+			receive (relleno, Cocinero);
+		end
+
+		send (comida, Olla);
+		receive (comida, Olla);
+
+		Comer();
+	end
+end
+\end{lstlisting}
+
+La olla primero procesa la consulta de misioneros restantes.
+Si no quedan misioneros, se prepara para procesar el relleno de la misma por parte del cocinero.
+En cualquier caso, se prepara para recibir una petición de comida de cualquier salvaje una vez llena.
+
+\begin{lstlisting}[language=Pascal]
+process Olla
+	var comida    : integer := ...;
+	    consulta  : integer := ...;
+	    relleno   : integer := ...;
+	    restantes : integer := M;
+begin
+	while true do begin
+		select for salvaje := 0 to S do
+			when receive (consulta, Salvaje[salvaje]) do
+				send (restantes, Salvaje[salvaje]);
+		end
+
+		if restantes = 0 then
+			receive (relleno, Cocinero);
+			restantes := M;
+			send (relleno, Cocinero);
+		end
+
+		select for salvaje := 0 to S do
+			when receive (comida, Salvaje[salvaje]) do
+				send (comida, Salvaje[salvaje]);
+				restantes := restantes - 1;
+		end
+	end
+end
+\end{lstlisting}
