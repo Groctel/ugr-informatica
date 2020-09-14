@@ -1,0 +1,5 @@
+# depslib dependency file v1.0
+1512750194 source:/home/manupc/Dropbox/docencia/ALG/Tema1/Codigos/Burbuja/main.cpp
+	<iostream>
+	<ctime>
+

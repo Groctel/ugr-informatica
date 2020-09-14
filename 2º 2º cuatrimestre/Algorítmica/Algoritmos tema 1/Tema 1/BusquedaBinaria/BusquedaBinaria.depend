@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1512822187 source:/home/manupc/Dropbox/docencia/ALG/Tema1/Codigos/BusquedaBinaria/main.cpp
+	<iostream>
+	<ctime>
+	<cstdlib>
+

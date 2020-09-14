@@ -1,0 +1,35 @@
+\documentclass[10pt]{report}
+\usepackage[spanish]{babel}
+
+% Document settings
+
+\usepackage{titling}
+	\author{Atanasio José Rubio Gil}
+	\title{Algorítmica}
+	\date{\today}
+
+\usepackage[title=\thetitle]{aqademia}
+
+\aqchap{Tema }
+\aqssec{}
+
+\usepackage{tikz}
+\usepackage{pgfplots}
+\graphicspath{{img/}}
+
+% Document composition
+
+\begin{document}
+
+\aqtitlepage{Grado en Ingeniería Informática}
+            {Trabajo autónomo}
+            {https://github.com/Groctel/ugr-informatica}
+\tableofcontents
+
+\input{TrabajoAutonomo/Tema2.tex}
+
+\aqapp{Apéndice }
+
+\input{TrabajoAutonomo/Bibliografia.tex}
+
+\end{document}
