@@ -1,0 +1,210 @@
+\section{\code{Ventas}}
+
+\subsubsection{Conocer el nombre de los clientes cuyo agente es del mismo área (\code{working\_area})}
+
+\begin{lstlisting}[language=SQL]
+SELECT Cliente.name
+FROM   Agente, Cliente
+WHERE  Agente.working_area = Cliente.working_area;
+\end{lstlisting}
+
+\[\pi_{Cliente.name}(Agente\bowtie_{working\_area}Cliente)\]
+
+\subsubsection{Agentes con la comisión más alta}
+
+\begin{lstlisting}[language=SQL]
+SELECT *
+FROM   Agente
+WHERE  commission = (
+	SELECT MAX(commission)
+	FROM   Agente
+);
+\end{lstlisting}
+
+\begin{lstlisting}[language=SQL]
+SELECT *
+FROM   Agente
+WHERE  commission IN (
+	SELECT MAX(commission)
+	FROM   Agente
+);
+\end{lstlisting}
+
+\begin{lstlisting}[language=SQL]
+SELECT *
+FROM   Agente
+WHERE  commission >= ALL (
+	SELECT commission
+	FROM   Agente
+);
+\end{lstlisting}
+
+\[
+\begin{split}
+	& \rho(Agente)=a1 \\
+	& \rho(Agente)=a2 \\
+	& \sigma(Agente)-\pi_{a1.commission}\big(\sigma_{a1.commission<a2.commisison}(a1\times a2)\big)
+\end{split}
+\]
+
+\pagebreak
+
+\subsubsection{Nombres de clientes de agentes con la comisión más baja}
+
+\begin{lstlisting}[language=SQL]
+SELECT Cliente.name
+FROM   Agente, Cliente
+WHERE  Agente.code       = Cliente.agent_code
+AND    Agente.commission = (
+	SELECT MIN(commission)
+	FROM   Agente
+);
+\end{lstlisting}
+
+\begin{lstlisting}[language=SQL]
+SELECT Cliente.name
+FROM   Agente, Cliente
+WHERE  Agente.code       = Cliente.agent_code
+AND    Agente.commission IN (
+	SELECT MIN(commission)
+	FROM   Agente
+);
+\end{lstlisting}
+
+\begin{lstlisting}[language=SQL]
+SELECT Cliente.name
+FROM   Agente, Cliente
+WHERE  Agente.code        = Cliente.agent_code
+AND    Agente.commission <= ALL (
+	SELECT MIN(commission)
+	FROM   Agente
+);
+\end{lstlisting}
+
+\[
+\begin{split}
+	& \rho(Agente)=a1 \\
+	& \rho(Agente)=a2 \\
+	& Cliente\bowtie \Big(Agente-\pi_{a1.commission}\big(\sigma_{a1.commission>a2.commisison}(a1\times a2)\big)\Big)
+\end{split}
+\]
+
+\subsubsection{Ciudad de clientes que realizaron los pedidos más recientes (fecha del pedido = \code{ped\_date})}
+
+\begin{lstlisting}[language=SQL]
+SELECT city
+FROM   Cliente, Pedido
+WHERE  Cliente.code = Pedido.client_code
+AND    ped_date = (
+	SELECT MAX(ped_date)
+	FROM   Pedido
+);
+\end{lstlisting}
+
+\begin{lstlisting}[language=SQL]
+SELECT city
+FROM   Cliente, Pedido
+WHERE  Cliente.code = Pedido.client_code
+AND    ped_date IN (
+	SELECT MAX(ped_date)
+	FROM   Pedido
+);
+\end{lstlisting}
+
+\begin{lstlisting}[language=SQL]
+SELECT city
+FROM   Cliente, Pedido
+WHERE  Cliente.code = Pedido.client_code
+AND    ped_date >= ALL (
+	SELECT ped_date
+	FROM   Pedido
+);
+\end{lstlisting}
+
+\[
+\begin{split}
+	& \rho(Agente)=a1 \\
+	& \rho(Agente)=a2 \\
+	& \pi_{city}\bigg(Cliente\bowtie\Big(\sigma\big(Pedido\big)-\pi_{p1.ped\_date}\big(\sigma_{p1.ped\_date<p2.ped\_date}(p1\times p2)\big)\Big)\bigg)
+\end{split}
+\]
+
+\subsubsection{Agentes que son responsables de los pedidos de todos los clientes de su misma área}
+
+\begin{lstlisting}[language=SQL]
+SELECT *
+FROM   Agente
+WHERE NOT EXISTS (
+	SELECT *
+	FROM   Agente
+	WHERE NOT EXISTS (
+		SELECT *
+		FROM   Agente, Cliente, Pedido
+		WHERE  Agente.code         = Pedido.agent_code
+		AND    Pedido.client_code  = Cliente.code
+		AND    Agente.working_area = Cliente.working_area
+	)
+);
+\end{lstlisting}
+
+\[Agente\bowtie Pedido\div Agente\bowtie_{working\_area}Cliente\]
+
+\subsubsection{Nombres de Clientes y de agentes, junto con el país, que son del mismo país}
+
+\begin{lstlisting}[language=SQL]
+SELECT Agente.name, Cliente.name, Agente.country
+FROM   Agente, Cliente
+WHERE  Agente.country = Cliente.country;
+\end{lstlisting}
+
+\[\pi_{Agente.name,Cliente.name,Agente.country}(Agente\bowtie_{country}Cliente)\]
+
+\subsubsection{Listado que contenga nombres de clientes de máxima calificación (grade) y de mínima calificación}
+
+\begin{lstlisting}[language=SQL]
+SELECT name
+FROM   Cliente
+WHERE  grade = (
+	SELECT MAX(grade)
+	FROM   Cliente
+)
+OR grade = (
+	SELECT MIN(grade)
+	FROM   Cliente
+);
+\end{lstlisting}
+
+\subsubsection{Nombre del cliente que hizo el pedido más antiguo}
+
+\begin{lstlisting}[language=SQL]
+SELECT name
+FROM   Cliente, Pedido
+WHERE  Cliente.code = Pedido.client_code
+AND    ped_date = (
+	SELECT MIN(ped_date)
+	FROM Pedido
+);
+\end{lstlisting}
+
+\subsubsection{Nombre de agentes que sólo tienen un único cliente}
+
+\begin{lstlisting}[language=SQL]
+SELECT Agente.name
+FROM   Agente, Cliente
+WHERE  Agente.code = Cliente.agent_code
+GROUP BY Agente.code
+HAVING COUNT(DISTINCT Cliente.code) = 1
+\end{lstlisting}
+
+\subsubsection{Nombre de agentes que no fueron responsables de ningún pedido en agosto de 2008}
+
+\begin{lstlisting}[language=SQL]
+SELECT Agente.name
+FROM   Agente
+WHERE NOT EXISTS (
+	SELECT *
+	FROM   Pedido
+	WHERE  Agente.code = Pedido.agent_code
+	AND    ped_date BETWEEN '08/01/2008' AND '08/31/2008'
+);
+\end{lstlisting}

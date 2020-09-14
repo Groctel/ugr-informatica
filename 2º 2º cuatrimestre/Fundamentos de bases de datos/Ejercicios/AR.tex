@@ -1,0 +1,691 @@
+\chapter{Álgebra relacional}
+
+\section{BikeStores}
+
+\subsubsection{Seleccionar productos con precio superior a 1000}
+
+\begin{lstlisting}[language=SQL]
+SELECT *
+FROM   Products
+WHERE  list_price > 1000;
+\end{lstlisting}
+
+\[\sigma_{list\_price>1000}(Products)\]
+
+\subsubsection{Seleccionar nombres y correos electrónicos de tiendas de `Santa Cruz'}
+
+\begin{lstlisting}[language=SQL]
+SELECT store_name, email
+FROM   Stores
+WHERE  city = 'Santa Cruz';
+\end{lstlisting}
+
+\[\pi_{store\_name,email}(\sigma_{city='\text{Santa Cruz}'}(Stores))\]
+
+\subsubsection{Seleccionar precio$+$descuento de todos los items vendidos}
+
+\begin{lstlisting}[language=SQL]
+SELECT list_price+discount AS "discounted_price"
+FROM   Order_Items;
+\end{lstlisting}
+
+\[\pi_{(price+discount)/discounted\_price}(Order\_Items)\]
+
+\subsubsection{Seleccionar el email del personal cuyo nombre y apellidos es `Fabiola Jackson'}
+
+\begin{lstlisting}[language=SQL]
+SELECT email
+FROM   Staffs
+WHERE  first_name = 'Fabiola'
+AND    last_name  = 'Jackson';
+\end{lstlisting}
+
+\[\pi_{email}(\sigma_{first\_name='\text{Fabiola}'\land last\_name='\text{Jackson}'}(Staffs))\]
+
+\subsubsection{Seleccionar el personal que no tenga manager. Es obligatorio hacer uso de la condición \code{IS NULL} en la consulta}
+
+\begin{lstlisting}[language=SQL]
+SELECT *
+FROM   Staffs
+WHERE  manager_id IS NULL;
+\end{lstlisting}
+
+\[\sigma_{manager\_id=null}(Staffs)\]
+
+\subsubsection{Seleccionar nombre y apellidos de personal (Staffs) que hayan procesado pedidos de clientes de la ciudad de `New York'}
+
+\begin{lstlisting}[language=SQL]
+SELECT Staffs.first_name, Staffs.last_name
+FROM   Customers, Orders, Staffs
+WHERE  Staffs.staff_id    = Orders.staff_id
+AND    Orders.customer_id = Customers.customer_id
+AND    city               = 'New York';
+\end{lstlisting}
+
+\[\pi_{Staffs.first\_name,Staffs.last\_name}(Staffs\bowtie Orders\bowtie\sigma_{city='New\ York'}(Customers))\]
+
+\subsubsection{Seleccionar nombres de tiendas que tienen productos de la categoría `Mountain Bikes'}
+
+\begin{lstlisting}[language=SQL]
+SELECT store_name
+FROM   Categories, Products, Stocks, Stores
+WHERE  Stores.store_id          = Stocks.store_id
+AND    Stocks.product_id        = Products.product_id
+AND    Products.category_id     = Categories.category_id
+AND    Categories.category_name = 'Mountain Bikes';
+\end{lstlisting}
+
+\[\pi_{store\_name}(Stores\bowtie Stocks\bowtie Products\bowtie\sigma_{category\_name='\text{Mountain Bikes}'}(Categories))\]
+
+\subsubsection{Seleccionar nombres de productos vendidos, y cantidad, a clientes que viven en `Bronx'}
+
+\begin{lstlisting}[language=SQL]
+SELECT product_name, quantity
+FROM   Customers, Products, Order_Items, Orders
+WHERE  Customers.customer_id  = Orders.customer_id
+AND    Orders.order_id        = Order_Items.order_id
+AND    Order_Items.product_id = Products.product_id
+AND    Customers.city         = 'Bronx';
+\end{lstlisting}
+
+\[\pi_{product\_name,quantity}(\sigma_{city='\text{Bronx}'}Customers\bowtie Orders\bowtie Order\_Items\bowtie Products)\]
+
+\pagebreak
+
+\subsubsection{Seleccionar nombre y apellidos de clientes que han comprado productos de la categoría `Mountain Bikes'}
+
+\begin{lstlisting}[language=SQL]
+SELECT DISTINCT first_name, last_name
+FROM   Categories, Customers, Order_Items, Orders, Products
+WHERE  Customers.customer_id    = Orders.customer_id
+AND    Orders.order_id          = Order_Items.order_id
+AND    Order_Items.product_id   = Products.product_id
+AND    Products.category_id     = Categories.category_id
+AND    Categories.category_name = 'Mountain Bikes';
+\end{lstlisting}
+
+\[
+\begin{split}
+\pi_{first\_name,last\_name}(Customers\bowtie Orders\bowtie Order\_Items\bowtie \\
+Products\bowtie\sigma_{category\_name='\text{Mountain Bikes}'}(Category))
+\end{split}
+\]
+
+\subsubsection{Seleccionar las marcas que ha vendido el personal de la tienda localizada en `Santa Cruz'}
+
+\begin{lstlisting}[language=SQL]
+SELECT DISTINCT brand_name
+FROM   Brands, Order_Items, Orders, Products, Stores
+WHERE  Stores.store_id        = Orders.store_id
+AND    Orders.order_id        = Order_Items.order_id
+AND    Order_Items.product_id = Products.product_id
+AND    Products.brand_id      = Brands.brand_id
+AND    city                   = 'Santa Cruz';
+\end{lstlisting}
+
+\[\pi_{brand\_name}(\sigma_{city='\text{Santa Cruz}'}Stores\bowtie Orders\bowtie Order\_Items\bowtie Products)\]
+
+\subsubsection{Seleccionar Descuento mínimo, máximo y promedio que se hace de los items vendidos}
+
+\begin{lstlisting}[language=SQL]
+SELECT MIN(discount), MAX(discount), AVG(discount)
+FROM   Order_Items;
+\end{lstlisting}
+
+\[\pi_{\min(discount),\max(discount),\text{avg}(discount)}(Order\_Items)\]
+
+\subsubsection{Seleccionar Descuento mínimo, máximo y promedio que se hace de los items vendidos a personas de `New York'}
+
+\begin{lstlisting}[language=SQL]
+SELECT MIN(discount), MAX(discount), AVG(discount)
+FROM   Customers, Order_Items, Orders
+WHERE  Order_Items.order_id = Orders.order_id
+AND    Orders.customer_id   = Customers.customer_id
+AND    Customers.city       = 'New York';
+\end{lstlisting}
+
+\[\pi_{\min(discount),\max(discount),\text{avg}(discount)}(Order\_Items\bowtie Orders\bowtie\sigma_{city='\text{New York}'}(Customers))\]
+
+\subsubsection{Seleccionar marcas que tengan algún producto que no esté en stock}
+
+\begin{lstlisting}[language=SQL]
+SELECT DISTINCT brand_name
+FROM   Products, Brands
+WHERE  Products.brand_id = Brands.brand_id
+AND NOT EXISTS (
+	SELECT *
+	FROM   Stocks
+	WHERE  Stocks.product_id = Products.product_id
+);
+\end{lstlisting}
+
+\[\pi_{brand\_name}(Brands\bowtie Products)-\pi{brand\_name}(Brand\bowtie Products\bowtie Stocks)\]
+
+\subsubsection{Seleccionar categorías que no tengan productos que no estén en stock (PISTA\@: Usar consultas anidadas haciendo uso de \code{NOT EXISTS})}
+
+\begin{lstlisting}[language=SQL]
+SELECT *
+FROM   Categories
+WHERE NOT EXISTS (
+	SELECT *
+	FROM   Products p
+	WHERE  Categories.category_id = p.category_id
+	AND NOT EXISTS (
+		SELECT *
+		FROM   Stocks
+		WHERE  product_id = p.product_id
+	)
+);
+\end{lstlisting}
+
+\[\sigma(Categories)-((Categories\bowtie\rho_p(Products))-(p\bowtie Stocks))\]
+
+\subsubsection{Seleccionar nombres de productos que no hayan sido vendidos}
+
+\begin{lstlisting}[language=SQL]
+SELECT product_name
+FROM   Products
+WHERE NOT EXISTS (
+	SELECT *
+	FROM   Order_Items
+	WHERE  Products.product_id = Order_Items.product_id
+);
+\end{lstlisting}
+
+\[\pi_{product\_name}(Products)-(Products\bowtie Order\_Items)\]
+
+\pagebreak
+
+\subsubsection{Seleccionar nombre de clientes que hayan comprado la máxima cantidad de algún producto, junto con el nombre del producto}
+
+\begin{lstlisting}[language=SQL]
+SELECT DISTINCT first_name, product_name
+FROM   Customers, Order_Items, Orders, Products
+WHERE  Customers.customer_id  = Orders.customer_id
+AND    Orders.order_id        = Order_Items.order_id
+AND    Order_Items.product_id = Products.product_id
+AND    quantity IN (
+	SELECT MAX(quantity)
+	FROM   Order_Items
+);
+\end{lstlisting}
+
+\[\pi_{first\_name,product\_name}(Customers\bowtie Orders\bowtie\sigma_{quantity=\max(quantity)}Order\_Items\bowtie Products)\]
+
+\subsubsection{Seleccionar nombre y apellidos de personal que no haya vendido nada en (es decir, que no haya procesado pedidos en ese año)}
+
+\begin{lstlisting}[language=SQL]
+SELECT first_name, last_name
+FROM   Staffs s
+WHERE NOT EXISTS (
+	SELECT *
+	FROM   Orders
+	WHERE  Orders.staff_id = s.staff_id
+);
+\end{lstlisting}
+
+\[\pi_{first\_name,last\_name}(\rho_s(Staffs))-(s\bowtie Orders)\]
+
+\subsubsection{Seleccionar nombres de tiendas y clientes que sean de la misma ciudad}
+
+\begin{lstlisting}[language=SQL]
+SELECT store_name, first_name
+FROM   Customers, Stores
+WHERE  Customers.city = Stores.city;
+\end{lstlisting}
+
+\[\pi_{Customers.first\_name,Stores.store\_name}(\sigma_{Customers.city=Stores.city}(Customers\times Stores))\]
+
+\subsubsection{Seleccionar nombres de tiendas y clientes que sean de la misma ciudad, y donde los clientes hayan hecho pedidos a otras tiendas que no sean esas}
+
+\begin{lstlisting}[language=SQL]
+SELECT store_name, first_name
+FROM   Customers c, Stores s
+WHERE  c.city = s.city
+AND EXISTS (
+	SELECT *
+	FROM   Orders
+	WHERE  c.customer_id    = Orders.customer_id
+	AND    Orders.store_id != s.store_id
+);
+\end{lstlisting}
+
+\[\pi_{store\_name,first\_name}(\sigma_{c.city=s.city}(\rho_c(Customers)\times\rho_s(Stores)))\cap(c\bowtie Orders\triangleright s)\]
+
+\subsubsection{Seleccionar nombres de clientes y su ciudad que hayan comprado los productos más caros.}
+
+\begin{lstlisting}[language=SQL]
+SELECT DISTINCT first_name, city
+FROM   Customers, Order_Items, Orders, Products
+WHERE  Customers.customer_id = Orders.customer_id
+AND    Orders.order_id = Order_Items.order_id
+AND    Order_Items.product_id = Products.product_id
+AND    Products.list_price IN (
+	SELECT MAX(list_price)
+	FROM   Products
+);
+\end{lstlisting}
+
+\[\pi_{first\_name,city}(Customers\bowtie Orders\bowtie Order\_Items\bowtie \sigma_{list\_price=\max(list\_price)}(Products))\]
+
+\subsubsection{Seleccionar nombre de tiendas que tengan en stock productos de al menos dos marcas distintas}
+
+\begin{lstlisting}[language=SQL]
+SELECT DISTINCT store_name
+FROM   Stocks, Stores, Products, Brands b1, Brands b2
+WHERE  Stores.store_id   = Stocks.store_id
+AND    Stocks.product_id = Products.product_id
+AND    Products.brand_id = b1.brand_id
+AND    Products.brand_id = b2.brand_id
+AND    b1.brand_id != b2.brand_id;
+\end{lstlisting}
+
+\[\pi_{store\_name}(Stores\bowtie Stocks\bowtie Products\bowtie\sigma_{b1.brand\_id\neq b2.brand\_id}\rho_{b1,b2}(Brands))\]
+
+\subsubsection{Seleccionar nombre y teléfono de clientes que sean de `New York' o de `Bronx'}
+
+\begin{lstlisting}[language=SQL]
+SELECT first_name, phone
+FROM
+	(
+		(
+			SELECT *
+			FROM   Customers
+			WHERE  city='New York'
+		)
+		UNION
+		(
+			SELECT *
+			FROM   Customers
+			WHERE  city='Bronx'
+		)
+	);
+\end{lstlisting}
+
+\[\pi_{first\_name,phone}((\sigma_{city='\text{New York}'}(Customers))\cup(\sigma_{city='\text{Bronx}'}(Customers)))\]
+
+\pagebreak
+
+\subsubsection{Encontrar el producto de precio máximo USANDO OPERADORES CONJUNTISTAS (sin usar operadores adicionales como min, max, all, etc.)}
+
+\begin{lstlisting}[language=SQL]
+SELECT product_name
+FROM
+	(
+		(
+			SELECT *
+			FROM   Products
+		)
+		MINUS
+		(
+			SELECT p1.*
+			FROM   Products p1, Products p2
+			WHERE  p1.list_price < p2.list_price
+		)
+	);
+\end{lstlisting}
+
+\[\pi_{product\_name}(\sigma(Products)-\pi_{p1}(\sigma_{p1.list\_price<p2.list\_price}(\rho_{p1,p2}(Products))))\]
+
+\subsubsection{Encontrar los nombres de productos que no estén en stock USANDO OPERADORES CONJUNTISTAS}
+
+\begin{lstlisting}[language=SQL]
+SELECT product_name
+FROM
+	(
+		(
+			SELECT *
+			FROM   Products
+		)
+		MINUS
+		(
+			SELECT Products.*
+			FROM   Products, Stocks
+			WHERE  Products.product_id = Stocks.product_id
+		)
+	);
+\end{lstlisting}
+
+\[\pi_{product\_name}(\sigma(Products)-\pi_{Products}(Products\bowtie Stocks))\]
+
+\pagebreak
+
+\subsubsection{Encontrar los nombres de productos que hayan sido vendidos por al menos dos tiendas distintas}
+
+\begin{lstlisting}[language=SQL]
+SELECT DISTINCT product_name
+FROM
+	(
+		(
+			SELECT Products.*
+			FROM   Order_Items, Orders, Products, Stores
+			WHERE  Stores.store_id = Orders.store_id
+			AND    Orders.order_id = Order_Items.order_id
+			AND    Order_Items.product_id = Products.product_id
+		)
+		MINUS
+		(
+			SELECT Products.*
+			FROM   Order_Items, Orders, Products, Stores
+			WHERE  Stores.store_id = Orders.store_id
+			AND    Orders.order_id = Order_Items.order_id
+			AND    Order_Items.product_id = Products.product_id
+			AND NOT EXISTS (
+				SELECT *
+				FROM   Stores s1, Stores s2
+				WHERE  s1.store_id = s2.store_id
+			)
+		)
+	);
+\end{lstlisting}
+
+\[
+\begin{split}
+\pi_{product\_name}((\pi_{Products}(Stores\bowtie Orders\bowtie Order\_Items\bowtie Products))- \\
+(\pi_{Products}((\rho_{s1,s2}(Stores)\bowtie Orders\bowtie Order\_Items\bowtie Products))-\sigma_{s1=s1}(Stores)))
+\end{split}
+\]
+
+\subsubsection{Marcas que tengan productos de todas las categorías}
+
+\begin{lstlisting}[language=SQL]
+SELECT DISTINCT *
+FROM   Products
+AND NOT EXISTS (
+	(
+		SELECT *
+		FROM   Categories
+	)
+	MINUS
+	(
+		SELECT *
+		FROM   Categories
+		WHERE  Categories.category_id = Products.category_id
+	)
+);
+\end{lstlisting}
+
+\[\sigma(Products)\div\sigma(Categories)\]
+
+\pagebreak
+
+\subsubsection{Categorías que tengan productos de todas las marcas}
+
+\begin{lstlisting}[language=SQL]
+SELECT DISTINCT *
+FROM   Categories
+AND NOT EXISTS (
+	(
+		SELECT *
+		FROM   Products, Brands
+	)
+	MINUS
+	(
+		SELECT *
+		FROM   Products, Brands
+		WHERE  Brands.brand_id      = Products.product_id
+		AND    Products.category_id = Categories.category_id
+	)
+);
+\end{lstlisting}
+
+\[\sigma(Categories)\div(Products\bowtie Brands)\]
+
+\subsubsection{Clientes que hayan realizado pedidos en todas las tiendas}
+
+\begin{lstlisting}[language=SQL]
+SELECT first_name, last_name
+FROM   Customers
+WHERE NOT EXISTS (
+	(
+		SELECT *
+		FROM   Orders, Stores
+	)
+	MINUS
+	(
+		SELECT *
+		FROM   Orders, Stores
+		WHERE  Stores.store_id    = Orders.store_id
+		AND    Orders.customer_id = Customers.customer_id
+	)
+);
+\end{lstlisting}
+
+\[\pi_{first\_name,last\_name}(Customers)\div(Orders\bowtie Stores)\]
+
+\pagebreak
+
+\subsubsection{Tiendas (id y nombre) que hayan vendido todos los productos de la marca `Strider'}
+
+\begin{lstlisting}[language=SQL]
+SELECT store_id, store_name
+FROM   Stores
+WHERE NOT EXISTS (
+	(
+		SELECT *
+		FROM   Brands
+		WHERE  brand_name = 'Strider'
+	)
+	MINUS
+	(
+		SELECT Brands.*
+		FROM   Brands, Order_Items, Orders, Products
+		WHERE  Stores.store_id        = Orders.store_id
+		AND    Orders.order_id        = Order_Items.order_id
+		AND    Order_Items.product_id = Products.product_id
+		AND    Products.brand_id      = Brands.brand_id
+	)
+);
+\end{lstlisting}
+
+\[\pi_{store\_id,store\_name}(Stores)\div(Orders\bowtie Order\_Items\bowtie Products\bowtie\sigma_{brand\_name='\text{Strider}'}(Brands))\]
+
+\subsubsection{Tiendas que hayan vendido productos de todas las categorías}
+
+\begin{lstlisting}[language=SQL]
+SELECT *
+FROM   Stores
+WHERE NOT EXISTS (
+	(
+		SELECT *
+		FROM   Categories
+	)
+	MINUS
+	(
+		SELECT Categories.*
+		FROM   Categories, Order_Items, Orders, Products
+		WHERE  Stores.store_id        = Orders.store_id
+		AND    Orders.order_id        = Order_Items.order_id
+		AND    Order_Items.product_id = Products.product_id
+		AND    Products.category_id   = Categories.category_id
+	)
+);
+\end{lstlisting}
+
+\[\sigma(Stores)\div(Orders\bowtie Order\_Items\bowtie Products\bowtie Categories)\]
+
+\pagebreak
+
+\subsubsection{Tiendas que hayan vendido productos de todas las marcas}
+
+\begin{lstlisting}[language=SQL]
+SELECT *
+FROM   Stores
+WHERE NOT EXISTS (
+	(
+		SELECT Brands.*
+		FROM   Brands
+	)
+	MINUS
+	(
+		SELECT Brands.*
+		FROM   Order_Items, Orders, Products, Brands
+		WHERE  Stores.store_id        = Orders.store_id
+		AND    Orders.order_id        = Order_Items.order_id
+		AND    Order_Items.product_id = Products.product_id
+		AND    Products.brand_id      = Brands.brand_id
+	)
+);
+\end{lstlisting}
+
+\[\sigma(Stores)\div(Orders\bowtie Order\_Items\bowtie Products\bowtie Brands)\]
+
+\subsubsection{Categorías que hayan sido vendidas por todas las tiendas}
+
+\begin{lstlisting}[language=SQL]
+SELECT *
+FROM   Categories
+WHERE NOT EXISTS (
+	(
+		SELECT Stores.*
+		FROM   Stores
+	)
+	MINUS
+	(
+		SELECT Stores.*
+		FROM   Order_Items, Orders, Products, Stores
+		WHERE  Stores.store_id        = Orders.store_id
+		AND    Orders.order_id        = Order_Items.order_id
+		AND    Order_Items.product_id = Products.product_id
+		AND    Products.category_id   = Categories.category_id
+	)
+);
+\end{lstlisting}
+
+\[\sigma(Categories)\div(Stores\bowtie Orders\bowtie Order\_Items\bowtie Products\bowtie Categories)\]
+
+\pagebreak
+
+\section{Agentes}
+
+\subsubsection{Conocer el nombre de los clientes cuyo agente es del mismo área (working area)}
+
+\begin{lstlisting}[language=SQL]
+SELECT Cliente.name
+FROM   Agentes, Cliente
+WHERE  Agentes.code         = Cliente.agent_code
+AND    Agentes.working_area = Cliente.working_area;
+\end{lstlisting}
+
+\[\pi_{Cliente.name}\sigma_{Agentes.working\_area=Cliente.working\_area}(Agentes\bowtie Clientes)\]
+
+\subsubsection{Agentes con la comisión más alta}
+
+\begin{lstlisting}[language=SQL]
+SELECT *
+FROM   Agentes
+WHERE  commission IN (
+	SELECT MAX(commission)
+	FROM   Agentes
+);
+\end{lstlisting}
+
+\[\sigma_{commission=\max(commission)}(Agentes)\]
+
+\subsubsection{Nombres de clientes de agentes con la comisión más baja}
+
+\begin{lstlisting}[language=SQL]
+SELECT Cliente.name
+FROM   Agentes, Cliente
+WHERE  Agentes.code = Cliente.agent_code
+AND    commission IN (
+	SELECT MIN(commission)
+	FROM   Agentes
+);
+\end{lstlisting}
+
+\[\pi_{Cliente.name}(\sigma_{commission=\max(commission)}(Agentes)\bowtie Cliente)\]
+
+\subsubsection{Ciudad de clientes que realizaron los pedidos más recientes (fecha del pedido=ped\_date)}
+
+\begin{lstlisting}[language=SQL]
+SELECT city
+FROM   Cliente, Pedidos
+WHERE  Cliente.code = Pedidos.client_code
+AND    Pedidos.ped_date IN (
+	SELECT MAX(ped_date)
+	FROM   Pedidos
+);
+\end{lstlisting}
+
+\[\pi_{city}(\sigma_{ped\_date=\max(ped\_date)}(Cliente)\bowtie Pedidos)\]
+
+\subsubsection{Agentes que son responsables de los pedidos de todos los clientes de su misma área}
+
+\begin{lstlisting}[language=SQL]
+SELECT Agentes.*
+FROM   Agentes, Cliente, Pedidos
+WHERE  Pedidos.agent_code   = Agentes.code
+AND    Pedidos.client_code  = Cliente.code
+AND    Agentes.working_area = Cliente.working_area;
+\end{lstlisting}
+
+\[\pi_{Agentes}(\sigma_{Agentes.working\_area=Cliente.working\_area}(Agentes\bowtie Pedidos\bowtie Cliente))\]
+
+\subsubsection{Nombres de Clientes y de agentes, junto con el país, que son del mismo país}
+
+\begin{lstlisting}[language=SQL]
+SELECT Agentes.name, Cliente.name, Agentes.country
+FROM   Agentes, Cliente
+WHERE  Agentes.code    = Cliente.agent_code
+AND    Agentes.country = Cliente.country;
+\end{lstlisting}
+
+\[\pi_{Agentes.name,Cliente.name,Agentes.country}(\sigma_{Agentes.country=Cliente.country}(Agentes\bowtie Cliente))\]
+
+\subsubsection{Listado que contenga nombres de clientes de máxima calificación (grade) y de mínima calificación}
+
+\begin{lstlisting}[language=SQL]
+SELECT MAX(grade), MIN(grade)
+FROM   Cliente
+\end{lstlisting}
+
+\[\pi_{\max(grade),\min(grade)}(Cliente)\]
+
+\subsubsection{Nombre del cliente que hizo el pedido más antiguo}
+
+\begin{lstlisting}[language=SQL]
+SELECT name
+FROM   Cliente, Pedidos
+WHERE  Cliente.code = Pedidos.client_code
+AND    Pedidos.ped_date IN (
+	SELECT MAX(ped_date)
+	FROM   Pedidos
+);
+\end{lstlisting}
+
+\[\pi_{name}(Cliente\bowtie\sigma_{ped\_date=\max(ped\_date)}(Pedidos))\]
+
+\pagebreak
+
+\subsubsection{Nombre de agentes que sólo tienen un único cliente}
+
+\begin{lstlisting}[language=SQL]
+SELECT name
+FROM
+	(
+		SELECT Agentes.name, COUNT(*) AS total
+		FROM   Agentes, Cliente
+		WHERE  Agentes.code = Cliente.agent_code
+		GROUP  BY Agentes.name
+	)
+WHERE total = 1;
+\end{lstlisting}
+
+\[\pi_{name}\sigma_{total=1}(G_{name,count(\star)}(Agentes)\bowtie Cliente)\]
+
+\subsubsection{Nombre de agentes que no fueron responsables de ningún pedido en agosto de 2008}
+
+\begin{lstlisting}[language=SQL]
+SELECT DISTINCT Agentes.name
+FROM Agentes
+WHERE NOT EXISTS (
+	SELECT *
+	FROM   Pedidos
+	WHERE  Agentes.code  = Pedidos.agent_code
+	AND    ped_date     <= '01-AUG-2008'
+	AND    ped_date     >= '31-AUG-2008'
+);
+\end{lstlisting}
+
+\[\pi_{name}(Agentes)-(Agentes\bowtie\sigma_{'\text{01-AUG-2008}'\leq ped\_date\land'\text{31-AUG-2008}'\geq ped\_date}(Pedidos))\]

@@ -1,0 +1,124 @@
+\section{\code{BikeStores}}
+
+\subsubsection{Seleccionar productos con precio superior a 1000}
+
+\begin{lstlisting}[language=SQL]
+SELECT *
+FROM   Product
+WHERE  list_price > 1000;
+\end{lstlisting}
+
+\[\sigma_{list\_price>1000}(Producto)\]
+
+\subsubsection{Seleccionar nombres y correos electrónicos de tiendas de Santa Cruz}
+
+\begin{lstlisting}[language=SQL]
+SELECT email
+FROM   Store
+WHERE  city = 'Santa Cruz';
+\end{lstlisting}
+
+\[\pi_{email}\big(\sigma_{city=\text{`Santa\ Cruz'}}(Store)\big)\]
+
+\subsubsection{Seleccionar precio$+$descuento de todos los items vendidos}
+
+\begin{lstlisting}[language=SQL]
+SELECT list_price+discount AS "discounted_price"
+FROM   OrderItem
+\end{lstlisting}
+
+\[\pi_{list\_price+discount}(OrderItem)\]
+
+\subsubsection{Seleccionar el email del personal cuyo nombre y apellidos es Fabiola Jackson}
+
+\begin{lstlisting}[language=SQL]
+SELECT email
+FROM   Staff
+WHERE  first_name = 'Fabiola'
+AND    last_name  = 'Jackson'
+\end{lstlisting}
+
+\[\pi_{email}\big(\sigma_{first\_name=\text{`Fabiola'}\land last\_name=\text{`Jackson'}}(Staff)\big)\]
+
+\subsubsection{Seleccionar el personal que no tenga manager. Es obligatorio hacer uso de la condición IS NULL en la consulta}
+
+\begin{lstlisting}[language=SQL]
+SELECT *
+FROM   Staff
+WHERE  manager_id IS NULL;
+\end{lstlisting}
+
+\[
+\begin{split}
+	& \rho(Staff)=s1 \\
+	& \rho(Staff)=s2 \\
+	& \sigma(Staff)-(s1\bowtie s2)
+\end{split}
+\]
+
+\subsubsection{Seleccionar nombre y apellidos de personal (Staff) que hayan procesado pedidos de clientes de la ciudad de New York}
+
+\begin{lstlisting}[language=SQL]
+SELECT DISTINCT Staff.first_name, Staff.last_name
+FROM   Customer, PlacedOrder, Staff
+WHERE  Staff.staff_id          = PlacedOrder.staff_id
+AND    PlacedOrder.customer_id = Customer.customer_id
+AND    city                    = 'New York';
+\end{lstlisting}
+
+\[\pi_{Staff.first\_name, Staff.last\_name}\big(Staff\bowtie PlacedOrder\bowtie\sigma_{city=\text{`New York'}}(Customer)\big)\]
+
+\subsubsection{Seleccionar nombres de tiendas que tienen productos de la categoría Mountain Bikes}
+
+\begin{lstlisting}[language=SQL]
+SELECT DISTINCT store_name
+FROM   Category, Product, Stock, Store
+WHERE  Store.store_id      = Stock.store_id
+AND    Stock.product_id    = Product.product_id
+AND    Product.category_id = Category.category_id
+AND    category_name       = 'Mountain Bikes'
+\end{lstlisting}
+
+\[\pi_{store\_name}\big(Store\bowtie Stock\bowtie Product\bowtie\sigma_{category\_name=\text{`Mountain Bikes'}}(Category)\big)\]
+
+\subsubsection{Seleccionar nombres de productos vendidos y cantidad a clientes que viven en Bronx}
+
+\begin{lstlisting}[language=SQL]
+SELECT product_name, quantity
+FROM   Customer, OrderItem, PlacedOrder, Product, Store
+WHERE  Store.store_id          = PlacedOrder.store_id
+AND    PlacedOrder.customer_id = Customer.customer_id
+AND    PlacedOrder.order_id    = OrderItem.order_id
+AND    OrderItem.product_id    = Product.product_id
+AND    Customer.city           = 'Bronx'
+\end{lstlisting}
+
+\[\pi_{product\_name,quantity}\big(Store\bowtie PlacedOrder\bowtie\sigma_{city=\text{`Bronx'}}(Customer)\bowtie OrderItem\bowtie Product\big)\]
+
+\subsubsection{Seleccionar nombre y apellidos de clientes que han comprado productos de la categoría Mountain Bikes}
+
+\begin{lstlisting}[language=SQL]
+SELECT DISTINCT first_name, last_name
+FROM   Category, Customer, OrderItem, PlacedOrder, Product
+WHERE  Customer.customer_id = PlacedOrder.customer_id
+AND    PlacedOrder.order_id = OrderItem.order_id
+AND    OrderItem.product_id = Product.product_id
+AND    Product.category_id  = Category.category_id
+AND    category_name        = 'Mountain Bikes'
+\end{lstlisting}
+
+\[\pi_{first\_name,last\_name}\big(Customer\bowtie PlacedOrder\bowtie OrderItem\bowtie Product\bowtie\sigma_{category\_name=\text{`Mountain Bikes'}}(Category)\big)\]
+
+\subsubsection{Seleccionar las marcas que ha vendido el personal de la tienda localizada en Santa Cruz}
+
+\begin{lstlisting}[language=SQL]
+SELECT DISTINCT brand_name
+FROM   Brand, OrderItem, PlacedOrder, Product, Store
+WHERE  Store.store_id       = PlacedOrder.store_id
+AND    PlacedOrder.order_id = OrderItem.order_id
+AND    OrderItem.product_id = Product.product_id
+AND    Product.brand_id     = Brand.brand_id
+AND    city                 = 'Santa Cruz'
+\end{lstlisting}
+
+\[\pi_{brand\_name}\big(\sigma_{city=\text{`Santa Cruz'}}(Store)\bowtie PlacedOrder\bowtie OrderItem\bowtie Product\bowtie Brand\big)\]

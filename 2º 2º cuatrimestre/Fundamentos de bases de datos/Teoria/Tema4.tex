@@ -1,0 +1,36 @@
+\chapter{El modelo de datos relacional}
+
+\section{La estructura de datos relacional}
+
+Como vimos en el tema anterior, el modelo relacional abarca tres ámbitos de los datos:
+
+\begin{itemize}
+	\item\textbf{La estructura para almacenarlos:} El usuario percibe la información de la BD estructurada en tablas.
+	\item\textbf{La integridad:} Estas tablas deben satisfacer unas condiciones que preservan la integridad y la coherencia de la información que contienen.
+	\item\textbf{Consulta y manipulación:} Los operadores empleados por el modelo se aplican sobre las tablas y devuelven tablas.
+\end{itemize}
+
+La tabla es la estructura lógica del sistema relacional, aunque a nivel físico el sistema es libre de almacenar los datos como más adecuado le parezca.
+
+\section{Definiciones iniciales}
+
+Para trabajar con un modelo relacional debemos conocer los siguientes términos:
+
+\begin{itemize}
+	\item\textbf{Atributo:} Cualquier elemento de información susceptible de tomar valores. Usamos la notación $A_i\forall i\in\mathbb{N}$. Todo atributo debe tener asociado un dominio.
+	\item\textbf{Dominio:} Rango de valores donde toma sus datos un atributo. Se considera finito. Usamos la notación $D_i\forall i\in\mathbb{N}$.
+	\item\textbf{Relación:} Cualquier subconjunto del producto cartesial $D_1\times D_2\times\cdots\times D_n$ notado por $R(A_1,A_2 \ldots A_n)$ que define una relación asociada a unos atributos atributos $A_1,A_2\ldots A_n$ con dominios $D_i\forall i\in\mathbb{N}$ no necesariamente distintos.
+	\item\textbf{Tupla:} Cada una de las filas de una relación.
+	\item\textbf{Cardinalidad de una relación:} Número de publas que contiene. Es variable en el tiempo.
+	\item\textbf{Esquema de una relación:} Atributos de la relación junto con su dominio ($A_1:D_1,A_2:D_2\ldots A_n:D_n$).
+	\item\textbf{Grado de una relación:} Número de atributos de su esquema. Invariable en el tiempo.
+	\item\textbf{Instancia de una relación:} Conjunto de tuplas $\{(x_1,x_2\ldots x_n)\}\subseteq D_1\times D_2\times\cdots\times D_n$ que la componen en cada momento.
+\end{itemize}
+
+\section{Propiedades de la estructura de datos relacional}
+
+
+
+\section{Notación}
+
+\section{Restricciones o reglas de integridad}

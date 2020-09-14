@@ -1,0 +1,32 @@
+\documentclass[10pt]{report}
+\usepackage[spanish]{babel}
+
+% Document settings
+
+\usepackage{titling}
+	\author{Atanasio José Rubio Gil}
+	\title{Fundamentos~de~bases~de~datos}
+	\date{\today}
+
+\usepackage[title=\thetitle]{aqademia}
+
+\aqchap{Práctica }
+\aqssec{}
+
+\usepackage{graphicx}
+	\graphicspath{{img/}}
+
+% Document composition
+
+\begin{document}
+
+\aqtitlepage{Grado en Ingeniería Informática}
+            {Prácticas}
+            {https://github.com/Groctel/ugr-informatica}
+\tableofcontents
+
+\input{Practicas/Practica1.tex}
+\input{Practicas/Practica2.tex}
+\input{Practicas/Practica3.tex}
+
+\end{document}

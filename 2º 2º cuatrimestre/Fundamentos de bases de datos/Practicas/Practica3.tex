@@ -1,0 +1,371 @@
+\chapter{SQL}
+
+\section{Creación de tablas}
+
+El último paso de la creación de una Bd es la implementación de ésta en un SGDB\@.
+Uno de los lenguajes utilizados por estos sistemas es \textbf{SQL}, que es con el que trabajaremos a lo largo de estas prácticas.
+
+Para crear tablas en SQL utilizamos la sentencia \code{CREATE TABLE}, que tiene la siguiente sintaxis:
+
+\begin{lstlisting}[language=SQL]
+CREATE TABLE [usuario.]nombre_tabla (
+	nombre_columna tipo_dato restricciones,
+	[nombre_columna tipo_dato restricciones,]
+	[...]
+);
+\end{lstlisting}
+
+El nombre de cada columna es el atributo que almacenamos en ella y es de uno de los tipos de dato permitidos por el lenguaje, que veremos a continuación.
+A cada columna se le pueden dar valores por defectoy restricciones que le hagan cumplir reglas de integridad y definan la forma en la que deben comportarse los datos de la columna.
+
+\subsubsection{Tipos de dato}
+
+Tenemos tres tipos numéricos que podemos representar:
+
+\begin{itemize}
+	\item\textbf{Enteros sin signo:} Se representan como \code{INT}, \code{INTEGER} o \code{NUMERIC} y su rango depende del sistema.
+	\item\textbf{Números reales:} Se representan como \code{FLOAT} y su rango depende del sistema.
+	\item\textbf{Números de precisión y escala:} Se representan como \code{NUMBER(p,s)} para una precisión (número total de dígitos) $1\leq p\leq38$ y una escala (número de decimales) $-84\leq s\leq127$.
+\end{itemize}
+
+Para representar cadenas de caracteres podemos hacerlo en función de su longitud:
+
+\begin{itemize}
+	\item\textbf{Lontigtud fija:} Se representan como \code{CHAR(n)} para $n\leq4000$.
+	\item\textbf{Longitud variable:} Se representan como \code{VARCHAR(n)} para $n$ caracteres.
+	\item\textbf{Cadenas largas:} Se representan como \code{LONG} (no confundir con el tipo de dato \code{long int}) y pueden pesar hasta 2GB\@.
+\end{itemize}
+
+Los datos binarios podemos representarlos como \code{RAW(n)} para $n\leq2000$ bytes o como \code{LONG RAW} para hasta 2GB\@.
+
+Los datos de fecha y hora podemos representarlos como \code{DATE} para la fecha, \code{TIME} para la hora, \code{DATETIME} para una conjunción de ambas y \code{TIMESTAMP} para representar un instante de tiempo.
+Para trabajar con fechas debemos transformar cadenas al formato reconocible por SQL mediante funciones como \code{TO\_DATE(s)} que transforma la cadena \code{s} en una fecha.
+En Oracle, \code{SYSDATE} devuelve la fecha y hora actual.
+
+\subsubsection{Restricciones de columnas}
+
+Las columnas pueden especificar restricciones a los datos que albergan como las siguientes:
+
+\begin{itemize}
+	\item\code{NOT NULL}\textbf{:} La columna no puede contener celdas vacías (\code{null}).
+	\item\code{UNIQUE}\textbf{:} El valor no puede estar repetido porque la columna es una clave candidata.
+	\item\code{PRIMARY KEY}\textbf{:} La columna es una clave primaria.
+	\item\code{REFERENCIES [usuario.]nombre\_tabla[(columna)]}\textbf{:} La columna es una clave externa al atributo columna de la tabla \code{nombre\_tabla}.
+	\item\code{CHECK (condición)}\textbf{:} Todos los valores de la columna deben cumplir la \code{condición} y no se admiten celdas \code{null}.
+\end{itemize}
+
+\textbf{Formulación de las condiciones}
+
+Las condiciones especificadas en la función \code{CHECK} pueden utilizar los siguientes operadores:
+
+\begin{itemize}
+	\item\textbf{Operadores aritméticos:} \code{+}, \code{-}, \code{*} y \code{/}.
+	\item\textbf{Comparadores booleanos y de orden:} \code{=}, \code{!=}, \code{<} \code{>}, \code{<=} y \code{>=}.
+	\item\textbf{Comparadores especiales:} \code{IS NULL}, \code{BETWEEN}, \code{IN} y \code{LIKE}.
+	\item\textbf{Operadores lógicos clásicos:} \code{NOT}, \code{AND} y \code{OR}.
+	\item\textbf{Concatenación:} \code{||}.
+\end{itemize}
+
+Utilizamos el comparador \code{LIKE} para utilizar máscaras en cadenas de caracteres.
+En ellas, el carácter \code{-} sustituye cualquier carácter y \code{\%}, cualquier cadena.
+
+Algunos ejemplos de expresiones comparativas serían los siguientes:
+
+\begin{lstlisting}[language=SQL]
+a IS NULL /* Esta fila no contiene ningún valor en la columna a */
+x <= a AND a <= y
+a BETWEEN x AND y /* Equivalente a la línea anterior */
+a LIKE '-A--' /* Por ejemplo, 'TAXO', 'PACO', 'CASA' */
+a LIKE '%TRACTOR%' /* Por ejemplo, 'TENGO UN TRACTOR AMARILLO' o 'TRACTOR BONICO' */
+\end{lstlisting}
+
+Opcionalmente, podemos usar \code{CONSTRAINT nombre} para identificar la restricción como \code{nombre}.
+Así se crearía una tabla para registrar los datos de los estudiantes de una universidad:
+
+\begin{lstlisting}[language=SQL]
+CREATE TABLE Estudiantes (
+	dni       VARCHAR(9)   PRIMARY KEY,
+	nombre    VARCHAR(10)  NOT NULL,
+	ap1       VARCHAR(10)  NOT NULL,
+	ap2       VARCHAR(10)  NOT NULL,
+	edad      NUMBER(3)    CHECK (edad BETWEEN 17 AND 90),
+	provincia VARCHAR(10),
+	beca      CHAR(2)      DEFAULT 'no' CHECK (beca IN ('si', 'no')),
+	sexo      char(1)      CONSTRAINT sx CHECK (sexo IN ('v', 'm'))
+);
+\end{lstlisting}
+
+\subsubsection{Restricciones de tablas}
+
+De la misma forma que podemos especificar restricciones para las columnas, podemos hacer lo mismo para las tablas, añadiendo las restricciones tras el último atributo.
+Para ello, podemos utilizar las siguientes restricciones:
+
+\begin{itemize}
+	\item\code{UNIQUE (atr, atr, \ldots)}\textbf{:} No se repiten valores en tuplas distintas para los atributos especificados.
+	\item\code{PRIMARY KEY (atr, atr, \ldots)}\textbf{:} Las columnas implicadas forman la clave primaria, por lo que deben ser \code{UNIQUE} y \code{NOT NULL}.
+	\item\code{FOREIGN KEY (atr) REFERENCES tabla.atr}\textbf{:} La columna \code{atr} es una clave externa a la clave primaria \code{atr} de otra \code{tabla}.
+	\item\code{CHECK (condición)}\textbf{:} Se cumplen las condiciones lógicas entre varias columnas.
+\end{itemize}
+
+Un ejemplo de esto sería una \code{Criatura} cuya vida total está limitada y se identifica por su raza, clase y nivel:
+
+\begin{lstlisting}[language=SQL]
+CREATE TABLE Criatura (
+	/* Entre otras cosas... */
+	raza       CHAR(2) CHECK (CHARACTER IN ('ho', 'hu', 'tf')),
+	clase      CHAR(2) CHECK (CHARACTER IN ('ra', 'wa', 'wi')),
+	nivel      INT CHECK (nivel BETWEEN 1 AND 99),
+	vida       INT,
+	bonus_vida INT,
+
+	PRIMARY KEY (raza, clase, nivel),
+	CONSTRAINT max_vida CHECK (vida+bonus_vida BETWEEN 1 AND 5000)
+);
+\end{lstlisting}
+
+\section{Modificación de tablas}
+
+\subsubsection{Alteración de tablas}
+
+Podemos alterar el esquema de una tabla añadiendo (\code{ADD}), eliminando (\code{DROP}) y modificando (\code{MODIFY}) sus atributos y restricciones mediante la sentencia \code{ALTER TABLE tabla}.
+Para modificar una columna sólo se puede alterar la restricción \code{NOT NULL}.
+Si se quieren alterar otras restricciones deben borrarse y añadirse de nuevo.
+
+\begin{lstlisting}[language=SQL]
+ALTER TABLE Criatura (
+	ADD (prob_rare FLOAT BETWEEN 0 AND 1),
+	MODIFY (vida BETWEEN 1 AND 5000),
+	DROP bonus_vida,
+	DROP CONSTRAINT max_vida
+);
+\end{lstlisting}
+
+\subsubsection{Inserción de datos en tablas}
+
+Podemos insertar tuplas en las tablas mediante la sentencia \code{INSERT INTO tabla}.
+Estos valores pueden ser literales o proceder de una consulta, que veremos en \S\ref{consultas}.
+
+Tengamos la siguiente tabla:
+
+\begin{lstlisting}[language=SQL]
+CREATE TABLE Pez (
+	codigo     CHAR(10)    PRIMARY KEY,
+	nombre     VARCHAR(50) NOT NULL,
+	comentario LONG
+);
+\end{lstlisting}
+
+Podemos introducir una tupla con todos los datos de la siguiente forma:
+
+\begin{lstlisting}[language=SQL]
+INSERT INTO Pez VALUES ("FSHRJ5723F", "Jurel", "Juro que lo pesqué yo");
+\end{lstlisting}
+
+También podemos especificar los datos que queremos introducir y sus respectivos valores:
+
+\begin{lstlisting}[language=SQL]
+INSERT INTO Pez (codigo, nombre) VALUES ("FSHW239VG6", "Pez sin comentario");
+\end{lstlisting}
+
+Para insertar desde una consulta podemos hacerlo de la siguiente forma:
+
+\begin{lstlisting}[language=SQL]
+INSERT INTO Pez (codigo, nombre, comentario)
+SELECT codigo, nombre, comentario
+FROM   Animal
+WHERE  codigo LIKE 'FSH%';
+\end{lstlisting}
+
+Ahondaremos más adelante en la sintaxis de las consultas.
+
+\subsubsection{Eliminación de datos en tablas}
+
+Usamos la sentencia \code{DELETE FROM tabla WHERE condición} para borrar las tuplas de una \code{tabla} que cumplan una \code{condición}.
+
+La \code{condición} puede ser tan compleja como se quiera o una clave primaria, en cuyo caso se borra la tupla que contenga esta clave.
+Si omitimos el \code{WHERE} la sentencia borra todas las tuplas de la tabla, así que \href{https://www.youtube.com/watch?v=i_cVJgIz_Cs}{no te olvides de poner el \code{WHERE} en el \code{DELETE FROM}}.
+
+\begin{lstlisting}[language=SQL]
+DELETE FROM Animal
+WHERE  codigo LIKE 'MML%';
+\end{lstlisting}
+
+\subsubsection{Actualización de tablas}
+
+Para actualizar el contenido de una tabla utilizamos la sentencia \code{UPDATE tabla SET columna=expr WHERE condición}.
+Podemos repetir el fragmento \code{columna=expr} tantas veces como queramos y omitir el \code{WHERE} con los mismos efectos que su omisión en el \code{DELETE FROM}.
+Las expresiones pueden ser tanto literales como consultas.
+
+Por ejemplo, si quisiéramos reducir a $1$ la vida de todas las criaturas de nivel $10$ o menor y luego doblar su nivel haríamos lo siguiente:
+
+\begin{lstlisting}[language=SQL]
+UPDATE Criatura SET vida=1, nivel=nivel*2 WHERE nivel <= 10;
+\end{lstlisting}
+
+De la misma forma, podemos cambiar el nivel de todas las criaturas a la mitad del nivel de la criatura de mayor nivel mediante una consulta:
+
+\begin{lstlisting}[language=SQL]
+UPDATE Criatura SET nivel=(
+	SELECT MAX(nivel)/2
+	FROM   Criatura
+);
+\end{lstlisting}
+
+\subsubsection{Eliminación de tablas}
+
+Por último, si queremos eliminar una tabla usamos la ordden \code{DROP TABLE tabla}, que elimina los datos de una tabla y su esquema de la BD\@.
+Si existen tablas que hacen referencia a ésta mediante claves externas SQL lanzará un error al intentar eliminarla, de forma que deben eliminarse todas las tablas dependientes antes de eliminar la tabla dependencia.
+
+\begin{lstlisting}[language=SQL]
+/* Por ejemplo, si nuestra BD no permite tener artículos sin asociarlos a una revista */
+DROP TABLE Articulo;
+DROP TABLE Revista;
+\end{lstlisting}
+
+\section{Consultas}\label{consultas}
+
+Las consultas son herramientas para obtener información de las tablas de nuestra BD\@.
+Esta información puede darse en forma de tuplas, de atributos específicos de las mismas y de cálculos realizados con sus valores.
+Para realizar una consulta utilizamos la sintaxis \code{SELECT atributos FROM tablas WHERE condiciones}.
+Estos tres elementos son extensibles y los iremos desarrollando a lo largo de esta sección.
+Cabe destacar que el \code{WHERE} es omisible, de forma que una consulta sin condiciones seleccionará todas las tuplas disponibles.
+
+\subsection{\code{SELECT}}
+
+La primera parte de la consulta indica qué atributos devolverá esta como resultado.
+Para devolver una tupla completa utilizamos el comodín \code{SELECT *} o \code{SELECT tabla.*} para seleccionar la tabla de la que se devuelve la tupla.
+
+Para seleccionar las columnas (\textbf{realizar una proyección}) que queremos devolver indicamos su nombre separado por comas:
+
+\begin{lstlisting}[language=SQL]
+SELECT nivel, vida
+FROM   Criatura
+\end{lstlisting}
+
+Si nos estamos refiriendo a dos tablas que tienen atributos del mismo nombre deberemos especificar a qué tabla nos referimos incluso si uno de los atributos hace referencia al otro:
+
+\begin{lstlisting}[language=SQL]
+SELECT Edificio_Oficinas.pisos
+FROM   Edificio_Oficinas, Edificio_Viviendas
+\end{lstlisting}
+
+También podemos dar un nombre personalizado a las proyecciones realizadas añadiendo \code{AS nombre}:
+
+\begin{lstlisting}[language=SQL]
+SELECT nivel, vida AS "hitpoints"
+FROM   Criatura
+\end{lstlisting}
+
+Es normal que queramos que una consulta nos devuelva sólo una instancia de cada resultado.
+Por ejemplo, si queremos seleccionar a los estudiantes con matrículas de honor en todo el centro, es probable que alguno aparezca varias veces por tener matrícula en varias asignaturas.
+Para que no se repitan usamos \code{SELECT DISTINCT}:
+
+\begin{lstlisting}[language=SQL]
+SELECT DISTINCT Estudiante.nombre
+FROM   Asignatura, Estudiante
+WHERE  /* El estudiante ha sacado matrícula de honor */
+\end{lstlisting}
+
+\subsection{\code{FROM}}
+
+Para seleccionar sobre qué tablas queremos realizar la consultas usamos \code{FROM tablas}.
+Si se selecciona más de una tabla la consulta se realiza sobre su \textbf{producto cartesiano}:
+
+\[
+\begin{bmatrix}
+	\boldsymbol{nivel} & \boldsymbol{vida} \\
+	5                  & 17                \\
+	8                  & 40                \\
+	10                 & 132               \\
+\end{bmatrix}
+\times
+\begin{bmatrix}
+	\boldsymbol{Espada} \\
+	Zweihander          \\
+	Flamberge           \\
+\end{bmatrix}
+=
+\begin{bmatrix}
+	\boldsymbol{nivel} & \boldsymbol{vida} & \boldsymbol{Espada} \\
+	5                  & 17                & Zweihander          \\
+	5                  & 17                & Flamberge           \\
+	8                  & 40                & Zweihander          \\
+	8                  & 40                & Flamberge           \\
+	10                 & 132               & Zweihander          \\
+	10                 & 132               & Flamberge           \\
+\end{bmatrix}
+\]
+
+Cuando realizamos este producto cartesiano, SQL trabaja con todas las combinaciones de tablas posibles, incluso si las entidades combinadas no están unidas por ninguna relación.
+
+Si trabajamos con varias referencias a la miama tabla podemos utilizar alias para identificarlas y hacer que SQL trabaje con dos tuplas distintas cada vez.
+Los alias se especifican tras el nombre de la tabla:
+
+\begin{lstlisting}[language=SQL]
+SELECT *
+FROM   Criatura crit, Critatura
+WHERE  Criatura.nivel != crit.nivel
+\end{lstlisting}
+
+\subsection{\code{WHERE}}
+
+Cuando tenemos todas las tablas seleccionadas con \code{FROM}, debemos especificar qué condiciones queremos que se cumplan entre ellas para devolver una consulta relevante.
+Para ello utilizamos \code{WHERE condición}, que especifica qué \code{condición} deben cumplir las tablas que buscamos.
+Podemos especificar varias condiciones concatenándolas con \code{AND}.
+
+Por ejemplo, supongamos que tenemos las siguientes tablas:
+
+\begin{lstlisting}[language=SQL]
+CREATE TABLE Critatura (
+	id     CHAR(10)    PRIMARY KEY,
+	nombre VARCHAR(50) NOT NULL,
+	tipo   VARCHAR(3)  NOT NULL
+	/* Y otros atributos... */
+);
+
+CREATE TABLE Ranger (
+	id                  CHAR(10)    PRIMARY KEY,
+	nombre              VARCHAR(50) NOT NULL,
+	enemigo_predilecto CHAR(10),
+	/* Y otros atributos... */
+	FOREIGN KEY (enemigo_predilecto) REFERENCES Criatura (tipo)
+);
+\end{lstlisting}
+
+La primera tabla registra las criaturas con su \code{id}, su \code{nombre} y el \code{tipo} de criatura que son (lobo, planta, ankheg\ldots).
+La segunda tabla registra los jugadores de clase \code{Ranger} que se encuentran en nuestro juego mediante su \code{id}, su \code{nombre} y su \code{enemigo\_predilecto}, que es un tipo de \code{Criatura} (como se indica en la \code{FOREIGN KEY}) sobre el que tiene ventaja.
+Realicemos la siguiente consulta:
+
+\begin{lstlisting}[language=SQL]
+SELECT Ranger.nombre, Criatura.nombre
+FROM   Criatura, Ranger
+WHERE  Ranger.enemigo_predilecto = Criatura.tipo
+\end{lstlisting}
+
+Esta consulta primero calculará el producto cartesiano de estas dos tablas, juntando todas las tuplas de \code{Criatura} con todas las tuplas de \code{Ranger}.
+Tras esto, se eliminan las tuplas del producto cartesiano que no cumplan la condición del \code{WHERE}, es decir, aquellas en las que el \code{enemigo\_predilecto} del \code{Ranger} y el \code{tipo} de la \code{Criatura} tengan valores distintos, quedando únicamente las tuplas que combinen ambas tablas y estén relacionadas por esta clave.
+Por último, la consulta nos devolverá el \code{nombre} de cada uno de los \code{Ranger} junto con el \code{nombre} de todas las tuplas de \code{Criatura} que sean su \code{enemigo\_predilecto} (si éste fuera \code{dragón}, nos devolvería nombres de dragones como \code{Elvarg}, \code{Vorkath} o \code{Paarthurnax}).
+
+Si tuviéramos dos entidades unidas por una relación formando tres tablas, tendríamos que relacionar la primera entidad con la relación y la relación con la segunda entidad.
+Por ejemplo, tengamos las siguientes tablas:
+
+\begin{lstlisting}[language=SQL]
+Hierba(id_hierba, nombre, tipo)
+Mezcla(id_hierba, id_pocion, metodo)
+Pocion(id_pocion, nombre, tipo, efecto)
+\end{lstlisting}
+
+Si queremos recoger qué hierbas se necesitan para cada poción (o qué poción se crea al mezclar hierbas) debemos relacionar las tablas de la siguiente forma:
+
+\begin{lstlisting}[language=SQL]
+SELECT Hierba.nombre, Pocion.nombre
+FROM   Hierba, Mezcla, Pocion
+WHERE  Hierba.id_hierba = Mezcla.id_hierba
+AND    Mezcla.id_pocion = Pocion.id_pocion;
+\end{lstlisting}
+
+\section{Índices}\label{indices}
+
+\section{Vistas}\label{visitas}
+
+\section{Clusters}\label{clusters}
