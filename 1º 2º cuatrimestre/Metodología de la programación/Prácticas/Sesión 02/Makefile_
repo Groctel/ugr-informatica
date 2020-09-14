@@ -1,0 +1,25 @@
+# Makefile de la Sesión 1 (src/saludo está copiado en esta sesión)
+
+# Instrucción extensiva de compilación
+all: saludo mrproper bin/saludo bin/saludo_en_dos_pasos clean
+	@echo Todo compilao jefe
+
+# Manierismos en tiempo de ejecución
+saludo:
+	@echo Empesando miarma
+
+mrproper: clean
+	-rm bin/*
+
+clean:
+	-rm obj/*
+
+# Órdenes de compilación
+bin/saludo: src/saludo.cpp
+	g++ -o bin/saludo src/saludo.cpp
+
+bin/saludo_en_dos_pasos: obj/saludo.o
+	g++ -o bin/saludo_en_dos_pasos obj/saludo.o
+
+obj/saludo.o: src/saludo.cpp
+	g++ -c -o obj/saludo.o src/saludo.cpp
