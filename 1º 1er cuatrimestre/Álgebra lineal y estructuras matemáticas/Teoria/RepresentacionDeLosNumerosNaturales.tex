@@ -1,0 +1,217 @@
+\section{Representación de los números naturales}\label{representacion-numeros-naturales}
+
+\subsection{$\mathbb{N}$, el conjunto de los números naturales}\label{el-conjunto-de-los-numeros-naturales}
+
+Los números naturales es un conjunto infinito de números que, coloquialmente, podemos enumerar como $0,1,2,\ldots$ hasta aburrirnos.
+Si queremos hacerlo matemáticamente, debemos describirlo en función de las propiedades que satisface.
+Enumerémoslas:
+
+\subsubsection{Los números naturales se pueden sumar}
+
+Dados dos números naturales $m$ y $n$, hay definido un nuevo número natural que es la suma de $m$ y $n$ y se representa como $m+n$.
+Hacemos hincapié en que el nuevo número es natural o, expresado matemáticamente:
+
+\[m,n \in\mathbb{N} \Rightarrow m+n \in\mathbb{N}, \forall m,n\]
+
+Esto es importante porque la inversa de la suma, la resta, no siempre cumple esta propiedad.
+Por ejemplo, $4-5=-1$ y éste no es un número natural.
+La suma satisface las siguientes propiedades:
+
+\begin{center}
+\begin{tabular}{l l}
+	\textbf{Propiedad}  & \textbf{Expresión}                                       \\
+	\toprule
+	Asociativa          & $(m+n) + p = m + (n+p), \forall m,n,p \in\mathbb{N}$     \\
+	Conmutativa         & $m+n = n+m, \forall m,n \in\mathbb{N}$                   \\
+	Elemento neutro (0) & $m+0 = m, \forall m \in\mathbb{N}$                       \\
+	Cancelativa         & $m+n = m+p \Rightarrow n=p, \forall m,n,p \in\mathbb{N}$ \\
+\end{tabular}
+\end{center}
+
+\subsubsection{Los números naturales se pueden multiplicar}
+
+Dados dos números naturales $m$ y $n$, hay definido un nuevo número natural que es el producto de $m$ y $n$ y se representa como $m \cdot n$ o simplemente $mn$.
+De nuevo, lo expresamos matemáticamente de la siguiente forma:
+
+\[m,n \in\mathbb{N} \Rightarrow m \cdot n \in\mathbb{N}, \forall m,n\]
+
+Al igual que la resta no cumple siempre esta propiedad, la división tampoco lo hace.
+Por ejemplo, $\frac{4}{5}=0.8$ y éste no es un número natural.
+La multiplicación satisface las siguientes propiedades:
+
+\begin{center}
+\begin{tabular}{l l}
+	\textbf{Propiedad}  & \textbf{Expresión}                                                             \\
+	\toprule
+	Asociativa          & $(m \cdot n) \cdot p = m \cdot (n \cdot p), \forall m,n,p \in\mathbb{N}$       \\
+	Conmutativa         & $m \cdot n = n \cdot m, \forall m,n \in\mathbb{N}$                             \\
+	Elemento neutro (1) & $m \cdot 1 = m, \forall m \in\mathbb{N}$                                       \\
+	Cancelativa         & $m \cdot n = m \cdot p \Rightarrow n=p, \forall m,n,p \in\mathbb{N}, m \neq 0$ \\
+\end{tabular}
+\end{center}
+
+También tenemos que la suma es distributiva respecto al producto:
+
+\[m \cdot (n+p) = m \cdot n + m \cdot p, \forall m,n,p \in\mathbb{N}\]
+
+\subsubsection{Los números naturales se pueden ordenar}
+
+Cuando sumamos dos números naturales obtenemos un número mayor a los dos números anteriores.
+Expresamos esta relación de la siguiente forma:
+
+\[\exists p \in\mathbb{N} : m+p = n \Rightarrow m \leq n, \forall m,n \in\mathbb{N}\]
+
+Esta relación de orden (\textit{menor o igual que} o $\leq$) satisface las siguientes tres propiedades con nombre\footnote{%
+	En general cualquier conjunto con cualquier relación de orden cumple estas tres propiedades, aunque aquí nos estemos centrando en el conjunto $\mathbb{N}$ y la relación $\leq$.
+}:
+
+\begin{center}
+\begin{tabular}{l l}
+	\textbf{Propiedad} & \textbf{Expresión}                                                          \\
+	\toprule
+	Reflexiva          & $m \leq m, \forall m \in\mathbb{N}$                                         \\
+	Asimétrica         & $m \leq n \land n \leq m \Rightarrow m=n, \forall m,n \in\mathbb{N}$        \\
+	Transitiva         & $m \leq n \land n \leq p \Rightarrow m \leq p, \forall m,n,p \in\mathbb{N}$ \\
+	Orden total        & $m \leq n \lor n \leq m, \forall m,n \in\mathbb{N}$                         \\
+\end{tabular}
+\end{center}
+
+Esta relación también cumple las siguientes propiedades
+
+\begin{itemize}
+	\item $m \leq n \Rightarrow m+p \leq n+p, \forall m,n,p \in\mathbb{N}$
+	\item $m+p \leq n+p \Rightarrow m \leq n, \forall m,n,p \in\mathbb{N}$
+	\item $m \leq n \Rightarrow m \cdot p \leq n \cdot p, \forall m,n,p \in\mathbb{N}$
+	\item $m \cdot p \leq n \cdot p \Rightarrow m \leq p, \forall m,n,p \in\mathbb{N}$
+\end{itemize}
+
+Sin embargo, todas las propiedades enumeradas hasta ahora se cumplen para otros conjuntos, como $\mathbb{Q}^+$ o $\mathbb{R}^+$.
+Para definir los números naturales necesitamos una propiedad que no se cumpla en ningún otro conjunto.
+
+\subsection{El principio de induccion}\label{el-principio-de-induccion}
+
+\[\{A \subseteq \mathbb{N} : 0 \in A, n \in A \Rightarrow n+1 \in A\} \Rightarrow A = \mathbb{N}\]
+
+Desglosemos este principio paso por paso.
+Primero, tomemos un conjunto $A \subseteq \mathbb{N}$, es decir, que $A$ sea un subconjunto de $\mathbb{N}$ pudiendo ser todo $\mathbb{N}$.
+Segundo, tenemos que $0 \in A$.
+Como el 0 es el menor de los números naturales\footnote{%
+	En algunas disciplinas se considera que el menor número natural es el 1 porque el 0 les causa demasiado inconveniente y es más fácil obviarlo que explicitar constantemente que lo escrito se aplica a $\mathbb{N}$\textbackslash0.
+}, hacemos que $A$ lo contenga y lo preparamos para el truco final:
+La existencia de un número $n$ implica necesariamente la existencia de $n+1$.
+Como nuestro conjunto contiene el 0, debe contener necesariamente el 1.
+Como ahora contiene el 1, debe contener necesariamente el 2, que da paso al 3, al 4, al 5\ldots
+Si nuestro conjunto contiene el 52543543, también contendrá necesariamente el 52543544.
+Siguiendo esta progresión, podemos contar un número infinito de números, por lo que $A$ contiene todos los números naturales y se verifica que $A=\mathbb{N}$.
+
+Este proceso puede compararse análogamente al efecto de derribar piezas de dominó colocadas secuencialmente de pie.
+Para que caiga la pieza $p_n$ no buscamos que caiga la pieza $p_{n-1}$ y ésta derribe a la pieza $p_n$, nos basta con derribar manualmente la pieza $p_0$ ($0 \in A$) y cada pieza $p_n$ derribe a la pieza $p_{n+1}$.
+
+Una consecuencia de este principio es el \textbf{Principio de buena ordenación}:
+
+\[A \subseteq \mathbb{N} : A \neq \emptyset \Rightarrow A\text{ tiene mínimo}\]
+
+Como corolario a este principio, tenemos que no existen sucesiones infinitas y estrictamente decrecientes en $\mathbb{N}$, ya que en algún momento deberá llegar necesariamente al mínimo.
+
+\pagebreak
+
+\subsection{Otras propiedades de los números naturales}
+
+\subsubsection{Los números naturales pueden elevarse}
+
+De la misma forma que la multiplicación es la aplicación repetida de la suma, tenemos que la potencia es la aplicación repetida de la multiplicación, de forma que, dados dos números naturales $m$ y $n$, hay definido un nuevo número natural que es la potencia de $m$ y $n$ (o $m$ elevado a $n$) y se representa como $m^n$ siempre y cuando no se cumpla que $m=n=0$.
+Expresamos matemáticamente esta operación de la siguiente forma:
+
+\[m,n \in\mathbb{N} \Rightarrow m^n \in\mathbb{N}, \forall m,n \neq 0\]
+
+Esta operación satisface las siguientes propiedades:
+
+\begin{itemize}
+	\item $m^{n+p} = nm^n \cdot m^p, \forall m,n,p \in\mathbb{N}, m \neq 0$
+	\item ${(m^n)}^p = m^{n \cdot p}, \forall m,n,p \in\mathbb{N}, m,n \neq 0$
+	\item ${(m \cdot n)}^p = mP p \cdot n^p, \forall m,n,p \in\mathbb{N}, m,n \neq 0$
+\end{itemize}
+
+\subsubsection{Existe un algoritmo para dividir los números naturales}
+
+\[a,b \in\mathbb{N} \Rightarrow \exists! c,r \in\mathbb{N} : a = bc + r, 0 \leq r < b, b \neq 0\]
+
+Este algoritmo es la \textit{división con caja} que conocemos desde primaria.
+Como ejemplo, tengamos un dividendo $a=164$ y un divisor $b=7$:
+
+\setlength{\parindent}{8cm}
+\parbox{10cm}{%
+	\Division{164}{7} \\
+	024\hspace{1.05ex}23 \\
+	\hspace*{1.1ex}\underline{03} \\
+}
+\setlength{\parindent}{15pt}
+
+El algoritmo nos devuelve un cociente $c=23$ y un resto $r=3$.
+Comparándolo con la expresión anterior, $a = bc + r \Leftrightarrow 164 = 7 \cdot 23 + 3$.
+Con este método dividir números naturales teniendo siempre en cuenta el resto de la división.
+Es muy importante tener en cuenta que la división entre 0 no está definida en $\mathbb{N}$. Otra forma de explicitar los números $c$ y $r$ es mediante las expresiones $(a\ div\ b)$ y $(a\ m\acute{o}d\ b)$ (módulo) respectivamente.
+
+\subsection{Representación de los números naturales}
+
+Al igual que tenemos diez dedos en las manos, los números que escribimos tienen diez cifras, del 0 al 9\footnote{%
+	En algún sitio leí que los griegos se plantearon contar en base duodecimal porque tenemos doce falanges en los dedos, pero vieron que reeducar a todo el mundo era demasiado complicado a pesar de las ventajas del nuevo sistema.\textsuperscript{[\href{https://en.wikipedia.org/wiki/Wikipedia:Citation_needed}{Cita requerida}]}
+}.
+Es lo que llamamos base 10 o decimal.
+La base nos indica el valor que puede adquirir cada cifra del número y el valor que se le otorga en función de su posición.
+Expresémoslo formalmente de forma general:
+
+\begin{align*}
+	& b \in\mathbb{N} : b \geq 2 \\
+	& a \in\mathbb{N} : a \neq 0 \\
+	& \exists! k, a_0, a_1,\ldots,a_n \in\mathbb{N} : 0 \leq a_i < b \\
+	& a = \sum_{k=0}^{m} a_kb^k = a_mb^m + a_{m-1}b^{k-1} + \cdots + a_1b + a_0 \\
+	& a = a_k, a_{k-1}, \ldots, a_1, a_0 \big)_b
+\end{align*}
+
+Vamos paso por paso.
+Primero, nombremos una base $b \geq 2$.
+No podemos usar la base 1 porque, como veremos tras el segundo paso, sólo podríamos usar el 0 para escribir el número.
+Segundo, tomemos un número $a \neq 0$, pues el 0 siempre se expresa como tal.
+Con estas dos presunciones, tenemos que existe una única expresión de un número $a_0, a_1,\ldots,a_n$ de $k$ cifras, ambos naturales y de forma que cada cifra sea menor que la base, que cumpla que el número $a$ es la suma de todas sus cifras en función de su posición.
+El valor que toma cada cifra equivale al valor intrínseco de la misma multiplicado por la base elevada a la posición en la que se encuentra la cifra de izquierda a derecha, siendo la primera 0.
+Por ejemplo, el número 123 en base 10 tiene el valor de tres unos ($10^0$) más dos dieces ($10^1$) más un cien ($10^2$).
+Ésta es la única forma de representar el 123 en base decimal, al igual que hay una única forma de representar un valor en cada base.
+
+Cuando expresamos un valor en una base distinta a 10 (aunque podríamos hacerlo para base 10, pero sería demasiado esfuerzo) explicitamos la base con un paréntesis seguido de la base en subíndice.
+Por ejemplo, para indicar que estamos escribiendo el número 174 en base 8 lo escribimos como $174\big)_8$.
+
+\subsubsection{Cambios de base}
+
+Para realizar el cambio de una base cualquiera a base decimal nos basta con utilizar la expresión anterior y calcular el valor decimal que le damos al número:
+
+\[5243\big)6 = 5 \cdot 6^3 + 2 \cdot 6^2 + 4 \cdot 6 + 3 = 1179\big)_{10}\]
+
+Para realizar el cambio de base decimal a una base cualquiera dividimos recursivamente hasta obtener un resto menor que la base y escribimos los restos de derecha a izquierda en orden de aparición:
+
+\begin{center}
+	\CambioDeBase{543}{4}
+\end{center}
+
+¿Qué ocurre si queremos hacer un cambio de un número $a$ en una base no decimal $b_1$ a un número $b$ en otra base no decimal $b_2$?
+La opción difícil sería aprenderse las tablas de multiplicar en la base con la que operemos.
+La opción fácil es tomar el camino largo y pasar primero el número $a$ a un tercer número $c$ base 10 y de ahí a la nueva base:
+
+\begin{center}
+\begin{tikzpicture}[scale=0.2]
+\tikzstyle{every node}+=[inner sep=0pt]
+	\draw (28.4,-22.1) node {$a\big)_{b_1}$};
+	\draw (40.8,-22.1) node {$b\big)_{b_2}$};
+	\draw (34.6,-30.5) node {$c\big)_{10}$};
+	\draw [black] (30.18,-24.51) -- (32.82,-28.09);
+	\fill [black] (32.82,-28.09) -- (32.75,-27.15) -- (31.94,-27.74);
+	\draw [black] (36.38,-28.09) -- (39.02,-24.51);
+	\fill [black] (39.02,-24.51) -- (38.14,-24.86) -- (38.95,-25.45);
+	\draw [black] [dashed] (31.4,-22.1) -- (37.8,-22.1);
+	\fill [black] (37.8,-22.1) -- (37,-21.6) -- (37,-22.6);
+\end{tikzpicture}
+\end{center}
+
+Por otro lado, si queremos cambiar de un número en base $b$ a otro número en base $b^k$, nos basta con agrupar las cifras del número de derecha a izquierda de $k$ en $k$ y expresar dichos números en la nueva base:
+
+\[01111010010\big)_2 = 0011 1101 0010\big)_2 = 3D2\big)_{16}\]

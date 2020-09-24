@@ -1,0 +1,85 @@
+\documentclass[10pt, a4paper]{aqademic}
+
+\usepackage[spanish]{babel}
+	\selectlanguage{spanish}
+
+% Document packages
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage[type=CC, modifier=by-nc-sa, version=4.0]{doclicense}
+\usepackage{graphicx}
+\usepackage{tikz}
+
+% Document settings
+
+\author{Atanasio José Rubio Gil}
+\title{Álgebra lineal y estructuras matemáticas}
+
+\AqSetChapter{Tema}
+
+\newcommand\Division[2]{%
+	$\strut#1$\kern.25em\smash{\raise-.35ex\hbox{\rule{0.4pt}{2ex}}}$\mkern-0.72mu
+	\underline{\,#2}$
+}
+
+\newcount\total
+\newcount\lasttotal
+\newcount\targetbase
+
+% https://tex.stackexchange.com/questions/107637/repeated-division-converting-from-base-10-to-another-base
+\def\CambioDeBase#1#2{%
+	\begin{tikzpicture}[every node/.style={minimum width=1cm, minimum height=0.5cm}, x=1cm,y=0.5cm]
+	%
+	\total=#1%
+	\targetbase=#2
+	\def\newnumber{}
+	%
+	\pgfmathloop
+	\ifnum\total<1
+	\else
+		%
+		\ifnum\pgfmathcounter>1
+			\node at (\pgfmathcounter, -\pgfmathcounter+1) (tmp) {\the\targetbase};
+			\draw (tmp.north west) |- (tmp.south east);
+			%
+			\node at (\pgfmathcounter-1, -\pgfmathcounter) (tmp) {\pgfmathparse{int(\total*\targetbase)}\pgfmathresult};
+			\draw (tmp.south west) -- (tmp.south east);
+			%
+			\pgfmathparse{int(\lasttotal-\total*\targetbase)}%
+			\let\digit=\pgfmathresult
+			\node at (\pgfmathcounter-1, -\pgfmathcounter-1) [text=red] {\digit};
+			\edef\newnumber{\digit\newnumber}
+		\fi
+		%
+		\ifnum\total<\targetbase
+			\edef\newnumber{\the\total\newnumber}
+			\node at (\pgfmathcounter, -\pgfmathcounter) [text=red]  {\the\total};
+		\else
+			\node at (\pgfmathcounter, -\pgfmathcounter) {\the\total};
+		\fi
+		\lasttotal=\total
+		\divide\total by\targetbase
+	\repeatpgfmathloop
+	\node [anchor=west] at (1, -\pgfmathcounter-1) {$#1=\newnumber_{\the\targetbase}$};
+	\end{tikzpicture}
+}
+
+% Document composition
+
+\begin{document}
+
+\AqMaketitle[%
+	cover    = logo-ugr.png,
+	org      = Grado en Ingeniería Informática,
+	subtitle = Teoría,
+	url      = https://github.com/Groctel/ugr-informatica
+]
+
+\input{RecursosTeX/post-portada.tex}
+\tableofcontents
+
+\chapter{Números naturales y números enteros}
+	\input{Teoria/RepresentacionDeLosNumerosNaturales.tex}
+
+\end{document}
