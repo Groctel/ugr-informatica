@@ -99,8 +99,6 @@ Para particionar un disco externo se recomienda usar \texttt{gdisk}, que crea un
 Ya creadas las particiones de un disco, se debe escoger el sistema de archivos que va a utilizar cada una.
 El sistema utilizado por los sistemas Linux actuales es \texttt{ext4}, una evolución de \texttt{ext3} y \texttt{ext2} que incorpora un diario (\emph{journal}) con información de recuperación de los ficheros, extensiones que permiten describir conjuntos de bloques de discos contiguos para mejorar el rendimiento al trabajar con ficheros grandes y reducir la fragmentación del disco y asigación retardada de espacio en disco, que permite postergr la asignación de bloques de disco hasta el momento inminente de la escritura.
 
-\pagebreak
-
 Podemos crear particiones mediante la orden \texttt{mkfs} seguida de un punto y el tipo de partición que queremos asignar:
 
 \begin{lstlisting}[language=Bash]
