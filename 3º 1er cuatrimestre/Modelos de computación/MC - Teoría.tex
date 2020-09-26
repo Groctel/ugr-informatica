@@ -1,0 +1,38 @@
+\documentclass[10pt, a4paper]{aqademic}
+
+\usepackage[spanish]{babel}
+	\selectlanguage{spanish}
+
+% Document packages
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage[type=CC, modifier=by-nc-sa, version=4.0]{doclicense}
+\usepackage{mathtools}
+\usepackage{tikz}
+
+% Document settings
+
+\author{Atanasio José Rubio Gil}
+\title{Modelos de computación}
+
+\AqSetChapter{Tema}
+
+% Document composition
+
+\begin{document}
+
+\AqMaketitle[%
+	cover    = logo-ugr.png,
+	org      = Grado en Ingeniería Informática,
+	subtitle = Teoría,
+	url      = https://github.com/Groctel/ugr-informatica
+]
+
+\input{RecursosTeX/post-portada.tex}
+\tableofcontents
+
+\input{Teoria/IntroduccionALaComputacion.tex}
+
+\end{document}

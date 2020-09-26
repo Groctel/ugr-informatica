@@ -1,0 +1,269 @@
+\chapter{Introducción a la computación}\label{introduccion-a-la-computacion}
+
+\section{Breve introducción histórica a la computación}
+
+En una época anterior a la existencia de las máquinas, las computadores eran las mujeres empleadas para realizar operaciones (computar) de forma extensiva en una sala.
+Alan Turing sentía fascinación por su trabajo y, más especialmente, por su automatización.
+Basando el trabajo de su vida en los diferentes aspectos de la computación, se hizo estas preguntas entre muchas otras:
+
+\begin{itemize}
+	\item ¿Qué clase de problemas pueden automatizar su resolución?
+	\item ¿Qué clase de problemas automatizados pueden resolverse eficientemente?
+	\item ¿Qué estructuras son comunes en la computación con palabras y símbolos y cómo se pueden procesar en un ordenador?
+\end{itemize}
+
+A lo largo de la historia, la computación ha estado estrechamente ligada a las matemáticas y ha evolucionado enormemente a lo largo de todo el siglo XX\@.
+Repasamos aquí algunos de los hitos de dicha historia:
+
+\begin{itemize}
+	\item\textbf{Precursores:} Russell, Hilbert y Boole.
+	\item\textbf{Años 30 y 40:} Primeros años de la computación. Tesis de Church-Turing.
+	\item\textbf{Años 50:} Aparecen los primeros lenguajes: FORTRAN, COBOL y LISP\@. Teoría de autómatas y lenguajes formales por Rabin, Scott y Chomsky.
+	\item\textbf{Años 60:} Estudios de complejidad algorítmica por Hartnamis, Lewis y Cook.
+	\item\textbf{Años 70:} Estudios de complejidad, semántica y estructuras de datos.
+	\item\textbf{Años 80 y 90:} Complejidad paralela, computación distribuida y criptografía.
+\end{itemize}
+
+\subsection{El problema de la parada}
+
+Ante la pregunta de si todos los problema son computables, Turing propone el siguiente problema:
+
+Tengamos un programa llamado \texttt{HALT} que reciba un programa \texttt{P} como entrada.
+Por algún método que desconocemos y llamaremos \texttt{STOPS} pero no nos importa, \texttt{HALT} es capaz de computar si el programa introducido llegará a un alto en algún momento o se ejecutará de forma infinita.
+Si el programa nunca llegase a un alto, \texttt{HALT} dejaría de ejecutarse, en caso contrario, \texttt{HALT} se ejecutaría infinitamente sin llegar a un alto.
+Podemos construir \texttt{HALT} en una línea de BASIC\@:
+
+\begin{lstlisting}[language={[Visual]Basic}]
+10 IF STOPS(P) GOTO 10
+\end{lstlisting}
+
+Ahora Turing nos plantea la siguiente pregunta:
+¿Cuál es el resultado de \texttt{HALT(HALT)}?
+Esta ejecución daría lugar a una paradoja y, por definición, las paradojas escapan a la lógica, por lo que este programa sería imposible y existe al menos un problema irresoluble computacionalmente$\blacksquare$.
+
+\section{Definiciones}
+
+\subsection{Alfabetos}
+
+Un alfabeto es un conjunto finito $A$ cuyos elementos se llaman símbolos o letras.
+Los alfabetos los representamos en mayúsculas y los símbolos en mínúsculas:
+
+\begin{align*}
+	A &= \{0,1\} \\
+	B &= \{<0,0>,<0,1>,<1,0>,<1,1>\} \\
+	C &= \{a,b,c,d,e,f\}
+\end{align*}
+
+\subsection{Palabras}
+
+Una palabra $u$ sobre un alfabeto $A$ es una sucesión finita de elementos de dicho alfabeto:
+
+\[u = a_1 a_2 \ldots a_{n-1} a_n : a_i \in A, \forall i \in \mathbb{N}\backslash\{0\}, i < n\]
+
+Por ejemplo, para el alfabeto $A=\{0,1\}$ definido anteriormente, 0, 1, 01, 10, 11, 01101, 0001010001 son palabras posibles.
+
+El conjunto de todas las palabras sobre un alfabeto $A$ se denomina $A^*$.
+Por convención, llamaremos a estas palabras, $u$, $v$, $x$, $y$, $z$,\ldots
+Denominaremos $|u|$ a la longitud de una palabra $u \in A^*$:
+
+\[u = a_1 a_2 \ldots a_{n-1} a_n \Rightarrow |u| = n\]
+
+De igual forma que el conjunto vacío $\emptyset$ es en elemento de todos los conjuntos, la palabra vacía $\epsilon$ es una palabra de longitud cero contenida en todos los alfabetos.
+Denonimaremos $A^+$ a $A^*\backslash\{\epsilon\}$.
+
+\subsection{Lenguajes}
+
+Un lenguaje sobre un alfabeto $A$ es un subconjunto $L \subseteq A^*$.
+Por convención llamaremos a estos lenguajes $L$, $M$, $N$,\ldots
+Éstos son algunos ejemplos de lenguajes:
+
+\begin{align*}
+	L_1 &= \{a,b,\epsilon\} \\
+	L_2 &= \{a^i b^i : i \in\mathbb{N}\} \\
+	L_3 &= \{uu^{-1} : u \in A^*\} \\
+	L_4 &= \{{a^n}^2 : n \in\mathbb{N}\backslash\{0\}\} \\
+\end{align*}
+
+\subsection{Numeración de conjuntos}
+
+Decimos que un conjunto es numerable si existe una aplicación inyectiva de este conjunto desde $\mathbb{N}$, es decir, si a cada elemento del conjunto le podemos asociar un único número natural.
+En cualquier otro caso, decimos que no es numerable.
+Alguno ejemplos de numerabilidad son los siguientes:
+
+\begin{itemize}
+	\item $A^*$ siempre es numerable.
+	\item El conjunto de lenguajes sobre $A^*$ nunca es numerable si $A \neq \epsilon$.
+	\item El conjunto de programas compilables en C++ es numerable\footnote{%
+		Curiosamente, una versión antigua de algún compilador permitía compilar un programa de C++ a partir de un fichero de tamaño \texttt{0b}, de forma que el resultado era la impresión de dicho fichero vacío, lo que se conoce como un \textit{quine}.
+	}.
+\end{itemize}
+
+\section{Operaciones con palabras y lenguajes}
+
+Dada la naturaleza de conjuntos de los lenguajes, se definen las operaciones de unión ($L \cup M$) e intersección ($L \cap M$) sobre ellos.
+También definimos otra serie de operaciones más específicas:
+
+\subsection{Concatenación}
+
+Dadas dos palabras $u,v \in A^*$, definidas como $u = a_1 a_2 \ldots a_{n-1} a_n$ y $v = b_1 b_2 \ldots b_{m-1} b_m$, definimos la concatenación de $u$ y $v$ a la cadena $u.v$ (o simplemente $uv$) con valor $uv = a_1 a_2\ldots a_{n-1} a_n b_1 b_2\ldots b_{m-1} b_m$.
+Por ejemplo, si $u=0110$ y $v=100010$, $uv=0110100010$.
+
+La concatenación de palabras satisface las propiedades de los monoides:
+
+\begin{center}
+\begin{tabular}{l l}
+	\textbf{Propiedad} & \textbf{Descripción}                          \\
+	\toprule
+	Asociativa         & $u(vw) = (uv)w, \forall u,v,w \in A^*$          \\
+	Elemento neutro    & $u\epsilon = \epsilon u = u, \forall u \in A^*$ \\
+\end{tabular}
+\end{center}
+
+También se tiene que $|uv| = |u| + |v|, \forall u,v \in A^*$.
+
+Si trabajamos con dos lenguajes $L_1$ y $L_2$ sobre un alfabeto $A$, definimos su concatenación de la siguiente forma:
+
+\[L_1 L_2 = \{u_1 u_2 : u_1 \in L_1, u_2 \in L_2\}\]
+
+Por ejemplo, si $L_1 = \{0^i 1^i : i \geq 0\}$ y $L_2 = \{1^i 0^i : i \geq 0\}$, su concatenación es $L_1 L_2 = \{0^i 1^i 1^j 0^j : i,j \geq 0\}$
+
+La concatenación de lenguajes también satisface las propiedadesde los monoides:
+
+\begin{center}
+\begin{tabular}{l l}
+	\textbf{Propiedad} & \textbf{Descripción}                                     \\
+	\toprule
+	Asociativa         & $L_1(L_2 L_3) = (L_1 L_2)L_3, \forall L_1,L_2,L_3 \in A$ \\
+	Elemento neutro    & $L\{\epsilon\} = \{\epsilon\}L = L, \forall L \in A$     \\
+\end{tabular}
+\end{center}
+
+También se tiene que $L\emptyset = \emptyset L = \emptyset$.
+
+\subsection{Iteración}
+
+La iteración $n$-ésima de una cadenam expresada como $u^n$, es la concatenación de la cadena consimo misma $n$ veces:
+
+\begin{align*}
+	u^0 &= \epsilon \\
+	u^n &= \prod_{i=0}^{n} u^i u, \forall i \geq 0
+\end{align*}
+
+Por ejemplo, si $u=1001$, $u^4=1001100110011001$.
+
+En lenguajes, definimos la iteración de forma de la siguiente forma:
+
+\begin{align*}
+	L^0     &= \{\epsilon\} \\
+	L^{i+1} &= L^i L \\
+\end{align*}
+
+\subsubsection{Clausura de Kleene}
+
+La clausura de Kleene, también conocida como estrella de Kleene o cierre estrella, representa las cadenas formables a partir de cualquier número de cadenas de un lenguaje inicial:
+
+\begin{align*}
+	L^* &= \bigcup_{i \geq 0} L^i \\
+	L^+ &= \bigcup_{i \geq 1} L^i
+\end{align*}
+
+Esta operación satisface las siguientes propiedades
+
+\begin{itemize}
+	\item $L^+ = L^* \Leftrightarrow \epsilon \in L$
+	\item $L^+ = L^* - \{\epsilon\} \Leftrightarrow \epsilon \notin L$
+\end{itemize}
+
+Por ejemplo, si $L = \{0, 01\}$, $L^*$ es el conjunto de palabras sobre $\{0,1\}$ en las que 1 va siempre precedido de un 0 y $L^+$ es el conjunto de palabras sobre $\{0,1\}$ en las que 1 va siempre precedido de un 0 y son distintas de $\epsilon$.
+
+\subsection{Cadena inversa}
+
+Definida una cadena $u = a_1 a_2 \ldots a_{n-1} a_n$, su cadena inversa ($u^{-1}$), es la cadena $u^{-1} = a_n a_{n-1} \ldots a_2a_1$.
+Por ejemplo, si $u = 100$, $u^{-1} = 001$.
+
+\subsection{Lenguaje inverso}
+
+\[L^{-1} = \{u : u^{-1} \in L\}\]
+
+\subsection{Cabecera de un lenguaje}
+
+\[CAB(L) = \{u : u \in A^* \land \exists v \in A^* : uv \in L\}\]
+
+Por ejemplo, si $L = \{0^i 1^i : i \geq 0\}$, $CAB(L) = \{0^i 1^i : i \geq j \geq 0\}$.
+
+\subsection{Homomorfisos}
+
+Sean $A_1$ y $A_2$ dos alfabetos, decimos que una aplicación $h : A^*_1 \rightarrow A^*_2$ es un homomorfismo si y sólo si $h(uv) = h(u) h(v)$.
+Por ejemplo, si $A = \{0,1,2,3,4,5,6,7,8,9\}$ y $A_2 = \{0,1\}$, $h(0) = 0000$, $h(1) = 0001$, $h(5) = 0101$, $h(9) = 1001$, $h(534) = 010100110100$ y $h(\epsilon) = \epsilon$.
+
+Como contraejemplos, una aplicación que transforme cada palabra $u \in A^*$ en su inversa no puede ser un homomorfismo $h : A^* \rightarrow A^*$, ya que no satisface que $h(uv) = h(u) h(v)$.
+De la misma forma, la transformación que a cada palabra sobre ${\{0,1\}}^*$ le añade 00 al principio y 11 al final tampoco puede serlo.
+
+\section{Gramáticas}
+
+Una gramática generativa es una cuádrupla $(V, T, P, S)$ con los siguientes elementos:
+
+\begin{itemize}
+	\item\textbf{Un alfabeto $\boldsymbol{V}$:} Son las variables o símbolos no terminales de la gramática. Sus elementos se suelen representar en mayúsculas.
+	\item\textbf{Un alfabeto $\boldsymbol{T}$:} Son los símbolos terminales y se suelen representar en minúsculas.
+\item\textbf{Un conjunto de pares $\boldsymbol{(\alpha,\beta)}$ $\boldsymbol{P}$:} Son las reglas de proudcción, donde $\alpha, \beta \in {(V \cup T)}^*$ y $a$ contiene al menos un símbolo de $V$. El par se suele representar como $\alpha \rightarrow \beta$.
+	\item\textbf{Un elemento $\boldsymbol{S}$ de $\boldsymbol{V}$:} Es el símbolo de partida.
+\end{itemize}
+
+Por ejemplo, tengamos la siguiente gramática:
+
+\begin{align*}
+	G &= (V, T, P, S) : \\
+	V &= \{E\} \\
+	T &= \{+, *, (,), a, b, c\} \\
+	P &=
+		\begin{cases}
+			E \rightarrow E + E \\
+			E \rightarrow E * E \\
+			E \rightarrow (E)   \\
+			E \rightarrow a     \\
+			E \rightarrow b     \\
+			E \rightarrow c
+ 		\end{cases} \\
+	S &= E
+\end{align*}
+
+Las palabras generables con este lenguaje ($T^*$) son aquellas que se pueden obtener con las diferentes reglas de producción empezando a partir del símbolo de partida ($E$ en este caso) y que sólo contienen símbolos terminales.
+Por ejemplo:
+
+\begin{align*}
+	E           & \Leftarrow S                   \\
+	E * E       & \Leftarrow E \rightarrow E * E \\
+	(E) * E     & \Leftarrow E \rightarrow (E)   \\
+	(E + E) * E & \Leftarrow E \rightarrow E + E \\
+	(a + E) * E & \Leftarrow E \rightarrow a     \\
+	(a + b) * E & \Leftarrow E \rightarrow b     \\
+	(a + b) * b & \Leftarrow E \rightarrow b
+\end{align*}
+
+\subsection{Derivación}
+
+Tengamos una gramática $G = (V, T, P, S)$ y dos palabras $\alpha, \beta \in {(V \cup T)}^*$.
+
+Decimos que $\beta$ es deribable a partir de $\alpha$ en un paso $(\alpha \Rightarrow \beta)$ si existe una producción $\gamma \rightarrow \phi$ en la que $\alpha$ contenga a $\gamma$ como subcadena y $\beta$ se obtenga sustituyendo $\gamma$ por $\phi$ en $\alpha$.
+
+Generalmente, decimos que $\beta$ es derivable de $\alpha$ en una secuencia $(\alpha \xRightarrow{*} \beta)$ si existe una sucesión de palabras $\gamma_1 \gamma_2 \ldots \gamma_{n-1} \gamma_n, \forall n \geq 1 : a = \gamma_1 \Rightarrow \gamma_2 \Rightarrow \ldots \Rightarrow \gamma_{n-1} \Rightarrow \gamma_n = \beta$.
+
+\subsection{Lenguaje generado}
+
+Un lenguaje generado por una gramática $G = (V, T, P, S)$ es un conjunto de cadenas formadas por símbolos terminales deribables a partir de $S$:
+
+\[L(G) = \{u \in T^* : S \xRightarrow{*} u\}\]
+
+\section{Jerarquía de Chomsky}
+
+Chomsky define la siguiente jerarquía de gramáticas en la que cada nivel $L_i \subseteq L_{i-1}$.
+
+\begin{itemize}
+	\item\textbf{Tipo 0:} Cualquier gramática sin ningún tipo de restricciones. Son los lenguajes recursivamente enumerables.
+	\item\textbf{Tipo 1:} Si todas las producciones tienen la forma $\alpha_1 A \alpha_2 \rightarrow \alpha_1 \beta \alpha_2 : \alpha_1, \alpha_2, \beta \in {(V \cup T)}^*, A \in V, \beta \neq \epsilon$, excepto la posible regla $S \rightarrow \epsilon$, en cuyo caso $S$ no aparece a la derecha de las reglas. Son los lenguajes dependientes del contexto.
+	\item\textbf{Tipo 2:} Si cualquier producción tiene la forma $A \rightarrow \alpha : A \in V, \alpha \in {V \cup T}^*$. Son los lenguajes independientes del contexto.
+	\item\textbf{Tipo 3:} Si todas las reglas tienen la forma $A \rightarrow uB \lor A \rightarrow u : u \in T^* \land A,B \in V$. Son los conjuntos regulares.
+\end{itemize}
+
+Se dice que un lenguaje es de tipo $i$ únicamente si es generado por una gramática de tipo $i$.
