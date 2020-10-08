@@ -1,0 +1,176 @@
+\section{Números enteros}\label{numeros-enteros}
+
+\subsection{$\mathbb{Z}$, el conjunto de los numeros enteros}
+
+Al igual que los números naturales, los números enteros se pueden sumar y multiplicar con las mismas propiedades.
+Sin embargo, este conjunto presenta propiedades que no tienen los números naturales.
+A pesar de las repeticiones, las enumeramos todas para facilitar la lectura.
+
+\subsubsection{Los números enteros se pueden sumar}
+
+\[a,b \in\mathbb{Z} \Rightarrow a+b \in\mathbb{Z}, \forall a,b\]
+
+La suma satisface las siguientes propiedades:
+
+\begin{center}
+\begin{tabular}{l l}
+	\textbf{Propiedad}      & \textbf{Expresión}                                       \\
+	\toprule
+	Asociativa              & $(a+b) + c = a + (b+a), \forall a,b,c \in\mathbb{Z}$     \\
+	Conmutativa             & $a+b = b+a, \forall a,b \in\mathbb{Z}$                   \\
+	Elemento neutro (0)     & $a+0 = a, \forall a \in\mathbb{Z}$                       \\
+	Elemento opuesto ($-a$) & $a + (-a) = 0, \forall a \in\mathbb{Z}$                  \\
+	Cancelativa             & $a+b = a+c \Rightarrow b=c, \forall a,b,c \in\mathbb{Z}$ \\
+\end{tabular}
+\end{center}
+
+La existencia del elemento opuesto nos indica que, al contrario que en los números naturales, la resta cumple todas las propiedades de la suma en los números enteros.
+
+\subsubsection{Los números enteros se pueden multiplicar}
+
+\[a,b \in\mathbb{Z} \Rightarrow a \cdot b \in\mathbb{Z}, \forall a,b\]
+
+Al igual que en los números naturales, la división no cumple siempre estas propiedades en los números enteros.
+La multiplicación satisface las siguientes propiedades:
+
+\begin{center}
+\begin{tabular}{l l}
+	\textbf{Propiedad}  & \textbf{Expresión}                                                             \\
+	\toprule
+	Asociativa          & $(a \cdot b) \cdot c = a \cdot (b \cdot c), \forall a,b,c \in\mathbb{Z}$       \\
+	Conmutativa         & $a \cdot b = b \cdot a, \forall a,b \in\mathbb{Z}$                             \\
+	Elemento neutro (1) & $a \cdot 1 = a, \forall a \in\mathbb{Z}$                                       \\
+	Cancelativa         & $a \cdot b = a \cdot c \Rightarrow b=c, \forall a,b,c \in\mathbb{Z}, a \neq 0$ \\
+\end{tabular}
+\end{center}
+
+También tenemos que la suma es distributiva respecto al producto:
+
+\[a \cdot (b+c) = a \cdot b + a \cdot c, \forall a,b,c \in\mathbb{Z}\]
+
+\subsubsection{Los números enteros se pueden ordenar}
+
+\[\exists c \in\mathbb{Z} : a+c = b \Rightarrow a \leq b, \forall a,b,c \in\mathbb{Z}\]
+
+Esta relación de orden satisface las siguientes tres propiedades con nombre:
+
+\begin{center}
+\begin{tabular}{l l}
+	\textbf{Propiedad} & \textbf{Expresión}                                                          \\
+	\toprule
+	Reflexiva          & $a \leq a, \forall a \in\mathbb{Z}$                                         \\
+	Asimétrica         & $a \leq b \land b \leq a \Rightarrow a=b, \forall a,b \in\mathbb{Z}$        \\
+	Transitiva         & $a \leq b \land b \leq c \Rightarrow a \leq c, \forall a,b,c \in\mathbb{Z}$ \\
+	Orden total        & $a \leq b \lor b \leq a, \forall a,b \in\mathbb{Z}$                         \\
+\end{tabular}
+\end{center}
+
+Esta relación también cumple las siguientes propiedades
+
+\begin{itemize}
+	\item $a \leq b \Rightarrow a+c \leq b+c, \forall a,b,c \in\mathbb{Z}$
+	\item $a+c \leq n+p \Rightarrow a \leq b, \forall a,b,c \in\mathbb{Z}$
+	\item $a \leq b \Rightarrow a \cdot c \leq b \cdot c, \forall a,b,c \in\mathbb{Z}$
+	\item $a \cdot c \leq b \cdot c \Rightarrow a \leq c, \forall a,b,c \in\mathbb{Z}$
+	\item $a \leq b \Rightarrow
+		\begin{cases}
+			ac \leq bc & \text{si } c \geq 0 \\
+			ac \geq bc & \text{si } c \leq 0
+		\end{cases}
+		, \forall a,b,c \in\mathbb{Z}$
+\end{itemize}
+
+\subsubsection{Los números enteros tienen un valor absoluto}
+
+Definimos la aplicación valor absoluto $|| : \mathbb{Z} \rightarrow \mathbb{N}$ de la siguiente forma:
+
+\[
+|a| =
+\begin{cases}
+	a  & \text{si } a \geq 0 \\
+	-a & \text{si } a < 0
+\end{cases}
+\]
+
+Informalmente hablando, esta aplicación nos devuelve la \textit{distancia de $a$ al 0} y cumple las siguientes propiedades:
+
+\begin{itemize}
+	\item $|a| = 0 \Leftrightarrow a = 0, \forall a \in\mathbb{Z}$
+	\item $|a \cdot b| = |a| \cdot |b|, \forall a,b \in\mathbb{Z}$
+	\item $|a+b+| \leq |a| + |b|, \forall a,b \in\mathbb{Z}$
+	\item $|a| \leq b \Leftrightarrow -b \leq a \leq b, \forall a,b \in\mathbb{Z}$
+\end{itemize}
+
+\subsubsection{Existe un algoritmo para dividir los números enteros}
+
+\[a,b \in\mathbb{Z} \Rightarrow \exists! c,r \in\mathbb{Z} : a = bc + r, 0 \geq r < |b|, b \neq 0\]
+
+\subsection{Representación en complemento}
+
+Para restarle a un número entero $a$ otro número entero $b$ realizamos la operación $a + (-b) = a - b$ y utilizamos el algoritmo de la resta.
+Sin embargo, existe una forma más sencilla de computar esta operación que sólo requiere del algoritmo de la suma.
+Esta forma es la representación de un número en complemento a otro.
+Vamos a construir primero una intuición al funcionamiento de esta representación:
+
+\begin{align*}
+	143 - 98  = 45  \\
+	100 - 98  = 2   \\
+	143 + 2   = 145 \\
+	144 - 100 = 45
+\end{align*}
+
+Para realizar la operación $143 - 98$ (o cualquier otra operación aparte del ejemplo) podemos realizar la resta directamente o podemos calcular cuánto le falta al sustraendo para llegar a 100, sumarlo y restarle 100.
+Utilizamos este algoritmo de forma diaria al hacer cálculos mentales sin pensar demasiado en el proceso.
+Vamos a formalizarlo para un caso general:
+
+Dado un número $a \in\mathbb{Z}$, en una base $b \geq 2$, podemos representarlo en complemento a $b$ con el siguiente algoritmo:
+
+\begin{itemize}
+	\item Añadimos un 0 a la izquierda de $a$.
+	\item Si $a$ es negativo:
+	\begin{itemize}
+		\item Para cada cifra $a_i$ de $a$, calculamos $(b-1) - a_i$ y la sustituimos.
+		\item Sumamos 1 al resultado del paso anterior\footnote{%
+			Si nos saltamos el tercer paso del algoritmo, hemos calculado $a$ en complemento a $b-1$.
+		}.
+	\end{itemize}
+\end{itemize}
+
+Vamos a representar -98 en complemento a 10 para demostrar que este algoritmo sirve para la el ejemplo anterior:
+
+Primero, le añadimos un 0 a la izquierda: 098.
+Segundo, a cada calculamos $9 - a_i$ para cada cifra $a_i$ de 098 y la sustituimos, quedándonos con 901.
+Por último, le sumamos 1 y tenemos el 902, que es -98 expresado en complemento a 10.
+Ahora para realizar la resta $143 - 98$ simplemente tenemos que realizar la suma $143 + 902$:
+
+\begin{center}
+\setlength{\tabcolsep}{1ex}
+\begin{tabular}{c c c c}
+  & 1 & 4 & 3 \\
++ & 9 & 0 & 2 \\
+\midrule
+1 & 0 & 4 & 5 \\
+\end{tabular}
+\end{center}
+
+Despreciamos el acarreo del 1 y tenemos que $143 - 98 = 143 + 902 = 45$.
+
+Esta operación es extremadamente útil en la ingeniería de computadores, ya que permite a los procesadores ahorrarse la implementación de un algoritmo de resta y usar las operaciones \texttt{xor} y \texttt{add}:
+
+\begin{lstlisting}[language={[x86masm]Assembler}]
+xorq %rax, %rax
+addq %rbx, %rax
+\end{lstlisting}
+
+Esto ocurre porque la representación en complemento a 2 de un número binario puede simplificarse en intercambiar los ceros y los unos y sumar 1 al resultado:
+
+\[-9 \rightarrow -1001 \rightarrow 10111\]
+
+Para pasar de un número en binario expresado en complemento a 2 a un número decimal, sumamos todas las cifras y restamos la más significativas:
+
+\begin{align*}
+	101101 & = 1 + 4 + 8 - 32 = -19 \\
+	01011  & = 1 + 2 + 8 - 0 = 11
+\end{align*}
+
+Al igual que en los números \textit{normales} no importa la cantidad de ceros a la izquierda, en los números en complemento a $b$ no importa la cantidad de $b-1$ a la izquierda.
