@@ -1,0 +1,37 @@
+\documentclass[10pt, a4paper]{aqademic}
+
+\usepackage[spanish]{babel}
+	\selectlanguage{spanish}
+
+% Document packages
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage[type=CC, modifier=by-nc-sa, version=4.0]{doclicense}
+\usepackage{graphicx}
+\usepackage{tikz}
+
+% Document settings
+
+\author{Atanasio José Rubio Gil}
+\title{Cálculo}
+
+\AqSetChapter{Tema }
+
+% Document composition
+
+\begin{document}
+
+\AqMaketitle[%
+	cover    = logo-ugr.png,
+	org      = Grado en Ingeniería Informática,
+	subtitle = Teoría,
+	url      = https://github.com/Groctel/ugr-informatica
+]
+
+\input{RecursosTeX/post-portada.tex}
+\tableofcontents
+
+\input{Teoría/Propiedades de los números reales.tex}
+
+\end{document}
