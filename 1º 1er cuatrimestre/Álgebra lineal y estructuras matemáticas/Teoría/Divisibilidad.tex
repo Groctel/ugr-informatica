@@ -1,0 +1,162 @@
+\section{Divisibilidad}\label{divisibilidad}
+
+\subsection{Definición}
+
+En \S\ref{representacion-de-los-numeros-naturales} vimos un algoritmo para dividir los números naturalesm que ampliamos para el caso de los números enteros en \S\ref{numeros-enteros}.
+Esta división tiene en cuenta que el resto puede ser cualquier número natura o entero.
+Sin embargo, no es lo mismo dividir un número entre otro y que un número divida a otro.
+Cuando decimos que un número $a$ divide a un número $b$ lo expresamos como $a|b$ y lo definimos de la siguiente forma:
+
+\[a|b \iff \exists c \in\mathbb{Z} : a = bc\]
+
+También podemos interpretar esta relación como que $b$ es múltiplo de $a$ o que $a$ es un divisor de $b$.
+Aunque esta última forma de expresarlo es muy similar a la primera que hemos dado, hace énfasis en que cdada número puede tener más de uno que lo divida.
+Llamaremos a este conjunto de números sus divisores.
+
+Esta relación satisface las siguientes propiedades:
+
+\begin{itemize}
+	\item $a|a$
+	\item $a|0 \forall a \in\mathbb{Z}$
+	\item $1|a \forall a \in\mathbb{Z}$
+	\item $a|b \land a|c \Rightarrow a|b \pm c$
+	\item $a|b \land b|c \Rightarrow a|c$
+	\item $a|b \land b|a \Rightarrow a = \pm b$
+	\item $a|b \Rightarrow a|bc$
+	\item $a|b \iff b \mod a = 0 \forall a \neq 0$
+\end{itemize}
+
+\subsection{Máximo común divisor y mínimo común múltiplo}
+
+Decimos que un número $d$ es un máximo común divisor de $a$ y $b$ si se satisfacen las siguientes condiciones:
+
+\begin{align*}
+	d|a \land d|b & \\
+	c|a \land c|b & \Rightarrow c|d
+\end{align*}
+
+De forma contraria a la definición usual que se da en el instituto, hablamos de \textit{un} máximo común divisor en lugar de \textit{el} máximo común divisor.
+Lo expresamos así porque los máximos divisores comunes son aquellos cuyo valor absoluto es el máximo, es decir, $-d$ también es un máximo común divisor de $a$ y $b$ porque $|-d| = |d|$.
+Por ejemplo, los máximos comunes divisores de 10 y 6 son 2 y -2, aunque nos quedaremos con el positivo por conveniencia.
+
+Esta relación satisface las siguientes propiedades:
+
+\begin{itemize}
+	\item $mcd(a,b) = mcd(a,-b) = mcd(-a,b) = mcd(-a,-b) = mcd(|a|,|b|)$
+	\item $mcd(a,0) = |a|$
+	\item $mcd(a,1) = 1$
+	\item $a|b \Rightarrow mcd(a,b) = |a|$
+	\item $mcd(a, mcd(b,c)) = mcd(mcd(a,b), c) = mcd(a,b,c)$
+	\item $mcd(ac,bc) = mcd(a,b) \cdot |c|$
+	\item $d|a \land d|b \Rightarrow mcd\big(\frac{a}{d},\frac{b}{d}\big) = \frac{mcd(a,b)}{|d|}$
+\end{itemize}
+
+Decimos que un número $m$ es un mínimo común múltiplo de $a$ y $b$ (nótese de nuevo que existe más de uno) si se satisfacen las siguientes condiciones:
+
+\begin{align*}
+	a|m \land b|m & \\
+	a|n \land b|n & \Rightarrow m|n
+\end{align*}
+
+Una forma sencilla de encontrar el mínimo común múltiplo de dos números es calculando previamente su máximo común divisor:
+
+\[mcm(a,b) = \frac{ab}{mcd(a,b)}\]
+
+\subsection{Algoritmo de Euclides}
+
+Para encontrar el máximo común divisor de dos números tenemos dos formas de proceder.
+La primera es factorizar ambos números y tomar los factores comunes elevados al menor exponente.
+Sin embargo, este proceso es extremadamente lento para números grandes (del orden de milenios) y aún no hemos definido cómo factorizar un número o los elementos con los que operamos para ello.
+En su lugar, vamos a definr un algoritmo llamado \textit{algoritmo de Euclides} que nos servirá para encontrar el máximo común divisor de un número en un tiempo extremadamente bajo.
+Lo expresamos en pseudocódigo de la siguiente forma:
+
+\begin{lstlisting}[language=Python]
+EUCLIDES(a,b):
+	(a,b) = (|a|,|b|)
+	while b != 0:
+		(a,b) = (b, a mod b)
+	return a
+\end{lstlisting}
+
+Por ejemplo, calculemos el $mcd(58,42)$:
+
+\begin{align*}
+	(a,b) & = (58, 42) \\
+	(a,b) & = (42, 16) \\
+	(a,b) & = (16, 10) \\
+	(a,b) & = (10, 6)  \\
+	(a,b) & = (6, 4)   \\
+	(a,b) & = (4, 2)   \\
+	(a,b) & = (2, 0)   \\
+\end{align*}
+
+En unas pocas operaciones hemos obtenido que $mcd(58,42) = 2$.
+A la hora de trabajar con este algoritmo lo hacemos en una tabla para facilitarlos la interpretación de los resultados.
+Organizamos esta tabla de forma que los restos de las operaciones estén a la izquierda y los cocientes a la derecha:
+
+\begin{center}
+\begin{tabular}{r r}
+  $\boldsymbol{r}$ & $\boldsymbol{c}$ \\
+	\toprule
+	58              &                  \\
+	42              &                  \\
+	16              & 1                \\
+	10              & 2                \\
+	6               & 1                \\
+	4               & 1                \\
+	2               & 1                \\
+	0               & 1                \\
+\end{tabular}
+\end{center}
+
+Con esta organización podemos definir una forma sistemática de computar cada fila $i$:
+
+\[r_{i-2} = r_{i-1} \cdot c_i + r_i\]
+
+\subsection{Algoritmo extendido de Euclides: Identidad de Bezout}
+
+Vamos a extender el algoritmo de Euclides con la siguiente identidad conocida como la \textit{identidad de Bezout}:
+
+\[d = mcd(a,b) \Rightarrow \exists u,v \in\mathbb{Z} : d = au + bv\]
+
+La extensión de este algoritmo la haremos añadiendo dos columnas $u$ y $v$ que nos ayuden a calcular esta identidad para cada $r_i$ de la siguiente forma:
+
+\[r_i = ua + vb\]
+
+Para calcular estos números no tenemos que probar todas las combinaciones posibles, sino que tenemos una forma sistemática de obtenerlos de la misma forma que con los restos:
+
+\begin{align*}
+	u_i = u_{i-2} - c_i \cdot u_{i-1} \\
+	v_i = v_{i-2} - c_i \cdot v_{i-1} \\
+\end{align*}
+
+Por ejemplo, veamos la extensión del algoritmo de Euclides para calcular $mcd(58,42)$:
+
+\begin{center}
+\begin{tabular}{r r r r}
+  $\boldsymbol{r}$ & $\boldsymbol{c}$ & $\boldsymbol{u}$ & $\boldsymbol{v}$ \\
+	\toprule
+   58              &                  & 1                & 0                \\
+   42              &                  & 0                & 1                \\
+   16              & 1                & 1                & -1               \\
+   10              & 2                & -2               & 3                \\
+   6               & 1                & 3                & -4               \\
+   4               & 1                & -5               & 7                \\
+   2               & 1                & 8                & -11              \\
+	0               & 2                & -21              & 29               \\
+\end{tabular}
+\end{center}
+
+Para preparar el algoritmo debemos rellenar las dos primeras filas con $u=0, v=1$ y $u=1, v=0$ respectivamente.
+Podemos verificar cómo para cada fila se cumple la identidad de Bezout:
+
+\begin{align*}
+	58 & = 58 \cdot 1 + 42 \cdot 0    \\
+   42 & = 58 \cdot 0 + 42 \cdot 1    \\
+   16 & = 58 \cdot 1 + 42 \cdot -1   \\
+   10 & = 58 \cdot -2 + 42 \cdot 3   \\
+   6  & = 58 \cdot 3 + 42 \cdot -4   \\
+   4  & = 58 \cdot -5 + 42 \cdot 7   \\
+   2  & = 58 \cdot 8 + 42 \cdot -11  \\
+	0  & = 58 \cdot -21 + 42 \cdot 29 \\
+\end{align*}
