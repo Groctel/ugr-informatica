@@ -16,19 +16,19 @@ inline void Cubo :: InicializarCaras () noexcept
 {
 	caras.resize(12);
 
-	caras[0]  = {6, 4, 2};
-	caras[1]  = {2, 0, 3};
-	caras[2]  = {3, 1, 7};
-	caras[3]  = {7, 5, 6};
-	caras[4]  = {2, 3, 6};
-	caras[5]  = {1, 0, 5};
+	caras[0]  = {6, 0, 2};
+	caras[1]  = {6, 5, 4};
+	caras[2]  = {6, 3, 7};
+	caras[3]  = {1, 3, 2};
+	caras[4]  = {1, 5, 7};
+	caras[5]  = {1, 0, 4};
 
-	caras[6]  = {0, 2, 4};
-	caras[7]  = {1, 3, 0};
-	caras[8]  = {5, 7, 1};
-	caras[9]  = {4, 6, 5};
-	caras[10] = {7, 6, 3};
-	caras[11] = {4, 5, 0};
+	caras[6]  = {6, 2, 3};
+	caras[7]  = {6, 7, 5};
+	caras[8]  = {6, 4, 0};
+	caras[9]  = {1, 2, 0};
+	caras[10] = {1, 7, 3};
+	caras[11] = {1, 4, 5};
 }
 
 /** @fn inline void Cubo :: InicializarVertices (const float escala) noexcept
