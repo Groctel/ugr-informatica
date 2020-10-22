@@ -5,6 +5,8 @@
 
 namespace coloresgl {
 
+typedef tuplas::Tupla3f color;
+
 const tuplas::Tupla3f AMARILLO = tuplas::Tupla3f(1, 1, 0);
 const tuplas::Tupla3f AZUL     = tuplas::Tupla3f(0, 0, 1);
 const tuplas::Tupla3f CIAN     = tuplas::Tupla3f(0, 1, 1);

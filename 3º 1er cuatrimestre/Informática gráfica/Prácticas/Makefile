@@ -1,5 +1,6 @@
 makedir = .
 bin     = $(makedir)/bin
+doc     = $(makedir)/doc
 inc     = $(makedir)/include
 obj     = $(makedir)/obj
 src     = $(makedir)/src
@@ -29,15 +30,18 @@ gtestflags = $(CXXFLAGS) -I$(gtest) $(gtestlibs)
 	clean \
 	cleanbuild \
 	directories \
+	doc \
 	full \
 	run \
-	tests
+	test
 
 all: directories $(bin)/practicas
 
 clean:
-	-rm $(bin)/*
-	-rm $(obj)/*
+	-@rm $(bin)/*
+	-@rm $(obj)/*
+	-@rm -r $(doc)/html
+	-@rm -r $(doc)/latex
 
 cleanbuild: clean all
 
@@ -45,12 +49,16 @@ directories:
 	@mkdir -p $(obj)
 	@mkdir -p $(bin)
 
-full: all tests run
+doc:
+	@mkdir -p $(doc)
+	@doxygen
+
+full: all test run
 
 run: all
 	@$(bin)/practicas
 
-tests: all $(bin)/tests
+test: all $(bin)/tests
 	@$(bin)/tests
 
 $(bin)/practicas: $(src)/practicas.cpp $(obj)/cubo.o $(obj)/ejes.o \

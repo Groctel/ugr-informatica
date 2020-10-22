@@ -1,4 +1,15 @@
+/** @file tetraedro.cpp
+ */
+
 #include "tetraedro.hpp"
+
+/** @fn inline void Tetraedro :: InicializarCaras () noexcept
+ *
+ * @brief Crea las cuatro caras del tetraedro
+ *
+ * La tupla de cada cara comienza con el vértice del mismo índice de la tabla
+ * para verificar su corrección.
+ */
 
 inline void Tetraedro :: InicializarCaras () noexcept
 {
@@ -10,19 +21,11 @@ inline void Tetraedro :: InicializarCaras () noexcept
 	caras[3]  = {3, 1, 0};
 }
 
-inline void Tetraedro :: InicializarColores () noexcept
-{
-	colores_lineas.resize(vertices.size());
-	colores_puntos.resize(vertices.size());
-	colores_solido.resize(vertices.size());
-
-	for (size_t i=0; i<vertices.size(); i++)
-	{
-		colores_lineas[i] = coloresgl::VERDE;
-		colores_puntos[i] = coloresgl::AZUL;
-		colores_solido[i] = coloresgl::ROJO;
-	}
-}
+/** @fn inline void Tetraedro :: InicializarVertices (const float escala) noexcept
+ *
+ * @brief Crea la tabla de vértices del tetraedro
+ * @param escala Factor de escalado de los lados del cubo
+ */
 
 inline void Tetraedro :: InicializarVertices (const float escala) noexcept
 {
@@ -37,11 +40,19 @@ inline void Tetraedro :: InicializarVertices (const float escala) noexcept
 	vertices[3] = {0,         altura/2,  0         };
 }
 
+/** @fn Tetraedro :: Tetraedro (const float escala)
+ *
+ * @brief Constructor con argumento
+ * @param escala Factor de escalado de los lados del tetraedro
+ *
+ * Llama a las funciones de inicialización propias y heredadas para crear el
+ * tetraedro.
+ */
+
 Tetraedro :: Tetraedro (const float escala)
 {
 	InicializarVertices(escala);
 	InicializarCaras();
 	InicializarColores();
-	GenerarAjedrez();
 }
 

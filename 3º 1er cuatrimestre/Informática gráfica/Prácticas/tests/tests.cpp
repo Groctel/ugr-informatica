@@ -42,97 +42,93 @@ TEST_F (TuplaTest, DosTuplasConstruidasIgualSonIguales)
 /* 	EXPECT_NE(*tupla1, *tupla2); */
 /* } */
 
-TEST_F (MallaTest, ElModoAjedrezEmpiezaApagado)
+TEST_F (MallaTest, LosModosDeVisualizacionEmpiezanApagados)
 {
-	EXPECT_EQ(malla.Ajedrez(), false);
+	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Ajedrez), false);
+	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Lineas), false);
+	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Puntos), false);
+	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Solido), false);
 }
 
 TEST_F (MallaTest, PuedoCambiarElModoAjedrez)
 {
-	ASSERT_EQ(malla.Ajedrez(), false);
-	malla.Ajedrez(true);
-	EXPECT_EQ(malla.Ajedrez(), true);
-	malla.Ajedrez(true);
-	EXPECT_EQ(malla.Ajedrez(), true);
-	malla.Ajedrez(false);
-	EXPECT_EQ(malla.Ajedrez(), false);
-	malla.Ajedrez(false);
-	EXPECT_EQ(malla.Ajedrez(), false);
-}
+	ASSERT_EQ(malla.EstadoVisualizacion(Visualizacion::Ajedrez), false);
 
-TEST_F (MallaTest, ElModoAristasEmpiezaApagado)
-{
-	EXPECT_EQ(malla.Aristas(), false);
+	malla.ModificarVisualizacion(Visualizacion::Ajedrez, Bitset::Set);
+	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Ajedrez), true);
+	malla.ModificarVisualizacion(Visualizacion::Ajedrez, Bitset::Set);
+	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Ajedrez), true);
+
+	malla.ModificarVisualizacion(Visualizacion::Ajedrez, Bitset::Reset);
+	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Ajedrez), false);
+	malla.ModificarVisualizacion(Visualizacion::Ajedrez, Bitset::Reset);
+	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Ajedrez), false);
+
+	malla.ModificarVisualizacion(Visualizacion::Ajedrez);
+	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Ajedrez), true);
+	malla.ModificarVisualizacion(Visualizacion::Ajedrez);
+	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Ajedrez), false);
 }
 
 TEST_F (MallaTest, PuedoCambiarElModoAristas)
 {
-	ASSERT_EQ(malla.Aristas(), false);
-	malla.Aristas(true);
-	EXPECT_EQ(malla.Aristas(), true);
-	malla.Aristas(true);
-	EXPECT_EQ(malla.Aristas(), true);
-	malla.Aristas(false);
-	EXPECT_EQ(malla.Aristas(), false);
-	malla.Aristas(false);
-	EXPECT_EQ(malla.Aristas(), false);
-}
+	ASSERT_EQ(malla.EstadoVisualizacion(Visualizacion::Lineas), false);
 
-TEST_F (MallaTest, ElModoPuntosEmpiezaApagado)
-{
-	EXPECT_EQ(malla.Puntos(), false);
+	malla.ModificarVisualizacion(Visualizacion::Lineas, Bitset::Set);
+	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Lineas), true);
+	malla.ModificarVisualizacion(Visualizacion::Lineas, Bitset::Set);
+	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Lineas), true);
+
+	malla.ModificarVisualizacion(Visualizacion::Lineas, Bitset::Reset);
+	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Lineas), false);
+	malla.ModificarVisualizacion(Visualizacion::Lineas, Bitset::Reset);
+	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Lineas), false);
+
+	malla.ModificarVisualizacion(Visualizacion::Lineas);
+	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Lineas), true);
+	malla.ModificarVisualizacion(Visualizacion::Lineas);
+	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Lineas), false);
 }
 
 TEST_F (MallaTest, PuedoCambiarElModoPuntos)
 {
-	ASSERT_EQ(malla.Puntos(), false);
-	malla.Puntos(true);
-	EXPECT_EQ(malla.Puntos(), true);
-	malla.Puntos(true);
-	EXPECT_EQ(malla.Puntos(), true);
-	malla.Puntos(false);
-	EXPECT_EQ(malla.Puntos(), false);
-	malla.Puntos(false);
-	EXPECT_EQ(malla.Puntos(), false);
-}
+	ASSERT_EQ(malla.EstadoVisualizacion(Visualizacion::Puntos), false);
 
-TEST_F (MallaTest, ElModoSolidoEmpiezaApagado)
-{
-	EXPECT_EQ(malla.Solido(), false);
+	malla.ModificarVisualizacion(Visualizacion::Puntos, Bitset::Set);
+	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Puntos), true);
+	malla.ModificarVisualizacion(Visualizacion::Puntos, Bitset::Set);
+	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Puntos), true);
+
+	malla.ModificarVisualizacion(Visualizacion::Puntos, Bitset::Reset);
+	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Puntos), false);
+	malla.ModificarVisualizacion(Visualizacion::Puntos, Bitset::Reset);
+	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Puntos), false);
+
+	malla.ModificarVisualizacion(Visualizacion::Puntos);
+	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Puntos), true);
+	malla.ModificarVisualizacion(Visualizacion::Puntos);
+	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Puntos), false);
 }
 
 TEST_F (MallaTest, PuedoCambiarElModoSolido)
 {
-	ASSERT_EQ(malla.Solido(), false);
-	malla.Solido(true);
-	EXPECT_EQ(malla.Solido(), true);
-	malla.Solido(true);
-	EXPECT_EQ(malla.Solido(), true);
-	malla.Solido(false);
-	EXPECT_EQ(malla.Solido(), false);
-	malla.Solido(false);
-	EXPECT_EQ(malla.Solido(), false);
-}
+	ASSERT_EQ(malla.EstadoVisualizacion(Visualizacion::Solido), false);
 
-TEST_F (CuboTest, LosVerticesSonLasCoordenadasEnBinario)
-{
-	EXPECT_EQ(cubo.Vertice(0), tuplas::Tupla3f({0, 0, 0}));
-	EXPECT_EQ(cubo.Vertice(1), tuplas::Tupla3f({0, 0, 1}));
-	EXPECT_EQ(cubo.Vertice(2), tuplas::Tupla3f({0, 1, 0}));
-	EXPECT_EQ(cubo.Vertice(3), tuplas::Tupla3f({0, 1, 1}));
-	EXPECT_EQ(cubo.Vertice(4), tuplas::Tupla3f({1, 0, 0}));
-	EXPECT_EQ(cubo.Vertice(5), tuplas::Tupla3f({1, 0, 1}));
-	EXPECT_EQ(cubo.Vertice(6), tuplas::Tupla3f({1, 1, 0}));
-	EXPECT_EQ(cubo.Vertice(7), tuplas::Tupla3f({1, 1, 1}));
-	EXPECT_THROW(cubo.Vertice(8), std::out_of_range);
-}
+	malla.ModificarVisualizacion(Visualizacion::Solido, Bitset::Set);
+	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Solido), true);
+	malla.ModificarVisualizacion(Visualizacion::Solido, Bitset::Set);
+	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Solido), true);
 
-/* TEST_F (CuboTest, LasCarasVanEnSentidoAntohorarioArribaYAbajo) */
-/* { */
-/* 	EXPECT_EQ(cubo.Cara(0), tuplas::Tupla3i({0, 6, 2})); */
-/* 	EXPECT_EQ(cubo.Cara(1), tuplas::Tupla3i({0, 4, 6})); */
-/* 	EXPECT_THROW(cubo.Cara(12), std::out_of_range); */
-/* } */
+	malla.ModificarVisualizacion(Visualizacion::Solido, Bitset::Reset);
+	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Solido), false);
+	malla.ModificarVisualizacion(Visualizacion::Solido, Bitset::Reset);
+	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Solido), false);
+
+	malla.ModificarVisualizacion(Visualizacion::Solido);
+	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Solido), true);
+	malla.ModificarVisualizacion(Visualizacion::Solido);
+	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Solido), false);
+}
 
 int main (int argc, char ** argv)
 {

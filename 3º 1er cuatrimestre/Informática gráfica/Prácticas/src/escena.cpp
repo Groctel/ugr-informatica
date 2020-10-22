@@ -10,7 +10,7 @@ Escena::Escena ()
 	Observer_angle_x  = 0.0;
 	Observer_angle_y  = 0.0;
 
-	ejes.NuevoTamanio(5000);
+	ejes.Tamanio(5000);
 
 	cubo      = new Cubo(60);
 	tetraedro = new Tetraedro(60);
@@ -151,11 +151,8 @@ inline void Escena :: MsgSeleccionDibujado (bool reescribir) const noexcept
 	MsgTeclasComunes();
 }
 
-inline void Escena :: MsgSeleccionMenu (bool reescribir) const noexcept
+inline void Escena :: MsgSeleccionMenu () const noexcept
 {
-	if (reescribir)
-		std::cout << "\033[5A";
-
 	std::cout << coloresterm::AZUL_B << "SELECCIÓN DE MENÚ:" << std::endl
 		<< coloresterm::CIAN_B << "[" << coloresterm::AMARILLO_B << "D"
 		<< coloresterm::CIAN_B << "]" << coloresterm::NORMAL
@@ -222,10 +219,10 @@ inline void Escena :: MsgTeclasComunes () const noexcept
 inline void Escena :: Visualizar (Visualizacion visualizacion) noexcept
 {
 	if (mostrar_cubo)
-		cubo->Visualizar(visualizacion);
+		cubo->ModificarVisualizacion(visualizacion);
 
 	if (mostrar_tetraedro)
-		tetraedro->Visualizar(visualizacion);
+		tetraedro->ModificarVisualizacion(visualizacion);
 }
 
 Escena * Escena :: Instance ()

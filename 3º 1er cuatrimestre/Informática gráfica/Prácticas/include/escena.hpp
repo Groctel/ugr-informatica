@@ -57,7 +57,7 @@ private:
 	inline void TeclasComunes          (unsigned char tecla) noexcept;
 
 	inline void MsgSeleccionDibujado      (bool reescribir=false) const noexcept;
-	inline void MsgSeleccionMenu          (bool reescribir=false) const noexcept;
+	inline void MsgSeleccionMenu          () const noexcept;
 	inline void MsgSeleccionObjeto        (bool reescribir=false) const noexcept;
 	inline void MsgSeleccionVisualizacion (bool reescribir=false) const noexcept;
 	inline void MsgTeclasComunes          () const noexcept;
