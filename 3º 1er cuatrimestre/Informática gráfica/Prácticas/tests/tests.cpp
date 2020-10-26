@@ -1,6 +1,7 @@
 #include <gtest/gtest.h>
 #include "cubo.hpp"
 #include "malla.hpp"
+#include "ply.hpp"
 #include "tuplasg.hpp"
 
 class TuplaTest : public testing::Test {
@@ -128,6 +129,73 @@ TEST_F (MallaTest, PuedoCambiarElModoSolido)
 	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Solido), true);
 	malla.ModificarVisualizacion(Visualizacion::Solido);
 	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Solido), false);
+}
+
+TEST (PLYTest, AbreFicherosAcabenONoEnPuntoPLY)
+{
+	PLY ply0("plys/ant.ply");
+	PLY ply1("plys/ant");
+}
+
+TEST (PLYTest, LosFicherosInexistentesLanzanUnaExcepcion)
+{
+	EXPECT_THROW(PLY ply("esto va a fallar xD"), std::runtime_error);
+}
+
+TEST (PLYTest, LosFicherosNoPLYLanzanUnaExcepcion)
+{
+	EXPECT_THROW(PLY ply("Makefile"), std::runtime_error);
+}
+
+TEST (PLYTest, LosFicherosPLYSinEndHeaderPetan)
+{
+	EXPECT_THROW(
+		PLY ply("plys/corruptos/sin_end_header.ply"),
+		std::runtime_error
+	);
+}
+
+TEST (PLYTest, LosFicherosPLYSinFormatoASCIIPetan)
+{
+	EXPECT_THROW(
+		PLY ply("plys/corruptos/sin_format_ascii.ply"),
+		std::runtime_error
+	);
+}
+
+TEST (PLYTest, PuedoCargarAnt)
+{
+	PLY ply("plys/ant.ply");
+}
+
+TEST (PLYTest, PuedoCargarBeethoven)
+{
+	PLY ply("plys/beethoven.ply");
+}
+
+TEST (PLYTest, PuedoCargarBigDodge)
+{
+	PLY ply("plys/big_dodge.ply");
+}
+
+TEST (PLYTest, PuedoCargarLataPCUE)
+{
+	PLY ply("plys/lata-pcue.ply");
+}
+
+TEST (PLYTest, PuedoCargarLataPINF)
+{
+	PLY ply("plys/lata-pinf.ply");
+}
+
+TEST (PLYTest, PuedoCargarLataPSUP)
+{
+	PLY ply("plys/lata-psup.ply");
+}
+
+TEST (PLYTest, PuedoCargarPeon)
+{
+	PLY ply("plys/peon.ply");
 }
 
 int main (int argc, char ** argv)
