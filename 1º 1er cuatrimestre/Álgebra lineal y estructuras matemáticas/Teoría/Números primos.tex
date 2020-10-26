@@ -1,0 +1,29 @@
+\section{Números primos, teorema fundamental de la aritmética}\label{numeros-primos-teorema-fundamental-de-la-aritmetica}
+
+\subsection{Definición}
+
+Decimos que un número $a \in\mathbb{Z}\backslash\{-1,0,1\}$ es irreducible si sus divisores son $\pm 1$ y $\pm a$.
+Puesto que los números primos son irreducibles, ésta es la definición que se da de ellos en el instituto.
+Sin embargo, ésta es una consecuencia de la propiedad con la que los vamos a identificar un número primo $p$:
+
+\[p|ab \Rightarrow p|a \lor p|b\]
+
+Por ejemplo, tomemos el número $p=2$ y los números $a=6$ y $b=3$.
+Tenemos que $6 \cdot 3 = 18$ y que $2|18$ y a 6 (aunque no a 3), por lo que sabemos que 2 es un número primo.
+Lo mismo ocurriría con $p=3$, $a=18$ y $b=9$.
+Sin embargo, probemos con $p=4$, $a=6$ y $b=2$.
+Tenemos que $6 \cdot 2 = 12$ y que $4|12$.
+Sin embargo, no se da en ningún momento que $4|6$ o que $4|2$, por lo que 4 no es un número primo.
+Esto ocurre porque 4 no es irreducible, ya que sus divisores son $\{1, -1, 2, -2, 4, -4\}$.
+
+\subsection{Teorema fundamental de la aritmética}
+
+Sea $a \geq 2 \in\mathbb{N}$, $a$ es primo o $a$ se expresa de forma única (salvo el orden y el signo) como producto de números primos.
+Por ejemplo, para $a = 17$, $a$ es primo, pero para $a = 120$, $a = 120 = 2^3 \cdot 3 \cdot 5$ y los números 2, 3 y 5 son primos.
+
+De esta forma, podemos definir el conjunto divisores $D$ de un número $a$, descrito como $D(a)$ como el conjunto resultante de todas las combinaciones posibles de los factores de dicho número $a$.
+Por ejemplo, definimos así los divisores de 120:
+
+\[D(120) = \{2^a \cdot 3^b \cdot 3^c : 0 \leq a \leq 3,\ 0 \leq b \leq 1,\ 0 \leq c \leq 1\}\]
+
+Podemos determinar el tamaño de este conjunto (el número de divisores de $a$) a partir de la factorización multiplicando los exponentes de todos los factores de $a$ sumando previamente 1 a cada uno de ellos.
