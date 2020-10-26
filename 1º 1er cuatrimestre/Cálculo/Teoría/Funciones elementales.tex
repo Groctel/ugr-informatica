@@ -1,0 +1,129 @@
+\chapter{Funciones elementales}\label{funciones-elementales}
+
+A lo largo de esta asignatura realizaremos múltiples análisis de funciones de diferente índole.
+Utilizaremos la notación $f : A \rightarrow B$ para hablar de una función $f$ que trabaja entre dos conjuntos $A$ y $B$ que definiremos a continuación.
+
+\section{Definiciones}
+
+\subsection{Dominio, rango e imagen}
+
+Dada una función $f : A \rightarrow B$, definimos su imagen $f(A)$ (o rango) y su gráfica $Gr(f)$ como los siguientes conjuntos:
+
+\begin{align*}
+	f(A)  & = \{f(x) : x \in A\} \\
+	Gr(f) & = \{(a,b) \in A \times B : f(a) = b\} = \{(x, f(x)) : x \in A\}
+\end{align*}
+
+
+Cuando definimos funciones, debemos incluir su dominio, codominio y la regla que asocia a cada elemento del primero uno del segundo.
+Llamaremos dominio de una función $f : A \rightarrow B$ al conjunto $A$ y codominio al conjunto $B \cap f(A)$.
+Cuando escribamos la regla que asocia $A$ con $B$, lo haremos tras una coma.
+
+Por ejemplo, tengamos la función $f : [0,3\pi] \rightarrow \mathbb{R}, f(x) = \cos(x)$:
+
+\begin{itemize}
+	\item Su dominio es el intervalo $[0,3\pi]$.
+	\item Su imagen es el conjutno de valores que toma, que en este caso es todo el intervalo $[-1,1]$.
+	\item Su codominio podría ser todo $\mathbb{R}$ (y sería correcto), pero más correcto aún es decir que es el intervalo $[-1,1]$, que es la intersección entre $B$ y su imagen.
+	\item Su gráfica es el conjunto $\{(x,\cos(x)) : x \in [0,3\pi]\}$.
+\end{itemize}
+
+A lo largo de estos apuntes entenderemos que algunas funciones tienen un dominio y un codominio en el que \textit{tienen sentido}.
+Por ejemplo, la función $f(x) = \sqrt{x}$ sólo tiene sentido en $[0,\infty] \rightarrow \mathbb{R}$.
+
+\subsection{Inyectividad, sobreyectividad y biyectividad}
+
+Dada una función $f : A \rightarrow B$, podemos clasificarla en función de la relación entre los elementos de su dominio ($A$) y su codominio ($B$):
+
+\begin{itemize}
+	\item\textbf{Inyectiva:}
+		$x,y \in A : x \neq y \Rightarrow f(x) \neq f(y), \forall x,y \in A$.
+	\item\textbf{Sobreyectiva:}
+		$b \in B \Rightarrow \exists a \in A : f(a) = b$.
+	\item\textbf{Sobreyectiva:}
+		Es tanto inyectiva como sobreyectiva.
+\end{itemize}
+
+Esta clasificación no es únicamente dependiente de la fórmula de la función, sino también del dominio.
+Por ejemplo, $f : \mathbb{R} \rightarrow \mathbb{R}, f(x) = x^2$ es sobreyectiva pero no inyectiva, ya que $f(a) = f(-a)$.
+Sin embargo podemos hacerla inyectiva ajustando su dominio a $\mathbb{R}^+$ o $\mathbb{R}^-$.
+Lo mismo ocurre ajustando el codominio.
+
+\subsection{Función inversa}
+
+Si $f : A \rightarrow B$ es una función inyectiva, llamaremos función inversa de $f$ a la que \textit{deshace} la transformación de $f$ y asocia $f(a)$ con su correspondiente $a$ y la definiremos formalmente de la siguiente forma:
+
+\[f^{-1} : f(A) -> A, f^{-1}(f(a))\]
+
+La técnica para cambiar la inversa es muy sencilla (aunque podría darse que su procedimiento fuera imposible).
+Si tenemos que $y = f(x)$, simplemente tenemos que intercambiar $x$ e $y$ y despejar $x$.
+Por ejemplo, para $f(x) = x^2 + x + 1$, hacemos el cambio de $y = x^2 + x + 1$ a $x = y^2 + y + 1$ y despejando obtenemos que $x = \frac{-1 \pm \sqrt{4y-3}}{2}$.
+\subsection{Funciones pares e impares}
+
+Si $A$ es un subconjunto simétrico respecto al origen de $\mathbb{R}$, es decir, que es un intervalo $(a_0,a_1) : a_0 = -a_1$, definimos la partidad de una función $f : A \rightarrow B$ de la siguiente forma:
+
+\begin{itemize}
+	\item\textbf{Función par:}
+		$f(x) = f(-x), \forall x \in A$. Por ejemplo, $f(x) = x^2$.
+	\item\textbf{Función impar:}
+		$f(x) = -f(-x), \forall x \in A$. Por ejemplo, $f(x) = x^3$.
+\end{itemize}
+
+Por definición, las funciones pares no pueden ser inyectivas.
+
+\subsection{Funciones periódicas}
+
+Una función $f : A \subset \mathbb{R} \rightarrow \mathbb{R}$ es periódica si $\exists T > 0 : x \in A \Rightarrow x + T \in A \land f(x) = f(x+T)$.
+Llamamos cualquier $T$ el período de la función y definimos el período fundamental $\omega$ de la función de la siguiente forma:
+
+\[\omega = \min\{T : f(x) = f(x+T), \forall x \in A\}\]
+
+Por ejemplo, las funciones seno y coseno son periódicas con período $2\pi$.
+
+\subsection{Acotación}
+
+Sea $f : A \rightarrow \mathbb{R}$:
+
+\begin{itemize}
+	\item\textbf{Está acotada superiormente (mayorada):}
+		$\exists M \in\mathbb{R} : f(a) \leq M, \forall a \in A$.
+	\item\textbf{Está acotada inferiormente (minorada):}
+		$\exists m \in\mathbb{R} : f(a) \geq m, \forall a \in A$.
+	\item\textbf{Está acotada:}
+		Está mayorada y minorada.
+\end{itemize}
+
+Por ejemplo, las funciones seno y coseno están acotadas.
+Por otro lado, ningún polinomio no constante está acotado en $\mathbb{R}$, aunque los de grado par están mayorados o minorados dependiendo del signo del coeficiente líder.
+Definida la acotación, definimos los máximos y mínimos de una función:
+
+\begin{itemize}
+	\item\textbf{Máximo de $\boldsymbol{f}$:}
+		$a_0 \in A : f(a) \leq f(a_0), \forall a \in A$.
+	\item\textbf{Mínimo de $\boldsymbol{f}$:}
+		$a_0 \in A : f(a) \geq f(a_0), \forall a \in A$.
+\end{itemize}
+
+Las funciones $f$ tienen máximo y mínimo si su imagen $f(A)$ lo tiene.
+Por ejemplo, el máximo de la función seno es 1 y su mínimo, -1.
+
+\subsection{Funciones monótonas}
+
+Una función $f : A \subseteq \mathbb{R} \rightarrow \mathbb{R}$ es creciente si se cumple lo siguiente:
+
+\[x \leq y \Rightarrow f(x) \leq f(y)\]
+
+También diremos que dicha función es estrictamente creciente si se cumple lo siguiente:
+
+\[x < y \Rightarrow f(x) < f(y)\]
+
+Las funciones decrecientes y estrictamente decrecientes se definen análogamente.
+Las funciones constantes son tanto crecientes como decrecientes, aunque no estrictamente.
+
+\section{Funciones basadas en potencias}
+
+\section{Funciones trigonométricas}
+
+\section{Funciones hiperbólicas}
+
+
