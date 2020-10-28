@@ -1,20 +1,70 @@
+/** @file escena.cpp
+ */
+
 #include "escena.hpp"
 
 Escena * Escena :: instance = nullptr;
 
-Escena::Escena ()
-{
-	Front_plane       = 50.0;
-	Back_plane        = 2000.0;
-	Observer_distance = 4*Front_plane;
-	Observer_angle_x  = 0.0;
-	Observer_angle_y  = 0.0;
+/** @fn Escena :: Escena () noexcept
+ *
+ * @brief Constructor por defectpor defecto.
+ *
+ * Inicializa todos los elementos de la escena.
+ */
 
-	ejes.Tamanio(5000);
+Escena :: Escena () noexcept
+:
+	plano_delantero      (50.0),
+	plano_trasero        (2000.0),
+	angulo_observador_x  (0.0),
+	angulo_observador_y  (0.0)
+{
+	distancia_observador = 4 * plano_delantero,
+	ejes.NuevoTamanio(5000);
 
 	cubo      = new Cubo(60);
 	tetraedro = new Tetraedro(60);
+	peon      = new ObjRevolucion("plys/peon.ply", 50);
 }
+
+/** @fn void Escena :: CambiarProyeccion (const float ratio_xy) noexcept
+ *
+ * @brief Modifica el punto de visión de la escena.
+ * @param ratio_xy Factor de modificación del eje x.
+ */
+
+void Escena :: CambiarProyeccion (const float ratio_xy) noexcept
+{
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+
+	const float wx = altura * ratio_xy;
+
+	glFrustum(-wx, wx, -altura, altura, plano_delantero, plano_trasero);
+}
+
+/** @fn void Escena :: CambiarObservador () noexcept
+ *
+ * @brief Modifica la posición del observador de la escena.
+ */
+
+void Escena :: CambiarObservador () noexcept
+{
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	glTranslatef(0.0, 0.0, -distancia_observador);
+	glRotatef(angulo_observador_y, 0.0 ,1.0, 0.0);
+	glRotatef(angulo_observador_x, 1.0, 0.0, 0.0);
+}
+
+
+/** @fn inline void Escena :: SeleccionDibujado (unsigned char tecla) noexcept
+ *
+ * @brief Seleccionador de modo de dibujo.
+ * @param tecla Tecla pulsada por el usuario.
+ *
+ * Alterna entre el modo de dibujo inmediato y diferido.
+ */
 
 inline void Escena :: SeleccionDibujado (unsigned char tecla) noexcept
 {
@@ -39,6 +89,14 @@ inline void Escena :: SeleccionDibujado (unsigned char tecla) noexcept
 	if (continuar)
 		MsgSeleccionDibujado(true);
 }
+
+/** @fn inline void Escena :: SeleccionMenu (unsigned char tecla) noexcept
+ *
+ * @brief Seleccionador del submenú de la escena.
+ * @param tecla Tecla pulsada por el usuario.
+ *
+ * Cambia el menú al seleccionado por el usuario.
+ */
 
 inline void Escena :: SeleccionMenu (unsigned char tecla) noexcept
 {
@@ -65,6 +123,14 @@ inline void Escena :: SeleccionMenu (unsigned char tecla) noexcept
 	}
 }
 
+/** @fn inline void Escena :: SeleccionObjeto (unsigned char tecla) noexcept
+ *
+ * @brief Seleccionador del objeto con el que interactuar.
+ * @param tecla Tecla pulsada por el usuario.
+ *
+ * Alterna la muestra del objeto seleccionado.
+ */
+
 inline void Escena :: SeleccionObjeto (unsigned char tecla) noexcept
 {
 	bool continuar = true;
@@ -88,6 +154,14 @@ inline void Escena :: SeleccionObjeto (unsigned char tecla) noexcept
 	if (continuar)
 		MsgSeleccionObjeto(true);
 }
+
+/** @fn inline void Escena :: SeleccionVisualizacion (unsigned char tecla) noexcept
+ *
+ * @brief Seleccionador de la visualización de los objetos visibles.
+ * @param tecla Tecla pulsada por el usuario.
+ *
+ * Alterna los diferentes modos de visualización para los objetos visibles.
+ */
 
 inline void Escena :: SeleccionVisualizacion (unsigned char tecla) noexcept
 {
@@ -115,6 +189,15 @@ inline void Escena :: SeleccionVisualizacion (unsigned char tecla) noexcept
 	}
 }
 
+/** @fn inline void Escena :: TeclasComunes (unsigned char tecla) noexcept
+ *
+ * @brief Gestor de teclas pulsables en todos los menús.
+ * @param tecla Tecla pulsada por el usuario.
+ *
+ * Cierra los submenús para salir al menú principal o finaliza la ejecución del
+ * programa si el menú actual es el principal.
+ */
+
 inline void Escena :: TeclasComunes (unsigned char tecla) noexcept
 {
 	switch (toupper(tecla))
@@ -132,6 +215,12 @@ inline void Escena :: TeclasComunes (unsigned char tecla) noexcept
 		break;
 	}
 }
+
+/** @fn inline void Escena :: MsgSeleccionDibujado (bool reescribir) const noexcept
+ *
+ * @brief Muestra el texto del menú de selección de dibujado.
+ * @param reescribir Superposición del menú nuevo sobre el antiguo.
+ */
 
 inline void Escena :: MsgSeleccionDibujado (bool reescribir) const noexcept
 {
@@ -151,6 +240,12 @@ inline void Escena :: MsgSeleccionDibujado (bool reescribir) const noexcept
 	MsgTeclasComunes();
 }
 
+/** @fn inline void Escena :: MsgSeleccionMenu (bool reescribir) const noexcept
+ *
+ * @brief Muestra el texto del menú de selección de submenús.
+ * @param reescribir Superposición del menú nuevo sobre el antiguo.
+ */
+
 inline void Escena :: MsgSeleccionMenu () const noexcept
 {
 	std::cout << coloresterm::AZUL_B << "SELECCIÓN DE MENÚ:" << std::endl
@@ -166,6 +261,12 @@ inline void Escena :: MsgSeleccionMenu () const noexcept
 
 	MsgTeclasComunes();
 }
+
+/** @fn inline void Escena :: MsgSeleccionObjeto (bool reescribir) const noexcept
+ *
+ * @brief Muestra el texto del menú de selección de objetos.
+ * @param reescribir Superposición del menú nuevo sobre el antiguo.
+ */
 
 inline void Escena :: MsgSeleccionObjeto (bool reescribir) const noexcept
 {
@@ -184,6 +285,12 @@ inline void Escena :: MsgSeleccionObjeto (bool reescribir) const noexcept
 
 	MsgTeclasComunes();
 }
+
+/** @fn inline void Escena :: MsgSeleccionVisualizacion (bool reescribir) const noexcept
+ *
+ * @brief Muestra el texto del menú de selección de modos de visualización.
+ * @param reescribir Superposición del menú nuevo sobre el antiguo.
+ */
 
 inline void Escena :: MsgSeleccionVisualizacion (bool reescribir) const noexcept
 {
@@ -207,6 +314,11 @@ inline void Escena :: MsgSeleccionVisualizacion (bool reescribir) const noexcept
 	MsgTeclasComunes();
 }
 
+/** @fn inline void Escena :: MsgTeclasComunes () const noexcept
+ *
+ * @brief Muestra el texto de las teclas comunes a todos los menús.
+ */
+
 inline void Escena :: MsgTeclasComunes () const noexcept
 {
 	std::cout
@@ -215,6 +327,12 @@ inline void Escena :: MsgTeclasComunes () const noexcept
 		<< ((menu == Menu::Inactivo) ? " Finalizar ejecución del programa"
 			: " Volver a la selección de menú") << std::endl;
 }
+
+/** @fn inline void Escena :: Visualizar (Visualizacion visualizacion) noexcept
+ *
+ * @brief Modifica los modos de visualización de los objetos visibles.
+ * @param visualizacion Modo de visualización a modificar.
+ */
 
 inline void Escena :: Visualizar (Visualizacion visualizacion) noexcept
 {
@@ -225,7 +343,12 @@ inline void Escena :: Visualizar (Visualizacion visualizacion) noexcept
 		tetraedro->ModificarVisualizacion(visualizacion);
 }
 
-Escena * Escena :: Instance ()
+/** @fn Escena * Escena :: Instance () noexcept
+ *
+ * @brief Instanciador para cumplir con el patrón Singleton.
+ */
+
+Escena * Escena :: Instance () noexcept
 {
 	if (instance == nullptr)
 		instance = new Escena;
@@ -233,15 +356,33 @@ Escena * Escena :: Instance ()
 	return instance;
 }
 
-Escena :: ~Escena ()
+/** @fn Escena :: ~Escena () noexcept
+ *
+ * @brief Destructor por defecto.
+ *
+ * Libera todos los objetos creados y almacenados en memoria.
+ */
+
+Escena :: ~Escena () noexcept
 {
 	instance = nullptr;
 	delete cubo;
 	delete tetraedro;
+	delete peon;
 	exit(0);
 }
 
-void Escena :: Inicializar (int UI_window_width, int UI_window_height)
+/** @fn void Escena :: Inicializar (int anchura_ventana, int altura_ventana) noexcept
+ *
+ * @brief Inicializa los aspectos de dibujo de la escena.
+ * @param anchura_ventana Anchura de la ventana en la que se muestra la escena.
+ * @param altura_ventana Altura de la ventana en la que se muestra la escena.
+ *
+ * Llama a las funciones de OpenGL correspondientes para inicializar el motor
+ * con los parámetros deseados.
+ */
+
+void Escena :: Inicializar (int anchura_ventana, int altura_ventana) noexcept
 {
 	glClearColor(1.0, 1.0, 1.0, 1.0);
 
@@ -251,25 +392,58 @@ void Escena :: Inicializar (int UI_window_width, int UI_window_height)
 
 	glPointSize(5);
 
-	Width  = UI_window_width  / 10;
-	Height = UI_window_height / 10;
+	anchura = anchura_ventana / 10;
+	altura  = altura_ventana  / 10;
 
-	CambiarProyeccion(float(UI_window_width)/float(UI_window_height));
-	glViewport(0, 0, UI_window_width, UI_window_height);
+	CambiarProyeccion((float) anchura_ventana / (float) altura_ventana);
+	glViewport(0, 0, anchura_ventana, altura_ventana);
 
 	MsgSeleccionMenu();
 }
 
-void Escena :: Dibujar ()
+/** @fn void Escena :: Dibujar () noexcept
+ *
+ * @brief Llama a las funciones de dibujo de cada uno de los objetos visibles.
+ */
+
+void Escena :: Dibujar () noexcept
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	change_observer();
+	CambiarObservador();
 	ejes.Dibujar();
-	cubo->Dibujar(dibujo);
-	tetraedro->Dibujar(dibujo);
+
+	if (mostrar_cubo)
+		cubo->Dibujar(dibujo);
+
+	if (mostrar_tetraedro)
+		tetraedro->Dibujar(dibujo);
 }
 
-bool Escena :: GestionTeclado (unsigned char tecla, int x, int y)
+/** @fn void Escena :: Redimensionar (int nueva_anchura, int nueva_altura) noexcept
+ *
+ * @brief Redimensiona la escena a nuevos valores.
+ * @param nueva_anchura Nueva anchura de la escena.
+ * @param nueva_altura Nueva altura de la escena.
+ */
+
+void Escena :: Redimensionar (int nueva_anchura, int nueva_altura) noexcept
+{
+	anchura = nueva_anchura / 10;
+	altura  = nueva_altura  / 10;
+
+	CambiarProyeccion((float) nueva_altura / (float) nueva_anchura);
+	glViewport(0, 0, nueva_anchura, nueva_altura);
+}
+
+/** @fn bool Escena :: GestionTeclado (unsigned char tecla, int x, int y) noexcept
+ *
+ * @brief Llama a las funciones adecuadas según la tecla pulsada.
+ * @param tecla Tecla pulsada por el usuario.
+ * @param x Parámetro no utilizado de glut.
+ * @param y Parámetro no utilizado de glut.
+ */
+
+bool Escena :: GestionTeclado (unsigned char tecla, int x, int y) noexcept
 {
 	switch (menu)
 	{
@@ -293,59 +467,41 @@ bool Escena :: GestionTeclado (unsigned char tecla, int x, int y)
 	return activa;
 }
 
-void Escena :: GestionTecladoEspecial (int tecla, int x, int y)
+/** @fn bool Escena :: GestionTecladoEspecial (unsigned char tecla, int x, int y) noexcept
+ *
+ * @brief Llama a las funciones adecuadas según la tecla pulsada.
+ * @param tecla Tecla pulsada por el usuario.
+ * @param x Parámetro no utilizado de glut.
+ * @param y Parámetro no utilizado de glut.
+ */
+
+void Escena :: GestionTecladoEspecial (int tecla, int x, int y) noexcept
 {
 	switch (tecla)
 	{
 		case GLUT_KEY_LEFT:
-			Observer_angle_y--;
+			angulo_observador_y--;
 		break;
 
 		case GLUT_KEY_RIGHT:
-			Observer_angle_y++;
+			angulo_observador_y++;
 		break;
 
 		case GLUT_KEY_UP:
-			Observer_angle_x--;
+			angulo_observador_x--;
 		break;
 
 		case GLUT_KEY_DOWN:
-			Observer_angle_x++;
+			angulo_observador_x++;
 		break;
 
 		case GLUT_KEY_PAGE_UP:
-			Observer_distance *= 1.2;
+			distancia_observador *= 1.2;
 		break;
 
 		case GLUT_KEY_PAGE_DOWN:
-			Observer_distance /= 1.2;
+			distancia_observador /= 1.2;
 		break;
 	}
-	//std::cout << Observer_distance << std::endl;
-}
-
-void Escena :: CambiarProyeccion (const float ratio_xy)
-{
-	glMatrixMode( GL_PROJECTION );
-	glLoadIdentity();
-	const float wx = float(Height)*ratio_xy ;
-	glFrustum( -wx, wx, -Height, Height, Front_plane, Back_plane );
-}
-
-void Escena :: Redimensionar (int newWidth, int newHeight)
-{
-	Width  = newWidth/10;
-	Height = newHeight/10;
-	CambiarProyeccion(float(newHeight) / float(newWidth));
-	glViewport(0, 0, newWidth, newHeight);
-}
-
-void Escena :: change_observer ()
-{
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	glTranslatef(0.0, 0.0, -Observer_distance);
-	glRotatef(Observer_angle_y, 0.0 ,1.0, 0.0);
-	glRotatef(Observer_angle_x, 1.0, 0.0, 0.0);
 }
 

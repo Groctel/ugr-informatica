@@ -16,7 +16,7 @@ libslinux  = -lGLEW -lGLU -lglut -lGL
 libsmacos  = -framework OpenGL -framework GLUT $(glumacos)
 libs       = $(libscommon) $(if $(linux), $(libslinux), $(libsmacos))
 
-cxxcommon = -std=c++17 -O3 -Wall -Wextra -Wpedantic -Wfloat-equal -I$(inc) $(libs)
+cxxcommon = -std=c++17 -g -Wall -Wextra -Wpedantic -Wfloat-equal -I$(inc) $(libs)
 cxxlinux  = -DLINUX
 cxxmacos  = -DMACOS
 CXXFLAGS  = $(cxxcommon) $(if $(linux), $(cxxlinux), $(cxxmacos))
@@ -62,10 +62,11 @@ test: all $(bin)/tests
 	@$(bin)/tests
 
 $(bin)/practicas: $(src)/practicas.cpp $(obj)/cubo.o $(obj)/ejes.o \
-		$(obj)/escena.o $(obj)/malla.o $(obj)/ply.o $(obj)/tetraedro.o
+		$(obj)/escena.o $(obj)/malla.o $(obj)/objrevolucion.o $(obj)/tetraedro.o
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
-$(bin)/tests: $(tst)/tests.cpp $(obj)/cubo.o $(obj)/malla.o $(obj)/ply.o
+$(bin)/tests: $(tst)/tests.cpp $(obj)/cubo.o $(obj)/malla.o \
+		$(obj)/objrevolucion.o
 	$(CXX) $(gtestflags) -o $@ $^
 
 $(obj)/cubo.o: $(src)/cubo.cpp $(inc)/cubo.hpp
@@ -80,7 +81,7 @@ $(obj)/escena.o: $(src)/escena.cpp $(inc)/escena.hpp
 $(obj)/malla.o: $(src)/malla.cpp $(inc)/malla.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-$(obj)/ply.o: $(src)/ply.cpp $(inc)/ply.hpp
+$(obj)/objrevolucion.o: $(src)/objrevolucion.cpp $(inc)/objrevolucion.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(obj)/tetraedro.o: $(src)/tetraedro.cpp $(inc)/tetraedro.hpp

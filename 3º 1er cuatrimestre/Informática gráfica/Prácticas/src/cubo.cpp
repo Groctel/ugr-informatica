@@ -7,9 +7,8 @@
  *
  * @brief Crea las doce caras del cubo
  *
- * Empareja las caras de forma que cada cara `2n` se corresponda con la cara
- * `2n+1`. Esta relación se verifica porque para cada par de caras `c` y `d`, se
- * tiene que `c[2] = d[3]` y `c[3] = d[2]`.
+ * Las caras se crean de forma que la primera mitad parte de un vértice y la
+ * otra del opuesto para crear el efecto ajedrez perfecto del cubo.
  */
 
 inline void Cubo :: InicializarCaras () noexcept
@@ -17,18 +16,18 @@ inline void Cubo :: InicializarCaras () noexcept
 	caras.resize(12);
 
 	caras[0]  = {6, 0, 2};
-	caras[1]  = {6, 5, 4};
+	caras[1]  = {6, 2, 3};
 	caras[2]  = {6, 3, 7};
-	caras[3]  = {1, 3, 2};
-	caras[4]  = {1, 5, 7};
-	caras[5]  = {1, 0, 4};
+	caras[3]  = {6, 7, 5};
+	caras[4]  = {6, 5, 4};
+	caras[5]  = {6, 4, 0};
 
-	caras[6]  = {6, 2, 3};
-	caras[7]  = {6, 7, 5};
-	caras[8]  = {6, 4, 0};
-	caras[9]  = {1, 2, 0};
-	caras[10] = {1, 7, 3};
-	caras[11] = {1, 4, 5};
+	caras[6]  = {1, 3, 2};
+	caras[7]  = {1, 2, 0};
+	caras[8]  = {1, 0, 4};
+	caras[9]  = {1, 4, 5};
+	caras[10] = {1, 5, 7};
+	caras[11] = {1, 7, 3};
 }
 
 /** @fn inline void Cubo :: InicializarVertices (const float escala) noexcept
@@ -51,7 +50,7 @@ inline void Cubo :: InicializarVertices (const float escala) noexcept
 	vertices[7] = { escala,  escala,  escala};
 }
 
-/** @fn Cubo :: Cubo (const float escala)
+/** @fn Cubo :: Cubo (const float escala) noexcept
  *
  * @brief Constructor con argumento
  * @param escala Factor de escalado de los lados del cubo
@@ -60,10 +59,11 @@ inline void Cubo :: InicializarVertices (const float escala) noexcept
  * cubo.
  */
 
-Cubo :: Cubo (const float escala)
+Cubo :: Cubo (const float escala) noexcept
 {
 	InicializarVertices(escala);
 	InicializarCaras();
 	InicializarColores();
+	GenerarAjedrez();
 }
 

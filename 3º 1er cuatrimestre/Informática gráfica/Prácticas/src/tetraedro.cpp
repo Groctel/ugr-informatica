@@ -34,13 +34,13 @@ inline void Tetraedro :: InicializarVertices (const float escala) noexcept
 	float mediana = sqrt(pow(escala, 2) - pow(escala/2, 2));
 	float altura  = sqrt(pow(escala, 2) - pow(mediana/3, 2));
 
-	vertices[0] = {-escala/2, -altura/2, -mediana/2};
-	vertices[1] = {escala/2,  -altura/2, -mediana/2};
-	vertices[2] = {0,         -altura/2, mediana/2 };
-	vertices[3] = {0,         altura/2,  0         };
+	vertices[0] = {-escala, -altura, -mediana};
+	vertices[1] = {escala,  -altura, -mediana};
+	vertices[2] = {0,       -altura, mediana };
+	vertices[3] = {0,       altura,  0       };
 }
 
-/** @fn Tetraedro :: Tetraedro (const float escala)
+/** @fn Tetraedro :: Tetraedro (const float escala) noexcept
  *
  * @brief Constructor con argumento
  * @param escala Factor de escalado de los lados del tetraedro
@@ -49,7 +49,7 @@ inline void Tetraedro :: InicializarVertices (const float escala) noexcept
  * tetraedro.
  */
 
-Tetraedro :: Tetraedro (const float escala)
+Tetraedro :: Tetraedro (const float escala) noexcept
 {
 	InicializarVertices(escala);
 	InicializarCaras();

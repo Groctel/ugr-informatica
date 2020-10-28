@@ -5,7 +5,10 @@
 #define PRACTICAS_MALLA3D
 
 #include <bitset>
+#include <fstream>
+#include <regex>
 #include <stdexcept>
+#include <string>
 #include <utility>
 #include "colores.hpp"
 #include "motor.hpp"
@@ -15,7 +18,8 @@
  * @brief Operaciones realizable sobre un `std::bitset`.
  */
 
-enum Bitset {
+enum Bitset
+{
 	Flip,
 	Reset,
 	Set
@@ -26,12 +30,14 @@ enum Bitset {
  * @brief Modos de envío de las órdenes de dibujo a la GPU.
  */
 
-enum Dibujo {
+enum Dibujo
+{
 	Diferido,
 	Inmediato
 };
 
-enum VBOColores {
+enum VBOColores
+{
 	Azul    = 0,
 	Magenta = 1,
 	Negro   = 2,
@@ -39,7 +45,8 @@ enum VBOColores {
 	Verde   = 4
 };
 
-enum VBOFormas {
+enum VBOFormas
+{
 	Caras    = 0,
 	Vertices = 1
 };
@@ -49,7 +56,8 @@ enum VBOFormas {
  * @brief Modos de visualización de los modelos.
  */
 
-enum Visualizacion {
+enum Visualizacion
+{
 	Ajedrez = 0,
 	Lineas  = 1,
 	Puntos  = 2,
@@ -61,7 +69,8 @@ enum Visualizacion {
  * @brief Malla de caras triangulares de la que heredan el resto de modelos.
  */
 
-class Malla3D {
+class Malla3D
+{
 private:
 	std::bitset<4> visualizacion;
 
@@ -75,10 +84,21 @@ private:
 
 	inline void InicializarVBOColor (const VBOColores & color) noexcept;
 
+	std::ifstream AbrirFicheroPLY (const std::string & ruta);
+	void InterpretarCabeceraPLY   (std::ifstream & fi);
+	void InterpretarVerticesPLY   (std::ifstream & fi, const float escala) noexcept;
+	void InterpretarCarasPLY      (std::ifstream & fi, const float escala) noexcept;
+
+	template <class T>
+	inline void RedimensionarDesdePLY (
+		const std::string & linea,
+		std::vector<T> & tabla
+	) noexcept;
+
 protected:
 	static std::vector<tuplas::Tupla3f> tablas_colores[5];
 
-	std::vector<tuplas::Tupla3i> caras;
+	std::vector<tuplas::Tupla3u> caras;
 	std::vector<tuplas::Tupla3f> vertices;
 
 	GLuint vbo_colores[5];
@@ -98,16 +118,20 @@ protected:
 		(GLenum modo, std::vector<tuplas::Tupla3f> color) const noexcept;
 
 	void InicializarColores () noexcept;
+	void GenerarAjedrez     () noexcept;
 
 public:
+	Malla3D ();
+	Malla3D (const std::string & ruta, const float escala=1);
+
 	void Dibujar (Dibujo modo) noexcept;
 
 	bool EstadoVisualizacion (Visualizacion vis) const noexcept;
 	void ModificarVisualizacion
 		(Visualizacion vis, Bitset operacion=Bitset::Flip) noexcept;
 
-	tuplas::Tupla3i              Cara  (const size_t indice) const;
-	std::vector<tuplas::Tupla3i> Caras () const noexcept;
+	tuplas::Tupla3u              Cara  (const size_t indice) const;
+	std::vector<tuplas::Tupla3u> Caras () const noexcept;
 
 	tuplas::Tupla3f              Vertice  (const size_t indice) const;
 	std::vector<tuplas::Tupla3f> Vertices () const noexcept;

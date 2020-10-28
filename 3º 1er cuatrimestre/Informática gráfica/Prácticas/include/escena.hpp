@@ -1,3 +1,6 @@
+/** @file escena.hpp
+ */
+
 #ifndef PRACTICAS_ESCENA
 #define PRACTICAS_ESCENA
 
@@ -5,31 +8,36 @@
 #include "ejes.hpp"
 #include "malla.hpp"
 #include "motor.hpp"
+#include "objrevolucion.hpp"
 #include "tetraedro.hpp"
 
-enum Menu {
+enum Menu
+{
 	Inactivo,
 	SeleccionDibujado,
 	SeleccionObjeto,
 	SeleccionVisualizacion,
 };
 
-class Escena {
+class Escena
+{
 private:
 	static Escena * instance;
 
 	bool activa = true;
 
-	GLfloat Observer_distance;
-	GLfloat Observer_angle_x;
-	GLfloat Observer_angle_y;
-	GLfloat Width;
-	GLfloat Height;
-	GLfloat Front_plane;
-	GLfloat Back_plane;
+	GLfloat altura;
+	GLfloat anchura;
+	GLfloat plano_delantero;
+	GLfloat plano_trasero;
 
-	Menu menu = Menu::Inactivo;
+	GLfloat angulo_observador_x;
+	GLfloat angulo_observador_y;
+	GLfloat distancia_observador;
+
+	Menu menu     = Menu::Inactivo;
 	Dibujo dibujo = Dibujo::Inmediato;
+
 	Ejes ejes;
 
 	/*
@@ -40,15 +48,17 @@ private:
 
 	Cubo * cubo           = nullptr;
 	Tetraedro * tetraedro = nullptr;
+	ObjRevolucion * peon  = nullptr;
 
 	bool mostrar_cubo      = false;
 	bool mostrar_tetraedro = false;
+	bool mostrar_peon      = false;
 
-	Escena ();
+	Escena () noexcept;
 	Escena (const Escena & otra) = delete;
 
-	void CambiarProyeccion (const float ratio_xy);
-	void change_observer ();
+	void CambiarProyeccion (const float ratio_xy) noexcept;
+	void CambiarObservador () noexcept;
 
 	inline void SeleccionDibujado      (unsigned char tecla) noexcept;
 	inline void SeleccionMenu          (unsigned char tecla) noexcept;
@@ -65,16 +75,16 @@ private:
 	inline void Visualizar (Visualizacion visualizacion) noexcept;
 
 public:
-	static Escena * Instance ();
-	~Escena();
+	static Escena * Instance () noexcept;
+	~Escena() noexcept;
 
-	void Inicializar (int UI_window_width, int UI_window_height);
+	void Inicializar (int anchura_ventana, int altura_ventana) noexcept;
 
-	void Dibujar       ();
-	void Redimensionar (int newWidth, int newHeight);
+	void Dibujar       () noexcept;
+	void Redimensionar (int nueva_anchura, int nueva_altura) noexcept;
 
-	bool GestionTeclado         (unsigned char Tecla1, int x, int y);
-	void GestionTecladoEspecial (int Tecla1, int x, int y);
+	bool GestionTeclado         (unsigned char Tecla1, int x, int y) noexcept;
+	void GestionTecladoEspecial (int Tecla1, int x, int y) noexcept;
 };
 
 #endif

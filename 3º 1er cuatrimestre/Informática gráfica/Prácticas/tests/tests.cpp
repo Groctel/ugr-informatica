@@ -1,7 +1,7 @@
 #include <gtest/gtest.h>
 #include "cubo.hpp"
 #include "malla.hpp"
-#include "ply.hpp"
+#include "objrevolucion.hpp"
 #include "tuplasg.hpp"
 
 class TuplaTest : public testing::Test {
@@ -133,24 +133,24 @@ TEST_F (MallaTest, PuedoCambiarElModoSolido)
 
 TEST (PLYTest, AbreFicherosAcabenONoEnPuntoPLY)
 {
-	PLY ply0("plys/ant.ply");
-	PLY ply1("plys/ant");
+	Malla3D ply0("plys/ant.ply");
+	Malla3D ply1("plys/ant");
 }
 
 TEST (PLYTest, LosFicherosInexistentesLanzanUnaExcepcion)
 {
-	EXPECT_THROW(PLY ply("esto va a fallar xD"), std::runtime_error);
+	EXPECT_THROW(Malla3D ply("esto va a fallar xD"), std::runtime_error);
 }
 
 TEST (PLYTest, LosFicherosNoPLYLanzanUnaExcepcion)
 {
-	EXPECT_THROW(PLY ply("Makefile"), std::runtime_error);
+	EXPECT_THROW(Malla3D ply("Makefile"), std::runtime_error);
 }
 
 TEST (PLYTest, LosFicherosPLYSinEndHeaderPetan)
 {
 	EXPECT_THROW(
-		PLY ply("plys/corruptos/sin_end_header.ply"),
+		Malla3D ply("plys/corruptos/sin_end_header.ply"),
 		std::runtime_error
 	);
 }
@@ -158,44 +158,59 @@ TEST (PLYTest, LosFicherosPLYSinEndHeaderPetan)
 TEST (PLYTest, LosFicherosPLYSinFormatoASCIIPetan)
 {
 	EXPECT_THROW(
-		PLY ply("plys/corruptos/sin_format_ascii.ply"),
+		Malla3D ply("plys/corruptos/sin_format_ascii.ply"),
 		std::runtime_error
 	);
 }
 
 TEST (PLYTest, PuedoCargarAnt)
 {
-	PLY ply("plys/ant.ply");
+	Malla3D ply("plys/ant.ply");
 }
 
 TEST (PLYTest, PuedoCargarBeethoven)
 {
-	PLY ply("plys/beethoven.ply");
+	Malla3D ply("plys/beethoven.ply");
 }
 
 TEST (PLYTest, PuedoCargarBigDodge)
 {
-	PLY ply("plys/big_dodge.ply");
+	Malla3D ply("plys/big_dodge.ply");
 }
 
 TEST (PLYTest, PuedoCargarLataPCUE)
 {
-	PLY ply("plys/lata-pcue.ply");
+	Malla3D ply("plys/lata-pcue.ply");
 }
 
 TEST (PLYTest, PuedoCargarLataPINF)
 {
-	PLY ply("plys/lata-pinf.ply");
+	Malla3D ply("plys/lata-pinf.ply");
 }
 
 TEST (PLYTest, PuedoCargarLataPSUP)
 {
-	PLY ply("plys/lata-psup.ply");
+	Malla3D ply("plys/lata-psup.ply");
 }
 
 TEST (PLYTest, PuedoCargarPeon)
 {
-	PLY ply("plys/peon.ply");
+	Malla3D ply("plys/peon.ply");
+}
+
+TEST (ObjRevolucionTest, PuedoCargarUnObjRevolucionAPartirDeUnPLY)
+{
+	ObjRevolucion objr("plys/peon.ply"); // 11 vértices
+	EXPECT_EQ(objr.Perfil().size(), 11);
+}
+
+TEST (ObjRevolucionTest, LaRevolucionRedimensionaPorElNumeroDeIteraciones)
+{
+	ObjRevolucion objr("plys/peon.ply"); // 11 vértices
+	objr.Revolucionar(4);
+	EXPECT_EQ(objr.Vertices().size(), 11*4);
+	objr.Revolucionar(25);
+	EXPECT_EQ(objr.Vertices().size(), 11*25);
 }
 
 int main (int argc, char ** argv)

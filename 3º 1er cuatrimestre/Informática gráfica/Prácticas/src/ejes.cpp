@@ -48,7 +48,8 @@ inline void Ejes :: InicializarVertices () noexcept
  */
 
 Ejes :: Ejes (float tam)
-	:tamanio(tam)
+:
+	tamanio (tam)
 {
 	if (tam < 0)
 		throw std::invalid_argument("Intento de uso de tamaño negativo en ejes.");
@@ -62,7 +63,7 @@ Ejes :: Ejes (float tam)
  * @brief Envía a la GPU los datos de dibujo de las visualizaciones de los ejes.
  */
 
-void Ejes :: Dibujar ()
+void Ejes :: Dibujar () const noexcept
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
@@ -76,12 +77,23 @@ void Ejes :: Dibujar ()
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
+/** @fn float Ejes :: Tamanio () const noexcept
+ *
+ * @brief Consultor del tamaño de los ejes
+ * @return Tamaño de los ejes
+ */
+
+float Ejes :: Tamanio () const noexcept
+{
+	return tamanio;
+}
+
 /** @fn void Ejes :: NuevoTamanio (float nuevo)
  *
  * @brief Modificador del tamaño de los ejes.
  */
 
-void Ejes :: Tamanio (float tam)
+void Ejes :: NuevoTamanio (float tam)
 {
 	if (tam < 0)
 		throw std::invalid_argument("Intento de uso de tamaño negativo en ejes.");
