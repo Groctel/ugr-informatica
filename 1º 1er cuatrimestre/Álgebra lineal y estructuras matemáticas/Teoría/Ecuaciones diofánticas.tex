@@ -1,0 +1,36 @@
+\section{Ecuaciones diofánticas}\label{ecuaciones-diofanticas}
+
+Para concluir el tema de los números naturales y enteros, vamos a dar un método para resolver en $\mathbb{Z}$ ecuaciones de la forma $ax + by = c : a,b,c \in\mathbb{Z}$.
+Debido a que el número de soluciones de estas ecuaciones (cuando la tienen) es infinito, daremos la solución de estas ecuaciones en función de $x$ o $y$.
+Estas ecuaciones sólo tienen solución si $mcd(a,b)|c$ y la encontraremos mediante la congruencia $ax \equiv c \mod b$ o también $by \equiv c \mod a$.
+
+Por ejemplo, vamos a resolver la siguiente ecuación:
+
+\[42x + 15y = 402\]
+
+Primero comprobamos si $mcd(42,15)|402$.
+Tenemos que $mcd(42,15) = 3$ y que $402 = 134 \cdot 3$, por lo que esta condición se cumple.
+Por tanto, pasamos a resolver la congruencia $42x \equiv 402 \mod 15$:
+
+\[
+\begin{array}{ll}
+	42x & \equiv 402 \mod 15 \iff \\
+	12x & \equiv 12 \mod 15 \iff  \\
+	x   & \equiv 6 \mod 15
+\end{array}
+\]
+
+Esto nos dice que $x = 15k + 6$.
+Vamos a sustituir $x$ en la ecuación original para obtener el valor de $y$:
+
+\[
+\begin{array}{ll}
+	42x + 15y         & = 402 \iff         \\
+	42(15k + 6) + 15y & = 402 \iff         \\
+	630k + 252 + 15y  & = 402 \iff         \\
+	15y               & = -630k + 150 \iff \\
+	y                 & = \frac{-630k + 150}{15} = -42k + 10
+\end{array}
+\]
+
+

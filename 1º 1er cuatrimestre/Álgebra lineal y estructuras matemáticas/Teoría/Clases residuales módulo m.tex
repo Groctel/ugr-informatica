@@ -1,0 +1,124 @@
+\section{Clases residuales módulo $\boldsymbol{m}$}\label{clases-residuales-modulo-m}
+
+\subsection{Definición}
+
+Sea $m \in \mathbb{N} \geq 2$, vamos definir el conjunto cociente $\mathbb{Z}_m$ a partir de la relación de equivalencia $a \equiv b$ (expresada como \textit{a es congruente con b}) de la siguiente forma:
+
+\[a \equiv b \mod m \iff m|(b-a)\]
+
+Este conjunto $\mathbb{Z}:m$ tiene $m$ elementos que denotaremos $\{{[0]}_m, {[1]}_m, \ldots, {[m-1]}_m\}$.
+Cada uno de estos elementos ${[i]}_m$ representa todos los números $a \equiv i \mod m$ o, lo que es lo mismo, todos los números que dan resto $i$ al dividirlos entre $m$.
+Por ejemplo, en $\mathbb{Z}_5$ tenemos que $3 = 8$, ya que dividir 3 entre 5 da el mismo resto que dividir 8 entre 5: 3.
+A pesar de ser los mismo elementos, trabajaremos siempre con el menor, en este caso el 3, y lo denotaremos como $[3]$ para indicar que equivale a dicho número y todos los que den el mismo resto al dividir entre el cociente del conjunto.
+
+Dentro de estos conjuntos podemos sumar y multiplicar los números que los componen con la facilidad de que tanto la suma como la multiplicación de dos elementos congruentes con $m$ es congruente con $m$, es decir, ${[a]}_m + {[b]}_m = {[a+b]}_m$ y ${[a]}_m{[b]}_m = {[ab]}_m$ sin importar los números $a$ y $b$ que elijamos.
+Sin embargo, éste no es el caso de la división, ya que no se puede asegurar que $\frac{{[a]}_m}{{[b]}_m} = {[\frac{a}{b}]}_m$.
+Esto es fácilmente comprobable en $\mathbb{Z}_5$, donde tenemos que $2 = 7$ pero $\frac{2}{3}$ no es lo mismo que $\frac{7}{3}$.
+Por tanto, tendremos en cuenta que la división no está bien definida en estos conjuntos.
+
+En estos conjuntos, las operaciones suma y producto verifican las siguientes propiedades que indican que $\mathbb{Z}_m$ es un anillo conmutativo:
+
+\subsubsection{Propiedades de la suma}
+
+\begin{center}
+\begin{tabular}{l l}
+	\textbf{Propiedad}     & \textbf{Expresión}                                                 \\
+	\toprule
+	Asociativa             & $(a+b) + c = a + (b+a), \forall a,b,c \in\mathbb{Z}_m$             \\
+	Conmutativa            & $a+b = b+a, \forall a,b \in\mathbb{Z}_m$                           \\
+	Elemento neutro (0)    & $a+0 = a, \forall a \in\mathbb{Z}_m$                               \\
+	Elemento opuesto ($b$) & $\exists b \in\mathbb{Z}_m : a + b = 0, \forall a \in\mathbb{Z}_m$ \\
+	Cancelativa            & $a+b = a+c \Rightarrow b=c, \forall a,b,c \in\mathbb{Z}_m$         \\
+\end{tabular}
+\end{center}
+
+\subsubsection{Propiedades del producto}
+
+\begin{center}
+\begin{tabular}{l l}
+	\textbf{Propiedad}  & \textbf{Expresión}                                                         \\
+	\toprule
+	Asociativa          & $(a \cdot b) \cdot c = a \cdot (b \cdot c), \forall a,b,c \in\mathbb{Z}_m$ \\
+	Conmutativa         & $a \cdot b = b \cdot a, \forall a,b \in\mathbb{Z}_m$                       \\
+	Elemento neutro (1) & $a \cdot 1 = a, \forall a \in\mathbb{Z}_m$                                 \\
+\end{tabular}
+\end{center}
+
+El producto no tiene la propiedad cancelativa.
+También tenemos que la suma es distributiva respecto al producto:
+
+\[a \cdot (b+c) = a \cdot b + a \cdot c, \forall a,b,c \in\mathbb{Z}_m\]
+
+\subsection{Unidades}
+
+\[a \in\mathbb{Z}_m \text{ es una unidad } \iff \exists! b \in\mathbb{Z}_m : ab = 1\]
+
+Por ejemplo, 2 es unidad en $\in\mathbb{Z}_3$ porque $2 \cdot 2 = 1$, pero no en $\mathbb{Z}_4$, pues todos sus múltiplos son 0 ó 2.
+1 es una unidad en $\mathbb{Z}_m, \forall m \geq 2$.
+Llamaremos al número $b$ que multiplicamos por $a$ para llegar a 1 el \textit{inverso de $a$} y lo representaremos como $a^{-1}$.
+
+\subsubsection{Cálculo de inversos}
+
+Para calcular el inverso de $a$ en $\mathbb{Z}_m$ tendremos que verificar primero si $mcd(a,m)=1$.
+Hacemos esto usando el algoritmo de Euclides, que vamos a aprovechar y extender para encontrar el inverso.
+Como vimos en~\ref{algoritmo-extendido-de-euclides}, podemos usar la identidad de Bezout para encontrar un par de factores $u$ y $v$ para $a$ y $b$ respectivamente que nos permitan dar una expresión de un $r_i$ en función de $a$ y $b$.
+Para este caso únicamente tenemos que calcular el valor de $v$ para $r_i = 1$.
+Por ejemplo, veamos el inverso de 4 en $\mathbb{Z}_{13}$:
+
+\begin{center}
+\begin{tabular}{r r r}
+	$\boldsymbol{r}$ & $\boldsymbol{c}$ & $\boldsymbol{v}$ \\
+	\toprule
+	13               &                  & 0                \\
+	4                &                  & 1                \\
+	1                & 3                & -3               \\
+\end{tabular}
+\end{center}
+
+El algoritmo extendido de Euclides nos dice que el inverso de 4 en $\mathbb{Z}_{13}$ es $-3 = 10$ y es fácil comprobar que $4 \cdot 10 = 40 = 13 \cdot 3 + 1$.
+Llamaremos $\mathcal{U}(\mathbb{Z}_m)$ al conjunto de unidades, que podemos definir de la siguiente forma:
+
+\[\mathcal{U}(\mathbb{Z}_m) = \{k \in\mathbb{N}, k < m: mcd(m,k) = 1\}, \forall m \in\mathbb{N}, m \geq 2\]
+
+Dicho de otra forma, éste es el conjunto de todos los números naturales $k$ menores que $m$ que son primos relativos con éste.
+
+\subsection{Teorema de Euler-Fermat}
+
+Antes de formular este teorema, vamos a introducir la función indicatriz o $\varphi$ (phi) de Euler:
+
+\[\varphi : \mathbb{N} \backslash \{0,1\} \rightarrow \mathbb{N}, \varphi(m) = |\mathcal{U}(\mathbb{Z}_m)|, \forall m \in\mathbb{N}, m \geq 2\]
+
+Por ejemplo, $\varphi(6) = |\{0, 1, 4, 5\}| = 4$.
+Nótese que para cualquier número primo $p$ se tiene que $\varphi(p) = |\{k \in\mathbb{N} : k < p\}| = p-1$.
+El cálculo de $\varphi(p)$ presenta las dos siguientes propiedades:
+
+\begin{itemize}
+	\item
+		$\varphi(p^n) = p^n - p^{n-1}$
+	\item
+		$mcd(a,b) = 1 \Rightarrow \varphi(ab) = \varphi(a) \cdot \varphi(b)$
+\end{itemize}
+
+Un ejemplo de la aplicación de estas propiedades sería calacular $\varphi(20)$.
+Tenemos que $20 = 2^2 \cdot 5$, y que $mcd(2^2, 5) = 1$, por lo que podemos calcular el producto de las indicatrices de sus factores\footnote{%
+	Para cualquier par de números primos $a$ y $b$ elevados a dos exponentes $n$ y $m$ cualquiera, se da que $mcd(a^m, b^n) = 1$, por lo que una estrategia para calcular $\varphi(x)$ es factorizarlo y calcular la indicatriz de sus factores.
+}.
+Tenemos entonces que $\varphi(20) = \varphi(2^2) \cdot \varphi(5) = (2^2 - 2^1) \cdot (5 - 5^0) = 2 \cdot 4 = 8$.
+
+Pasamos ahora a formular el teorema de Euler-Fermat:
+
+\[a \in\mathbb{Z}, m \in\mathbb{N}^* : mcd(a,m) = 1 \Rightarrow a^{\varphi(m)} \equiv 1 \mod m\]
+
+Decir que $mcd(a,m) = 1$ es lo mismo que decir que $a \in\mathcal(\mathbb{Z}_m)$.
+Este teorema nos ayuda a encontrar un inverso de $a$ en $\mathbb{Z}_m$ sin tener que probar con todos los valores por los que multiplicar $a$ hasta llegar a 1.
+Cabe notar que no nos dice el primer valor que encontraríamos, sino que nos dice uno de ellos.
+Habrá casos en los que podamos multiplicar $a$ por un número menor para encontrar su inverso, pero nos conformamos con este valor dada su facilidad para calcularlo.
+
+Por ejemplo, vamos a calcular un inverso de 4 en $\mathbb{Z}_7$.
+Primero tenemos que $mcd(4,7) = 1$, por lo que 4 tiene inverso en $\mathbb{Z}_7$.
+Una forma de llegar al inverso sería ir probando y concluir que $2 \cdot 3 = 6 \equiv 1 \mod 5$.
+Usando el teorema de Euler-Fermat tenemos que $2^{\varphi{5}} \equiv 1 \mod 5$.
+Como 5 es primo, tenemos que $\varphi{5} = 4$, por lo que $2^4 \equiv 1 \mod 5$.
+Es fácilmente comprobable que $16 \equiv 1 \mod 5$.
+Por último, ¿cuál es el inverso de 2 en $\mathbb{Z}_5$?
+$2^3$.
