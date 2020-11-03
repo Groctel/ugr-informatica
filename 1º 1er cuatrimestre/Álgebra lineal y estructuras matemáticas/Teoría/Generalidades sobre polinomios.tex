@@ -1,0 +1,238 @@
+\section{Generalidades sobre polinomios}\label{generalidades-sobre-polinomios}
+
+En un anillo conmutativo $A$, definimos un polinomio con coeficientes en éste como una expresión de la siguiente forma:
+
+\[a_{n}x^{n} + a_{n-1}x^{n-1} + \cdots + a_{1}x^{1} + a_{0}x^{0} : a_i \in A, x \notin A, n \in\mathbb{N}\]
+
+Por ejemplo, $2x^2 + 3x + 1$ es un polinomio con coeficientes en $\mathbb{N}$.
+No son polinomios expresiones como $x^{-3}$, $\cos(x)$ o $\sqrt{x}$.
+Según esta definición, $3 + 5x^2$ tampoco lo sería, pero ignoraremos esto y trataremos las expresiones que tengan una equivalencia polinómica como tal ($5x^2 + 0x + 3$ en este caso).
+
+Cada uno de los términos de un polinomio tiene un grado único, que es el valor $n$ al que está elevado su correspondiente $x$.
+El valor que acompaña a dicho término es su coeficiente.
+Por ejemplo, en $8x^3 + 2x + 3$, su coeficiente de grado 3 es 8 y su término independiente, 3.
+Llamaremos coeficiente líder al coeficiente de mayor grado distinto de 0 y grado del polinomio al grado del coeficiente líder.
+Por ejemplo, $3x^2 + 5x + 6$ es un polinomio de grado 2, pues éste es el grado de su coeficientes líder.
+Si su grado es 0, diremos que es constante.
+Si el coeficiente líder es 1 diremos que es mónico.
+En el caso particular del polinomio 0, éste no tiene grado por la definición del coeficiente líder.
+Para hablar del grado de un polinomio $p(x)$ usaremos la expresión $gr(p(x))$.
+
+Llamaremos $A[x]$ al conjunto de todos los polinomios con coeficientes en $A$.
+
+\subsection{Operaciones con polinomios}
+
+Consideremos los dos siguientes polinomios en $A[x]$:
+
+\[
+\begin{array}{ll}
+	p(x) & = a_{m}x^{m} + a_{m-1}x^{m-1} + \cdots + a_{1}x^{1} + a_{0}x^{0} \\
+	q(x) & = b_{n}x^{n} + b_{n-1}x^{n-1} + \cdots + b_{1}x^{1} + b_{0}x^{0}
+\end{array}
+\]
+
+Suponiendo que $m \leq n$, definimos las siguientes operaciones:
+
+\subsubsection{Los polinomios se pueden sumar}
+
+\[p(x) + q(x) = b_{n}x^{n} + \cdots + b_{m+1}x^{m+1} + (a_m + b_m)x^m + \cdots + (a_1 + b_1)x + (a_0 + b_0)\]
+
+La suma satisface las siguientes propiedades:
+
+\begin{center}
+\begin{tabular}{l l}
+	\textbf{Propiedad}         & \textbf{Expresión}                                                             \\
+	\toprule
+	Asociativa                 & $(p(x) + q(x)) + r(x) = p(x) + (q(x) + r(x)), \forall p(x),q(x),r(x) \in A[x]$ \\
+	Conmutativa                & $p(x) + q(x) = q(x) + p(x), \forall p(x),q(x) \in A[x]$                        \\
+	Elemento neutro (0)        & $p(x)+0 = p(x), \forall p(x) \in A[x] $                                        \\
+	Elemento opuesto ($-p(x)$) & $p(x) + (-p(x)) = 0, \forall p(x) \in A[x]$                                    \\
+\end{tabular}
+\end{center}
+
+\subsubsection{Los polinomios se pueden multiplicar}
+
+\[
+\begin{array}{ll}
+	p(x) \cdot c_{k}x^{k} & = a_{n}c_{k}x^{k+n} + a_{n_1}c_{k}x^{k+n-1} + \cdots + a_{1}c_{k}x^{k+1} + a_{0}c_{k}x^{k} \\
+	p(x) \cdot q(x)       & = p(x) \cdot q_n(x) + p(x) \cdot q_{n-1}(x) + \cdots + p(x) \cdot q_1(x) + p(x) \cdot q_0(x)
+\end{array}
+\]
+
+El producto satisface las siguientes propiedades:
+
+\begin{center}
+\begin{tabular}{l l}
+	\textbf{Propiedad}  & \textbf{Expresión}                                                                             \\
+	\toprule
+	Asociativa          & $(p(x) \cdot q(x)) \cdot r(x) = p(x) \cdot (q(x) \cdot r(x)), \forall p(x),q(x),r(x) \in A[x]$ \\
+	Conmutativa         & $p(x) \cdot q(x) = q(x) \cdot r(x), \forall p(x),q(x) \in A[x]$                                \\
+	Elemento neutro (1) & $p(x) \cdot 1 = p(x), \forall p(x) \in a[x]$                                                   \\
+\end{tabular}
+\end{center}
+
+También tenemos que la suma es distributiva respecto al producto:
+
+\[p(x) \cdot (q(x) + r(x)) = p(x) \cdot q(x) + p(x) \cdot r(x), \forall p(x),q(x),r(x) \in A[x]\]
+
+Podemos calcular el producto de dos polinomios mediante el algoritmo de la multiplicación que aprendimos en primaria:
+
+\[
+\begin{array}{ll}
+	p(x) & = 5x^3 + 3x^2 - x  + 8 \\
+	q(x) & = 2x^3        - 5x + 3
+\end{array}
+\]
+
+\begin{center}
+\setlength{\tabcolsep}{1ex}
+\begin{tabular}{c c c c c c c}
+	   &   &          & 5   & 3  & -1  & 8  \\
+	   &   & $\times$ & 2   & 0  & -5  & 3  \\
+	\midrule
+	   &   &          & 15  & 9  & -3  & 24 \\
+	   &   & -25      & -15 & 5  & -40 &    \\
+	10 & 6 & -2       & 16  &    &     &    \\
+	\midrule
+	10 & 6 & -27      & 16  & 14 & -43 & 24 \\
+\end{tabular}
+\end{center}
+
+\[p(x) \cdot q(x) = 10x^6 + 6x^5 - 27x^4 + 16x^3 + 14x^2 - 43x + 24\]
+
+Por supuesto, también podemos multiplicar un polinomio por un término constante $k$:
+
+\[p(x) \cdot k = a_{m}k^{m} + a_{m-1}k^{m-1} + \cdots + a_{1}k^{1} + a_{0}k^{0} \]
+
+\subsubsection{Los polinomios se pueden dividir}
+
+\[p(x),q(x) \in A[x] \Rightarrow \exists! c(x),r(x) \in A[x] : p(x) = q(x) \cdot c(x) + r(x), 0 \leq gr(r(x)) \leq gr(q(x)), q(x) \neq 0\]
+
+Podemos utilizar el algoritmo de la división \textit{con caja} que aprendimos en primaria, pero vamos a utilizar un algoritmo muchísimo más eficiente que es una generalización del ya conocido algoritmo de Ruffini.
+
+\subsection{Algoritmo de Horner}
+
+\subsubsection{División entre polinomios mónicos de grado 1: regla de Ruffini}
+
+Vamos a repasar la regla de Ruffini.
+Para dividir un polinomio $p(x)$ entre un polinomio $q(x)$ mónico, es decir, $q(x) = x + a$, utilizamos una tabla en la que introducimos los coeficientes de $p(x)$ en la fila superior y el término independiente de $q(x)$ cambiado de signo a la izquierda de la segunda fila:
+
+\begin{center}
+\setlength{\tabcolsep}{1ex}
+\begin{tabular}{r | r r r r r}
+	     & $p_m(x)$ & $p_{m-1}(x)$ & $\cdots$ & $p_1(x)$ & $p_0(x)$ \\
+	$-a$ &          &              &          &          &          \\
+	\hline
+	     &          &              &          &          &
+\end{tabular}
+\end{center}
+
+Luego, vamos rellenando la última fila de izquierda a derecha \textit{bajando} cada uno de los coeficientes sumado con el elemento de la fila intermedia si hubiese, multiplicando por $-a$ y almacenando el resultado en la fila intermedia:
+
+\begin{center}
+\setlength{\tabcolsep}{1ex}
+\begin{tabular}{r | r r r r r}
+        & $p_m(x)$ & $p_{m-1}(x)$              & $\cdots$ & $p_1(x)$ & $p_0(x)$                                            \\
+	$-a$ &          & $p_m(x)(-a)$              & $\cdots$ & $\ddots$ & $((p_m(x)(-a) + p_{m-1}(x))(-a) \cdots p_1(x))(-a)$ \\
+	\hline
+        & $p_m(x)$ & $p_m(x)(-a) + p_{m-1}(x)$ & $\cdots$ & $\cdots$ & $((p_m(x)(-a) + p_{m-1}(x))(-a) \cdots p_1(x))(-a) + p_0(x)$
+\end{tabular}
+\end{center}
+
+Por ejemplo, vamos a dividir los dos siguientes polinomios:
+
+\[
+\begin{array}{ll}
+	p(x) & = 4x^3 + 2x^2 - 5x + 3 \\
+	q(x) & =                x - 2
+\end{array}
+\]
+
+\begin{center}
+\setlength{\tabcolsep}{1ex}
+\begin{tabular}{r | r r r r}
+	  & 4 & 2  & $-5$ & 3  \\
+	2 &   & 8  & 20   & 30 \\
+	\hline
+	  & 4 & 10 & 15   & 33
+\end{tabular}
+\end{center}
+
+\[
+\begin{array}{ll}
+	c(x) & = 4x^2 + 10x - 15 \\
+	r(x) & =              33
+\end{array}
+\]
+
+\subsubsection{División entre polinomios mónicos de grado mayor que 1}
+
+Para dividir entre polinomios mónicos de grado mayor que 1 vamos a usar el algoritmo de Horner, que tiene una forma de proceder similar a la regla de Ruffini, pero con las siguientes modificaciones:
+
+\begin{itemize}
+	\item
+		Añadiremos los coeficientes del polinomio divisor cambiados de signo y ordenados de arriba a abajo en orden descendiende de su grado.
+	\item
+		Cada vez que operemos con el valor de la fila inferior y lo multipliquemos por los términos de la columna de la izquierda lo haremos en orden descendente y cada valor lo introduciremos en la columna siguiente a la anterior.
+	\item
+		Frenaremos cuando añadamos el producto de la penúltima con la fila inferior a la última columna, tras lo cual \textit{bajaremos} el resto de números y finalizaremos el algoritmo.
+\end{itemize}
+
+Por ejemplo, vamos a dividir los dos siguientes polinomios:
+
+\[
+\begin{array}{ll}
+	p(x) & = 3x^3 + 5x^2 - 2x + 1 \\
+	q(x) & =         x^2 + 2x - 3
+\end{array}
+\]
+
+\begin{center}
+\setlength{\tabcolsep}{1ex}
+\begin{tabular}{r | r r r r}
+	     & 3 & 5    & $-2$ & 1    \\
+	$-2$ &   & $-6$ & 2    &      \\
+	3    &   &      & 9    & $-3$ \\
+	\hline
+	     & 3 & $-1$ &  9   & $-2$
+\end{tabular}
+\end{center}
+
+\[
+\begin{array}{ll}
+	c(x) & = 3x - 1 \\
+	r(x) & = 9x - 2
+\end{array}
+\]
+
+Como hemos frenado el algoritmo al multiplicar $-1 \cdot 3 = -3$, los elementos de la fila inferior (3 y $-1$) son los coeficientes del cociente y el resto de elementos que hemos \textit{bajado} (9 y $-2$), son los coeficientes del resto.
+
+\subsubsection{Algoritmo de Horner para divisores no mónicos}
+
+Si el grado del divisor fuese distinto de 1, simplemente tendríamos que multiplicar todos los números de la columna de la izquierda por el inverso del coeficiente líder y, al final, el cociente por el mismo valor.
+Por ejemplo, vamos a dividir los dos siguientes polinomios:
+
+\[
+\begin{array}{ll}
+	p(x) & = 2x^3 + 4x^2 - 3x + 5 \\
+	q(x) & =        3x^2 + 4x - 3
+\end{array}
+\]
+
+\begin{center}
+\setlength{\tabcolsep}{1ex}
+\begin{tabular}{r r | r r r r}
+	                         &                & 2 & 4              & $-3$            & 5             \\
+	$-4 \cdot \frac{1}{3} =$ & $-\frac{4}{3}$ &   & $-\frac{8}{3}$ & $-\frac{16}{9}$ &               \\
+	$3 \cdot \frac{1}{3} =$  & 1              &   &                & 2               & $\frac{4}{3}$ \\
+	\hline
+	                         &                & 2 & $\frac{4}{3}$  & $-\frac{43}{9}$ & $\frac{19}{3}$
+\end{tabular}
+\end{center}
+
+\[
+\begin{array}{ll}
+	c(x) & = \frac{1}{3}(2x + \frac{4}{3}) = \frac{2}{3}x + \frac{4}{9} \\
+	r(x) & = -\frac{43}{9}x + \frac{19}{3}
+\end{array}
+\]

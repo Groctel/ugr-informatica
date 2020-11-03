@@ -9,6 +9,7 @@
 \usepackage{amsfonts}
 \usepackage[type=CC, modifier=by-nc-sa, version=4.0]{doclicense}
 \usepackage{graphicx}
+\usepackage{mathtools}
 \usepackage{tikz}
 
 % Document settings
@@ -79,7 +80,7 @@
 \input{RecursosTeX/post-portada.tex}
 \tableofcontents
 
-\chapter{Números naturales y números enteros}
+\chapter{Números naturales y números enteros}\label{numeros-naturales-y-numeros-enteros}
 	\input{Teoría/Representacion de los números naturales.tex} \pagebreak
 	\input{Teoría/Números enteros.tex}
 	\input{Teoría/Divisibilidad.tex}
@@ -87,5 +88,9 @@
 	\input{Teoría/Clases residuales módulo m.tex}
 	\input{Teoría/Sistemas de congruencias.tex}
 	\input{Teoría/Ecuaciones diofánticas.tex}
+
+\chapter{Cuerpos finitos}\label{cuerpos-finitos}
+	\input{Teoría/Cuerpos finitos definición.tex}
+	\input{Teoría/Generalidades sobre polinomios.tex}
 
 \end{document}

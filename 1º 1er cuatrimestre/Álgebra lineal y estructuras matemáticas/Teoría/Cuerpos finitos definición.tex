@@ -1,0 +1,55 @@
+\section{Definición}\label{cuerpos-finitos-definicion}
+
+\subsection{Anillos conmutativos}\label{anillos-conmutativos}
+
+Para dar la definición de un cuerpo debemos dar primero la definición de un anillo conmutativo, ya que la primera es un caso particular de la segunda.
+Decimos que un conjunto $A$ tiene estructura de anillo conmunitativo si define las siguientes operaciones:
+
+\[
+	\begin{array}{rl}
+		\text{Operación suma: }    & A \times A \xrightarrow{+} A     \\
+                                 & (a,b) \mapsto a + b              \\
+		\text{Operación producto } & A \times A \xrightarrow{\cdot} A \\
+                                 & (a,b) \mapsto a \cdot b          \\
+\end{array}
+\]
+
+En esta estructura, la suma y el producto satisface las siguientes propiedades:
+
+\subsubsection{Propiedades de la suma}
+
+\begin{center}
+\begin{tabular}{l l}
+	\textbf{Propiedad}     & \textbf{Expresión}                           \\
+	\toprule
+	Asociativa             & $(a+b) + c = a + (b+a), \forall a,b,c \in A$ \\
+	Conmutativa            & $a+b = b+a, \forall a,b \in A$               \\
+	Elemento neutro (0)    & $a+0 = a, \forall a \in A$                   \\
+	Elemento opuesto ($b$) & $\exists b : a + b = 0, \forall a \in A$     \\
+\end{tabular}
+\end{center}
+
+\subsubsection{Propiedades del producto}
+
+\begin{center}
+\begin{tabular}{l l}
+	\textbf{Propiedad}  & \textbf{Expresión}                                               \\
+	\toprule
+	Asociativa          & $(a \cdot b) \cdot c = a \cdot (b \cdot c), \forall a,b,c \in A$ \\
+	Conmutativa         & $a \cdot b = b \cdot a, \forall a,b \in A$                       \\
+	Elemento neutro (1) & $a \cdot 1 = a, \forall a \in A$                                 \\
+\end{tabular}
+\end{center}
+
+La suma también debe ser distributiva respecto al producto:
+
+\[a \cdot (b+c) = a \cdot b + a \cdot c, \forall a,b,c \in A\]
+
+\subsection{Existencia de un inverso}
+
+Para que un anillo conmutativo tenga estructura de cuerpo debe cumplirse una última propiedad:
+
+\[\exists b : a \cdot b = 1, \forall a \in A, a \neq 0\]
+
+Esta propiedad indica que todo elemento $a \in A$ tiene inverso, como es el caso de $\mathbb{C}$, $\mathbb{Q}$, $\mathbb{R}$ y $\mathbb{Z}_p$ para números primos $p$.
+Como vimos en \S\ref{clases-residuales-modulo-m}, llamaremos unidades a los elementos que tienen inverso.
