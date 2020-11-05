@@ -1,8 +1,13 @@
 /* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
 /* [ Created with wxMaxima version 20.07.0 ] */
 /* [wxMaxima: title   start ]
-PRÁCTICA 1 - ATANASIO RUBIO GIL
+PRÁCTICA 1 - PRIMEROS PASOS CON MAXIMA
    [wxMaxima: title   end   ] */
+
+
+/* [wxMaxima: comment start ]
+ATANASIO RUBIO GIL
+   [wxMaxima: comment end   ] */
 
 
 /* [wxMaxima: section start ]
@@ -94,6 +99,32 @@ numer:false$
 /* [wxMaxima: input   end   ] */
 
 
+/* [wxMaxima: subsect start ]
+Los 20 primeros la raíz cuadrada de 10:
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fpprec:20$
+numer:true$
+sqrt(10);
+numer:false$
+fpprec:16$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: subsect start ]
+La expresión decimal de la suma de los primeros cinco números naturales:
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: input   start ] */
+numer:true$
+1/1 + 1/2 + 1/3 + 1/4 + 1/5;
+numer:false$
+/* [wxMaxima: input   end   ] */
+
+
 /* [wxMaxima: section start ]
 ¿Qué número es mayor: 1000^{999} o 999^{1000}?
    [wxMaxima: section end   ] */
@@ -177,6 +208,56 @@ is(cosh(x) = 1/acosh(x));
 /* [wxMaxima: input   start ] */
 is(tanh(x) = 1/atanh(x));
 /* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: section start ]
+Decide si los siguientes números son primos:
+   [wxMaxima: section end   ] */
+
+
+/* [wxMaxima: subsect start ]
+12341:
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: input   start ] */
+factor(12341);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+No es primo.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: subsect start ]
+329427:
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: input   start ] */
+factor(329427);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+No es primo.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: subsect start ]
+14392017:
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: input   start ] */
+factor(14392017);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+No es primo.
+   [wxMaxima: comment end   ] */
 
 
 
