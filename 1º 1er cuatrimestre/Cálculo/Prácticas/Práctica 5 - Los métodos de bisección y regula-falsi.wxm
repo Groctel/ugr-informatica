@@ -1,0 +1,68 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 20.07.0 ] */
+/* [wxMaxima: title   start ]
+PRÁCTICA 3 - LOS MÉTODOS DE BISECCIÓN Y REGULA-FALSI
+   [wxMaxima: title   end   ] */
+
+
+/* [wxMaxima: comment start ]
+ATANASIO RUBIO GIL
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+biseccion(expr,var,err,ext_inf,ext_sup):=block
+(
+    [   inferior:ext_inf,
+        superior:ext_sup,
+        punto_medio:(ext_inf+ext_sup)/2,
+        contador:0, /* número de repeticiones */
+        epsilon:10^(-err),
+        numer:true
+    ],
+    local(f),
+    define(f(x),subst(x,var,expr)),
+    
+    if (f(punto_medio) = 0)
+    then 
+        return([punto_medio,1])
+    ,
+    if (sign(f(inferior)) = sign(f(superior)))
+    then
+        error("La función no cambia de signo en los extremos")
+    ,
+    while ((superior-inferior)/2 > epsilon)
+    do (
+        contador:contador+1,
+        punto_medio:float((inferior+superior)/2),
+        
+        if (f(punto_medio) = 0)
+        then
+            return()
+        ,
+        if (sign(f(inferior)) = sign(f(punto_medio)))
+        then
+            inferior:punto_medio
+        else
+            superior:punto_medio
+    ),
+    
+    fpprintprec:err,
+    [punto_medio,contador]
+)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+f(x):=3*x+2;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+biseccion(f(x),1,4,-3,7);
+/* [wxMaxima: input   end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 20.07.0"$
