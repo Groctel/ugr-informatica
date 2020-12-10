@@ -86,8 +86,8 @@ private:
 
 	std::ifstream AbrirFicheroPLY (const std::string & ruta);
 	void InterpretarCabeceraPLY   (std::ifstream & fi);
-	void InterpretarVerticesPLY   (std::ifstream & fi, const float escala) noexcept;
-	void InterpretarCarasPLY      (std::ifstream & fi, const float escala) noexcept;
+	void InterpretarVerticesPLY   (std::ifstream & fi) noexcept;
+	void InterpretarCarasPLY      (std::ifstream & fi) noexcept;
 
 	template <class T>
 	inline void RedimensionarDesdePLY (
@@ -96,6 +96,7 @@ private:
 	) noexcept;
 
 protected:
+	std::string nombre = "Malla3D";
 	static std::vector<tuplas::Tupla3f> tablas_colores[5];
 
 	std::vector<tuplas::Tupla3u> caras;
@@ -122,7 +123,7 @@ protected:
 
 public:
 	Malla3D ();
-	Malla3D (const std::string & ruta, const float escala=1);
+	Malla3D (const std::string & ruta);
 
 	void Dibujar (Dibujo modo) noexcept;
 
@@ -132,6 +133,8 @@ public:
 
 	tuplas::Tupla3u              Cara  (const size_t indice) const;
 	std::vector<tuplas::Tupla3u> Caras () const noexcept;
+
+	std::string Nombre () const noexcept;
 
 	tuplas::Tupla3f              Vertice  (const size_t indice) const;
 	std::vector<tuplas::Tupla3f> Vertices () const noexcept;

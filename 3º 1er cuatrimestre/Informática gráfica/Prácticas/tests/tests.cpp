@@ -200,17 +200,13 @@ TEST (PLYTest, PuedoCargarPeon)
 
 TEST (ObjRevolucionTest, PuedoCargarUnObjRevolucionAPartirDeUnPLY)
 {
-	ObjRevolucion objr("plys/peon.ply"); // 11 vértices
-	EXPECT_EQ(objr.Perfil().size(), 11);
+	ObjRevolucion objr("Peon", "plys/peon.ply", 100);
 }
 
 TEST (ObjRevolucionTest, LaRevolucionRedimensionaPorElNumeroDeIteraciones)
 {
-	ObjRevolucion objr("plys/peon.ply"); // 11 vértices
-	objr.Revolucionar(4);
-	EXPECT_EQ(objr.Vertices().size(), 11*4);
-	objr.Revolucionar(25);
-	EXPECT_EQ(objr.Vertices().size(), 11*25);
+	ObjRevolucion objr("Peon", "plys/peon.ply", 100);
+	EXPECT_EQ(objr.Vertices().size(), 11*50);
 }
 
 int main (int argc, char ** argv)

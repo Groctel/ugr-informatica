@@ -4,6 +4,8 @@
 #ifndef PRACTICAS_ESCENA
 #define PRACTICAS_ESCENA
 
+#include <set>
+#include <typeinfo>
 #include "cubo.hpp"
 #include "ejes.hpp"
 #include "malla.hpp"
@@ -40,19 +42,9 @@ private:
 
 	Ejes ejes;
 
-	/*
-	 * TODO: ESTA SOLUCIÓN DE MUESTRA DE OBJETOS ES EFECTIVA PERO POCO ESCALABLE.
-	 * BUSCAR UNA FORMA DE ENCONTRAR OBJETOS DE UNA SUBCLASE EN UN VECTOR DE
-	 * SU SUPERCLASE USANDO TYPEID Y FIND.
-	 */
-
-	Cubo * cubo           = nullptr;
-	Tetraedro * tetraedro = nullptr;
-	ObjRevolucion * peon  = nullptr;
-
-	bool mostrar_cubo      = false;
-	bool mostrar_tetraedro = false;
-	bool mostrar_peon      = false;
+	std::set<Malla3D *> modelos;
+	std::set<Malla3D *> visibles;
+	std::vector<Malla3D *> seleccionables;
 
 	Escena () noexcept;
 	Escena (const Escena & otra) = delete;
@@ -68,7 +60,7 @@ private:
 
 	inline void MsgSeleccionDibujado      (bool reescribir=false) const noexcept;
 	inline void MsgSeleccionMenu          () const noexcept;
-	inline void MsgSeleccionObjeto        (bool reescribir=false) const noexcept;
+	inline void MsgSeleccionObjeto        (bool reescribir=false) noexcept;
 	inline void MsgSeleccionVisualizacion (bool reescribir=false) const noexcept;
 	inline void MsgTeclasComunes          () const noexcept;
 

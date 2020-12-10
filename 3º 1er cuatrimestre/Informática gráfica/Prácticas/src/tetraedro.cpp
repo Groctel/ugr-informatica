@@ -51,6 +51,8 @@ inline void Tetraedro :: InicializarVertices (const float escala) noexcept
 
 Tetraedro :: Tetraedro (const float escala) noexcept
 {
+	nombre = "Tetraedro";
+
 	InicializarVertices(escala);
 	InicializarCaras();
 	InicializarColores();

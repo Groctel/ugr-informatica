@@ -52,6 +52,8 @@ public:
 	template <class C, unsigned u>
 	inline friend Tupla<C,u> operator * (const C & escalar, const Tupla<C,u> & tupla);
 	template <class C, unsigned u>
+	inline friend Tupla<C,u> operator *= (const Tupla<C,u> & tupla, const C & escalar);
+	template <class C, unsigned u>
 	inline friend std::ostream & operator << (std::ostream & os, const Tupla<C,u> & tupla);
 
 	T operator | (const Tupla & der) const;
@@ -161,7 +163,7 @@ inline Tupla<T,n> Tupla<T,n> :: operator + (const Tupla<T,n> & otra) const noexc
 	Tupla<T,n> resultado;
 
 	for(unsigned i = 0; i < n; i++)
-		resultado[i] = this(i) + otra(i);
+		resultado[i] = (*this)(i) + otra(i);
 
 	return resultado;
 }
@@ -172,7 +174,7 @@ inline Tupla<T,n> Tupla<T,n> :: operator - (const Tupla<T,n> & otra) const noexc
 	Tupla<T,n> resultado;
 
 	for (unsigned i = 0; i < n; i++)
-		resultado[i] = this(i) - otra(i);
+		resultado[i] = (*this)(i) - otra(i);
 
 	return resultado;
 }
@@ -183,7 +185,7 @@ inline Tupla<T,n> Tupla<T,n> :: operator - () const noexcept
 	Tupla<T,n> resultado;
 
 	for (unsigned i = 0; i < n; i++)
-		resultado[i] = -this(i);
+		resultado[i] = -(*this)(i);
 
 	return resultado;
 }
@@ -194,7 +196,7 @@ inline Tupla<T,n> Tupla<T,n> :: operator * (const T & escalar) const noexcept
 	Tupla<T,n> resultado;
 
 	for (unsigned i = 0; i < n; i++)
-		resultado[i] = this(i) * escalar;
+		resultado[i] = (*this)(i) * escalar;
 
 	return resultado;
 }
@@ -205,7 +207,7 @@ inline Tupla<T,n> Tupla<T,n> :: operator / (const T & escalar) const noexcept
 	Tupla<T,n> resultado;
 
 	for( unsigned i = 0; i < n; i++)
-		resultado[i] = this(i) / escalar;
+		resultado[i] = (*this)(i) / escalar;
 
 	return resultado;
 }
@@ -231,6 +233,17 @@ inline bool Tupla<T,n> :: operator != (const Tupla<C,u> & otra) const
 
 template <class C, unsigned u>
 inline Tupla<C,u> operator * (const C & escalar, const Tupla<C,u> & tupla)
+{
+	Tupla<C,u> resultado;
+
+	for (unsigned i = 0; i < u; i++)
+		resultado[i] = escalar * tupla(i);
+
+	return resultado;
+}
+
+template <class C, unsigned u>
+inline Tupla<C,u> operator *= (const Tupla<C,u> & tupla, const C & escalar)
 {
 	Tupla<C,u> resultado;
 

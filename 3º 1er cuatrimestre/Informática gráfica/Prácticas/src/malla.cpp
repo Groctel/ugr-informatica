@@ -92,7 +92,7 @@ void Malla3D :: InterpretarCabeceraPLY (std::ifstream & fi)
 		throw std::runtime_error("PLY vacío tras su cabecera.");
 }
 
-void Malla3D :: InterpretarVerticesPLY (std::ifstream & fi, const float escala) noexcept
+void Malla3D :: InterpretarVerticesPLY (std::ifstream & fi) noexcept
 {
 	for (size_t i = 0; i < vertices.size(); i++)
 	{
@@ -102,7 +102,7 @@ void Malla3D :: InterpretarVerticesPLY (std::ifstream & fi, const float escala) 
 	}
 }
 
-void Malla3D :: InterpretarCarasPLY (std::ifstream & fi, const float escala) noexcept
+void Malla3D :: InterpretarCarasPLY (std::ifstream & fi) noexcept
 {
 	for (size_t i = 0; i < caras.size(); i++)
 	{
@@ -371,13 +371,13 @@ void Malla3D :: GenerarAjedrez () noexcept
 Malla3D :: Malla3D ()
 { }
 
-Malla3D :: Malla3D (const std::string & ruta, const float escala)
+Malla3D :: Malla3D (const std::string & ruta)
 {
 	std::ifstream fi = AbrirFicheroPLY(ruta);
 
 	InterpretarCabeceraPLY(fi);
-	InterpretarVerticesPLY(fi, escala);
-	InterpretarCarasPLY(fi, escala);
+	InterpretarVerticesPLY(fi);
+	InterpretarCarasPLY(fi);
 }
 
 /** @fn void Malla3D :: Dibujar (Dibujo modo) noexcept
@@ -462,6 +462,17 @@ tuplas::Tupla3u Malla3D :: Cara (const size_t indice) const
 std::vector<tuplas::Tupla3u> Malla3D :: Caras () const noexcept
 {
 	return caras;
+}
+
+/** @fn std::string Malla3D :: Nombre () const noexcept
+ *
+ * @brief Consultor del nombre de la malla.
+ * @return Nombre de la malla.
+ */
+
+std::string Malla3D :: Nombre () const noexcept
+{
+	return nombre;
 }
 
 /** @fn tuplas::Tupla3i Malla3D :: Vertice (const size_t indice) const

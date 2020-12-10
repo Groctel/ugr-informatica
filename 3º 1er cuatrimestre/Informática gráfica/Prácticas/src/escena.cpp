@@ -14,17 +14,20 @@ Escena * Escena :: instance = nullptr;
 
 Escena :: Escena () noexcept
 :
-	plano_delantero      (50.0),
-	plano_trasero        (2000.0),
-	angulo_observador_x  (0.0),
-	angulo_observador_y  (0.0)
+	plano_delantero     (50.0),
+	plano_trasero       (2000.0),
+	angulo_observador_x (0.0),
+	angulo_observador_y (0.0)
 {
 	distancia_observador = 4 * plano_delantero,
 	ejes.NuevoTamanio(5000);
 
-	cubo      = new Cubo(60);
-	tetraedro = new Tetraedro(60);
-	peon      = new ObjRevolucion("plys/peon.ply", 50);
+	ObjRevolucion * peon = new ObjRevolucion("Peón", "plys/peon.ply");
+	peon->Revolucionar(10, Tapas::Ambas);
+
+	modelos.insert(new Cubo(60));
+	modelos.insert(new Tetraedro(120));
+	modelos.insert(peon);
 }
 
 /** @fn void Escena :: CambiarProyeccion (const float ratio_xy) noexcept
@@ -56,7 +59,6 @@ void Escena :: CambiarObservador () noexcept
 	glRotatef(angulo_observador_y, 0.0 ,1.0, 0.0);
 	glRotatef(angulo_observador_x, 1.0, 0.0, 0.0);
 }
-
 
 /** @fn inline void Escena :: SeleccionDibujado (unsigned char tecla) noexcept
  *
@@ -135,20 +137,31 @@ inline void Escena :: SeleccionObjeto (unsigned char tecla) noexcept
 {
 	bool continuar = true;
 
-	switch (toupper(tecla))
+	size_t indice = tecla - '0';
+
+	/*
+	 * TODO: Esto debería poder hacerse en la asignación de arriba pero ahora
+	 * mismo no sé cómo y me da un poco de pereza ponerme a optimizarlo.
+	 */
+
+	if (indice == 0)
+		indice = 9;
+	else
+		indice--;
+
+	if (indice < seleccionables.size())
 	{
-		case 'C':
-			mostrar_cubo = !mostrar_cubo;
-		break;
+		auto it = visibles.find(seleccionables[indice]);
 
-		case 'T':
-			mostrar_tetraedro = !mostrar_tetraedro;
-		break;
-
-		default:
-			TeclasComunes(tecla);
-			continuar = false;
-		break;
+		if (it == visibles.end())
+			visibles.insert(seleccionables[indice]);
+		else
+			visibles.erase(it);
+	}
+	else
+	{
+		TeclasComunes(tecla);
+		continuar = false;
 	}
 
 	if (continuar)
@@ -227,7 +240,8 @@ inline void Escena :: MsgSeleccionDibujado (bool reescribir) const noexcept
 	if (reescribir)
 		std::cout << "\033[4A";
 
-	std::cout << coloresterm::AZUL_B << "SELECCIÓN DE DIBUJADO:" << std::endl
+	std::cout
+		<< coloresterm::AZUL_B << "SELECCIÓN DE DIBUJADO:" << std::endl
 		<< coloresterm::CIAN_B << "[" << coloresterm::AMARILLO_B << "D"
 		<< coloresterm::CIAN_B << "]" << coloresterm::NORMAL
 		<< (dibujo == Dibujo::Diferido ? coloresterm::VERDE : coloresterm::ROJO)
@@ -235,7 +249,7 @@ inline void Escena :: MsgSeleccionDibujado (bool reescribir) const noexcept
 		<< coloresterm::CIAN_B << "[" << coloresterm::AMARILLO_B << "I"
 		<< coloresterm::CIAN_B << "]" << coloresterm::NORMAL
 		<< (dibujo == Dibujo::Inmediato ? coloresterm::VERDE : coloresterm::ROJO)
-		<< " Modo inmediato" << std::endl;
+		<< " Modo inmediato" << coloresterm::NORMAL << std::endl;
 
 	MsgTeclasComunes();
 }
@@ -248,7 +262,8 @@ inline void Escena :: MsgSeleccionDibujado (bool reescribir) const noexcept
 
 inline void Escena :: MsgSeleccionMenu () const noexcept
 {
-	std::cout << coloresterm::AZUL_B << "SELECCIÓN DE MENÚ:" << std::endl
+	std::cout
+		<< coloresterm::AZUL_B << "SELECCIÓN DE MENÚ:" << std::endl
 		<< coloresterm::CIAN_B << "[" << coloresterm::AMARILLO_B << "D"
 		<< coloresterm::CIAN_B << "]" << coloresterm::NORMAL
 		<< " Selección de dibujado" << std::endl
@@ -257,7 +272,7 @@ inline void Escena :: MsgSeleccionMenu () const noexcept
 		<< " Selección de objeto" << std::endl
 		<< coloresterm::CIAN_B << "[" << coloresterm::AMARILLO_B << "V"
 		<< coloresterm::CIAN_B << "]" << coloresterm::NORMAL
-		<< " Selección de visualización" << std::endl;
+		<< " Selección de visualización" << coloresterm::NORMAL << std::endl;
 
 	MsgTeclasComunes();
 }
@@ -268,20 +283,31 @@ inline void Escena :: MsgSeleccionMenu () const noexcept
  * @param reescribir Superposición del menú nuevo sobre el antiguo.
  */
 
-inline void Escena :: MsgSeleccionObjeto (bool reescribir) const noexcept
+inline void Escena :: MsgSeleccionObjeto (bool reescribir) noexcept
 {
-	if (reescribir)
-		std::cout << "\033[4A";
+	size_t indice = 0;
 
-	std::cout << coloresterm::AZUL_B << "SELECCIÓN DE OBJETO:" << std::endl
-		<< coloresterm::CIAN_B << "[" << coloresterm::AMARILLO_B << "C"
-		<< coloresterm::CIAN_B << "]" << coloresterm::NORMAL
-		<< (mostrar_cubo ? coloresterm::VERDE : coloresterm::ROJO)
-		<< " Cubo" << std::endl
-		<< coloresterm::CIAN_B << "[" << coloresterm::AMARILLO_B << "T"
-		<< coloresterm::CIAN_B << "]" << coloresterm::NORMAL
-		<< (mostrar_tetraedro ? coloresterm::VERDE : coloresterm::ROJO)
-		<< " Tetraedro" << std::endl;
+	seleccionables.resize(std::min(modelos.size(), (size_t) 10));
+
+	for (auto it = modelos.cbegin(); it != modelos.cend(); ++it)
+		seleccionables[indice++] = (*it);
+
+	if (reescribir)
+		std::cout << "\033[" << indice + 1 << "A";
+
+	for (size_t i = 0; i < indice; i++)
+	{
+		auto it = visibles.find(seleccionables[i]);
+
+		std::cout
+			<< coloresterm::CIAN_B << "["
+			<< coloresterm::AMARILLO_B << (i + 1 % 10)
+			<< coloresterm::CIAN_B << "] "
+			<< coloresterm::NORMAL
+			<< ((it == visibles.cend()) ? coloresterm::ROJO : coloresterm::VERDE)
+			<< seleccionables[i]->Nombre()
+			<< coloresterm::NORMAL << std::endl;
+	}
 
 	MsgTeclasComunes();
 }
@@ -297,7 +323,8 @@ inline void Escena :: MsgSeleccionVisualizacion (bool reescribir) const noexcept
 	if (reescribir)
 		std::cout << "\033[5A";
 
-	std::cout << coloresterm::AZUL_B << "SELECCIÓN DE VISUALIZACIÓN:" << std::endl
+	std::cout
+		<< coloresterm::AZUL_B << "SELECCIÓN DE VISUALIZACIÓN:" << std::endl
 		<< coloresterm::CIAN_B << "[" << coloresterm::AMARILLO_B << "A"
 		<< coloresterm::CIAN_B << "]" << coloresterm::NORMAL
 		<< coloresterm::AMARILLO << " Modo ajedrez" << std::endl
@@ -309,7 +336,8 @@ inline void Escena :: MsgSeleccionVisualizacion (bool reescribir) const noexcept
 		<< coloresterm::AMARILLO << " Modo puntos" << std::endl
 		<< coloresterm::CIAN_B << "[" << coloresterm::AMARILLO_B << "S"
 		<< coloresterm::CIAN_B << "]" << coloresterm::NORMAL
-		<< coloresterm::AMARILLO << " Modo sólido" << std::endl;
+		<< coloresterm::AMARILLO << " Modo sólido" << coloresterm::NORMAL
+		<< std::endl;
 
 	MsgTeclasComunes();
 }
@@ -336,11 +364,8 @@ inline void Escena :: MsgTeclasComunes () const noexcept
 
 inline void Escena :: Visualizar (Visualizacion visualizacion) noexcept
 {
-	if (mostrar_cubo)
-		cubo->ModificarVisualizacion(visualizacion);
-
-	if (mostrar_tetraedro)
-		tetraedro->ModificarVisualizacion(visualizacion);
+	for (auto it = visibles.begin(); it != visibles.end(); ++it)
+		(*it)->ModificarVisualizacion(visualizacion);
 }
 
 /** @fn Escena * Escena :: Instance () noexcept
@@ -366,9 +391,13 @@ Escena * Escena :: Instance () noexcept
 Escena :: ~Escena () noexcept
 {
 	instance = nullptr;
-	delete cubo;
-	delete tetraedro;
-	delete peon;
+
+	for (auto it = modelos.begin(); it != modelos.end(); ++it)
+		delete (*it);
+
+	modelos.clear();
+	visibles.clear();
+
 	exit(0);
 }
 
@@ -412,11 +441,15 @@ void Escena :: Dibujar () noexcept
 	CambiarObservador();
 	ejes.Dibujar();
 
-	if (mostrar_cubo)
-		cubo->Dibujar(dibujo);
+	for (auto it = visibles.begin(); it != visibles.end(); ++it)
+	{
+		glPushMatrix();
 
-	if (mostrar_tetraedro)
-		tetraedro->Dibujar(dibujo);
+		glScalef(60, 60, 60);
+		(*it)->Dibujar(dibujo);
+
+		glPopMatrix();
+	}
 }
 
 /** @fn void Escena :: Redimensionar (int nueva_anchura, int nueva_altura) noexcept
