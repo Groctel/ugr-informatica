@@ -37,93 +37,6 @@ inline void Malla3D :: InicializarVBOColor (const VBOColores & color) noexcept
 		);
 }
 
-std::ifstream Malla3D :: AbrirFicheroPLY (const std::string & ruta)
-{
-	std::ifstream fi;
-	std::string linea;
-
-	if (! std::regex_search(ruta, std::regex("\\.ply$")))
-		fi.open(ruta + ".ply");
-	else
-		fi.open(ruta);
-
-	if (! fi.is_open())
-		throw std::runtime_error("Error crítico al abrir \"" + ruta + "\".");
-
-	std::getline(fi, linea);
-
-	if (linea != "ply")
-		throw std::runtime_error("Fallo en sintaxis PLY de \"" + ruta + "\".");
-
-	return fi;
-}
-
-void Malla3D :: InterpretarCabeceraPLY (std::ifstream & fi)
-{
-	bool cabecera_finalizada = false;
-	std::string linea;
-
-	std::getline(fi, linea);
-
-	if (! std::regex_search(linea, std::regex("^ *format *ascii")))
-		throw std::runtime_error("PLY sin formato ASCII.");
-
-	while (! cabecera_finalizada && std::getline(fi, linea))
-	{
-		if (! std::regex_search(linea, std::regex("^ *comment")))
-		{
-			cabecera_finalizada = std::regex_search(
-				linea,
-				std::regex("^ *end_header")
-			);
-
-			if (std::regex_search(linea, std::regex("^ *element *face")))
-				RedimensionarDesdePLY(linea, caras);
-
-			if (std::regex_search(linea, std::regex("^ *element *vertex")))
-				RedimensionarDesdePLY(linea, vertices);
-		}
-	}
-
-	if (!cabecera_finalizada)
-		throw std::runtime_error("Cabecera de PLY no finalizada.");
-
-	if (fi.eof())
-		throw std::runtime_error("PLY vacío tras su cabecera.");
-}
-
-void Malla3D :: InterpretarVerticesPLY (std::ifstream & fi) noexcept
-{
-	for (size_t i = 0; i < vertices.size(); i++)
-	{
-		fi >> vertices[i][0];
-		fi >> vertices[i][1];
-		fi >> vertices[i][2];
-	}
-}
-
-void Malla3D :: InterpretarCarasPLY (std::ifstream & fi) noexcept
-{
-	for (size_t i = 0; i < caras.size(); i++)
-	{
-		fi >> caras[i][0];
-		fi >> caras[i][0];
-		fi >> caras[i][1];
-		fi >> caras[i][2];
-	}
-}
-
-template <class T>
-inline void Malla3D :: RedimensionarDesdePLY (
-	const std::string & linea,
-	std::vector<T> & tabla
-) noexcept
-{
-	std::smatch tamanio;
-	std::regex_search(linea, tamanio, std::regex("[0-9]+ *$"));
-	tabla.resize(std::stoi(tamanio[0]));
-}
-
 /** @fn inline void Malla3D :: DibujarDiferido () noexcept
  *
  * @brief Dibuja el modelo en modo diferido.
@@ -373,11 +286,11 @@ Malla3D :: Malla3D ()
 
 Malla3D :: Malla3D (const std::string & ruta)
 {
-	std::ifstream fi = AbrirFicheroPLY(ruta);
+	std::ifstream fi = Abrir(ruta);
 
-	InterpretarCabeceraPLY(fi);
-	InterpretarVerticesPLY(fi);
-	InterpretarCarasPLY(fi);
+	std::pair<size_t, size_t> dimensiones = InterpretarCabecera(fi);
+	vertices = InterpretarVertices(fi, dimensiones.first);
+	caras = InterpretarCaras(fi, dimensiones.second);
 }
 
 /** @fn void Malla3D :: Dibujar (Dibujo modo) noexcept

@@ -200,12 +200,12 @@ TEST (PLYTest, PuedoCargarPeon)
 
 TEST (ObjRevolucionTest, PuedoCargarUnObjRevolucionAPartirDeUnPLY)
 {
-	ObjRevolucion objr("Peon", "plys/peon.ply", 100);
+	ObjRevolucion objr("Peon", "plys/peon.ply");
 }
 
 TEST (ObjRevolucionTest, LaRevolucionRedimensionaPorElNumeroDeIteraciones)
 {
-	ObjRevolucion objr("Peon", "plys/peon.ply", 100);
+	ObjRevolucion objr("Peon", "plys/peon.ply");
 	EXPECT_EQ(objr.Vertices().size(), 11*50);
 }
 

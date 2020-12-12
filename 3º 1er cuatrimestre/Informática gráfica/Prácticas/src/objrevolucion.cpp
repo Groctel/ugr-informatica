@@ -68,7 +68,7 @@ void ObjRevolucion :: GenerarVertices (const size_t iteraciones, Tapas tapas) no
 {
 	size_t vertice_final = (perfil.size() - tapas);
 
-	vertices.resize((perfil.size() - 2) * iteraciones + (2 - tapas));
+	vertices.resize((perfil.size() - Tapas::Ambas) * iteraciones + tapas);
 
 	for (size_t i = 0; i < iteraciones; i++)
 	{
@@ -156,8 +156,12 @@ tuplas::Tupla3f ObjRevolucion :: PuntoPerfil (const size_t indice) const
 void ObjRevolucion :: Revolucionar (size_t iteraciones, Tapas tapas) noexcept
 {
 	GenerarVertices(iteraciones, tapas);
+	std::cout << "Vértices generados" << std::endl;
 	GenerarCaras(iteraciones);
+	std::cout << "Caras generadas" << std::endl;
 	InicializarColores();
+	std::cout << "Colores generados" << std::endl;
 	GenerarAjedrez();
+	std::cout << "Ajedrez generado" << std::endl;
 }
 

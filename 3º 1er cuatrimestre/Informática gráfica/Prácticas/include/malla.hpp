@@ -12,6 +12,7 @@
 #include <utility>
 #include "colores.hpp"
 #include "motor.hpp"
+#include "ply.hpp"
 
 /** @enum Bitset
  *
@@ -69,7 +70,7 @@ enum Visualizacion
  * @brief Malla de caras triangulares de la que heredan el resto de modelos.
  */
 
-class Malla3D
+class Malla3D : public PLY
 {
 private:
 	std::bitset<4> visualizacion;
@@ -84,17 +85,6 @@ private:
 
 	inline void InicializarVBOColor (const VBOColores & color) noexcept;
 
-	std::ifstream AbrirFicheroPLY (const std::string & ruta);
-	void InterpretarCabeceraPLY   (std::ifstream & fi);
-	void InterpretarVerticesPLY   (std::ifstream & fi) noexcept;
-	void InterpretarCarasPLY      (std::ifstream & fi) noexcept;
-
-	template <class T>
-	inline void RedimensionarDesdePLY (
-		const std::string & linea,
-		std::vector<T> & tabla
-	) noexcept;
-
 protected:
 	std::string nombre = "Malla3D";
 	static std::vector<tuplas::Tupla3f> tablas_colores[5];
@@ -106,7 +96,7 @@ protected:
 	GLuint vbo_caras    = 0;
 	GLuint vbo_vertices = 0;
 	std::pair<GLuint, GLuint> vbo_caras_ajedrez = {0,0};
-	//
+
 	//void CalcularNormales ();
 
 	inline void DibujarDiferido  () noexcept;
