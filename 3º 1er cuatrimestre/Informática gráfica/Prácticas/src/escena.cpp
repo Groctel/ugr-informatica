@@ -23,7 +23,7 @@ Escena :: Escena () noexcept
 	ejes.NuevoTamanio(5000);
 
 	ObjRevolucion * peon = new ObjRevolucion("Peón", "plys/peon.ply");
-	peon->Revolucionar(10, Tapas::Ambas);
+	peon->Revolucionar(5, Tapas::Ambas);
 
 	modelos.insert(new Cubo(60));
 	modelos.insert(new Tetraedro(120));
@@ -444,10 +444,10 @@ void Escena :: Dibujar () noexcept
 	for (auto it = visibles.begin(); it != visibles.end(); ++it)
 	{
 		glPushMatrix();
-
-		glScalef(60, 60, 60);
-		(*it)->Dibujar(dibujo);
-
+		{
+			glScalef(60, 60, 60);
+			(*it)->Dibujar(dibujo);
+		}
 		glPopMatrix();
 	}
 }

@@ -21,9 +21,15 @@ enum Tapas
 class ObjRevolucion : public Malla3D
 {
 private:
-	void GenerarCaras    (const size_t iteraciones, Tapas tapas = Tapas::Ambas) noexcept;
-	void GenerarVertices (const size_t iteraciones, Tapas tapas = Tapas::Ambas) noexcept;
-	void GenerarTapas    () noexcept;
+	inline void GenerarCaras (
+		const size_t iteraciones,
+		Tapas tapas = Tapas::Ambas
+	) noexcept;
+	inline void GenerarVertices (
+		const size_t iteraciones,
+		Tapas tapas = Tapas::Ambas
+	) noexcept;
+	inline void EliminarTapas () noexcept;
 
 protected:
 	std::vector<tuplas::Tupla3f> perfil;

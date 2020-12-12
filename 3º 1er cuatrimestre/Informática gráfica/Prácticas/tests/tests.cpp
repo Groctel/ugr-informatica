@@ -203,10 +203,11 @@ TEST (ObjRevolucionTest, PuedoCargarUnObjRevolucionAPartirDeUnPLY)
 	ObjRevolucion objr("Peon", "plys/peon.ply");
 }
 
-TEST (ObjRevolucionTest, LaRevolucionRedimensionaPorElNumeroDeIteraciones)
+TEST (ObjRevolucionTest, LaRevolucionRedimensionaPorElNumeroDeIteracionesMasTapas)
 {
 	ObjRevolucion objr("Peon", "plys/peon.ply");
-	EXPECT_EQ(objr.Vertices().size(), 11*50);
+	objr.Revolucionar(100);
+	EXPECT_EQ(objr.Vertices().size(), objr.Perfil().size()*100+2);
 }
 
 int main (int argc, char ** argv)

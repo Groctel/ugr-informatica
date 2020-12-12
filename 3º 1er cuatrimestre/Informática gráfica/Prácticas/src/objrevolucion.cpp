@@ -3,98 +3,91 @@
 
 #include "objrevolucion.hpp"
 
-void ObjRevolucion :: GenerarCaras (const size_t iteraciones, Tapas tapas) noexcept
+inline void ObjRevolucion :: GenerarCaras (
+	const size_t iteraciones,
+	Tapas tapas
+) noexcept
 {
-	caras.resize((2 * (perfil.size() - (3 - tapas)) + 2 - tapas) * iteraciones);
+	caras.resize(2 * (vertices.size() - tapas - 1) + iteraciones * tapas);
 
 	size_t indice_cara = 0;
 
-	size_t vertice_inicial = (
-		(tapas == Tapas::Ambas || tapas == Tapas::Inferior) ? 1 : 0
-	);
-
-	size_t vertice_final = (
-		perfil.size() - (
-			(tapas == Tapas::Ambas || tapas == Tapas::Superior) ? 1 : 0
-		)
-	);
-
-	/*
-	 * TODO: Probablemente esto se pueda hacer arreglando el bucle y
-	 * simplemente usando la operación módulo. El pseudocódigo de las
-	 * prácticas no me funciona y esto es un poco farragoso pero hace su
-	 * trabajo, aunque no sea eficiente.
-	 */
-
-	for (size_t i = 0; i < perfil.size()-1; i++)
+	for (size_t i = 0; i < perfil.size() - 1; i++)
 	{
 		for (size_t j = 0; j < iteraciones; j++)
 		{
-			uint32_t vertice = i * iteraciones + j;
+			uint32_t vertice = iteraciones * i + j;
 
-			if (j == iteraciones - 1)
-			{
-				caras[indice_cara++] = {
-					vertice,
-					vertice - (uint32_t) iteraciones + 1,
-					vertice + 1
-				};
+			caras[indice_cara++] = {
+				vertice,
+				(uint32_t) (((vertice + 1) % iteraciones) + i * iteraciones),
+				(uint32_t) (((vertice + 1) % iteraciones) + (i + 1) * iteraciones)
+			};
 
-				caras[indice_cara++] = {
-					vertice,
-					vertice + 1,
-					vertice + (uint32_t) iteraciones
-				};
-			}
-			else
-			{
-				caras[indice_cara++] = {
-					vertice,
-					vertice + 1,
-					vertice + (uint32_t) iteraciones + 1
-				};
-
-				caras[indice_cara++] = {
-					vertice,
-					vertice + (uint32_t) iteraciones + 1,
-					vertice + (uint32_t) iteraciones
-				};
-			}
+			caras[indice_cara++] = {
+				vertice,
+				(uint32_t) (((vertice + 1) % iteraciones) + (i + 1) * iteraciones),
+				(uint32_t) ((vertice % iteraciones) + (i + 1) * iteraciones)
+			};
 		}
+	}
+
+	if (tapas == Tapas::Inferior || tapas == Tapas::Ambas)
+	{
+		for (size_t i = 0; i < iteraciones; i++)
+			caras[indice_cara++] = {
+				(uint32_t) i,
+				(uint32_t) vertices.size()-tapas,
+				(uint32_t) ((i + 1) % iteraciones)
+			};
+	}
+
+	if (tapas == Tapas::Superior || tapas == Tapas::Ambas)
+	{
+		for (size_t i = 0; i < iteraciones; i++)
+			caras[indice_cara++] = {
+				(uint32_t) (i + iteraciones * (perfil.size() - 1)),
+				(uint32_t) (((i + 1) % iteraciones) + iteraciones * (perfil.size() - 1)),
+				(uint32_t) (vertices.size()-1)
+			};
 	}
 }
 
-void ObjRevolucion :: GenerarVertices (const size_t iteraciones, Tapas tapas) noexcept
+inline void ObjRevolucion :: GenerarVertices (
+	const size_t iteraciones,
+	Tapas tapas
+) noexcept
 {
-	size_t vertice_final = (perfil.size() - tapas);
-
-	vertices.resize((perfil.size() - Tapas::Ambas) * iteraciones + tapas);
+	vertices.resize(perfil.size() * iteraciones + tapas);
 
 	for (size_t i = 0; i < iteraciones; i++)
 	{
 		float angulo = (2 * M_PI * i) / iteraciones;
 
-		for (size_t j = 0; j < vertice_final; j++)
+		for (size_t j = 0; j < perfil.size(); j++)
 		{
-			vertices[iteraciones * i + j] = {
+			vertices[iteraciones * j + i] = {
 				(float) (perfil[j][0] * cos(angulo) + perfil[j][2] * sin(angulo)),
 				(float) (perfil[j][1]),
 				(float) (perfil[j][0] * -sin(angulo) + perfil[j][2] * cos(angulo))
 			};
 		}
 	}
+
+	if (tapas == Tapas::Inferior || tapas == Tapas::Ambas)
+		vertices[vertices.size()-tapas] = {0, perfil[0][1], 0};
+
+	if (tapas == Tapas::Superior || tapas == Tapas::Ambas)
+		vertices[vertices.size()-1] = {0, perfil[perfil.size()-1][1], 0};
 }
 
-void ObjRevolucion :: GenerarTapas () noexcept
+void ObjRevolucion :: EliminarTapas () noexcept
 {
-	if (perfil[0][0] > std::numeric_limits<double>::epsilon())
-		perfil.push_back({0, perfil[0][1], 0});
+	if ((*perfil.cbegin())[0] < std::numeric_limits<double>::epsilon())
+		perfil.erase(perfil.cbegin());
 
-	if (perfil[perfil.size()-1][0] > std::numeric_limits<double>::epsilon())
-		perfil.push_back({0, perfil[perfil.size()-1][1], 0});
-
-	if (fabs(perfil[perfil.size()-1][1] - perfil[perfil.size()-2][1]) > std::numeric_limits<double>::epsilon())
-		std::swap(perfil[perfil.size()-1], perfil[perfil.size()-2]);
+	if ((*perfil.crbegin())[0] < std::numeric_limits<double>::epsilon())
+		perfil.pop_back();
 }
 
 /** @fn ObjRevolucion :: ObjRevolucion ()
@@ -126,7 +119,7 @@ ObjRevolucion :: ObjRevolucion (
 {
 	nombre = nuevo_nombre;
 	perfil.swap(vertices);
-	GenerarTapas();
+	EliminarTapas();
 }
 
 ObjRevolucion :: ObjRevolucion (
@@ -136,7 +129,7 @@ ObjRevolucion :: ObjRevolucion (
 {
 	nombre = nuevo_nombre;
 	perfil = nuevo_perfil;
-	GenerarTapas();
+	EliminarTapas();
 }
 
 std::vector<tuplas::Tupla3f> ObjRevolucion :: Perfil () const noexcept
@@ -147,21 +140,19 @@ std::vector<tuplas::Tupla3f> ObjRevolucion :: Perfil () const noexcept
 tuplas::Tupla3f ObjRevolucion :: PuntoPerfil (const size_t indice) const
 {
 	if (indice >= perfil.size())
+	{
 		throw std::out_of_range(
 			"Intento de acceso a punto del perfil sobre el máximo."
 		);
+	}
 	return perfil[indice];
 }
 
 void ObjRevolucion :: Revolucionar (size_t iteraciones, Tapas tapas) noexcept
 {
 	GenerarVertices(iteraciones, tapas);
-	std::cout << "Vértices generados" << std::endl;
 	GenerarCaras(iteraciones);
-	std::cout << "Caras generadas" << std::endl;
 	InicializarColores();
-	std::cout << "Colores generados" << std::endl;
 	GenerarAjedrez();
-	std::cout << "Ajedrez generado" << std::endl;
 }
 
