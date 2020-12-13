@@ -5,11 +5,13 @@
 
 class Cono : public ObjRevolucion
 {
-private:
-
-
 public:
-	Cono (size_t iteraciones, float altura, float radio, Tapas tapas);
+	Cono (
+		const float radio,
+		const float altura,
+		const size_t divisiones,
+		const size_t iteraciones
+	) noexcept;
 };
 
 #endif

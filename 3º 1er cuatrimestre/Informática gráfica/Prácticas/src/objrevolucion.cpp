@@ -123,7 +123,7 @@ inline void ObjRevolucion :: InsertarTapas (
 		if (generar_tapas && puntos_tapas[1] == invalida)
 			vertices[vertices.size()-1] = {0, perfil[perfil.size()-1][1], 0};
 		else
-			vertices[vertices.size()-1] = puntos_tapas[0];
+			vertices[vertices.size()-1] = puntos_tapas[1];
 	}
 }
 

@@ -25,12 +25,14 @@ Escena :: Escena () noexcept
 	ObjRevolucion * peon = new ObjRevolucion("Peón", "plys/peon.ply");
 	peon->Revolucionar(20, Tapas::Ambas, true);
 
+	Cono * cono = new Cono(1, 5, 20, 30);
 	Cilindro * cilindro = new Cilindro(1, 5, 20, 30);
 	Esfera * esfera = new Esfera(1, 20);
 
 	modelos.insert(new Cubo(60));
 	modelos.insert(new Tetraedro(120));
 	modelos.insert(peon);
+	modelos.insert(cono);
 	modelos.insert(cilindro);
 	modelos.insert(esfera);
 }
