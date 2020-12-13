@@ -5,7 +5,8 @@ Cilindro :: Cilindro (
 	const float altura,
 	const size_t divisiones,
 	const size_t iteraciones
-) {
+) noexcept
+{
 	nombre            = "Cilindro";
 	const float despl = altura/divisiones;
 	const float base  = -(despl * (divisiones / 2.0));

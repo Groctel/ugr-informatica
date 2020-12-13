@@ -26,11 +26,13 @@ Escena :: Escena () noexcept
 	peon->Revolucionar(20, Tapas::Ambas, true);
 
 	Cilindro * cilindro = new Cilindro(1, 5, 20, 30);
+	Esfera * esfera = new Esfera(1, 20);
 
 	modelos.insert(new Cubo(60));
 	modelos.insert(new Tetraedro(120));
 	modelos.insert(peon);
 	modelos.insert(cilindro);
+	modelos.insert(esfera);
 }
 
 /** @fn void Escena :: CambiarProyeccion (const float ratio_xy) noexcept

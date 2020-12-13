@@ -62,8 +62,8 @@ test: all $(bin)/tests
 	@$(bin)/tests
 
 $(bin)/practicas: $(src)/practicas.cpp $(obj)/cilindro.o $(obj)/cubo.o \
-		$(obj)/ejes.o $(obj)/escena.o $(obj)/globals.o $(obj)/malla.o \
-		$(obj)/objrevolucion.o $(obj)/ply.o $(obj)/tetraedro.o
+		$(obj)/ejes.o $(obj)/escena.o $(obj)/esfera.o $(obj)/globals.o \
+		$(obj)/malla.o $(obj)/objrevolucion.o $(obj)/ply.o $(obj)/tetraedro.o
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
 $(bin)/tests: $(tst)/tests.cpp $(obj)/cubo.o $(obj)/globals.o $(obj)/malla.o \
@@ -80,6 +80,9 @@ $(obj)/ejes.o: $(src)/ejes.cpp $(inc)/ejes.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(obj)/escena.o: $(src)/escena.cpp $(inc)/escena.hpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(obj)/esfera.o: $(src)/esfera.cpp $(inc)/esfera.hpp $(obj)/objrevolucion.o
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(obj)/globals.o: $(src)/globals.cpp $(inc)/globals.hpp

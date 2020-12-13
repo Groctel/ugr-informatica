@@ -9,6 +9,7 @@
 #include "cilindro.hpp"
 #include "cubo.hpp"
 #include "ejes.hpp"
+#include "esfera.hpp"
 #include "malla.hpp"
 #include "motor.hpp"
 #include "objrevolucion.hpp"
