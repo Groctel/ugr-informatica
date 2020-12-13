@@ -61,14 +61,17 @@ run: all
 test: all $(bin)/tests
 	@$(bin)/tests
 
-$(bin)/practicas: $(src)/practicas.cpp $(obj)/cubo.o $(obj)/ejes.o \
-		$(obj)/escena.o $(obj)/malla.o $(obj)/objrevolucion.o $(obj)/ply.o \
-		$(obj)/tetraedro.o
+$(bin)/practicas: $(src)/practicas.cpp $(obj)/cilindro.o $(obj)/cubo.o \
+		$(obj)/ejes.o $(obj)/escena.o $(obj)/globals.o $(obj)/malla.o \
+		$(obj)/objrevolucion.o $(obj)/ply.o $(obj)/tetraedro.o
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
-$(bin)/tests: $(tst)/tests.cpp $(obj)/cubo.o $(obj)/malla.o \
+$(bin)/tests: $(tst)/tests.cpp $(obj)/cubo.o $(obj)/globals.o $(obj)/malla.o \
 		$(obj)/objrevolucion.o $(obj)/ply.o
 	$(CXX) $(gtestflags) -o $@ $^
+
+$(obj)/cilindro.o: $(src)/cilindro.cpp $(inc)/cilindro.hpp $(obj)/objrevolucion.o
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(obj)/cubo.o: $(src)/cubo.cpp $(inc)/cubo.hpp $(obj)/malla.o
 	$(CXX) $(CXXFLAGS) -c $< -o $@
@@ -79,6 +82,9 @@ $(obj)/ejes.o: $(src)/ejes.cpp $(inc)/ejes.hpp
 $(obj)/escena.o: $(src)/escena.cpp $(inc)/escena.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
+$(obj)/globals.o: $(src)/globals.cpp $(inc)/globals.hpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
 $(obj)/malla.o: $(src)/malla.cpp $(inc)/malla.hpp $(obj)/ply.o
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
@@ -86,7 +92,7 @@ $(obj)/ply.o: $(src)/ply.cpp $(inc)/ply.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(obj)/objrevolucion.o: $(src)/objrevolucion.cpp $(inc)/objrevolucion.hpp \
-	$(obj)/malla.o
+		$(obj)/globals.o $(obj)/malla.o
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(obj)/tetraedro.o: $(src)/tetraedro.cpp $(inc)/tetraedro.hpp $(obj)/malla.o

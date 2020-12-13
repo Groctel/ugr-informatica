@@ -1,5 +1,6 @@
 #include <gtest/gtest.h>
 #include "cubo.hpp"
+#include "globals.hpp"
 #include "malla.hpp"
 #include "objrevolucion.hpp"
 #include "tuplasg.hpp"
@@ -42,6 +43,14 @@ TEST_F (TuplaTest, DosTuplasConstruidasIgualSonIguales)
 /* 	EXPECT_NE(tupla1, tupla2); */
 /* 	EXPECT_NE(*tupla1, *tupla2); */
 /* } */
+
+TEST (GlobalsTest, DosFloatsIgualesSonIguales)
+{
+	float a = 0.5436546354;
+	float b = 0.5436546354;
+
+	EXPECT_EQ(FloatEq(a,b), true);
+}
 
 TEST_F (MallaTest, LosModosDeVisualizacionEmpiezanApagados)
 {

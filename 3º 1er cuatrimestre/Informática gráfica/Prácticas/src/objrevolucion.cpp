@@ -55,7 +55,8 @@ inline void ObjRevolucion :: GenerarCaras (
 
 inline void ObjRevolucion :: GenerarVertices (
 	const size_t iteraciones,
-	Tapas tapas
+	Tapas tapas,
+	bool generar_tapas
 ) noexcept
 {
 	vertices.resize(perfil.size() * iteraciones + tapas);
@@ -74,20 +75,56 @@ inline void ObjRevolucion :: GenerarVertices (
 		}
 	}
 
-	if (tapas == Tapas::Inferior || tapas == Tapas::Ambas)
-		vertices[vertices.size()-tapas] = {0, perfil[0][1], 0};
-
-	if (tapas == Tapas::Superior || tapas == Tapas::Ambas)
-		vertices[vertices.size()-1] = {0, perfil[perfil.size()-1][1], 0};
+	InsertarTapas(tapas, generar_tapas);
 }
 
-void ObjRevolucion :: EliminarTapas () noexcept
+inline void ObjRevolucion :: EliminarTapas () noexcept
 {
-	if ((*perfil.cbegin())[0] < std::numeric_limits<double>::epsilon())
-		perfil.erase(perfil.cbegin());
+	puntos_tapas.fill({
+		std::numeric_limits<float>::max(),
+		std::numeric_limits<float>::max(),
+		std::numeric_limits<float>::max()
+	});
 
-	if ((*perfil.crbegin())[0] < std::numeric_limits<double>::epsilon())
+	if (FloatEq(*perfil.cbegin()[0]))
+	{
+		puntos_tapas[0] = *perfil.cbegin();
+		perfil.erase(perfil.begin());
+	}
+
+	if (FloatEq(*perfil.crbegin()[0]))
+	{
+		puntos_tapas[1] = *perfil.crbegin();
 		perfil.pop_back();
+	}
+}
+
+inline void ObjRevolucion :: InsertarTapas (
+	Tapas tapas,
+	bool generar_tapas
+) noexcept
+{
+	tuplas::Tupla3f invalida = {
+		std::numeric_limits<float>::max(),
+		std::numeric_limits<float>::max(),
+		std::numeric_limits<float>::max()
+	};
+
+	if (tapas == Tapas::Inferior || tapas == Tapas::Ambas)
+	{
+		if (generar_tapas && puntos_tapas[0] == invalida)
+			vertices[vertices.size()-tapas] = {0, perfil[0][1], 0};
+		else
+			vertices[vertices.size()-tapas] = puntos_tapas[0];
+	}
+
+	if (tapas == Tapas::Superior || tapas == Tapas::Ambas)
+	{
+		if (generar_tapas && puntos_tapas[1] == invalida)
+			vertices[vertices.size()-1] = {0, perfil[perfil.size()-1][1], 0};
+		else
+			vertices[vertices.size()-1] = puntos_tapas[0];
+	}
 }
 
 /** @fn ObjRevolucion :: ObjRevolucion ()
@@ -148,10 +185,14 @@ tuplas::Tupla3f ObjRevolucion :: PuntoPerfil (const size_t indice) const
 	return perfil[indice];
 }
 
-void ObjRevolucion :: Revolucionar (size_t iteraciones, Tapas tapas) noexcept
+void ObjRevolucion :: Revolucionar (
+	size_t iteraciones,
+	Tapas tapas,
+	bool generar_tapas
+) noexcept
 {
-	GenerarVertices(iteraciones, tapas);
-	GenerarCaras(iteraciones);
+	GenerarVertices(iteraciones, tapas, generar_tapas);
+	GenerarCaras(iteraciones, tapas);
 	InicializarColores();
 	GenerarAjedrez();
 }

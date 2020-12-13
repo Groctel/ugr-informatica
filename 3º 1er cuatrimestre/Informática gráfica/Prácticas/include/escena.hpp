@@ -6,6 +6,7 @@
 
 #include <set>
 #include <typeinfo>
+#include "cilindro.hpp"
 #include "cubo.hpp"
 #include "ejes.hpp"
 #include "malla.hpp"
