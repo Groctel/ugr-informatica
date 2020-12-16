@@ -7,8 +7,6 @@ Cono :: Cono (
 	const size_t iteraciones
 ) noexcept
 {
-	nombre = "Cono";
-
 	const float despl = altura/divisiones;
 	const float base  = -despl * (divisiones / 2.0);
 

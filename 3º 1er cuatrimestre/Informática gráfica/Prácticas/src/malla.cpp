@@ -377,17 +377,6 @@ std::vector<tuplas::Tupla3u> Malla3D :: Caras () const noexcept
 	return caras;
 }
 
-/** @fn std::string Malla3D :: Nombre () const noexcept
- *
- * @brief Consultor del nombre de la malla.
- * @return Nombre de la malla.
- */
-
-std::string Malla3D :: Nombre () const noexcept
-{
-	return nombre;
-}
-
 /** @fn tuplas::Tupla3i Malla3D :: Vertice (const size_t indice) const
  *
  * @brief Consulta el vértice indicada.

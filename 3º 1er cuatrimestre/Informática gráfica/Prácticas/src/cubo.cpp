@@ -61,8 +61,6 @@ inline void Cubo :: InicializarVertices (const float escala) noexcept
 
 Cubo :: Cubo (const float escala) noexcept
 {
-	nombre = "Cubo";
-
 	InicializarVertices(escala);
 	InicializarCaras();
 	InicializarColores();

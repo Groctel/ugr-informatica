@@ -13,6 +13,7 @@
 #include "esfera.hpp"
 #include "malla.hpp"
 #include "motor.hpp"
+#include "objeto.hpp"
 #include "objrevolucion.hpp"
 #include "tetraedro.hpp"
 
@@ -22,13 +23,6 @@ enum Menu
 	SeleccionDibujado,
 	SeleccionObjeto,
 	SeleccionVisualizacion,
-};
-
-struct Objeto
-{
-	Malla3D * modelo;
-	bool operator  < (const Objeto & otro) const;
-	bool operator == (const Objeto & otro) const;
 };
 
 class Escena

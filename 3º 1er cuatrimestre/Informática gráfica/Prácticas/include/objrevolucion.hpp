@@ -39,12 +39,8 @@ protected:
 
 public:
 	ObjRevolucion () noexcept;
+	ObjRevolucion (const std::string & ruta) noexcept;
 	ObjRevolucion (
-		const std::string & nuevo_nombre,
-		const std::string & ruta
-	) noexcept;
-	ObjRevolucion (
-		const std::string & nuevo_nombre,
 		const std::vector<tuplas::Tupla3f> & nuevo_perfil
 	) noexcept;
 

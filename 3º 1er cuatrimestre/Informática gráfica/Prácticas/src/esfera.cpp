@@ -2,8 +2,6 @@
 
 Esfera :: Esfera (const float radio, const size_t iteraciones) noexcept
 {
-	nombre = "Esfera";
-
 	perfil.resize(iteraciones);
 
 	for (size_t i = 0; i < iteraciones; i++)

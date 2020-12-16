@@ -147,24 +147,18 @@ ObjRevolucion :: ObjRevolucion () noexcept
  * @param tapas Especificación de la construcción de las tapas en la revolución.
  */
 
-ObjRevolucion :: ObjRevolucion (
-	const std::string & nuevo_nombre,
-	const std::string & ruta
-) noexcept
+ObjRevolucion :: ObjRevolucion (const std::string & ruta) noexcept
 :
 	Malla3D (ruta)
 {
-	nombre = nuevo_nombre;
 	perfil.swap(vertices);
 	EliminarTapas();
 }
 
 ObjRevolucion :: ObjRevolucion (
-	const std::string & nuevo_nombre,
 	const std::vector<tuplas::Tupla3f> & nuevo_perfil
 ) noexcept
 {
-	nombre = nuevo_nombre;
 	perfil = nuevo_perfil;
 	EliminarTapas();
 }

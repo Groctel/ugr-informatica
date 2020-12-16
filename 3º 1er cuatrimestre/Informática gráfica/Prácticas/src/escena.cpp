@@ -5,16 +5,6 @@
 
 Escena * Escena :: instance = nullptr;
 
-bool Objeto :: operator < (const Objeto & otro) const
-{
-	return this < &otro;
-}
-
-bool Objeto :: operator == (const Objeto & otro) const
-{
-	return modelo == otro.modelo;
-}
-
 /** @fn Escena :: Escena () noexcept
  *
  * @brief Constructor por defectpor defecto.
@@ -32,19 +22,32 @@ Escena :: Escena () noexcept
 	distancia_observador = 4 * plano_delantero,
 	ejes.NuevoTamanio(5000);
 
-	ObjRevolucion * peon = new ObjRevolucion("Peón", "plys/peon.ply");
+	ObjRevolucion * peon = new ObjRevolucion("plys/peon.ply");
 	peon->Revolucionar(20, Tapas::Ambas, true);
 
-	Cono * cono         = new Cono(1, 5, 20, 30);
-	Cilindro * cilindro = new Cilindro(1, 5, 20, 30);
-	Esfera * esfera     = new Esfera(1, 20);
+	Objeto cilindro(new Cilindro(1, 5, 20, 30), "Cilindro");
+		cilindro.Escalar(30,30,30);
+		cilindro.Trasladar(-60,0,-60);
+	Objeto cono(new Cono(1, 5, 20, 30), "Cono");
+		cono.Escalar(30,30,30);
+		cono.Trasladar(60,0,-60);
+	Objeto cubo(new Cubo(30), "Cubo");
+		cubo.Trasladar(-60,0,60);
+	Objeto esfera(new Esfera(1, 20), "Esfera");
+		esfera.Escalar(30,30,30);
+		esfera.Trasladar(0,-60,0);
+	Objeto peon_obj(peon, "Peón");
+		peon_obj.Escalar(30,30,30);
+		peon_obj.Trasladar(60,0,60);
+	Objeto tetraedro(new Tetraedro(30), "Tetraedro");
+		tetraedro.Trasladar(0,60,0);
 
-	modelos.insert({new Cubo(60)});
-	modelos.insert({new Tetraedro(120)});
-	modelos.insert({peon});
-	modelos.insert({cono});
-	modelos.insert({cilindro});
-	modelos.insert({esfera});
+	modelos.insert(cilindro);
+	modelos.insert(cono);
+	modelos.insert(cubo);
+	modelos.insert(esfera);
+	modelos.insert(tetraedro);
+	modelos.insert(peon_obj);
 }
 
 /** @fn void Escena :: CambiarProyeccion (const float ratio_xy) noexcept
@@ -322,7 +325,7 @@ inline void Escena :: MsgSeleccionObjeto (bool reescribir) noexcept
 			<< coloresterm::CIAN_B << "] "
 			<< coloresterm::NORMAL
 			<< ((it == visibles.cend()) ? coloresterm::ROJO : coloresterm::VERDE)
-			<< seleccionables[i].modelo->Nombre()
+			<< seleccionables[i].Nombre()
 			<< coloresterm::NORMAL << std::endl;
 	}
 
@@ -382,7 +385,7 @@ inline void Escena :: MsgTeclasComunes () const noexcept
 inline void Escena :: Visualizar (Visualizacion visualizacion) noexcept
 {
 	for (auto it = visibles.begin(); it != visibles.end(); ++it)
-		(*it).modelo->ModificarVisualizacion(visualizacion);
+		(*it).Modelo()->ModificarVisualizacion(visualizacion);
 }
 
 /** @fn Escena * Escena :: Instance () noexcept
@@ -410,7 +413,10 @@ Escena :: ~Escena () noexcept
 	instance = nullptr;
 
 	for (auto it = modelos.begin(); it != modelos.end(); ++it)
-		delete (*it).modelo;
+	{
+		Objeto obj = (*it);
+		obj.LiberarMalla();
+	}
 
 	modelos.clear();
 	visibles.clear();
@@ -462,8 +468,23 @@ void Escena :: Dibujar () noexcept
 	{
 		glPushMatrix();
 		{
-			glScalef(60, 60, 60);
-			(*it).modelo->Dibujar(dibujo);
+			glTranslatef(
+				it->Traslacion()[0],
+				it->Traslacion()[1],
+				it->Traslacion()[2]
+			);
+			glRotatef(
+				it->Rotacion()[0],
+				it->Rotacion()[1],
+				it->Rotacion()[2],
+				it->Rotacion()[3]
+			);
+			glScalef(
+				it->Escalado()[0],
+				it->Escalado()[1],
+				it->Escalado()[2]
+			);
+			it->Modelo()->Dibujar(dibujo);
 		}
 		glPopMatrix();
 	}

@@ -86,7 +86,6 @@ private:
 	inline void InicializarVBOColor (const VBOColores & color) noexcept;
 
 protected:
-	std::string nombre = "Malla3D";
 	static std::vector<tuplas::Tupla3f> tablas_colores[5];
 
 	std::vector<tuplas::Tupla3u> caras;
@@ -123,8 +122,6 @@ public:
 
 	tuplas::Tupla3u              Cara  (const size_t indice) const;
 	std::vector<tuplas::Tupla3u> Caras () const noexcept;
-
-	std::string Nombre () const noexcept;
 
 	tuplas::Tupla3f              Vertice  (const size_t indice) const;
 	std::vector<tuplas::Tupla3f> Vertices () const noexcept;
