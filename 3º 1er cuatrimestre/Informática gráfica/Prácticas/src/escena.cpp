@@ -5,6 +5,16 @@
 
 Escena * Escena :: instance = nullptr;
 
+bool Objeto :: operator < (const Objeto & otro) const
+{
+	return this < &otro;
+}
+
+bool Objeto :: operator == (const Objeto & otro) const
+{
+	return modelo == otro.modelo;
+}
+
 /** @fn Escena :: Escena () noexcept
  *
  * @brief Constructor por defectpor defecto.
@@ -25,16 +35,16 @@ Escena :: Escena () noexcept
 	ObjRevolucion * peon = new ObjRevolucion("Peón", "plys/peon.ply");
 	peon->Revolucionar(20, Tapas::Ambas, true);
 
-	Cono * cono = new Cono(1, 5, 20, 30);
+	Cono * cono         = new Cono(1, 5, 20, 30);
 	Cilindro * cilindro = new Cilindro(1, 5, 20, 30);
-	Esfera * esfera = new Esfera(1, 20);
+	Esfera * esfera     = new Esfera(1, 20);
 
-	modelos.insert(new Cubo(60));
-	modelos.insert(new Tetraedro(120));
-	modelos.insert(peon);
-	modelos.insert(cono);
-	modelos.insert(cilindro);
-	modelos.insert(esfera);
+	modelos.insert({new Cubo(60)});
+	modelos.insert({new Tetraedro(120)});
+	modelos.insert({peon});
+	modelos.insert({cono});
+	modelos.insert({cilindro});
+	modelos.insert({esfera});
 }
 
 /** @fn void Escena :: CambiarProyeccion (const float ratio_xy) noexcept
@@ -312,7 +322,7 @@ inline void Escena :: MsgSeleccionObjeto (bool reescribir) noexcept
 			<< coloresterm::CIAN_B << "] "
 			<< coloresterm::NORMAL
 			<< ((it == visibles.cend()) ? coloresterm::ROJO : coloresterm::VERDE)
-			<< seleccionables[i]->Nombre()
+			<< seleccionables[i].modelo->Nombre()
 			<< coloresterm::NORMAL << std::endl;
 	}
 
@@ -372,7 +382,7 @@ inline void Escena :: MsgTeclasComunes () const noexcept
 inline void Escena :: Visualizar (Visualizacion visualizacion) noexcept
 {
 	for (auto it = visibles.begin(); it != visibles.end(); ++it)
-		(*it)->ModificarVisualizacion(visualizacion);
+		(*it).modelo->ModificarVisualizacion(visualizacion);
 }
 
 /** @fn Escena * Escena :: Instance () noexcept
@@ -400,7 +410,7 @@ Escena :: ~Escena () noexcept
 	instance = nullptr;
 
 	for (auto it = modelos.begin(); it != modelos.end(); ++it)
-		delete (*it);
+		delete (*it).modelo;
 
 	modelos.clear();
 	visibles.clear();
@@ -453,7 +463,7 @@ void Escena :: Dibujar () noexcept
 		glPushMatrix();
 		{
 			glScalef(60, 60, 60);
-			(*it)->Dibujar(dibujo);
+			(*it).modelo->Dibujar(dibujo);
 		}
 		glPopMatrix();
 	}

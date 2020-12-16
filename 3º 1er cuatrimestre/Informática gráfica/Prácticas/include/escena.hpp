@@ -24,6 +24,13 @@ enum Menu
 	SeleccionVisualizacion,
 };
 
+struct Objeto
+{
+	Malla3D * modelo;
+	bool operator  < (const Objeto & otro) const;
+	bool operator == (const Objeto & otro) const;
+};
+
 class Escena
 {
 private:
@@ -45,9 +52,9 @@ private:
 
 	Ejes ejes;
 
-	std::set<Malla3D *> modelos;
-	std::set<Malla3D *> visibles;
-	std::vector<Malla3D *> seleccionables;
+	std::set<Objeto> modelos;
+	std::set<Objeto> visibles;
+	std::vector<Objeto> seleccionables;
 
 	Escena () noexcept;
 	Escena (const Escena & otra) = delete;
