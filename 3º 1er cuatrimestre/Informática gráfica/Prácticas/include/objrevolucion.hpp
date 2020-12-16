@@ -40,9 +40,8 @@ protected:
 public:
 	ObjRevolucion () noexcept;
 	ObjRevolucion (const std::string & ruta) noexcept;
-	ObjRevolucion (
-		const std::vector<tuplas::Tupla3f> & nuevo_perfil
-	) noexcept;
+	ObjRevolucion
+		(const std::vector<tuplas::Tupla3f> & nuevo_perfil) noexcept;
 
 	tuplas::Tupla3f              PuntoPerfil (const size_t indice) const;
 	std::vector<tuplas::Tupla3f> Perfil      () const noexcept;

@@ -5,7 +5,6 @@
 #define PRACTICAS_ESCENA
 
 #include <set>
-#include <typeinfo>
 #include "cilindro.hpp"
 #include "cono.hpp"
 #include "cubo.hpp"
