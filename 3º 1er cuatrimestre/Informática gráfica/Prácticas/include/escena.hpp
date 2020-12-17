@@ -12,9 +12,21 @@
 #include "esfera.hpp"
 #include "malla.hpp"
 #include "motor.hpp"
-#include "objeto.hpp"
 #include "objrevolucion.hpp"
 #include "tetraedro.hpp"
+
+#define objeto  first
+#define visible second
+
+enum Objetos
+{
+	_Cilindro  = 1,
+	_Cono      = 2,
+	_Cubo      = 3,
+	_Esfera    = 4,
+	_Tetraedro = 5,
+	_Peon      = 6
+};
 
 enum Menu
 {
@@ -43,11 +55,14 @@ private:
 	Menu menu     = Menu::Inactivo;
 	Dibujo dibujo = Dibujo::Inmediato;
 
-	Ejes ejes;
+	Ejes          ejes;
 
-	std::set<Objeto> modelos;
-	std::set<Objeto> visibles;
-	std::vector<Objeto> seleccionables;
+	std::pair<Cilindro,      bool> cilindro;
+	std::pair<Cono,          bool> cono;
+	std::pair<Cubo,          bool> cubo;
+	std::pair<Esfera,        bool> esfera;
+	std::pair<Tetraedro,     bool> tetraedro;
+	std::pair<ObjRevolucion, bool> peon;
 
 	Escena () noexcept;
 	Escena (const Escena & otra) = delete;

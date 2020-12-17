@@ -17,37 +17,19 @@ Escena :: Escena () noexcept
 	plano_delantero     (50.0),
 	plano_trasero       (2000.0),
 	angulo_observador_x (0.0),
-	angulo_observador_y (0.0)
+	angulo_observador_y (0.0),
+
+	cilindro  (Cilindro(1, 5, 20, 30), false),
+	cono      (Cono(1, 5, 20, 30), false),
+	cubo      (Cubo(30), false),
+	esfera    (Esfera(1, 20), false),
+	tetraedro (Tetraedro(30), false),
+	peon      (ObjRevolucion("plys/peon.ply"), false)
 {
 	distancia_observador = 4 * plano_delantero,
 	ejes.NuevoTamanio(5000);
 
-	ObjRevolucion * peon = new ObjRevolucion("plys/peon.ply");
-	peon->Revolucionar(20, Tapas::Ambas, true);
-
-	Objeto cilindro(new Cilindro(1, 5, 20, 30), "Cilindro");
-		cilindro.Escalar(30,30,30);
-		cilindro.Trasladar(-60,0,-60);
-	Objeto cono(new Cono(1, 5, 20, 30), "Cono");
-		cono.Escalar(30,30,30);
-		cono.Trasladar(60,0,-60);
-	Objeto cubo(new Cubo(30), "Cubo");
-		cubo.Trasladar(-60,0,60);
-	Objeto esfera(new Esfera(1, 20), "Esfera");
-		esfera.Escalar(30,30,30);
-		esfera.Trasladar(0,-60,0);
-	Objeto peon_obj(peon, "Peón");
-		peon_obj.Escalar(30,30,30);
-		peon_obj.Trasladar(60,0,60);
-	Objeto tetraedro(new Tetraedro(30), "Tetraedro");
-		tetraedro.Trasladar(0,60,0);
-
-	modelos.insert(cilindro);
-	modelos.insert(cono);
-	modelos.insert(cubo);
-	modelos.insert(esfera);
-	modelos.insert(tetraedro);
-	modelos.insert(peon_obj);
+	peon.objeto.Revolucionar(20, Tapas::Ambas, true);
 }
 
 /** @fn void Escena :: CambiarProyeccion (const float ratio_xy) noexcept
@@ -157,31 +139,36 @@ inline void Escena :: SeleccionObjeto (unsigned char tecla) noexcept
 {
 	bool continuar = true;
 
-	size_t indice = tecla - '0';
-
-	/*
-	 * TODO: Esto debería poder hacerse en la asignación de arriba pero ahora
-	 * mismo no sé cómo y me da un poco de pereza ponerme a optimizarlo.
-	 */
-
-	if (indice == 0)
-		indice = 9;
-	else
-		indice--;
-
-	if (indice < seleccionables.size())
+	switch (std::toupper(tecla))
 	{
-		auto it = visibles.find(seleccionables[indice]);
+		case 'I':
+			cilindro.visible = true;
+		break;
 
-		if (it == visibles.end())
-			visibles.insert(seleccionables[indice]);
-		else
-			visibles.erase(it);
-	}
-	else
-	{
-		TeclasComunes(tecla);
-		continuar = false;
+		case 'O':
+			cono.visible = true;
+		break;
+
+		case 'U':
+			cubo.visible = true;
+		break;
+
+		case 'E':
+			esfera.visible = true;
+		break;
+
+		case 'T':
+			tetraedro.visible = true;
+		break;
+
+		case 'P':
+			peon.visible = true;
+		break;
+
+		default:
+			TeclasComunes(tecla);
+			continuar = false;
+		break;
 	}
 
 	if (continuar)
@@ -305,29 +292,52 @@ inline void Escena :: MsgSeleccionMenu () const noexcept
 
 inline void Escena :: MsgSeleccionObjeto (bool reescribir) noexcept
 {
-	size_t indice = 0;
-
-	seleccionables.resize(std::min(modelos.size(), (size_t) 10));
-
-	for (auto it = modelos.cbegin(); it != modelos.cend(); ++it)
-		seleccionables[indice++] = (*it);
-
 	if (reescribir)
-		std::cout << "\033[" << indice + 1 << "A";
+		std::cout << "\033[" << 7 << "A";
 
-	for (size_t i = 0; i < indice; i++)
-	{
-		auto it = visibles.find(seleccionables[i]);
-
-		std::cout
-			<< coloresterm::CIAN_B << "["
-			<< coloresterm::AMARILLO_B << (i + 1 % 10)
-			<< coloresterm::CIAN_B << "] "
-			<< coloresterm::NORMAL
-			<< ((it == visibles.cend()) ? coloresterm::ROJO : coloresterm::VERDE)
-			<< seleccionables[i].Nombre()
-			<< coloresterm::NORMAL << std::endl;
-	}
+	std::cout
+		<< coloresterm::CIAN_B << "["
+		<< coloresterm::AMARILLO_B << "I"
+		<< coloresterm::CIAN_B << "] "
+		<< coloresterm::NORMAL
+		<< ((cilindro.visible) ? coloresterm::VERDE : coloresterm::ROJO)
+		<< "Cilindro"
+		<< coloresterm::NORMAL << std::endl
+		<< coloresterm::CIAN_B << "["
+		<< coloresterm::AMARILLO_B << "O"
+		<< coloresterm::CIAN_B << "] "
+		<< coloresterm::NORMAL
+		<< ((cono.visible) ? coloresterm::VERDE : coloresterm::ROJO)
+		<< "Cono"
+		<< coloresterm::NORMAL << std::endl
+		<< coloresterm::CIAN_B << "["
+		<< coloresterm::AMARILLO_B << "U"
+		<< coloresterm::CIAN_B << "] "
+		<< coloresterm::NORMAL
+		<< ((cubo.visible) ? coloresterm::VERDE : coloresterm::ROJO)
+		<< "Cubo"
+		<< coloresterm::NORMAL << std::endl
+		<< coloresterm::CIAN_B << "["
+		<< coloresterm::AMARILLO_B << "E"
+		<< coloresterm::CIAN_B << "] "
+		<< coloresterm::NORMAL
+		<< ((esfera.visible) ? coloresterm::VERDE : coloresterm::ROJO)
+		<< "Esfera"
+		<< coloresterm::NORMAL << std::endl
+		<< coloresterm::CIAN_B << "["
+		<< coloresterm::AMARILLO_B << "T"
+		<< coloresterm::CIAN_B << "] "
+		<< coloresterm::NORMAL
+		<< ((tetraedro.visible) ? coloresterm::VERDE : coloresterm::ROJO)
+		<< "Tetraedro"
+		<< coloresterm::NORMAL << std::endl
+		<< coloresterm::CIAN_B << "["
+		<< coloresterm::AMARILLO_B << "P"
+		<< coloresterm::CIAN_B << "] "
+		<< coloresterm::NORMAL
+		<< ((peon.visible) ? coloresterm::VERDE : coloresterm::ROJO)
+		<< "Peon"
+		<< coloresterm::NORMAL << std::endl;
 
 	MsgTeclasComunes();
 }
@@ -384,8 +394,23 @@ inline void Escena :: MsgTeclasComunes () const noexcept
 
 inline void Escena :: Visualizar (Visualizacion visualizacion) noexcept
 {
-	for (auto it = visibles.begin(); it != visibles.end(); ++it)
-		(*it).Modelo()->ModificarVisualizacion(visualizacion);
+	if (cilindro.visible)
+		cilindro.objeto.ModificarVisualizacion(visualizacion);
+
+	if (cono.visible)
+		cono.objeto.ModificarVisualizacion(visualizacion);
+
+	if (cubo.visible)
+		cubo.objeto.ModificarVisualizacion(visualizacion);
+
+	if (esfera.visible)
+		esfera.objeto.ModificarVisualizacion(visualizacion);
+
+	if (tetraedro.visible)
+		tetraedro.objeto.ModificarVisualizacion(visualizacion);
+
+	if (peon.visible)
+		peon.objeto.ModificarVisualizacion(visualizacion);
 }
 
 /** @fn Escena * Escena :: Instance () noexcept
@@ -411,16 +436,6 @@ Escena * Escena :: Instance () noexcept
 Escena :: ~Escena () noexcept
 {
 	instance = nullptr;
-
-	for (auto it = modelos.begin(); it != modelos.end(); ++it)
-	{
-		Objeto obj = (*it);
-		obj.LiberarMalla();
-	}
-
-	modelos.clear();
-	visibles.clear();
-
 	exit(0);
 }
 
@@ -464,27 +479,66 @@ void Escena :: Dibujar () noexcept
 	CambiarObservador();
 	ejes.Dibujar();
 
-	for (auto it = visibles.begin(); it != visibles.end(); ++it)
+	if (cilindro.visible)
 	{
 		glPushMatrix();
 		{
-			glTranslatef(
-				it->Traslacion()[0],
-				it->Traslacion()[1],
-				it->Traslacion()[2]
-			);
-			glRotatef(
-				it->Rotacion()[0],
-				it->Rotacion()[1],
-				it->Rotacion()[2],
-				it->Rotacion()[3]
-			);
-			glScalef(
-				it->Escalado()[0],
-				it->Escalado()[1],
-				it->Escalado()[2]
-			);
-			it->Modelo()->Dibujar(dibujo);
+			glTranslatef(-60, 0, -60);
+			glScalef(30, 30, 30);
+			cilindro.objeto.Dibujar(dibujo);
+		}
+		glPopMatrix();
+	}
+
+	if (cono.visible)
+	{
+		glPushMatrix();
+		{
+			glTranslatef(60, 0, -60);
+			glScalef(30, 30, 30);
+			cono.objeto.Dibujar(dibujo);
+		}
+		glPopMatrix();
+	}
+
+	if (cubo.visible)
+	{
+		glPushMatrix();
+		{
+			glTranslatef(-60, 0, 60);
+			cubo.objeto.Dibujar(dibujo);
+		}
+		glPopMatrix();
+	}
+
+	if (esfera.visible)
+	{
+		glPushMatrix();
+		{
+			glTranslatef(0, -60, 0);
+			glScalef(30, 30, 30);
+			esfera.objeto.Dibujar(dibujo);
+		}
+		glPopMatrix();
+	}
+
+	if (tetraedro.visible)
+	{
+		glPushMatrix();
+		{
+			glTranslatef(0, 60, 0);
+			tetraedro.objeto.Dibujar(dibujo);
+		}
+		glPopMatrix();
+	}
+
+	if (peon.visible)
+	{
+		glPushMatrix();
+		{
+			glTranslatef(60, 0, 60);
+			glScalef(30, 30, 30);
+			peon.objeto.Dibujar(dibujo);
 		}
 		glPopMatrix();
 	}

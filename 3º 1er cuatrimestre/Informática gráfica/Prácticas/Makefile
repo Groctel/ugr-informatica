@@ -70,7 +70,6 @@ $(bin)/practicas: $(src)/practicas.cpp \
 		$(obj)/esfera.o \
 		$(obj)/globals.o \
 		$(obj)/malla.o \
-		$(obj)/objeto.o \
 		$(obj)/objrevolucion.o \
 		$(obj)/ply.o \
 		$(obj)/tetraedro.o
@@ -111,9 +110,6 @@ $(obj)/globals.o: $(src)/globals.cpp $(inc)/globals.hpp
 
 $(obj)/malla.o: $(src)/malla.cpp $(inc)/malla.hpp \
 		$(obj)/ply.o
-	$(CXX) $(CXXFLAGS) -c $< -o $@
-
-$(obj)/objeto.o: $(src)/objeto.cpp $(inc)/objeto.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(obj)/ply.o: $(src)/ply.cpp $(inc)/ply.hpp
