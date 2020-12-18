@@ -12,6 +12,13 @@
 #include "malla.hpp"
 #include "tuplasg.hpp"
 
+enum EjeRotacion
+{
+	X = 0,
+	Y = 1,
+	Z = 2
+};
+
 enum Tapas
 {
 	Ninguna  = 0,
@@ -23,36 +30,45 @@ enum Tapas
 class ObjRevolucion : public Malla3D
 {
 private:
-	inline void GenerarCaras
-		(const size_t iteraciones, Tapas tapas) noexcept;
+	bool mostrar_tapas;
 
-	inline void GenerarVertices
-		(const size_t iteraciones, Tapas tapas, bool generar_tapas) noexcept;
+	void GenerarCaras (
+		const std::vector<tuplas::Tupla3f> & perfil,
+		const size_t iteraciones,
+		Tapas tapas
+	) noexcept;
 
-	inline void InsertarTapas (Tapas tapas, bool generar_tapas) noexcept;
+	void GenerarVertices (
+		std::vector<tuplas::Tupla3f> & perfil,
+		const size_t iteraciones,
+		Tapas tapas
+	) noexcept;
 
 protected:
-	std::vector<tuplas::Tupla3f>   perfil;
-	std::array<tuplas::Tupla3f, 2> puntos_tapas;
-
-	void EliminarTapas () noexcept;
+	void Revolucionar  (
+		std::vector<tuplas::Tupla3f> & perfil,
+		size_t iteraciones,
+		Tapas tapas = Tapas::Ambas
+	) noexcept;
 
 public:
 	ObjRevolucion () noexcept;
-	ObjRevolucion (const std::string & ruta) noexcept;
-	ObjRevolucion
-		(const std::vector<tuplas::Tupla3f> & nuevo_perfil) noexcept;
 
-	tuplas::Tupla3f              PuntoPerfil (const size_t indice) const;
-	std::vector<tuplas::Tupla3f> Perfil      () const noexcept;
-
-	void RenovarPerfil (const std::string & ruta) noexcept;
-	void RenovarPerfil (const std::vector<tuplas::Tupla3f> & nuevo_perfil) noexcept;
-	void Revolucionar  (
+	ObjRevolucion (
+		const std::string & ruta,
 		size_t iteraciones,
-		Tapas tapas = Tapas::Ambas,
-		bool generar_tapas = true
+		Tapas tapas = Tapas::Ambas
 	) noexcept;
+
+	ObjRevolucion (
+		const std::vector<tuplas::Tupla3f> & nuevo_perfil,
+		size_t iteraciones,
+		Tapas tapas = Tapas::Ambas
+	) noexcept;
+
+	bool MuestraTapas () const noexcept;
+
+	void MostrarTapas (const bool estado) noexcept;
 };
 
 #endif

@@ -10,11 +10,10 @@ Cilindro :: Cilindro (
 	const float despl = altura/divisiones;
 	const float base  = -(despl * (divisiones / 2.0));
 
-	perfil.resize(divisiones);
+	std::vector<tuplas::Tupla3f> perfil(divisiones);
 
 	for (size_t i = 0; i < divisiones; i++)
 		perfil[i] = {radio, base + despl * i, 0};
 
-	EliminarTapas();
-	Revolucionar(iteraciones, Tapas::Ambas, true);
+	Revolucionar(perfil, iteraciones);
 }

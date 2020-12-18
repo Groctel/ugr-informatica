@@ -2,7 +2,7 @@
 
 Esfera :: Esfera (const float radio, const size_t iteraciones) noexcept
 {
-	perfil.resize(iteraciones);
+	std::vector<tuplas::Tupla3f> perfil(iteraciones);
 
 	for (size_t i = 0; i < iteraciones; i++)
 	{
@@ -15,6 +15,5 @@ Esfera :: Esfera (const float radio, const size_t iteraciones) noexcept
 		};
 	}
 
-	EliminarTapas();
-	Revolucionar(iteraciones, Tapas::Ambas, true);
+	Revolucionar(perfil, iteraciones);
 }

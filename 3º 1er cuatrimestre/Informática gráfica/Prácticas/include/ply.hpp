@@ -9,22 +9,23 @@
 #include "tuplasg.hpp"
 
 class PLY {
-protected:
-	std::ifstream Abrir (const std::string & ruta);
+private:
+	inline size_t LeerDimensiones (const std::string & linea) const noexcept;
 
-	std::pair<size_t, size_t> InterpretarCabecera (std::ifstream & fi);
+public:
+	std::ifstream Abrir (const std::string & ruta) const;
+
+	std::pair<size_t, size_t> InterpretarCabecera (std::ifstream & fi) const;
 
 	std::vector<tuplas::Tupla3f> InterpretarVertices (
 		std::ifstream & fi,
 		const size_t tamanio
-	) noexcept;
+	) const noexcept;
 
 	std::vector<tuplas::Tupla3u> InterpretarCaras (
 		std::ifstream & fi,
 		const size_t tamanio
-	) noexcept;
-
-	inline size_t LeerDimensiones (const std::string & linea) noexcept;
+	) const noexcept;
 };
 
 #endif

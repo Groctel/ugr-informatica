@@ -19,17 +19,33 @@ Escena :: Escena () noexcept
 	angulo_observador_x (0.0),
 	angulo_observador_y (0.0),
 
-	cilindro  (Cilindro(1, 5, 20, 30), false),
-	cono      (Cono(1, 5, 20, 30), false),
-	cubo      (Cubo(30), false),
-	esfera    (Esfera(1, 20), false),
-	tetraedro (Tetraedro(30), false),
-	peon      (ObjRevolucion("plys/peon.ply"), false)
+	cilindro (
+		Cilindro(1, 5, 20, 30),
+		false
+	),
+	cono (
+		Cono(1, 5, 20, 30),
+		false
+	),
+	cubo (
+		Cubo(30),
+		false
+	),
+	esfera (
+		Esfera(1, 20),
+		false
+	),
+	tetraedro (
+		Tetraedro(30),
+		false
+	),
+	peon (
+		ObjRevolucion("plys/peon.ply", 20, Tapas::Ambas),
+		false
+	)
 {
 	distancia_observador = 4 * plano_delantero,
 	ejes.NuevoTamanio(5000);
-
-	peon.objeto.Revolucionar(20, Tapas::Ambas, true);
 }
 
 /** @fn void Escena :: CambiarProyeccion (const float ratio_xy) noexcept
