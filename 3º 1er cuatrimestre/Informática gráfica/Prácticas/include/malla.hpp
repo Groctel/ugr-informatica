@@ -70,7 +70,7 @@ enum Visualizacion
  * @brief Malla de caras triangulares de la que heredan el resto de modelos.
  */
 
-class Malla3D : public PLY
+class Malla3D
 {
 private:
 	std::bitset<4> visualizacion;

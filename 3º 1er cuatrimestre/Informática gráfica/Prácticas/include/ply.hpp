@@ -10,22 +10,22 @@
 
 class PLY {
 private:
-	inline size_t LeerDimensiones (const std::string & linea) const noexcept;
+	static size_t LeerDimensiones (const std::string & linea) noexcept;
 
 public:
-	std::ifstream Abrir (const std::string & ruta) const;
+	static std::ifstream Abrir (const std::string & ruta);
 
-	std::pair<size_t, size_t> InterpretarCabecera (std::ifstream & fi) const;
+	static std::pair<size_t, size_t> LeerCabecera (std::ifstream & fi);
 
-	std::vector<tuplas::Tupla3f> InterpretarVertices (
+	static std::vector<tuplas::Tupla3f> LeerVertices (
 		std::ifstream & fi,
 		const size_t tamanio
-	) const noexcept;
+	) noexcept;
 
-	std::vector<tuplas::Tupla3u> InterpretarCaras (
+	static std::vector<tuplas::Tupla3u> LeerCaras (
 		std::ifstream & fi,
 		const size_t tamanio
-	) const noexcept;
+	) noexcept;
 };
 
 #endif

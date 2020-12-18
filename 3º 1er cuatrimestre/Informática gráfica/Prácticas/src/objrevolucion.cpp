@@ -135,8 +135,8 @@ ObjRevolucion :: ObjRevolucion (
 ) noexcept
 {
 	std::ifstream fi                    = PLY::Abrir(ruta);
-	std::pair<size_t, size_t> tamanios  = PLY::InterpretarCabecera(fi);
-	std::vector<tuplas::Tupla3f> perfil = PLY::InterpretarVertices(fi, tamanios.first);
+	std::pair<size_t, size_t> tamanios  = PLY::LeerCabecera(fi);
+	std::vector<tuplas::Tupla3f> perfil = PLY::LeerVertices(fi, tamanios.first);
 	fi.close();
 
 	Revolucionar(perfil, iteraciones, tapas);

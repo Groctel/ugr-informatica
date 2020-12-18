@@ -286,11 +286,10 @@ Malla3D :: Malla3D ()
 
 Malla3D :: Malla3D (const std::string & ruta)
 {
-	std::ifstream fi = Abrir(ruta);
-
-	std::pair<size_t, size_t> dimensiones = InterpretarCabecera(fi);
-	vertices = InterpretarVertices(fi, dimensiones.first);
-	caras = InterpretarCaras(fi, dimensiones.second);
+	std::ifstream fi                      = PLY::Abrir(ruta);
+	std::pair<size_t, size_t> dimensiones = PLY::LeerCabecera(fi);
+	vertices                              = PLY::LeerVertices(fi, dimensiones.first);
+	caras                                 = PLY::LeerCaras(fi, dimensiones.second);
 }
 
 /** @fn void Malla3D :: Dibujar (Dibujo modo) noexcept

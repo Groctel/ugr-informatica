@@ -1,6 +1,6 @@
 #include "ply.hpp"
 
-std::ifstream PLY :: Abrir (const std::string & ruta) const
+std::ifstream PLY :: Abrir (const std::string & ruta)
 {
 	std::ifstream fi;
 	std::string linea;
@@ -21,7 +21,7 @@ std::ifstream PLY :: Abrir (const std::string & ruta) const
 	return fi;
 }
 
-std::pair<size_t, size_t> PLY :: InterpretarCabecera (std::ifstream & fi) const
+std::pair<size_t, size_t> PLY :: LeerCabecera (std::ifstream & fi)
 {
 	bool cabecera_finalizada = false;
 	std::string linea;
@@ -58,10 +58,10 @@ std::pair<size_t, size_t> PLY :: InterpretarCabecera (std::ifstream & fi) const
 	return dimensiones;
 }
 
-std::vector<tuplas::Tupla3f> PLY :: InterpretarVertices (
+std::vector<tuplas::Tupla3f> PLY :: LeerVertices (
 	std::ifstream & fi,
 	const size_t tamanio
-) const noexcept
+) noexcept
 {
 	std::vector<tuplas::Tupla3f> vertices(tamanio);
 
@@ -75,10 +75,10 @@ std::vector<tuplas::Tupla3f> PLY :: InterpretarVertices (
 	return vertices;
 }
 
-std::vector<tuplas::Tupla3u> PLY :: InterpretarCaras (
+std::vector<tuplas::Tupla3u> PLY :: LeerCaras (
 	std::ifstream & fi,
 	const size_t tamanio
-) const noexcept
+) noexcept
 {
 	std::vector<tuplas::Tupla3u> caras(tamanio);
 
@@ -93,7 +93,7 @@ std::vector<tuplas::Tupla3u> PLY :: InterpretarCaras (
 	return caras;
 }
 
-inline size_t PLY :: LeerDimensiones (const std::string & linea) const noexcept
+size_t PLY :: LeerDimensiones (const std::string & linea) noexcept
 {
 	std::smatch tamanio;
 	std::regex_search(linea, tamanio, std::regex("[0-9]+ *$"));
