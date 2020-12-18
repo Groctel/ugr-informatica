@@ -2,7 +2,7 @@
 
 Esfera :: Esfera (const float radio, const size_t iteraciones) noexcept
 {
-	std::vector<tuplas::Tupla3f> perfil(iteraciones);
+	std::vector<Tupla3f> perfil(iteraciones);
 
 	for (size_t i = 0; i < iteraciones; i++)
 	{

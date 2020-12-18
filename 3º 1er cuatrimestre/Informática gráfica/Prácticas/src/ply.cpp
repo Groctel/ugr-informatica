@@ -58,12 +58,12 @@ std::pair<size_t, size_t> PLY :: LeerCabecera (std::ifstream & fi)
 	return dimensiones;
 }
 
-std::vector<tuplas::Tupla3f> PLY :: LeerVertices (
+std::vector<Tupla3f> PLY :: LeerVertices (
 	std::ifstream & fi,
 	const size_t tamanio
 ) noexcept
 {
-	std::vector<tuplas::Tupla3f> vertices(tamanio);
+	std::vector<Tupla3f> vertices(tamanio);
 
 	for (size_t i = 0; i < vertices.size(); i++)
 	{
@@ -75,12 +75,12 @@ std::vector<tuplas::Tupla3f> PLY :: LeerVertices (
 	return vertices;
 }
 
-std::vector<tuplas::Tupla3u> PLY :: LeerCaras (
+std::vector<Tupla3u> PLY :: LeerCaras (
 	std::ifstream & fi,
 	const size_t tamanio
 ) noexcept
 {
-	std::vector<tuplas::Tupla3u> caras(tamanio);
+	std::vector<Tupla3u> caras(tamanio);
 
 	for (size_t i = 0; i < caras.size(); i++)
 	{

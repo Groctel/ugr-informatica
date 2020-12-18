@@ -79,18 +79,18 @@ private:
 		const GLvoid * datos) const noexcept;
 
 	inline void InicializarColor (
-		std::vector<tuplas::Tupla3f> & tabla,
+		std::vector<Tupla3f> & tabla,
 		const coloresgl::color & color
 	) noexcept;
 
 	inline void InicializarVBOColor (const VBOColores & color) noexcept;
 
 protected:
-	static std::vector<tuplas::Tupla3f> tablas_colores[5];
+	static std::vector<Tupla3f> tablas_colores[5];
 
-	std::vector<tuplas::Tupla3u> caras;
-	std::vector<tuplas::Tupla3f> vertices;
-	std::vector<tuplas::Tupla3f> normales;
+	std::vector<Tupla3u> caras;
+	std::vector<Tupla3f> vertices;
+	std::vector<Tupla3f> normales;
 
 	GLuint vbo_colores[5];
 	GLuint vbo_caras    = 0;
@@ -106,7 +106,7 @@ protected:
 	inline void EnviarAjedrezInmediato () const noexcept;
 	inline void EnviarDibujoDiferido (GLenum modo, VBOColores color) noexcept;
 	inline void EnviarDibujoInmediato
-		(GLenum modo, std::vector<tuplas::Tupla3f> color) const noexcept;
+		(GLenum modo, std::vector<Tupla3f> color) const noexcept;
 
 	void InicializarColores () noexcept;
 	void GenerarAjedrez     () noexcept;
@@ -121,11 +121,11 @@ public:
 	void ModificarVisualizacion
 		(Visualizacion vis, Bitset operacion=Bitset::Flip) noexcept;
 
-	tuplas::Tupla3u              Cara  (const size_t indice) const;
-	std::vector<tuplas::Tupla3u> Caras () const noexcept;
+	Tupla3u              Cara  (const size_t indice) const;
+	std::vector<Tupla3u> Caras () const noexcept;
 
-	tuplas::Tupla3f              Vertice  (const size_t indice) const;
-	std::vector<tuplas::Tupla3f> Vertices () const noexcept;
+	Tupla3f              Vertice  (const size_t indice) const;
+	std::vector<Tupla3f> Vertices () const noexcept;
 };
 
 #endif

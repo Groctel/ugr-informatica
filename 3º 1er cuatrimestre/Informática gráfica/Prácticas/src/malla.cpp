@@ -3,7 +3,7 @@
 
 #include "malla.hpp"
 
-std::vector<tuplas::Tupla3f> Malla3D :: tablas_colores[5];
+std::vector<Tupla3f> Malla3D :: tablas_colores[5];
 
 /** @fn inline GLuint Malla3D :: VBO (GLuint tipo, GLuint bytes, GLvoid * datos) const noexcept
  *
@@ -39,10 +39,10 @@ inline void Malla3D :: InicializarVBOColor (const VBOColores & color) noexcept
 
 void Malla3D :: CalcularNormales () noexcept
 {
-	tuplas::Tupla3f vectorA;
-	tuplas::Tupla3f vectorB;
-	tuplas::Tupla3f perpendicular;
-	tuplas::Tupla3f normal;
+	Tupla3f vectorA;
+	Tupla3f vectorB;
+	Tupla3f perpendicular;
+	Tupla3f normal;
 
 	// para cada cara calculamos los vectores, si por ejemplo la cara esta formada
 	// por los puntos p, q y r, A = q - p y B = r - p
@@ -264,7 +264,7 @@ inline void Malla3D :: EnviarDibujoDiferido (GLenum modo, VBOColores color) noex
  */
 
 inline void Malla3D :: EnviarDibujoInmediato (
-	GLenum modo, std::vector<tuplas::Tupla3f> color) const noexcept
+	GLenum modo, std::vector<Tupla3f> color) const noexcept
 {
 	glColorPointer(3, GL_FLOAT, 0, color.data());
 	glPolygonMode(GL_FRONT, modo);
@@ -275,9 +275,9 @@ inline void Malla3D :: EnviarDibujoInmediato (
 }
 
 /** @fn void Malla3D :: InicializarColores (
- * 	tuplas::Tupla3f puntos,
- * 	tuplas::Tupla3f lineas,
- * 	tuplas::Tupla3f solido
+ * 	Tupla3f puntos,
+ * 	Tupla3f lineas,
+ * 	Tupla3f solido
  * ) noexcept
  *
  * @brief Crea las tablas de colores
@@ -300,7 +300,7 @@ void Malla3D :: InicializarColores () noexcept
 }
 
 inline void Malla3D :: InicializarColor (
-	std::vector<tuplas::Tupla3f> & tabla,
+	std::vector<Tupla3f> & tabla,
 	const coloresgl::color & color
 ) noexcept
 {
@@ -390,7 +390,7 @@ void Malla3D :: ModificarVisualizacion
 	}
 }
 
-/** @fn tuplas::Tupla3i Malla3D :: Cara (const size_t indice) const
+/** @fn Tupla3i Malla3D :: Cara (const size_t indice) const
  *
  * @brief Consulta la cara indicada.
  * @param indice Índice de la cara a consultar en la tabla de caras.
@@ -398,25 +398,25 @@ void Malla3D :: ModificarVisualizacion
  * @exception std::out_of_range Intento de acceso a cara sobre el máximo.
  */
 
-tuplas::Tupla3u Malla3D :: Cara (const size_t indice) const
+Tupla3u Malla3D :: Cara (const size_t indice) const
 {
 	if (indice >= caras.size())
 		throw std::out_of_range("Intento de acceso a cara sobre el máximo.");
 	return caras[indice];
 }
 
-/** @fn std::vector<tuplas::Tupla3i> Malla3D :: Caras () const noexcept
+/** @fn std::vector<Tupla3i> Malla3D :: Caras () const noexcept
  *
  * @brief Consulta la tabla de caras.
  * @return Tabla de caras del modelo.
  */
 
-std::vector<tuplas::Tupla3u> Malla3D :: Caras () const noexcept
+std::vector<Tupla3u> Malla3D :: Caras () const noexcept
 {
 	return caras;
 }
 
-/** @fn tuplas::Tupla3i Malla3D :: Vertice (const size_t indice) const
+/** @fn Tupla3i Malla3D :: Vertice (const size_t indice) const
  *
  * @brief Consulta el vértice indicada.
  * @param indice Índice del vértice a consultar en la tabla de vértices.
@@ -424,20 +424,20 @@ std::vector<tuplas::Tupla3u> Malla3D :: Caras () const noexcept
  * @exception std::out_of_range Intento de acceso a vértice sobre el máximo.
  */
 
-tuplas::Tupla3f Malla3D :: Vertice (const size_t indice) const
+Tupla3f Malla3D :: Vertice (const size_t indice) const
 {
 	if (indice >= vertices.size())
 		throw std::out_of_range("Intento de acceso a vértice sobre el máximo.");
 	return vertices[indice];
 }
 
-/** @fn std::vector<tuplas::Tupla3f> Malla3D :: Vertices () const noexcept
+/** @fn std::vector<Tupla3f> Malla3D :: Vertices () const noexcept
  *
  * @brief Consulta la tabla de vértices.
  * @return Tabla de vértices del modelo.
  */
 
-std::vector<tuplas::Tupla3f> Malla3D :: Vertices () const noexcept
+std::vector<Tupla3f> Malla3D :: Vertices () const noexcept
 {
 	return vertices;
 }

@@ -17,12 +17,12 @@ public:
 
 	static std::pair<size_t, size_t> LeerCabecera (std::ifstream & fi);
 
-	static std::vector<tuplas::Tupla3f> LeerVertices (
+	static std::vector<Tupla3f> LeerVertices (
 		std::ifstream & fi,
 		const size_t tamanio
 	) noexcept;
 
-	static std::vector<tuplas::Tupla3u> LeerCaras (
+	static std::vector<Tupla3u> LeerCaras (
 		std::ifstream & fi,
 		const size_t tamanio
 	) noexcept;

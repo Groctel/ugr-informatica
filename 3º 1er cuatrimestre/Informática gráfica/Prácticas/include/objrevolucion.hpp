@@ -26,20 +26,20 @@ private:
 	bool mostrar_tapas;
 
 	void GenerarCaras (
-		const std::vector<tuplas::Tupla3f> & perfil,
+		const std::vector<Tupla3f> & perfil,
 		const size_t iteraciones,
 		Tapas tapas
 	) noexcept;
 
 	void GenerarVertices (
-		std::vector<tuplas::Tupla3f> & perfil,
+		std::vector<Tupla3f> & perfil,
 		const size_t iteraciones,
 		Tapas tapas
 	) noexcept;
 
 protected:
 	void Revolucionar  (
-		std::vector<tuplas::Tupla3f> & perfil,
+		std::vector<Tupla3f> & perfil,
 		size_t iteraciones,
 		Tapas tapas = Tapas::Ambas
 	) noexcept;
@@ -54,7 +54,7 @@ public:
 	) noexcept;
 
 	ObjRevolucion (
-		const std::vector<tuplas::Tupla3f> & nuevo_perfil,
+		const std::vector<Tupla3f> & nuevo_perfil,
 		size_t iteraciones,
 		Tapas tapas = Tapas::Ambas
 	) noexcept;

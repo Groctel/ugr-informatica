@@ -19,8 +19,8 @@ class Ejes
 {
 private:
 	float tamanio;
-	std::vector<tuplas::Tupla3f> colores;
-	std::vector<tuplas::Tupla3f> vertices;
+	std::vector<Tupla3f> colores;
+	std::vector<Tupla3f> vertices;
 
 	inline void InicializarColores  () noexcept;
 	inline void InicializarVertices () noexcept;

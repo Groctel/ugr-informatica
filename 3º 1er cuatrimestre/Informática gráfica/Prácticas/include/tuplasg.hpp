@@ -14,8 +14,6 @@
 #define G 1
 #define B 2
 
-namespace tuplas {
-
 template <typename T, uint32_t n>
 class Tupla
 {
@@ -282,7 +280,5 @@ inline void Tupla3<T> :: operator = (const Tupla<T,3> & otra)
 	(*this)[1] = otra[1];
 	(*this)[2] = otra[2];
 }
-
-} // namespace tuplas
 
 #endif

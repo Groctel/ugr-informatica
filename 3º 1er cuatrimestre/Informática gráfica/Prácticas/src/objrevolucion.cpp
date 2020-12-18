@@ -4,7 +4,7 @@
 #include "objrevolucion.hpp"
 
 void ObjRevolucion :: GenerarCaras (
-	const std::vector<tuplas::Tupla3f> & perfil,
+	const std::vector<Tupla3f> & perfil,
 	const size_t iteraciones,
 	Tapas tapas
 ) noexcept
@@ -55,13 +55,13 @@ void ObjRevolucion :: GenerarCaras (
 }
 
 void ObjRevolucion :: GenerarVertices (
-	std::vector<tuplas::Tupla3f> & perfil,
+	std::vector<Tupla3f> & perfil,
 	const size_t iteraciones,
 	Tapas tapas
 ) noexcept
 {
-	tuplas::Tupla3f tapa_inf = *perfil.cbegin();
-	tuplas::Tupla3f tapa_sup = *perfil.crbegin();
+	Tupla3f tapa_inf = *perfil.cbegin();
+	Tupla3f tapa_sup = *perfil.crbegin();
 
 	if (FloatZ(tapa_inf[0]) && FloatZ(tapa_inf[2]))
 		perfil.erase(perfil.cbegin());
@@ -97,7 +97,7 @@ void ObjRevolucion :: GenerarVertices (
 }
 
 void ObjRevolucion :: Revolucionar (
-	std::vector<tuplas::Tupla3f> & perfil,
+	std::vector<Tupla3f> & perfil,
 	size_t iteraciones,
 	Tapas tapas
 ) noexcept
@@ -136,19 +136,19 @@ ObjRevolucion :: ObjRevolucion (
 {
 	std::ifstream fi                    = PLY::Abrir(ruta);
 	std::pair<size_t, size_t> tamanios  = PLY::LeerCabecera(fi);
-	std::vector<tuplas::Tupla3f> perfil = PLY::LeerVertices(fi, tamanios.first);
+	std::vector<Tupla3f> perfil = PLY::LeerVertices(fi, tamanios.first);
 	fi.close();
 
 	Revolucionar(perfil, iteraciones, tapas);
 }
 
 ObjRevolucion :: ObjRevolucion (
-	const std::vector<tuplas::Tupla3f> & nuevo_perfil,
+	const std::vector<Tupla3f> & nuevo_perfil,
 	size_t iteraciones,
 	Tapas tapas
 ) noexcept
 {
-	std::vector<tuplas::Tupla3f> perfil = nuevo_perfil;
+	std::vector<Tupla3f> perfil = nuevo_perfil;
 
 	Revolucionar(perfil, iteraciones, tapas);
 }

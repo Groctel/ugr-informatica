@@ -7,7 +7,7 @@
 
 class TuplaTest : public testing::Test {
 protected:
-	tuplas::Tupla<int, 3> tupla3i;
+	Tupla<int, 3> tupla3i;
 };
 
 class MallaTest : public testing::Test {
@@ -28,8 +28,8 @@ TEST_F (TuplaTest, UnaTuplaEsIgualAEllaMisma)
 
 TEST_F (TuplaTest, DosTuplasConstruidasIgualSonIguales)
 {
-	tuplas::Tupla3u tupla1 = tuplas::Tupla3u(534, 5422, 5425);
-	tuplas::Tupla3u tupla2 = tuplas::Tupla3u(534, 5422, 5425);
+	Tupla3u tupla1 = Tupla3u(534, 5422, 5425);
+	Tupla3u tupla2 = Tupla3u(534, 5422, 5425);
 
 	EXPECT_EQ(tupla1, tupla2);
 	EXPECT_EQ(*tupla1, *tupla2);
@@ -37,8 +37,8 @@ TEST_F (TuplaTest, DosTuplasConstruidasIgualSonIguales)
 
 /* TEST_F (TuplaTest, DosTuplasConDistintoTipoSonDiferentes) */
 /* { */
-/* 	tuplas::Tupla3i tupla1 {1, 2, 3}; */
-/* 	tuplas::Tupla3u tupla2 {1, 2, 3}; */
+/* 	Tupla3i tupla1 {1, 2, 3}; */
+/* 	Tupla3u tupla2 {1, 2, 3}; */
 
 /* 	EXPECT_NE(tupla1, tupla2); */
 /* 	EXPECT_NE(*tupla1, *tupla2); */

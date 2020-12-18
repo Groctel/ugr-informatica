@@ -5,16 +5,16 @@
 
 namespace coloresgl {
 
-typedef tuplas::Tupla3f color;
+typedef Tupla3f color;
 
-const tuplas::Tupla3f AMARILLO = tuplas::Tupla3f(1, 1, 0);
-const tuplas::Tupla3f AZUL     = tuplas::Tupla3f(0, 0, 1);
-const tuplas::Tupla3f CIAN     = tuplas::Tupla3f(0, 1, 1);
-const tuplas::Tupla3f BLANCO   = tuplas::Tupla3f(1, 1, 1);
-const tuplas::Tupla3f MAGENTA  = tuplas::Tupla3f(1, 0, 1);
-const tuplas::Tupla3f NEGRO    = tuplas::Tupla3f(0, 0, 0);
-const tuplas::Tupla3f ROJO     = tuplas::Tupla3f(1, 0, 0);
-const tuplas::Tupla3f VERDE    = tuplas::Tupla3f(0, 1, 0);
+const Tupla3f AMARILLO = Tupla3f(1, 1, 0);
+const Tupla3f AZUL     = Tupla3f(0, 0, 1);
+const Tupla3f CIAN     = Tupla3f(0, 1, 1);
+const Tupla3f BLANCO   = Tupla3f(1, 1, 1);
+const Tupla3f MAGENTA  = Tupla3f(1, 0, 1);
+const Tupla3f NEGRO    = Tupla3f(0, 0, 0);
+const Tupla3f ROJO     = Tupla3f(1, 0, 0);
+const Tupla3f VERDE    = Tupla3f(0, 1, 0);
 
 } // namespace coloresgl
 
