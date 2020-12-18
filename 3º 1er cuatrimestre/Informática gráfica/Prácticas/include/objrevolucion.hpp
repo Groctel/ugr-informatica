@@ -12,13 +12,6 @@
 #include "malla.hpp"
 #include "tuplasg.hpp"
 
-enum EjeRotacion
-{
-	X = 0,
-	Y = 1,
-	Z = 2
-};
-
 enum Tapas
 {
 	Ninguna  = 0,

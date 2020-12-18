@@ -90,13 +90,14 @@ protected:
 
 	std::vector<tuplas::Tupla3u> caras;
 	std::vector<tuplas::Tupla3f> vertices;
+	std::vector<tuplas::Tupla3f> normales;
 
 	GLuint vbo_colores[5];
 	GLuint vbo_caras    = 0;
 	GLuint vbo_vertices = 0;
 	std::pair<GLuint, GLuint> vbo_caras_ajedrez = {0,0};
 
-	//void CalcularNormales ();
+	void CalcularNormales () noexcept;
 
 	inline void DibujarDiferido  () noexcept;
 	inline void DibujarInmediato () const noexcept;

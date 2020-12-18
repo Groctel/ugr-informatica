@@ -37,6 +37,44 @@ inline void Malla3D :: InicializarVBOColor (const VBOColores & color) noexcept
 		);
 }
 
+void Malla3D :: CalcularNormales () noexcept
+{
+	tuplas::Tupla3f vectorA;
+	tuplas::Tupla3f vectorB;
+	tuplas::Tupla3f perpendicular;
+	tuplas::Tupla3f normal;
+
+	// para cada cara calculamos los vectores, si por ejemplo la cara esta formada
+	// por los puntos p, q y r, A = q - p y B = r - p
+	// tendremos una normal por cada vertice
+	normales.resize(vertices.size());
+
+	for (auto it = caras.cbegin(); it != caras.cend(); ++it)
+	{
+		vectorA = vertices[(*it)[Y]] - vertices[(*it)[X]];
+		vectorB = vertices[(*it)[Z]] - vertices[(*it)[X]];
+
+		// calculamos la permendicular haciendo el producto vectorial
+		perpendicular = vectorA * vectorB;
+
+		// lo normalizamos
+		// si podemos, esto esta hecho asi para caso de la esfera
+		// que repetimos lospuntos de los polos
+		if ((perpendicular | perpendicular) > 0)
+			normal = perpendicular.normalized();
+
+		normales[(*it)[X]] = normales[(*it)[X]] + normal;
+		normales[(*it)[Y]] = normales[(*it)[Y]] + normal;
+		normales[(*it)[Z]] = normales[(*it)[Z]] + normal;
+	}
+
+	for (auto it = normales.begin(); it != normales.end(); ++it)
+	{
+		if ((*it | *it) > 0)
+			(*it) = (*it).normalized();
+	}
+}
+
 /** @fn inline void Malla3D :: DibujarDiferido () noexcept
  *
  * @brief Dibuja el modelo en modo diferido.
@@ -290,6 +328,8 @@ Malla3D :: Malla3D (const std::string & ruta)
 	std::pair<size_t, size_t> dimensiones = PLY::LeerCabecera(fi);
 	vertices                              = PLY::LeerVertices(fi, dimensiones.first);
 	caras                                 = PLY::LeerCaras(fi, dimensiones.second);
+
+	CalcularNormales();
 }
 
 /** @fn void Malla3D :: Dibujar (Dibujo modo) noexcept
