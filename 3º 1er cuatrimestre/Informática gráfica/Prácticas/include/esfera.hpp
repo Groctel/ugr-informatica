@@ -1,7 +1,7 @@
 #ifndef PRACTICAS_ESFERA
 #define PRACTICAS_ESFERA
 
-#include "objrevolucion.hpp"
+#include "obj_revolucion.hpp"
 
 class Esfera : public ObjRevolucion {
 public:

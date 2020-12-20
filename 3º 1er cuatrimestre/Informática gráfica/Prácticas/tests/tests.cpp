@@ -2,7 +2,7 @@
 #include "cubo.hpp"
 #include "globals.hpp"
 #include "malla.hpp"
-#include "objrevolucion.hpp"
+#include "obj_revolucion.hpp"
 #include "tuplasg.hpp"
 
 class TuplaTest : public testing::Test {
@@ -209,7 +209,7 @@ TEST (PLYTest, PuedoCargarPeon)
 
 TEST (ObjRevolucionTest, PuedoCargarUnObjRevolucionAPartirDeUnPLY)
 {
-	ObjRevolucion objr("Peon", "plys/peon.ply");
+	ObjRevolucion objr("plys/peon.ply");
 }
 
 TEST (ObjRevolucionTest, LaRevolucionRedimensionaPorElNumeroDeIteracionesMasTapas)

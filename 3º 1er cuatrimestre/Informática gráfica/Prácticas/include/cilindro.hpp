@@ -1,7 +1,7 @@
 #ifndef PRACTICAS_CILINDRO
 #define PRACTICAS_CILINDRO
 
-#include "objrevolucion.hpp"
+#include "obj_revolucion.hpp"
 
 class Cilindro : public ObjRevolucion {
 public:

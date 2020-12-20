@@ -19,15 +19,16 @@ Escena :: Escena () noexcept
 	angulo_observador_x (0.0),
 	angulo_observador_y (0.0),
 
-	cilindro  (Cilindro(1, 5, 20, 30)),
-	cono      (Cono(1, 5, 20, 30)),
-	cubo      (Cubo(30)),
-	esfera    (Esfera(1, 20)),
-	tetraedro (Tetraedro(30)),
-	peon      (ObjRevolucion("plys/peon.ply", 20, Tapas::Ambas))
+	ejes      (new Ejes()),
+	cilindro  (new Cilindro(1, 5, 20, 30)),
+	cono      (new Cono(1, 5, 20, 30)),
+	cubo      (new Cubo(30)),
+	esfera    (new Esfera(1, 20)),
+	tetraedro (new Tetraedro(30)),
+	peon      (new ObjRevolucion("plys/peon.ply", 20, Tapas::Ambas))
 {
 	distancia_observador = 4 * plano_delantero,
-	ejes.NuevoTamanio(5000);
+	ejes->NuevoTamanio(5000);
 }
 
 /** @fn void Escena :: CambiarProyeccion (const float ratio_xy) noexcept
@@ -291,9 +292,10 @@ inline void Escena :: MsgSeleccionMenu () const noexcept
 inline void Escena :: MsgSeleccionObjeto (bool reescribir) noexcept
 {
 	if (reescribir)
-		std::cout << "\033[" << 7 << "A";
+		std::cout << "\033[8A";
 
 	std::cout
+		<< coloresterm::AZUL_B << "SELECCIÓN DE MENÚ:" << std::endl
 		<< coloresterm::CIAN_B << "["
 		<< coloresterm::AMARILLO_B << "I"
 		<< coloresterm::CIAN_B << "] "
@@ -349,13 +351,16 @@ inline void Escena :: MsgSeleccionObjeto (bool reescribir) noexcept
 inline void Escena :: MsgSeleccionVisualizacion (bool reescribir) const noexcept
 {
 	if (reescribir)
-		std::cout << "\033[5A";
+		std::cout << "\033[6A";
 
 	std::cout
 		<< coloresterm::AZUL_B << "SELECCIÓN DE VISUALIZACIÓN:" << std::endl
 		<< coloresterm::CIAN_B << "[" << coloresterm::AMARILLO_B << "A"
 		<< coloresterm::CIAN_B << "]" << coloresterm::NORMAL
 		<< coloresterm::AMARILLO << " Modo ajedrez" << std::endl
+		<< coloresterm::CIAN_B << "[" << coloresterm::AMARILLO_B << "I"
+		<< coloresterm::CIAN_B << "]" << coloresterm::NORMAL
+		<< coloresterm::AMARILLO << " Modo iluminación" << std::endl
 		<< coloresterm::CIAN_B << "[" << coloresterm::AMARILLO_B << "L"
 		<< coloresterm::CIAN_B << "]" << coloresterm::NORMAL
 		<< coloresterm::AMARILLO << " Modo líneas" << std::endl
@@ -392,12 +397,12 @@ inline void Escena :: MsgTeclasComunes () const noexcept
 
 inline void Escena :: Visualizar (Visualizacion visualizacion) noexcept
 {
-	cilindro.ModificarVisualizacion(visualizacion);
-	cono.ModificarVisualizacion(visualizacion);
-	cubo.ModificarVisualizacion(visualizacion);
-	esfera.ModificarVisualizacion(visualizacion);
-	tetraedro.ModificarVisualizacion(visualizacion);
-	peon.ModificarVisualizacion(visualizacion);
+	cilindro->ModificarVisualizacion(visualizacion);
+	cono->ModificarVisualizacion(visualizacion);
+	cubo->ModificarVisualizacion(visualizacion);
+	esfera->ModificarVisualizacion(visualizacion);
+	tetraedro->ModificarVisualizacion(visualizacion);
+	peon->ModificarVisualizacion(visualizacion);
 }
 
 /** @fn Escena * Escena :: Instance () noexcept
@@ -422,6 +427,14 @@ Escena * Escena :: Instance () noexcept
 
 Escena :: ~Escena () noexcept
 {
+	delete ejes;
+	delete cilindro;
+	delete cono;
+	delete cubo;
+	delete esfera;
+	delete tetraedro;
+	delete peon;
+
 	instance = nullptr;
 	exit(0);
 }
@@ -464,7 +477,7 @@ void Escena :: Dibujar () noexcept
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	CambiarObservador();
-	ejes.Dibujar();
+	ejes->Dibujar();
 
 	if (visibles.test(obj_cilindro))
 	{
@@ -472,7 +485,7 @@ void Escena :: Dibujar () noexcept
 		{
 			glTranslatef(-60, 0, -60);
 			glScalef(30, 30, 30);
-			cilindro.Dibujar(dibujo);
+			cilindro->Dibujar(dibujo);
 		}
 		glPopMatrix();
 	}
@@ -483,7 +496,7 @@ void Escena :: Dibujar () noexcept
 		{
 			glTranslatef(60, 0, -60);
 			glScalef(30, 30, 30);
-			cono.Dibujar(dibujo);
+			cono->Dibujar(dibujo);
 		}
 		glPopMatrix();
 	}
@@ -493,7 +506,7 @@ void Escena :: Dibujar () noexcept
 		glPushMatrix();
 		{
 			glTranslatef(-60, 0, 60);
-			cubo.Dibujar(dibujo);
+			cubo->Dibujar(dibujo);
 		}
 		glPopMatrix();
 	}
@@ -504,7 +517,7 @@ void Escena :: Dibujar () noexcept
 		{
 			glTranslatef(0, -60, 0);
 			glScalef(30, 30, 30);
-			esfera.Dibujar(dibujo);
+			esfera->Dibujar(dibujo);
 		}
 		glPopMatrix();
 	}
@@ -514,7 +527,7 @@ void Escena :: Dibujar () noexcept
 		glPushMatrix();
 		{
 			glTranslatef(0, 60, 0);
-			tetraedro.Dibujar(dibujo);
+			tetraedro->Dibujar(dibujo);
 		}
 		glPopMatrix();
 	}
@@ -525,7 +538,7 @@ void Escena :: Dibujar () noexcept
 		{
 			glTranslatef(60, 0, 60);
 			glScalef(30, 30, 30);
-			peon.Dibujar(dibujo);
+			peon->Dibujar(dibujo);
 		}
 		glPopMatrix();
 	}

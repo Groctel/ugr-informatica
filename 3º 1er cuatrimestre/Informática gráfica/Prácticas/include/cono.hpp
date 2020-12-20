@@ -1,7 +1,7 @@
 #ifndef PRACTICAS_CONO
 #define PRACTICAS_CONO
 
-#include "objrevolucion.hpp"
+#include "obj_revolucion.hpp"
 
 class Cono : public ObjRevolucion
 {

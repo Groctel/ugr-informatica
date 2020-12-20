@@ -69,8 +69,12 @@ $(bin)/practicas: $(src)/practicas.cpp \
 		$(obj)/escena.o \
 		$(obj)/esfera.o \
 		$(obj)/globals.o \
+		$(obj)/luz.o \
+		$(obj)/luz_direccional.o \
+		$(obj)/luz_posicional.o \
 		$(obj)/malla.o \
-		$(obj)/objrevolucion.o \
+		$(obj)/material.o \
+		$(obj)/obj_revolucion.o \
 		$(obj)/ply.o \
 		$(obj)/tetraedro.o
 	$(CXX) $(CXXFLAGS) -o $@ $^
@@ -79,16 +83,16 @@ $(bin)/tests: $(tst)/tests.cpp \
 		$(obj)/cubo.o \
 		$(obj)/globals.o \
 		$(obj)/malla.o \
-		$(obj)/objrevolucion.o \
+		$(obj)/obj_revolucion.o \
 		$(obj)/ply.o
 	$(CXX) $(gtestflags) -o $@ $^
 
 $(obj)/cilindro.o: $(src)/cilindro.cpp $(inc)/cilindro.hpp \
-		$(obj)/objrevolucion.o
+		$(obj)/obj_revolucion.o
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(obj)/cono.o: $(src)/cono.cpp $(inc)/cono.hpp \
-		$(obj)/objrevolucion.o
+		$(obj)/obj_revolucion.o
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(obj)/cubo.o: $(src)/cubo.cpp $(inc)/cubo.hpp \
@@ -102,20 +106,32 @@ $(obj)/escena.o: $(src)/escena.cpp $(inc)/escena.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(obj)/esfera.o: $(src)/esfera.cpp $(inc)/esfera.hpp \
-		$(obj)/objrevolucion.o
+		$(obj)/obj_revolucion.o
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(obj)/globals.o: $(src)/globals.cpp $(inc)/globals.hpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(obj)/luz.o: $(src)/luz.cpp $(inc)/luz.hpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(obj)/luz_direccional.o: $(src)/luz_direccional.cpp $(inc)/luz_direccional.hpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(obj)/luz_posicional.o: $(src)/luz_posicional.cpp $(inc)/luz_posicional.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(obj)/malla.o: $(src)/malla.cpp $(inc)/malla.hpp \
 		$(obj)/ply.o
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
+$(obj)/material.o: $(src)/material.cpp $(inc)/material.hpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
 $(obj)/ply.o: $(src)/ply.cpp $(inc)/ply.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-$(obj)/objrevolucion.o: $(src)/objrevolucion.cpp $(inc)/objrevolucion.hpp \
+$(obj)/obj_revolucion.o: $(src)/obj_revolucion.cpp $(inc)/obj_revolucion.hpp \
 		$(obj)/globals.o \
 		$(obj)/malla.o
 	$(CXX) $(CXXFLAGS) -c $< -o $@

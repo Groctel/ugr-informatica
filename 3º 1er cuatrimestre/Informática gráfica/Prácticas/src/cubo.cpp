@@ -65,5 +65,6 @@ Cubo :: Cubo (const float escala) noexcept
 	InicializarCaras();
 	InicializarColores();
 	GenerarAjedrez();
+	CalcularNormales();
 }
 

@@ -24,18 +24,17 @@ public:
 	inline Tupla () noexcept;
 	inline Tupla (const T * elem) noexcept;
 
-	inline Tupla<T,n> operator =  (const Tupla & otra)      noexcept;
-	inline Tupla<T,n> operator +  (const Tupla & otra)      const noexcept;
-	inline Tupla<T,n> operator -  (const Tupla & otra)      const noexcept;
-	inline Tupla<T,n> operator -  ()                        const noexcept;
-	inline Tupla<T,n> operator *  (const T & escalar)       const noexcept;
-	inline Tupla<T,n> operator /  (const T & escalar)       const noexcept;
-	inline       T    operator |  (const Tupla & der)       const noexcept;
-	inline       T &  operator [] (const uint32_t indice);
-	inline const T &  operator [] (const uint32_t indice)   const;
-	inline const T *  operator *  ()                        const noexcept;
-	inline bool       operator == (const Tupla<T,n> & otra) const;
-	inline bool       operator != (const Tupla<T,n> & otra) const;
+	inline Tupla<T,n> operator +   (const Tupla & otra)      const noexcept;
+	inline Tupla<T,n> operator -   (const Tupla & otra)      const noexcept;
+	inline Tupla<T,n> operator -   ()                        const noexcept;
+	inline Tupla<T,n> operator *   (const T & escalar)       const noexcept;
+	inline Tupla<T,n> operator /   (const T & escalar)       const noexcept;
+	inline       T    operator |   (const Tupla & der)       const noexcept;
+	inline       T &  operator []  (const uint32_t indice);
+	inline const T &  operator []  (const uint32_t indice)   const;
+	inline            operator T * ()                        noexcept;
+	inline bool       operator ==  (const Tupla<T,n> & otra) const;
+	inline bool       operator !=  (const Tupla<T,n> & otra) const;
 
 	template <typename N, uint32_t u>
 	inline friend std::ostream & operator <<
@@ -79,7 +78,7 @@ typedef Tupla3<uint32_t> Tupla3u;
 typedef Tupla3<int>      Tupla3i;
 
 template <typename T>
-class Tupla4 : public Tupla<T,3>
+class Tupla4 : public Tupla<T,4>
 {
 public:
 	Tupla4 ();
@@ -87,8 +86,6 @@ public:
 	Tupla4 (const Tupla<T,4> & otra);
 
 	void operator = (const Tupla<T,4> & otra);
-
-	Tupla4<T> operator * (const Tupla4 <T> & otra) const noexcept;
 };
 
 typedef Tupla4<double>   Tupla4d;
@@ -105,15 +102,6 @@ inline Tupla<T,n> :: Tupla (const T * elem) noexcept
 {
 	for (uint32_t i = 0; i < n; i++)
 		elementos[i] = elem[i];
-}
-
-template <typename T, uint32_t n>
-inline Tupla<T,n> Tupla<T,n> :: operator = (const Tupla<T,n> & otra) noexcept
-{
-	for (uint32_t i = 0; i < n; i++)
-		elementos[i] = otra[i];
-
-	return *this;
 }
 
 template <typename T, uint32_t n>
@@ -199,7 +187,7 @@ inline const T & Tupla <T,n> :: operator [] (const uint32_t indice) const
 }
 
 template <typename T, uint32_t n>
-inline const T * Tupla<T,n> :: operator * () const noexcept
+inline Tupla<T,n> :: operator T * () noexcept
 {
 	return elementos;
 }
@@ -304,16 +292,6 @@ inline Tupla4<T> :: Tupla4 (const T elem0, const T elem1, const T elem2, const T
 	(*this)[1] = elem1;
 	(*this)[2] = elem2;
 	(*this)[3] = elem3;
-}
-
-template <typename T>
-inline Tupla4<T> Tupla4<T> :: operator * (const Tupla4<T> & otra) const noexcept
-{
-	return Tupla3<T> (
-		(*this)[1] * otra[2] - (*this)[2] * otra[1],
-		(*this)[2] * otra[0] - (*this)[0] * otra[2],
-		(*this)[0] * otra[1] - (*this)[1] * otra[0]
-	);
 }
 
 template <typename T>

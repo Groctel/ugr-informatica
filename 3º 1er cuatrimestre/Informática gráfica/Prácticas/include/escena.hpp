@@ -4,7 +4,7 @@
 #ifndef PRACTICAS_ESCENA
 #define PRACTICAS_ESCENA
 
-#include <set>
+#include <bitset>
 #include "cilindro.hpp"
 #include "cono.hpp"
 #include "cubo.hpp"
@@ -12,8 +12,14 @@
 #include "esfera.hpp"
 #include "malla.hpp"
 #include "motor.hpp"
-#include "objrevolucion.hpp"
+#include "obj_revolucion.hpp"
 #include "tetraedro.hpp"
+
+/*
+ * OBJETOS VISIBLES EN LA ESCENA:
+ * Cada objeto visible en la escena se almacena como una flag en el std::bitset
+ * visibles. Estas macros definen el nombre de cada una de estas flags.
+ */
 
 #define obj_cilindro  0
 #define obj_cono      1
@@ -49,13 +55,13 @@ private:
 	Menu menu     = Menu::Inactivo;
 	Dibujo dibujo = Dibujo::Inmediato;
 
-	Ejes          ejes;
-	Cilindro      cilindro;
-	Cono          cono;
-	Cubo          cubo;
-	Esfera        esfera;
-	Tetraedro     tetraedro;
-	ObjRevolucion peon;
+	Ejes          * ejes      = nullptr;
+	Cilindro      * cilindro  = nullptr;
+	Cono          * cono      = nullptr;
+	Cubo          * cubo      = nullptr;
+	Esfera        * esfera    = nullptr;
+	Tetraedro     * tetraedro = nullptr;
+	ObjRevolucion * peon      = nullptr;
 
 	std::bitset<6> visibles;
 

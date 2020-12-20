@@ -11,6 +11,7 @@
 #include <string>
 #include <utility>
 #include "colores.hpp"
+#include "material.hpp"
 #include "motor.hpp"
 #include "ply.hpp"
 
@@ -59,10 +60,12 @@ enum VBOFormas
 
 enum Visualizacion
 {
-	Ajedrez = 0,
-	Lineas  = 1,
-	Puntos  = 2,
-	Solido  = 3
+	Ajedrez   = 0,
+	Lineas    = 1,
+	Puntos    = 2,
+	Solido    = 3,
+	IlumSuave = 4,
+	IlumPlano = 5
 };
 
 /** @class Malla3D
@@ -73,7 +76,8 @@ enum Visualizacion
 class Malla3D
 {
 private:
-	std::bitset<4> visualizacion;
+	Material material;
+	std::bitset<6> visualizacion;
 
 	inline GLuint VBO (const GLuint & tipo, const GLuint & bytes,
 		const GLvoid * datos) const noexcept;
@@ -118,6 +122,8 @@ public:
 	void Dibujar (Dibujo modo) noexcept;
 
 	bool EstadoVisualizacion (Visualizacion vis) const noexcept;
+
+	void AplicarMaterial (Material nuevo) noexcept;
 	void ModificarVisualizacion
 		(Visualizacion vis, Bitset operacion=Bitset::Flip) noexcept;
 

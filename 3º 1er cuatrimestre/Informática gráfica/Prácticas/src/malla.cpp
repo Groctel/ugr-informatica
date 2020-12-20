@@ -364,6 +364,11 @@ bool Malla3D :: EstadoVisualizacion (Visualizacion vis) const noexcept
 	return visualizacion.test(vis);
 }
 
+void Malla3D :: AplicarMaterial (Material nuevo) noexcept
+{
+	material = nuevo;
+}
+
 /** @fn void Malla3D :: Visualizar (Visualizacion vis, Bitset operacion) noexcept
  *
  * @brief Modifica el estado del modo de visualización indicado.

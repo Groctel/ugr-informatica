@@ -1,4 +1,4 @@
-/** @file objrevolucion.hpp
+/** @file obj_revolucion.hpp
  */
 
 #ifndef PRACTICAS_OBJREVOLUCION

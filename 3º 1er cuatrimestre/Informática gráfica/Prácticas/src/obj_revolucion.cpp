@@ -1,7 +1,7 @@
-/** @file objrevolucion.cpp
+/** @file obj_revolucion.cpp
  */
 
-#include "objrevolucion.hpp"
+#include "obj_revolucion.hpp"
 
 void ObjRevolucion :: GenerarCaras (
 	const std::vector<Tupla3f> & perfil,
