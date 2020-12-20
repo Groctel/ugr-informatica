@@ -15,18 +15,12 @@
 #include "objrevolucion.hpp"
 #include "tetraedro.hpp"
 
-#define objeto  first
-#define visible second
-
-enum Objetos
-{
-	_Cilindro  = 1,
-	_Cono      = 2,
-	_Cubo      = 3,
-	_Esfera    = 4,
-	_Tetraedro = 5,
-	_Peon      = 6
-};
+#define obj_cilindro  0
+#define obj_cono      1
+#define obj_cubo      2
+#define obj_esfera    3
+#define obj_tetraedro 4
+#define obj_peon      5
 
 enum Menu
 {
@@ -56,13 +50,14 @@ private:
 	Dibujo dibujo = Dibujo::Inmediato;
 
 	Ejes          ejes;
+	Cilindro      cilindro;
+	Cono          cono;
+	Cubo          cubo;
+	Esfera        esfera;
+	Tetraedro     tetraedro;
+	ObjRevolucion peon;
 
-	std::pair<Cilindro,      bool> cilindro;
-	std::pair<Cono,          bool> cono;
-	std::pair<Cubo,          bool> cubo;
-	std::pair<Esfera,        bool> esfera;
-	std::pair<Tetraedro,     bool> tetraedro;
-	std::pair<ObjRevolucion, bool> peon;
+	std::bitset<6> visibles;
 
 	Escena () noexcept;
 	Escena (const Escena & otra) = delete;

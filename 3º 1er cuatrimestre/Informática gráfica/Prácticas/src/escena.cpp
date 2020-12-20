@@ -19,30 +19,12 @@ Escena :: Escena () noexcept
 	angulo_observador_x (0.0),
 	angulo_observador_y (0.0),
 
-	cilindro (
-		Cilindro(1, 5, 20, 30),
-		false
-	),
-	cono (
-		Cono(1, 5, 20, 30),
-		false
-	),
-	cubo (
-		Cubo(30),
-		false
-	),
-	esfera (
-		Esfera(1, 20),
-		false
-	),
-	tetraedro (
-		Tetraedro(30),
-		false
-	),
-	peon (
-		ObjRevolucion("plys/peon.ply", 20, Tapas::Ambas),
-		false
-	)
+	cilindro  (Cilindro(1, 5, 20, 30)),
+	cono      (Cono(1, 5, 20, 30)),
+	cubo      (Cubo(30)),
+	esfera    (Esfera(1, 20)),
+	tetraedro (Tetraedro(30)),
+	peon      (ObjRevolucion("plys/peon.ply", 20, Tapas::Ambas))
 {
 	distancia_observador = 4 * plano_delantero,
 	ejes.NuevoTamanio(5000);
@@ -158,27 +140,27 @@ inline void Escena :: SeleccionObjeto (unsigned char tecla) noexcept
 	switch (std::toupper(tecla))
 	{
 		case 'I':
-			cilindro.visible = true;
+			visibles.flip(obj_cilindro);
 		break;
 
 		case 'O':
-			cono.visible = true;
+			visibles.flip(obj_cono);
 		break;
 
 		case 'U':
-			cubo.visible = true;
+			visibles.flip(obj_cubo);
 		break;
 
 		case 'E':
-			esfera.visible = true;
+			visibles.flip(obj_esfera);
 		break;
 
 		case 'T':
-			tetraedro.visible = true;
+			visibles.flip(obj_tetraedro);
 		break;
 
 		case 'P':
-			peon.visible = true;
+			visibles.flip(obj_peon);
 		break;
 
 		default:
@@ -316,42 +298,42 @@ inline void Escena :: MsgSeleccionObjeto (bool reescribir) noexcept
 		<< coloresterm::AMARILLO_B << "I"
 		<< coloresterm::CIAN_B << "] "
 		<< coloresterm::NORMAL
-		<< ((cilindro.visible) ? coloresterm::VERDE : coloresterm::ROJO)
+		<< (visibles.test(obj_cilindro) ? coloresterm::VERDE : coloresterm::ROJO)
 		<< "Cilindro"
 		<< coloresterm::NORMAL << std::endl
 		<< coloresterm::CIAN_B << "["
 		<< coloresterm::AMARILLO_B << "O"
 		<< coloresterm::CIAN_B << "] "
 		<< coloresterm::NORMAL
-		<< ((cono.visible) ? coloresterm::VERDE : coloresterm::ROJO)
+		<< (visibles.test(obj_cono) ? coloresterm::VERDE : coloresterm::ROJO)
 		<< "Cono"
 		<< coloresterm::NORMAL << std::endl
 		<< coloresterm::CIAN_B << "["
 		<< coloresterm::AMARILLO_B << "U"
 		<< coloresterm::CIAN_B << "] "
 		<< coloresterm::NORMAL
-		<< ((cubo.visible) ? coloresterm::VERDE : coloresterm::ROJO)
+		<< (visibles.test(obj_cubo) ? coloresterm::VERDE : coloresterm::ROJO)
 		<< "Cubo"
 		<< coloresterm::NORMAL << std::endl
 		<< coloresterm::CIAN_B << "["
 		<< coloresterm::AMARILLO_B << "E"
 		<< coloresterm::CIAN_B << "] "
 		<< coloresterm::NORMAL
-		<< ((esfera.visible) ? coloresterm::VERDE : coloresterm::ROJO)
+		<< (visibles.test(obj_esfera) ? coloresterm::VERDE : coloresterm::ROJO)
 		<< "Esfera"
 		<< coloresterm::NORMAL << std::endl
 		<< coloresterm::CIAN_B << "["
 		<< coloresterm::AMARILLO_B << "T"
 		<< coloresterm::CIAN_B << "] "
 		<< coloresterm::NORMAL
-		<< ((tetraedro.visible) ? coloresterm::VERDE : coloresterm::ROJO)
+		<< (visibles.test(obj_tetraedro) ? coloresterm::VERDE : coloresterm::ROJO)
 		<< "Tetraedro"
 		<< coloresterm::NORMAL << std::endl
 		<< coloresterm::CIAN_B << "["
 		<< coloresterm::AMARILLO_B << "P"
 		<< coloresterm::CIAN_B << "] "
 		<< coloresterm::NORMAL
-		<< ((peon.visible) ? coloresterm::VERDE : coloresterm::ROJO)
+		<< (visibles.test(obj_peon) ? coloresterm::VERDE : coloresterm::ROJO)
 		<< "Peon"
 		<< coloresterm::NORMAL << std::endl;
 
@@ -410,23 +392,12 @@ inline void Escena :: MsgTeclasComunes () const noexcept
 
 inline void Escena :: Visualizar (Visualizacion visualizacion) noexcept
 {
-	if (cilindro.visible)
-		cilindro.objeto.ModificarVisualizacion(visualizacion);
-
-	if (cono.visible)
-		cono.objeto.ModificarVisualizacion(visualizacion);
-
-	if (cubo.visible)
-		cubo.objeto.ModificarVisualizacion(visualizacion);
-
-	if (esfera.visible)
-		esfera.objeto.ModificarVisualizacion(visualizacion);
-
-	if (tetraedro.visible)
-		tetraedro.objeto.ModificarVisualizacion(visualizacion);
-
-	if (peon.visible)
-		peon.objeto.ModificarVisualizacion(visualizacion);
+	cilindro.ModificarVisualizacion(visualizacion);
+	cono.ModificarVisualizacion(visualizacion);
+	cubo.ModificarVisualizacion(visualizacion);
+	esfera.ModificarVisualizacion(visualizacion);
+	tetraedro.ModificarVisualizacion(visualizacion);
+	peon.ModificarVisualizacion(visualizacion);
 }
 
 /** @fn Escena * Escena :: Instance () noexcept
@@ -495,66 +466,66 @@ void Escena :: Dibujar () noexcept
 	CambiarObservador();
 	ejes.Dibujar();
 
-	if (cilindro.visible)
+	if (visibles.test(obj_cilindro))
 	{
 		glPushMatrix();
 		{
 			glTranslatef(-60, 0, -60);
 			glScalef(30, 30, 30);
-			cilindro.objeto.Dibujar(dibujo);
+			cilindro.Dibujar(dibujo);
 		}
 		glPopMatrix();
 	}
 
-	if (cono.visible)
+	if (visibles.test(obj_cono))
 	{
 		glPushMatrix();
 		{
 			glTranslatef(60, 0, -60);
 			glScalef(30, 30, 30);
-			cono.objeto.Dibujar(dibujo);
+			cono.Dibujar(dibujo);
 		}
 		glPopMatrix();
 	}
 
-	if (cubo.visible)
+	if (visibles.test(obj_cubo))
 	{
 		glPushMatrix();
 		{
 			glTranslatef(-60, 0, 60);
-			cubo.objeto.Dibujar(dibujo);
+			cubo.Dibujar(dibujo);
 		}
 		glPopMatrix();
 	}
 
-	if (esfera.visible)
+	if (visibles.test(obj_esfera))
 	{
 		glPushMatrix();
 		{
 			glTranslatef(0, -60, 0);
 			glScalef(30, 30, 30);
-			esfera.objeto.Dibujar(dibujo);
+			esfera.Dibujar(dibujo);
 		}
 		glPopMatrix();
 	}
 
-	if (tetraedro.visible)
+	if (visibles.test(obj_tetraedro))
 	{
 		glPushMatrix();
 		{
 			glTranslatef(0, 60, 0);
-			tetraedro.objeto.Dibujar(dibujo);
+			tetraedro.Dibujar(dibujo);
 		}
 		glPopMatrix();
 	}
 
-	if (peon.visible)
+	if (visibles.test(obj_peon))
 	{
 		glPushMatrix();
 		{
 			glTranslatef(60, 0, 60);
 			glScalef(30, 30, 30);
-			peon.objeto.Dibujar(dibujo);
+			peon.Dibujar(dibujo);
 		}
 		glPopMatrix();
 	}
