@@ -16,4 +16,5 @@ Esfera :: Esfera (const float radio, const size_t iteraciones) noexcept
 	}
 
 	Revolucionar(perfil, iteraciones);
+	InicializarMalla();
 }

@@ -37,9 +37,9 @@ void Luz :: Aplicar () noexcept
 	}
 }
 
-void Luz :: Activar (const bool estado) noexcept
+void Luz :: Pulsar () noexcept
 {
-	activada = estado;
+	activada = !activada;
 
 	if (activada)
 		glEnable(id);

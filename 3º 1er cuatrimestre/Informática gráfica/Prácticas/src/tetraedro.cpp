@@ -53,6 +53,6 @@ Tetraedro :: Tetraedro (const float escala) noexcept
 {
 	InicializarVertices(escala);
 	InicializarCaras();
-	InicializarColores();
+	InicializarMalla();
 }
 

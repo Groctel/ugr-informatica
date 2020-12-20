@@ -28,7 +28,7 @@ public:
 	bool Activada () const noexcept;
 
 	void Aplicar () noexcept;
-	void Activar (const bool estado) noexcept;
+	void Pulsar  () noexcept;
 };
 
 #endif

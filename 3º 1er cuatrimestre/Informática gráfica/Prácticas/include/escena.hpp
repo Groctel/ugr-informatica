@@ -10,6 +10,7 @@
 #include "cubo.hpp"
 #include "ejes.hpp"
 #include "esfera.hpp"
+#include "luz_direccional.hpp"
 #include "malla.hpp"
 #include "motor.hpp"
 #include "obj_revolucion.hpp"
@@ -32,6 +33,7 @@ enum Menu
 {
 	Inactivo,
 	SeleccionDibujado,
+	SeleccionLuces,
 	SeleccionObjeto,
 	SeleccionVisualizacion,
 };
@@ -77,23 +79,28 @@ private:
 	Tetraedro     * tetraedro = nullptr;
 	ObjRevolucion * peon      = nullptr;
 
+	LuzDireccional * luz0 = nullptr;
+
 	std::bitset<6> visibles;
 	std::bitset<5> visualizacion;
 
 	Escena () noexcept;
 	Escena (const Escena & otra) = delete;
 
+	void AplicarLuces      () noexcept;
 	void CambiarProyeccion (const float ratio_xy) noexcept;
 	void CambiarObservador () noexcept;
 	void DibujarMallas     (Colores color, bool ajedrez=false) const noexcept;
 
 	void SeleccionDibujado      (unsigned char tecla) noexcept;
+	void SeleccionLuces         (unsigned char tecla) noexcept;
 	void SeleccionMenu          (unsigned char tecla) noexcept;
 	void SeleccionObjeto        (unsigned char tecla) noexcept;
 	void SeleccionVisualizacion (unsigned char tecla) noexcept;
 	void TeclasComunes          (unsigned char tecla) noexcept;
 
 	void MsgSeleccionDibujado      (bool reescribir=false) const noexcept;
+	void MsgSeleccionLuces         (bool reescribir=false) const noexcept;
 	void MsgSeleccionMenu          () const noexcept;
 	void MsgSeleccionObjeto        (bool reescribir=false) noexcept;
 	void MsgSeleccionVisualizacion (bool reescribir=false) const noexcept;

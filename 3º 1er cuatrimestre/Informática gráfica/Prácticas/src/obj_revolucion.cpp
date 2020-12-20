@@ -104,8 +104,7 @@ void ObjRevolucion :: Revolucionar (
 {
 	GenerarVertices(perfil, iteraciones, tapas);
 	GenerarCaras(perfil, iteraciones, tapas);
-	InicializarColores();
-	GenerarAjedrez();
+	InicializarMalla();
 }
 
 /** @fn ObjRevolucion :: ObjRevolucion ()

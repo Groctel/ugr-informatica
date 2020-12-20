@@ -16,4 +16,5 @@ Cilindro :: Cilindro (
 		perfil[i] = {radio, base + despl * i, 0};
 
 	Revolucionar(perfil, iteraciones);
+	InicializarMalla();
 }

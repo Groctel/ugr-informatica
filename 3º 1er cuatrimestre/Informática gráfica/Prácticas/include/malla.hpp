@@ -66,6 +66,9 @@ private:
 		const coloresgl::color & color
 	) noexcept;
 
+	void CalcularNormales    () noexcept;
+	void GenerarAjedrez      () noexcept;
+	void InicializarColores  () noexcept;
 	void InicializarVBOColor (const Colores & color) noexcept;
 
 protected:
@@ -75,20 +78,17 @@ protected:
 	std::vector<Tupla3f> vertices;
 	std::vector<Tupla3f> normales;
 
-	GLuint vbo_colores[5];
-	GLuint vbo_caras    = 0;
-	GLuint vbo_vertices = 0;
+	GLuint vbo_colores[5] = {0};
+	GLuint vbo_caras      = 0;
+	GLuint vbo_vertices   = 0;
 	std::pair<GLuint, GLuint> vbo_caras_ajedrez = {0,0};
 
-	void CalcularNormales () noexcept;
-
 	void DibujarDiferido         (Colores color) noexcept;
-	void DibujarInmediato        (Colores color) const noexcept;
+	void DibujarInmediato        (Colores color) noexcept;
 	void DibujarAjedrezDiferido  () noexcept;
 	void DibujarAjedrezInmediato () const noexcept;
 
-	void InicializarColores () noexcept;
-	void GenerarAjedrez     () noexcept;
+	void InicializarMalla () noexcept;
 
 public:
 	Malla3D ();

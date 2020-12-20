@@ -27,6 +27,55 @@ GLuint Malla3D :: VBO (const GLuint & tipo, const GLuint & bytes,
 	return vbo;
 }
 
+void Malla3D :: InicializarColor (
+	std::vector<Tupla3f> & tabla,
+	const coloresgl::color & color
+) noexcept
+{
+	size_t indice_vacio = tabla.size();
+
+	if (vertices.size() > tabla.size())
+		tabla.resize(vertices.size());
+
+	for (; indice_vacio < tabla.size(); indice_vacio++)
+		tabla[indice_vacio] = color;
+}
+
+void Malla3D :: GenerarAjedrez () noexcept
+{
+	for (size_t i = 0; i < caras.size()/2; i+=2)
+		std::swap(caras[i], caras[caras.size()-i-1]);
+}
+
+void Malla3D :: InicializarColores () noexcept
+{
+	InicializarColor(tablas_colores[Colores::Azul],    coloresgl::AZUL);
+	InicializarColor(tablas_colores[Colores::Magenta], coloresgl::MAGENTA);
+	InicializarColor(tablas_colores[Colores::Negro],   coloresgl::NEGRO);
+	InicializarColor(tablas_colores[Colores::Rojo],    coloresgl::ROJO);
+	InicializarColor(tablas_colores[Colores::Verde],   coloresgl::VERDE);
+}
+
+void Malla3D :: CalcularNormales () noexcept
+{
+	Tupla3f normal;
+
+	normales.resize(vertices.size());
+
+	for (auto it = normales.begin(); it != normales.end(); ++it)
+		(*it) = {0,0,0};
+
+	for (auto it = caras.cbegin(); it != caras.cend(); ++it)
+	{
+		normal = (vertices[(*it)[Y]] - vertices[(*it)[X]]
+			* vertices[(*it)[Z]] - vertices[(*it)[X]]).normalized();
+
+		normales[(*it)[X]] = normales[(*it)[X]] + normal;
+		normales[(*it)[Y]] = normales[(*it)[Y]] + normal;
+		normales[(*it)[Z]] = normales[(*it)[Z]] + normal;
+	}
+}
+
 void Malla3D :: InicializarVBOColor (const Colores & color) noexcept
 {
 	if (vbo_colores[color] == 0)
@@ -35,44 +84,6 @@ void Malla3D :: InicializarVBOColor (const Colores & color) noexcept
 			vertices.size()*3*sizeof(float),
 			tablas_colores[color].data()
 		);
-}
-
-void Malla3D :: CalcularNormales () noexcept
-{
-	Tupla3f vectorA;
-	Tupla3f vectorB;
-	Tupla3f perpendicular;
-	Tupla3f normal;
-
-	// para cada cara calculamos los vectores, si por ejemplo la cara esta formada
-	// por los puntos p, q y r, A = q - p y B = r - p
-	// tendremos una normal por cada vertice
-	normales.resize(vertices.size());
-
-	for (auto it = caras.cbegin(); it != caras.cend(); ++it)
-	{
-		vectorA = vertices[(*it)[Y]] - vertices[(*it)[X]];
-		vectorB = vertices[(*it)[Z]] - vertices[(*it)[X]];
-
-		// calculamos la permendicular haciendo el producto vectorial
-		perpendicular = vectorA * vectorB;
-
-		// lo normalizamos
-		// si podemos, esto esta hecho asi para caso de la esfera
-		// que repetimos lospuntos de los polos
-		if ((perpendicular | perpendicular) > 0)
-			normal = perpendicular.normalized();
-
-		normales[(*it)[X]] = normales[(*it)[X]] + normal;
-		normales[(*it)[Y]] = normales[(*it)[Y]] + normal;
-		normales[(*it)[Z]] = normales[(*it)[Z]] + normal;
-	}
-
-	for (auto it = normales.begin(); it != normales.end(); ++it)
-	{
-		if ((*it | *it) > 0)
-			(*it) = (*it).normalized();
-	}
 }
 
 /** @fn void Malla3D :: DibujarDiferido (GLenum modo) noexcept
@@ -129,11 +140,18 @@ void Malla3D :: DibujarDiferido (Colores color) noexcept
  * ajedrez siempre se muestra solo.
  */
 
-void Malla3D :: DibujarInmediato (Colores color) const noexcept
+void Malla3D :: DibujarInmediato (Colores color) noexcept
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
 	{
+		if (glIsEnabled(GL_LIGHTING))
+		{
+			glEnableClientState(GL_NORMAL_ARRAY);
+			glNormalPointer(GL_FLOAT,0, normales.data());
+			material.Aplicar();
+		}
+
 		glVertexPointer(3, GL_FLOAT, 0, vertices.data());
 		 glColorPointer(3, GL_FLOAT, 0, tablas_colores[color].data());
 
@@ -224,6 +242,13 @@ void Malla3D :: DibujarAjedrezInmediato () const noexcept
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
+void Malla3D :: InicializarMalla () noexcept
+{
+	CalcularNormales();
+	GenerarAjedrez();
+	InicializarColores();
+}
+
 /** @fn void Malla3D :: InicializarColores (
  * 	Tupla3f puntos,
  * 	Tupla3f lineas,
@@ -239,35 +264,6 @@ void Malla3D :: DibujarAjedrezInmediato () const noexcept
  * asignando por defecto el color azul a los puntos, el verde a las líneas y el
  * rojo a las caras pintadas en modo sólido.
  */
-
-void Malla3D :: InicializarColores () noexcept
-{
-	InicializarColor(tablas_colores[Colores::Azul],    coloresgl::AZUL);
-	InicializarColor(tablas_colores[Colores::Magenta], coloresgl::MAGENTA);
-	InicializarColor(tablas_colores[Colores::Negro],   coloresgl::NEGRO);
-	InicializarColor(tablas_colores[Colores::Rojo],    coloresgl::ROJO);
-	InicializarColor(tablas_colores[Colores::Verde],   coloresgl::VERDE);
-}
-
-void Malla3D :: InicializarColor (
-	std::vector<Tupla3f> & tabla,
-	const coloresgl::color & color
-) noexcept
-{
-	size_t indice_vacio = tabla.size();
-
-	if (vertices.size() > tabla.size())
-		tabla.resize(vertices.size());
-
-	for (; indice_vacio < tabla.size(); indice_vacio++)
-		tabla[indice_vacio] = color;
-}
-
-void Malla3D :: GenerarAjedrez () noexcept
-{
-	for (size_t i = 0; i < caras.size()/2; i+=2)
-		std::swap(caras[i], caras[caras.size()-i-1]);
-}
 
 Malla3D :: Malla3D ()
 { }

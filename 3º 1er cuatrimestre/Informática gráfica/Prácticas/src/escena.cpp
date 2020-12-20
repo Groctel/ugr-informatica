@@ -25,10 +25,23 @@ Escena :: Escena () noexcept
 	cubo      (new Cubo(30)),
 	esfera    (new Esfera(1, 20)),
 	tetraedro (new Tetraedro(30)),
-	peon      (new ObjRevolucion("plys/peon.ply", 20, Tapas::Ambas))
+	peon      (new ObjRevolucion("plys/peon.ply", 20, Tapas::Ambas)),
+
+	luz0 (new LuzDireccional(
+		GL_LIGHT0,
+		{1, 0, 0, 1},
+		{0, 1, 0, 1},
+		{0, 0, 1, 1},
+		{0, 0, 10}
+	))
 {
 	distancia_observador = 4 * plano_delantero,
 	ejes->NuevoTamanio(5000);
+}
+
+void Escena :: AplicarLuces () noexcept
+{
+	luz0->Aplicar();
 }
 
 /** @fn void Escena :: CambiarProyeccion (const float ratio_xy) noexcept
@@ -160,6 +173,26 @@ void Escena :: SeleccionDibujado (unsigned char tecla) noexcept
 		MsgSeleccionDibujado(true);
 }
 
+void Escena :: SeleccionLuces (unsigned char tecla) noexcept
+{
+	bool continuar = true;
+
+	switch (toupper(tecla))
+	{
+		case '0':
+			luz0->Pulsar();
+		break;
+
+		default:
+			TeclasComunes(tecla);
+			continuar = false;
+		break;
+	}
+
+	if (continuar)
+		MsgSeleccionLuces(true);
+}
+
 /** @fn void Escena :: SeleccionMenu (unsigned char tecla) noexcept
  *
  * @brief Seleccionador del submenú de la escena.
@@ -175,6 +208,11 @@ void Escena :: SeleccionMenu (unsigned char tecla) noexcept
 		case 'D':
 			menu = Menu::SeleccionDibujado;
 			MsgSeleccionDibujado();
+		break;
+
+		case 'L':
+			menu = Menu::SeleccionLuces;
+			MsgSeleccionLuces();
 		break;
 
 		case 'O':
@@ -207,16 +245,16 @@ void Escena :: SeleccionObjeto (unsigned char tecla) noexcept
 
 	switch (std::toupper(tecla))
 	{
+		case 'C':
+			visibles.flip(obj_cubo);
+		break;
+
 		case 'I':
 			visibles.flip(obj_cilindro);
 		break;
 
 		case 'O':
 			visibles.flip(obj_cono);
-		break;
-
-		case 'U':
-			visibles.flip(obj_cubo);
 		break;
 
 		case 'E':
@@ -257,6 +295,10 @@ void Escena :: SeleccionVisualizacion (unsigned char tecla) noexcept
 	{
 		case 'A':
 			visualizacion.flip(Visualizacion::Ajedrez);
+		break;
+
+		case 'I':
+			visualizacion.flip(Visualizacion::Iluminacion);
 		break;
 
 		case 'L':
@@ -333,6 +375,22 @@ void Escena :: MsgSeleccionDibujado (bool reescribir) const noexcept
 	MsgTeclasComunes();
 }
 
+void Escena :: MsgSeleccionLuces (bool reescribir) const noexcept
+{
+	if (reescribir)
+		std::cout << "\033[3A";
+
+	std::cout
+		<< coloresterm::AZUL_B << "SELECCIÓN DE LUCES:" << std::endl
+		<< coloresterm::CIAN_B << "[" << coloresterm::AMARILLO_B << "0"
+		<< coloresterm::CIAN_B << "]" << coloresterm::NORMAL
+		<< (luz0->Activada() ? coloresterm::VERDE : coloresterm::ROJO)
+		<< " Luz 0"
+		<< coloresterm::NORMAL << std::endl;
+
+	MsgTeclasComunes();
+}
+
 /** @fn void Escena :: MsgSeleccionMenu (bool reescribir) const noexcept
  *
  * @brief Muestra el texto del menú de selección de submenús.
@@ -346,6 +404,9 @@ void Escena :: MsgSeleccionMenu () const noexcept
 		<< coloresterm::CIAN_B << "[" << coloresterm::AMARILLO_B << "D"
 		<< coloresterm::CIAN_B << "]" << coloresterm::NORMAL
 		<< " Selección de dibujado" << std::endl
+		<< coloresterm::CIAN_B << "[" << coloresterm::AMARILLO_B << "L"
+		<< coloresterm::CIAN_B << "]" << coloresterm::NORMAL
+		<< " Selección de luces" << std::endl
 		<< coloresterm::CIAN_B << "[" << coloresterm::AMARILLO_B << "O"
 		<< coloresterm::CIAN_B << "]" << coloresterm::NORMAL
 		<< " Selección de objeto" << std::endl
@@ -368,48 +429,43 @@ void Escena :: MsgSeleccionObjeto (bool reescribir) noexcept
 		std::cout << "\033[8A";
 
 	std::cout
-		<< coloresterm::AZUL_B << "SELECCIÓN DE MENÚ:" << std::endl
+		<< coloresterm::AZUL_B << "SELECCIÓN DE OBJETO:" << std::endl
 		<< coloresterm::CIAN_B << "["
-		<< coloresterm::AMARILLO_B << "I"
-		<< coloresterm::CIAN_B << "] "
-		<< coloresterm::NORMAL
-		<< (visibles.test(obj_cilindro) ? coloresterm::VERDE : coloresterm::ROJO)
-		<< "Cilindro"
-		<< coloresterm::NORMAL << std::endl
-		<< coloresterm::CIAN_B << "["
-		<< coloresterm::AMARILLO_B << "O"
-		<< coloresterm::CIAN_B << "] "
-		<< coloresterm::NORMAL
-		<< (visibles.test(obj_cono) ? coloresterm::VERDE : coloresterm::ROJO)
-		<< "Cono"
-		<< coloresterm::NORMAL << std::endl
-		<< coloresterm::CIAN_B << "["
-		<< coloresterm::AMARILLO_B << "U"
-		<< coloresterm::CIAN_B << "] "
+		<< coloresterm::AMARILLO_B << "C"
+		<< coloresterm::CIAN_B << "]"
 		<< coloresterm::NORMAL
 		<< (visibles.test(obj_cubo) ? coloresterm::VERDE : coloresterm::ROJO)
-		<< "Cubo"
-		<< coloresterm::NORMAL << std::endl
+		<< " Cubo" << std::endl
+		<< coloresterm::CIAN_B << "["
+		<< coloresterm::AMARILLO_B << "I"
+		<< coloresterm::CIAN_B << "]"
+		<< coloresterm::NORMAL
+		<< (visibles.test(obj_cilindro) ? coloresterm::VERDE : coloresterm::ROJO)
+		<< " Cilindro" << std::endl
+		<< coloresterm::CIAN_B << "["
+		<< coloresterm::AMARILLO_B << "O"
+		<< coloresterm::CIAN_B << "]"
+		<< coloresterm::NORMAL
+		<< (visibles.test(obj_cono) ? coloresterm::VERDE : coloresterm::ROJO)
+		<< " Cono" << std::endl
 		<< coloresterm::CIAN_B << "["
 		<< coloresterm::AMARILLO_B << "E"
-		<< coloresterm::CIAN_B << "] "
+		<< coloresterm::CIAN_B << "]"
 		<< coloresterm::NORMAL
 		<< (visibles.test(obj_esfera) ? coloresterm::VERDE : coloresterm::ROJO)
-		<< "Esfera"
-		<< coloresterm::NORMAL << std::endl
+		<< " Esfera" << std::endl
 		<< coloresterm::CIAN_B << "["
 		<< coloresterm::AMARILLO_B << "T"
-		<< coloresterm::CIAN_B << "] "
+		<< coloresterm::CIAN_B << "]"
 		<< coloresterm::NORMAL
 		<< (visibles.test(obj_tetraedro) ? coloresterm::VERDE : coloresterm::ROJO)
-		<< "Tetraedro"
-		<< coloresterm::NORMAL << std::endl
+		<< " Tetraedro" << std::endl
 		<< coloresterm::CIAN_B << "["
 		<< coloresterm::AMARILLO_B << "P"
-		<< coloresterm::CIAN_B << "] "
+		<< coloresterm::CIAN_B << "]"
 		<< coloresterm::NORMAL
 		<< (visibles.test(obj_peon) ? coloresterm::VERDE : coloresterm::ROJO)
-		<< "Peon"
+		<< " Peon"
 		<< coloresterm::NORMAL << std::endl;
 
 	MsgTeclasComunes();
@@ -430,40 +486,35 @@ void Escena :: MsgSeleccionVisualizacion (bool reescribir) const noexcept
 		<< coloresterm::AZUL_B << "SELECCIÓN DE VISUALIZACIÓN:" << std::endl
 		<< coloresterm::CIAN_B << "[" << coloresterm::AMARILLO_B << "A"
 		<< coloresterm::CIAN_B << "]" << coloresterm::NORMAL
-		<< (
-				visualizacion.test(Visualizacion::Ajedrez)
+		<< (visualizacion.test(Visualizacion::Ajedrez)
 				? coloresterm::VERDE
 				: coloresterm::ROJO
 			)
 		<< " Modo ajedrez" << std::endl
 		<< coloresterm::CIAN_B << "[" << coloresterm::AMARILLO_B << "I"
 		<< coloresterm::CIAN_B << "]" << coloresterm::NORMAL
-		<< (
-				visualizacion.test(Visualizacion::Iluminacion)
+		<< (visualizacion.test(Visualizacion::Iluminacion)
 				? coloresterm::VERDE
 				: coloresterm::ROJO
 			)
 		<< " Modo iluminación" << std::endl
 		<< coloresterm::CIAN_B << "[" << coloresterm::AMARILLO_B << "L"
 		<< coloresterm::CIAN_B << "]" << coloresterm::NORMAL
-		<< (
-				visualizacion.test(Visualizacion::Lineas)
+		<< (visualizacion.test(Visualizacion::Lineas)
 				? coloresterm::VERDE
 				: coloresterm::ROJO
 			)
 		<< " Modo líneas" << std::endl
 		<< coloresterm::CIAN_B << "[" << coloresterm::AMARILLO_B << "P"
 		<< coloresterm::CIAN_B << "]" << coloresterm::NORMAL
-		<< (
-				visualizacion.test(Visualizacion::Puntos)
+		<< (visualizacion.test(Visualizacion::Puntos)
 				? coloresterm::VERDE
 				: coloresterm::ROJO
 			)
 		<< " Modo puntos" << std::endl
 		<< coloresterm::CIAN_B << "[" << coloresterm::AMARILLO_B << "S"
 		<< coloresterm::CIAN_B << "]" << coloresterm::NORMAL
-		<< (
-				visualizacion.test(Visualizacion::Solido)
+		<< (visualizacion.test(Visualizacion::Solido)
 				? coloresterm::VERDE
 				: coloresterm::ROJO
 			)
@@ -569,11 +620,24 @@ void Escena :: Dibujar () noexcept
 	}
 	else
 	{
+		if (visualizacion.test(Visualizacion::Iluminacion))
+		{
+			glEnable(GL_LIGHTING);
+			{
+				glPolygonMode(GL_FRONT, GL_FILL);
+				AplicarLuces();
+				DibujarMallas(Colores::Indefinido);
+			}
+			glDisable(GL_LIGHTING);
+		}
+
 		if (visualizacion.test(Visualizacion::Lineas))
 		{
 			glLineWidth(2);
-			glPolygonMode(GL_FRONT, GL_LINE);
-			DibujarMallas(Colores::Verde);
+			{
+				glPolygonMode(GL_FRONT, GL_LINE);
+				DibujarMallas(Colores::Verde);
+			}
 			glLineWidth(1);
 		}
 
@@ -625,6 +689,10 @@ bool Escena :: GestionTeclado (unsigned char tecla, int x, int y) noexcept
 
 		case Menu::SeleccionDibujado:
 			SeleccionDibujado(tecla);
+		break;
+
+		case Menu::SeleccionLuces:
+			SeleccionLuces(tecla);
 		break;
 
 		case Menu::SeleccionObjeto:

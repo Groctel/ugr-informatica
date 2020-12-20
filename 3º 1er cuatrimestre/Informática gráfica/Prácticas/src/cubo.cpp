@@ -63,8 +63,6 @@ Cubo :: Cubo (const float escala) noexcept
 {
 	InicializarVertices(escala);
 	InicializarCaras();
-	InicializarColores();
-	GenerarAjedrez();
-	CalcularNormales();
+	InicializarMalla();
 }
 
