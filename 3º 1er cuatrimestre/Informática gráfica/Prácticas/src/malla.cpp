@@ -5,7 +5,7 @@
 
 std::vector<Tupla3f> Malla3D :: tablas_colores[5];
 
-/** @fn inline GLuint Malla3D :: VBO (GLuint tipo, GLuint bytes, GLvoid * datos) const noexcept
+/** @fn GLuint Malla3D :: VBO (GLuint tipo, GLuint bytes, GLvoid * datos) const noexcept
  *
  * @brief Procesa y genera un VBO para una tabla de la malla.
  * @param tipo Tipo de búfer a procesar.
@@ -14,7 +14,7 @@ std::vector<Tupla3f> Malla3D :: tablas_colores[5];
  * @return Identificador VBO del búfer procesado.
  */
 
-inline GLuint Malla3D :: VBO (const GLuint & tipo, const GLuint & bytes,
+GLuint Malla3D :: VBO (const GLuint & tipo, const GLuint & bytes,
 	const GLvoid * datos) const noexcept
 {
 	GLuint vbo;
@@ -27,7 +27,7 @@ inline GLuint Malla3D :: VBO (const GLuint & tipo, const GLuint & bytes,
 	return vbo;
 }
 
-inline void Malla3D :: InicializarVBOColor (const VBOColores & color) noexcept
+void Malla3D :: InicializarVBOColor (const Colores & color) noexcept
 {
 	if (vbo_colores[color] == 0)
 		vbo_colores[color] = VBO(
@@ -75,7 +75,7 @@ void Malla3D :: CalcularNormales () noexcept
 	}
 }
 
-/** @fn inline void Malla3D :: DibujarDiferido () noexcept
+/** @fn void Malla3D :: DibujarDiferido (GLenum modo) noexcept
  *
  * @brief Dibuja el modelo en modo diferido.
  *
@@ -83,10 +83,9 @@ void Malla3D :: CalcularNormales () noexcept
  * ajedrez siempre se muestra solo.
  */
 
-inline void Malla3D :: DibujarDiferido () noexcept
+void Malla3D :: DibujarDiferido (Colores color) noexcept
 {
-	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_COLOR_ARRAY);
+	InicializarVBOColor(color);
 
 	if (vbo_caras == 0)
 		vbo_caras = VBO(
@@ -102,33 +101,27 @@ inline void Malla3D :: DibujarDiferido () noexcept
 			vertices.data()
 		);
 
-	glBindBuffer(GL_ARRAY_BUFFER, vbo_vertices);
-	glVertexPointer(3, GL_FLOAT, 0, 0);
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	if (visualizacion.test(Visualizacion::Ajedrez))
-		EnviarAjedrezDiferido();
-	else
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
 	{
-		if (visualizacion.test(Visualizacion::Lineas))
+		glBindBuffer(GL_ARRAY_BUFFER, vbo_vertices);
 		{
-			glLineWidth(2);
-			EnviarDibujoDiferido(GL_LINE, VBOColores::Verde);
-			glLineWidth(1);
+			glVertexPointer(3, GL_FLOAT, 0, 0);
 		}
-
-		if (visualizacion.test(Visualizacion::Puntos))
-			EnviarDibujoDiferido(GL_POINT, VBOColores::Azul);
-
-		if (visualizacion.test(Visualizacion::Solido))
-			EnviarDibujoDiferido(GL_FILL, VBOColores::Rojo);
+		glBindBuffer(GL_ARRAY_BUFFER,         vbo_colores[color]);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_caras);
+		{
+			glColorPointer(3, GL_FLOAT, 0, 0);
+			glDrawElements(GL_TRIANGLES, caras.size()*3, GL_UNSIGNED_INT, 0);
+		}
+		glBindBuffer(GL_ARRAY_BUFFER,         0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
-
 	glDisableClientState(GL_COLOR_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-/** @fn inline void Malla3D :: DibujarInmediato () noexcept
+/** @fn void Malla3D :: DibujarInmediato (GLenum modo) noexcept
  *
  * @brief Dibuja el modelo en modo inmediato.
  *
@@ -136,45 +129,31 @@ inline void Malla3D :: DibujarDiferido () noexcept
  * ajedrez siempre se muestra solo.
  */
 
-inline void Malla3D :: DibujarInmediato () const noexcept
+void Malla3D :: DibujarInmediato (Colores color) const noexcept
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
-
-	glVertexPointer(3, GL_FLOAT, 0, vertices.data());
-
-	if (visualizacion.test(Visualizacion::Ajedrez))
-		EnviarAjedrezInmediato();
-	else
 	{
-		if (visualizacion.test(Visualizacion::Lineas))
-		{
-			glLineWidth(2);
-			EnviarDibujoInmediato(GL_LINE, tablas_colores[VBOColores::Verde]);
-			glLineWidth(1);
-		}
+		glVertexPointer(3, GL_FLOAT, 0, vertices.data());
+		 glColorPointer(3, GL_FLOAT, 0, tablas_colores[color].data());
 
-		if (visualizacion.test(Visualizacion::Puntos))
-			EnviarDibujoInmediato(GL_POINT, tablas_colores[VBOColores::Azul]);
-
-		if (visualizacion.test(Visualizacion::Solido))
-			EnviarDibujoInmediato(GL_FILL, tablas_colores[VBOColores::Rojo]);
+		glDrawElements(
+			GL_TRIANGLES,    caras.size()*3,
+			GL_UNSIGNED_INT, caras.data()
+		);
 	}
-
 	glDisableClientState(GL_COLOR_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-/** @fn inline void Malla3D :: EnviarAjedrezDiferido () const noexcept
+/** @fn void Malla3D :: EnviarAjedrezDiferido () const noexcept
  *
  * @brief Envía a la GPU los datos de dibujo de la visualización en ajedrez del
  * modelo en modo diferido.
  */
 
-inline void Malla3D :: EnviarAjedrezDiferido () noexcept
+void Malla3D :: DibujarAjedrezDiferido () noexcept
 {
-	glPolygonMode(GL_FRONT, GL_FILL);
-
 	if (vbo_caras_ajedrez.first == 0)
 		vbo_caras_ajedrez.first = VBO(
 			GL_ELEMENT_ARRAY_BUFFER,
@@ -189,89 +168,60 @@ inline void Malla3D :: EnviarAjedrezDiferido () noexcept
 			caras.data()+caras.size()/2
 		);
 
-	InicializarVBOColor(VBOColores::Negro);
-	InicializarVBOColor(VBOColores::Magenta);
+	InicializarVBOColor(Colores::Negro);
+	InicializarVBOColor(Colores::Magenta);
 
-	glBindBuffer(GL_ARRAY_BUFFER, vbo_colores[VBOColores::Negro]);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_caras_ajedrez.first);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+	{
+		glVertexPointer(3, GL_FLOAT, 0, vertices.data());
 
-		glColorPointer(3, GL_FLOAT, 0, 0);
-		glDrawElements(GL_TRIANGLES, (caras.size()/2)*3, GL_UNSIGNED_INT, 0);
-
-	glBindBuffer(GL_ARRAY_BUFFER, vbo_colores[VBOColores::Magenta]);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_caras_ajedrez.second);
-
-		glColorPointer(3, GL_FLOAT, 0, 0);
-		glDrawElements(GL_TRIANGLES, (caras.size()/2)*3, GL_UNSIGNED_INT, 0);
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ARRAY_BUFFER,         vbo_colores[Colores::Negro]);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_caras_ajedrez.first);
+		{
+			glColorPointer(3, GL_FLOAT, 0, 0);
+			glDrawElements(GL_TRIANGLES, (caras.size()/2)*3, GL_UNSIGNED_INT, 0);
+		}
+		glBindBuffer(GL_ARRAY_BUFFER,         vbo_colores[Colores::Magenta]);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_caras_ajedrez.second);
+		{
+			glColorPointer(3, GL_FLOAT, 0, 0);
+			glDrawElements(GL_TRIANGLES, (caras.size()/2)*3, GL_UNSIGNED_INT, 0);
+		}
+		glBindBuffer(GL_ARRAY_BUFFER,         0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	}
+	glDisableClientState(GL_COLOR_ARRAY);
+	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-/** @fn inline void Malla3D :: EnviarAjedrezInmediato () const noexcept
+/** @fn void Malla3D :: EnviarAjedrezInmediato () const noexcept
  *
  * @brief Envía a la GPU los datos de dibujo de la visualización en ajedrez del
  * modelo en modo inmediato.
  */
 
-inline void Malla3D :: EnviarAjedrezInmediato () const noexcept
+void Malla3D :: DibujarAjedrezInmediato () const noexcept
 {
-	glPolygonMode(GL_FRONT, GL_FILL);
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+	{
+		glVertexPointer(3, GL_FLOAT, 0, vertices.data());
 
-	glColorPointer(3, GL_FLOAT, 0, tablas_colores[VBOColores::Negro].data());
-	glDrawElements(
-		GL_TRIANGLES, (caras.size()/2)*3,
-		GL_UNSIGNED_INT, caras.data()
-	);
+		glColorPointer(3, GL_FLOAT, 0, tablas_colores[Colores::Negro].data());
+		glDrawElements(
+			GL_TRIANGLES,    (caras.size()/2)*3,
+			GL_UNSIGNED_INT, caras.data()
+		);
 
-	glColorPointer(3, GL_FLOAT, 0, tablas_colores[VBOColores::Magenta].data());
-	glDrawElements(
-		GL_TRIANGLES, (caras.size()/2)*3,
-		GL_UNSIGNED_INT, caras.data()+(caras.size()/2)
-	);
-}
-
-/** @fn inline void Malla3D :: EnviarDibujoDiferido (GLenum modo, GLuint color) const noexcept
- *
- * @brief Envía a la GPU los datos de dibujo de las visualizaciones del modelo
- * en modo diferido.
- * @param modo Modo de visualización del modelo.
- * @param color VBO del color con el que dibujar el modelo.
- */
-
-inline void Malla3D :: EnviarDibujoDiferido (GLenum modo, VBOColores color) noexcept
-{
-	glPolygonMode(GL_FRONT, modo);
-
-	InicializarVBOColor(color);
-
-	glBindBuffer(GL_ARRAY_BUFFER, vbo_colores[color]);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_caras);
-
-		glColorPointer(3, GL_FLOAT, 0, 0);
-		glDrawElements(GL_TRIANGLES, caras.size()*3, GL_UNSIGNED_INT, 0);
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-}
-
-/** @fn inline void Malla3D :: EnviarDibujoInmediato (GLenum modo, GLuint color) const noexcept
- *
- * @brief Envía a la GPU los datos de dibujo de las visualizaciones del modelo
- * en modo inmediato.
- * @param modo Modo de visualización del modelo.
- * @param color Tabla de colores con la que dibujar el modelo.
- */
-
-inline void Malla3D :: EnviarDibujoInmediato (
-	GLenum modo, std::vector<Tupla3f> color) const noexcept
-{
-	glColorPointer(3, GL_FLOAT, 0, color.data());
-	glPolygonMode(GL_FRONT, modo);
-	glDrawElements(
-		GL_TRIANGLES, caras.size()*3,
-		GL_UNSIGNED_INT, caras.data()
-	);
+		glColorPointer(3, GL_FLOAT, 0, tablas_colores[Colores::Magenta].data());
+		glDrawElements(
+			GL_TRIANGLES,    (caras.size()/2)*3,
+			GL_UNSIGNED_INT, caras.data()+(caras.size()/2)
+		);
+	}
+	glDisableClientState(GL_COLOR_ARRAY);
+	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
 /** @fn void Malla3D :: InicializarColores (
@@ -292,14 +242,14 @@ inline void Malla3D :: EnviarDibujoInmediato (
 
 void Malla3D :: InicializarColores () noexcept
 {
-	InicializarColor(tablas_colores[VBOColores::Azul],    coloresgl::AZUL);
-	InicializarColor(tablas_colores[VBOColores::Magenta], coloresgl::MAGENTA);
-	InicializarColor(tablas_colores[VBOColores::Negro],   coloresgl::NEGRO);
-	InicializarColor(tablas_colores[VBOColores::Rojo],    coloresgl::ROJO);
-	InicializarColor(tablas_colores[VBOColores::Verde],   coloresgl::VERDE);
+	InicializarColor(tablas_colores[Colores::Azul],    coloresgl::AZUL);
+	InicializarColor(tablas_colores[Colores::Magenta], coloresgl::MAGENTA);
+	InicializarColor(tablas_colores[Colores::Negro],   coloresgl::NEGRO);
+	InicializarColor(tablas_colores[Colores::Rojo],    coloresgl::ROJO);
+	InicializarColor(tablas_colores[Colores::Verde],   coloresgl::VERDE);
 }
 
-inline void Malla3D :: InicializarColor (
+void Malla3D :: InicializarColor (
 	std::vector<Tupla3f> & tabla,
 	const coloresgl::color & color
 ) noexcept
@@ -332,65 +282,33 @@ Malla3D :: Malla3D (const std::string & ruta)
 	CalcularNormales();
 }
 
+void Malla3D :: AplicarMaterial (Material nuevo) noexcept
+{
+	material = nuevo;
+}
+
 /** @fn void Malla3D :: Dibujar (Dibujo modo) noexcept
  *
  * @brief Dibuja el modelo en el modo indicado.
  * @param modo Modo de envío del dibujo a la GPU.
  */
 
-void Malla3D :: Dibujar (Dibujo modo) noexcept
+void Malla3D :: Dibujar (Dibujo dibujado, bool ajedrez, Colores color) noexcept
 {
-	switch (modo)
+	switch (dibujado)
 	{
 		case Dibujo::Diferido:
-			DibujarDiferido();
+			if (ajedrez)
+				DibujarAjedrezDiferido();
+			else
+				DibujarDiferido(color);
 		break;
 
 		case Dibujo::Inmediato:
-			DibujarInmediato();
-		break;
-	}
-}
-
-/** @fn bool Malla3D :: Visualizar (Visualizacion vis) const noexcept
- *
- * @brief Consulta el estado del modo de visualización indicado.
- * @param vis Modo de visualización a consultar.
- * @return Estado de la bandera de visualización indicada.
- */
-
-bool Malla3D :: EstadoVisualizacion (Visualizacion vis) const noexcept
-{
-	return visualizacion.test(vis);
-}
-
-void Malla3D :: AplicarMaterial (Material nuevo) noexcept
-{
-	material = nuevo;
-}
-
-/** @fn void Malla3D :: Visualizar (Visualizacion vis, Bitset operacion) noexcept
- *
- * @brief Modifica el estado del modo de visualización indicado.
- * @param vis Modo de visualización a modificar.
- * @param operacion Operación con la que modificar el modo de visualización.
- */
-
-void Malla3D :: ModificarVisualizacion
-	(Visualizacion vis, Bitset operacion) noexcept
-{
-	switch (operacion)
-	{
-		case Bitset::Flip:
-			visualizacion.flip(vis);
-		break;
-
-		case Bitset::Reset:
-			visualizacion.reset(vis);
-		break;
-
-		case Bitset::Set:
-			visualizacion.set(vis);
+			if (ajedrez)
+				DibujarAjedrezInmediato();
+			else
+				DibujarInmediato(color);
 		break;
 	}
 }

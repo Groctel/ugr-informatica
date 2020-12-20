@@ -38,34 +38,14 @@ enum Dibujo
 	Inmediato
 };
 
-enum VBOColores
+enum Colores
 {
+	Indefinido,
 	Azul    = 0,
 	Magenta = 1,
 	Negro   = 2,
 	Rojo    = 3,
 	Verde   = 4
-};
-
-enum VBOFormas
-{
-	Caras    = 0,
-	Vertices = 1
-};
-
-/** @enum Visualizacion
- *
- * @brief Modos de visualización de los modelos.
- */
-
-enum Visualizacion
-{
-	Ajedrez   = 0,
-	Lineas    = 1,
-	Puntos    = 2,
-	Solido    = 3,
-	IlumSuave = 4,
-	IlumPlano = 5
 };
 
 /** @class Malla3D
@@ -77,17 +57,16 @@ class Malla3D
 {
 private:
 	Material material;
-	std::bitset<6> visualizacion;
 
-	inline GLuint VBO (const GLuint & tipo, const GLuint & bytes,
+	GLuint VBO (const GLuint & tipo, const GLuint & bytes,
 		const GLvoid * datos) const noexcept;
 
-	inline void InicializarColor (
+	void InicializarColor (
 		std::vector<Tupla3f> & tabla,
 		const coloresgl::color & color
 	) noexcept;
 
-	inline void InicializarVBOColor (const VBOColores & color) noexcept;
+	void InicializarVBOColor (const Colores & color) noexcept;
 
 protected:
 	static std::vector<Tupla3f> tablas_colores[5];
@@ -103,14 +82,10 @@ protected:
 
 	void CalcularNormales () noexcept;
 
-	inline void DibujarDiferido  () noexcept;
-	inline void DibujarInmediato () const noexcept;
-
-	inline void EnviarAjedrezDiferido  () noexcept;
-	inline void EnviarAjedrezInmediato () const noexcept;
-	inline void EnviarDibujoDiferido (GLenum modo, VBOColores color) noexcept;
-	inline void EnviarDibujoInmediato
-		(GLenum modo, std::vector<Tupla3f> color) const noexcept;
+	void DibujarDiferido         (Colores color) noexcept;
+	void DibujarInmediato        (Colores color) const noexcept;
+	void DibujarAjedrezDiferido  () noexcept;
+	void DibujarAjedrezInmediato () const noexcept;
 
 	void InicializarColores () noexcept;
 	void GenerarAjedrez     () noexcept;
@@ -119,13 +94,8 @@ public:
 	Malla3D ();
 	Malla3D (const std::string & ruta);
 
-	void Dibujar (Dibujo modo) noexcept;
-
-	bool EstadoVisualizacion (Visualizacion vis) const noexcept;
-
 	void AplicarMaterial (Material nuevo) noexcept;
-	void ModificarVisualizacion
-		(Visualizacion vis, Bitset operacion=Bitset::Flip) noexcept;
+	void Dibujar         (Dibujo dibujado, bool ajedrez, Colores color) noexcept;
 
 	Tupla3u              Cara  (const size_t indice) const;
 	std::vector<Tupla3u> Caras () const noexcept;

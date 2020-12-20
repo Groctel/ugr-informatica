@@ -36,6 +36,20 @@ enum Menu
 	SeleccionVisualizacion,
 };
 
+/** @enum Visualizacion
+ *
+ * @brief Modos de visualización de los modelos.
+ */
+
+enum Visualizacion
+{
+	Ajedrez     = 0,
+	Lineas      = 1,
+	Puntos      = 2,
+	Solido      = 3,
+	Iluminacion = 4
+};
+
 class Escena
 {
 private:
@@ -64,30 +78,30 @@ private:
 	ObjRevolucion * peon      = nullptr;
 
 	std::bitset<6> visibles;
+	std::bitset<5> visualizacion;
 
 	Escena () noexcept;
 	Escena (const Escena & otra) = delete;
 
 	void CambiarProyeccion (const float ratio_xy) noexcept;
 	void CambiarObservador () noexcept;
+	void DibujarMallas     (Colores color, bool ajedrez=false) const noexcept;
 
-	inline void SeleccionDibujado      (unsigned char tecla) noexcept;
-	inline void SeleccionMenu          (unsigned char tecla) noexcept;
-	inline void SeleccionObjeto        (unsigned char tecla) noexcept;
-	inline void SeleccionVisualizacion (unsigned char tecla) noexcept;
-	inline void TeclasComunes          (unsigned char tecla) noexcept;
+	void SeleccionDibujado      (unsigned char tecla) noexcept;
+	void SeleccionMenu          (unsigned char tecla) noexcept;
+	void SeleccionObjeto        (unsigned char tecla) noexcept;
+	void SeleccionVisualizacion (unsigned char tecla) noexcept;
+	void TeclasComunes          (unsigned char tecla) noexcept;
 
-	inline void MsgSeleccionDibujado      (bool reescribir=false) const noexcept;
-	inline void MsgSeleccionMenu          () const noexcept;
-	inline void MsgSeleccionObjeto        (bool reescribir=false) noexcept;
-	inline void MsgSeleccionVisualizacion (bool reescribir=false) const noexcept;
-	inline void MsgTeclasComunes          () const noexcept;
-
-	inline void Visualizar (Visualizacion visualizacion) noexcept;
+	void MsgSeleccionDibujado      (bool reescribir=false) const noexcept;
+	void MsgSeleccionMenu          () const noexcept;
+	void MsgSeleccionObjeto        (bool reescribir=false) noexcept;
+	void MsgSeleccionVisualizacion (bool reescribir=false) const noexcept;
+	void MsgTeclasComunes          () const noexcept;
 
 public:
 	static Escena * Instance () noexcept;
-	~Escena() noexcept;
+	~Escena () noexcept;
 
 	void Inicializar (int anchura_ventana, int altura_ventana) noexcept;
 

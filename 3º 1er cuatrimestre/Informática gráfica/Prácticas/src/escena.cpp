@@ -61,7 +61,74 @@ void Escena :: CambiarObservador () noexcept
 	glRotatef(angulo_observador_x, 1.0, 0.0, 0.0);
 }
 
-/** @fn inline void Escena :: SeleccionDibujado (unsigned char tecla) noexcept
+void Escena :: DibujarMallas (Colores color, bool ajedrez) const noexcept
+{
+	if (visibles.test(obj_cilindro))
+	{
+		glPushMatrix();
+		{
+			glTranslatef(-60, 0, -60);
+			glScalef(30, 30, 30);
+			cilindro->Dibujar(dibujo, ajedrez, color);
+		}
+		glPopMatrix();
+	}
+
+	if (visibles.test(obj_cono))
+	{
+		glPushMatrix();
+		{
+			glTranslatef(60, 0, -60);
+			glScalef(30, 30, 30);
+			cono->Dibujar(dibujo, ajedrez, color);
+		}
+		glPopMatrix();
+	}
+
+	if (visibles.test(obj_cubo))
+	{
+		glPushMatrix();
+		{
+			glTranslatef(-60, 0, 60);
+			cubo->Dibujar(dibujo, ajedrez, color);
+		}
+		glPopMatrix();
+	}
+
+	if (visibles.test(obj_esfera))
+	{
+		glPushMatrix();
+		{
+			glTranslatef(0, -60, 0);
+			glScalef(30, 30, 30);
+			esfera->Dibujar(dibujo, ajedrez, color);
+		}
+		glPopMatrix();
+	}
+
+	if (visibles.test(obj_tetraedro))
+	{
+		glPushMatrix();
+		{
+			glTranslatef(0, 60, 0);
+			tetraedro->Dibujar(dibujo, ajedrez, color);
+		}
+		glPopMatrix();
+	}
+
+	if (visibles.test(obj_peon))
+	{
+		glPushMatrix();
+		{
+			glTranslatef(60, 0, 60);
+			glScalef(30, 30, 30);
+			peon->Dibujar(dibujo, ajedrez, color);
+		}
+		glPopMatrix();
+	}
+}
+
+/** @fn void Escena :: SeleccionDibujado (unsigned char tecla) noexcept
  *
  * @brief Seleccionador de modo de dibujo.
  * @param tecla Tecla pulsada por el usuario.
@@ -69,7 +136,7 @@ void Escena :: CambiarObservador () noexcept
  * Alterna entre el modo de dibujo inmediato y diferido.
  */
 
-inline void Escena :: SeleccionDibujado (unsigned char tecla) noexcept
+void Escena :: SeleccionDibujado (unsigned char tecla) noexcept
 {
 	bool continuar = true;
 
@@ -93,7 +160,7 @@ inline void Escena :: SeleccionDibujado (unsigned char tecla) noexcept
 		MsgSeleccionDibujado(true);
 }
 
-/** @fn inline void Escena :: SeleccionMenu (unsigned char tecla) noexcept
+/** @fn void Escena :: SeleccionMenu (unsigned char tecla) noexcept
  *
  * @brief Seleccionador del submenú de la escena.
  * @param tecla Tecla pulsada por el usuario.
@@ -101,7 +168,7 @@ inline void Escena :: SeleccionDibujado (unsigned char tecla) noexcept
  * Cambia el menú al seleccionado por el usuario.
  */
 
-inline void Escena :: SeleccionMenu (unsigned char tecla) noexcept
+void Escena :: SeleccionMenu (unsigned char tecla) noexcept
 {
 	switch (toupper(tecla))
 	{
@@ -126,7 +193,7 @@ inline void Escena :: SeleccionMenu (unsigned char tecla) noexcept
 	}
 }
 
-/** @fn inline void Escena :: SeleccionObjeto (unsigned char tecla) noexcept
+/** @fn void Escena :: SeleccionObjeto (unsigned char tecla) noexcept
  *
  * @brief Seleccionador del objeto con el que interactuar.
  * @param tecla Tecla pulsada por el usuario.
@@ -134,7 +201,7 @@ inline void Escena :: SeleccionMenu (unsigned char tecla) noexcept
  * Alterna la muestra del objeto seleccionado.
  */
 
-inline void Escena :: SeleccionObjeto (unsigned char tecla) noexcept
+void Escena :: SeleccionObjeto (unsigned char tecla) noexcept
 {
 	bool continuar = true;
 
@@ -174,7 +241,7 @@ inline void Escena :: SeleccionObjeto (unsigned char tecla) noexcept
 		MsgSeleccionObjeto(true);
 }
 
-/** @fn inline void Escena :: SeleccionVisualizacion (unsigned char tecla) noexcept
+/** @fn void Escena :: SeleccionVisualizacion (unsigned char tecla) noexcept
  *
  * @brief Seleccionador de la visualización de los objetos visibles.
  * @param tecla Tecla pulsada por el usuario.
@@ -182,33 +249,39 @@ inline void Escena :: SeleccionObjeto (unsigned char tecla) noexcept
  * Alterna los diferentes modos de visualización para los objetos visibles.
  */
 
-inline void Escena :: SeleccionVisualizacion (unsigned char tecla) noexcept
+void Escena :: SeleccionVisualizacion (unsigned char tecla) noexcept
 {
+	bool continuar = true;
+
 	switch (toupper(tecla))
 	{
 		case 'A':
-			Visualizar(Visualizacion::Ajedrez);
+			visualizacion.flip(Visualizacion::Ajedrez);
 		break;
 
 		case 'L':
-			Visualizar(Visualizacion::Lineas);
+			visualizacion.flip(Visualizacion::Lineas);
 		break;
 
 		case 'P':
-			Visualizar(Visualizacion::Puntos);
+			visualizacion.flip(Visualizacion::Puntos);
 		break;
 
 		case 'S':
-			Visualizar(Visualizacion::Solido);
+			visualizacion.flip(Visualizacion::Solido);
 		break;
 
 		default:
 			TeclasComunes(tecla);
+			continuar = false;
 		break;
 	}
+
+	if (continuar)
+		MsgSeleccionVisualizacion(true);
 }
 
-/** @fn inline void Escena :: TeclasComunes (unsigned char tecla) noexcept
+/** @fn void Escena :: TeclasComunes (unsigned char tecla) noexcept
  *
  * @brief Gestor de teclas pulsables en todos los menús.
  * @param tecla Tecla pulsada por el usuario.
@@ -217,7 +290,7 @@ inline void Escena :: SeleccionVisualizacion (unsigned char tecla) noexcept
  * programa si el menú actual es el principal.
  */
 
-inline void Escena :: TeclasComunes (unsigned char tecla) noexcept
+void Escena :: TeclasComunes (unsigned char tecla) noexcept
 {
 	switch (toupper(tecla))
 	{
@@ -235,13 +308,13 @@ inline void Escena :: TeclasComunes (unsigned char tecla) noexcept
 	}
 }
 
-/** @fn inline void Escena :: MsgSeleccionDibujado (bool reescribir) const noexcept
+/** @fn void Escena :: MsgSeleccionDibujado (bool reescribir) const noexcept
  *
  * @brief Muestra el texto del menú de selección de dibujado.
  * @param reescribir Superposición del menú nuevo sobre el antiguo.
  */
 
-inline void Escena :: MsgSeleccionDibujado (bool reescribir) const noexcept
+void Escena :: MsgSeleccionDibujado (bool reescribir) const noexcept
 {
 	if (reescribir)
 		std::cout << "\033[4A";
@@ -260,13 +333,13 @@ inline void Escena :: MsgSeleccionDibujado (bool reescribir) const noexcept
 	MsgTeclasComunes();
 }
 
-/** @fn inline void Escena :: MsgSeleccionMenu (bool reescribir) const noexcept
+/** @fn void Escena :: MsgSeleccionMenu (bool reescribir) const noexcept
  *
  * @brief Muestra el texto del menú de selección de submenús.
  * @param reescribir Superposición del menú nuevo sobre el antiguo.
  */
 
-inline void Escena :: MsgSeleccionMenu () const noexcept
+void Escena :: MsgSeleccionMenu () const noexcept
 {
 	std::cout
 		<< coloresterm::AZUL_B << "SELECCIÓN DE MENÚ:" << std::endl
@@ -283,13 +356,13 @@ inline void Escena :: MsgSeleccionMenu () const noexcept
 	MsgTeclasComunes();
 }
 
-/** @fn inline void Escena :: MsgSeleccionObjeto (bool reescribir) const noexcept
+/** @fn void Escena :: MsgSeleccionObjeto (bool reescribir) const noexcept
  *
  * @brief Muestra el texto del menú de selección de objetos.
  * @param reescribir Superposición del menú nuevo sobre el antiguo.
  */
 
-inline void Escena :: MsgSeleccionObjeto (bool reescribir) noexcept
+void Escena :: MsgSeleccionObjeto (bool reescribir) noexcept
 {
 	if (reescribir)
 		std::cout << "\033[8A";
@@ -342,67 +415,76 @@ inline void Escena :: MsgSeleccionObjeto (bool reescribir) noexcept
 	MsgTeclasComunes();
 }
 
-/** @fn inline void Escena :: MsgSeleccionVisualizacion (bool reescribir) const noexcept
+/** @fn void Escena :: MsgSeleccionVisualizacion (bool reescribir) const noexcept
  *
  * @brief Muestra el texto del menú de selección de modos de visualización.
  * @param reescribir Superposición del menú nuevo sobre el antiguo.
  */
 
-inline void Escena :: MsgSeleccionVisualizacion (bool reescribir) const noexcept
+void Escena :: MsgSeleccionVisualizacion (bool reescribir) const noexcept
 {
 	if (reescribir)
-		std::cout << "\033[6A";
+		std::cout << "\033[7A";
 
 	std::cout
 		<< coloresterm::AZUL_B << "SELECCIÓN DE VISUALIZACIÓN:" << std::endl
 		<< coloresterm::CIAN_B << "[" << coloresterm::AMARILLO_B << "A"
 		<< coloresterm::CIAN_B << "]" << coloresterm::NORMAL
-		<< coloresterm::AMARILLO << " Modo ajedrez" << std::endl
+		<< (
+				visualizacion.test(Visualizacion::Ajedrez)
+				? coloresterm::VERDE
+				: coloresterm::ROJO
+			)
+		<< " Modo ajedrez" << std::endl
 		<< coloresterm::CIAN_B << "[" << coloresterm::AMARILLO_B << "I"
 		<< coloresterm::CIAN_B << "]" << coloresterm::NORMAL
-		<< coloresterm::AMARILLO << " Modo iluminación" << std::endl
+		<< (
+				visualizacion.test(Visualizacion::Iluminacion)
+				? coloresterm::VERDE
+				: coloresterm::ROJO
+			)
+		<< " Modo iluminación" << std::endl
 		<< coloresterm::CIAN_B << "[" << coloresterm::AMARILLO_B << "L"
 		<< coloresterm::CIAN_B << "]" << coloresterm::NORMAL
-		<< coloresterm::AMARILLO << " Modo líneas" << std::endl
+		<< (
+				visualizacion.test(Visualizacion::Lineas)
+				? coloresterm::VERDE
+				: coloresterm::ROJO
+			)
+		<< " Modo líneas" << std::endl
 		<< coloresterm::CIAN_B << "[" << coloresterm::AMARILLO_B << "P"
 		<< coloresterm::CIAN_B << "]" << coloresterm::NORMAL
-		<< coloresterm::AMARILLO << " Modo puntos" << std::endl
+		<< (
+				visualizacion.test(Visualizacion::Puntos)
+				? coloresterm::VERDE
+				: coloresterm::ROJO
+			)
+		<< " Modo puntos" << std::endl
 		<< coloresterm::CIAN_B << "[" << coloresterm::AMARILLO_B << "S"
 		<< coloresterm::CIAN_B << "]" << coloresterm::NORMAL
-		<< coloresterm::AMARILLO << " Modo sólido" << coloresterm::NORMAL
+		<< (
+				visualizacion.test(Visualizacion::Solido)
+				? coloresterm::VERDE
+				: coloresterm::ROJO
+			)
+		<< " Modo sólido" << coloresterm::NORMAL
 		<< std::endl;
 
 	MsgTeclasComunes();
 }
 
-/** @fn inline void Escena :: MsgTeclasComunes () const noexcept
+/** @fn void Escena :: MsgTeclasComunes () const noexcept
  *
  * @brief Muestra el texto de las teclas comunes a todos los menús.
  */
 
-inline void Escena :: MsgTeclasComunes () const noexcept
+void Escena :: MsgTeclasComunes () const noexcept
 {
 	std::cout
 		<< coloresterm::AZUL_B << "[" << coloresterm::ROJO_B << "Q"
 		<< coloresterm::AZUL_B << "]" << coloresterm::NORMAL
 		<< ((menu == Menu::Inactivo) ? " Finalizar ejecución del programa"
 			: " Volver a la selección de menú") << std::endl;
-}
-
-/** @fn inline void Escena :: Visualizar (Visualizacion visualizacion) noexcept
- *
- * @brief Modifica los modos de visualización de los objetos visibles.
- * @param visualizacion Modo de visualización a modificar.
- */
-
-inline void Escena :: Visualizar (Visualizacion visualizacion) noexcept
-{
-	cilindro->ModificarVisualizacion(visualizacion);
-	cono->ModificarVisualizacion(visualizacion);
-	cubo->ModificarVisualizacion(visualizacion);
-	esfera->ModificarVisualizacion(visualizacion);
-	tetraedro->ModificarVisualizacion(visualizacion);
-	peon->ModificarVisualizacion(visualizacion);
 }
 
 /** @fn Escena * Escena :: Instance () noexcept
@@ -477,70 +559,35 @@ void Escena :: Dibujar () noexcept
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	CambiarObservador();
+
 	ejes->Dibujar();
 
-	if (visibles.test(obj_cilindro))
+	if (visualizacion.test(Visualizacion::Ajedrez))
 	{
-		glPushMatrix();
-		{
-			glTranslatef(-60, 0, -60);
-			glScalef(30, 30, 30);
-			cilindro->Dibujar(dibujo);
-		}
-		glPopMatrix();
+		glPolygonMode(GL_FRONT, GL_FILL);
+		DibujarMallas(Colores::Indefinido, true);
 	}
-
-	if (visibles.test(obj_cono))
+	else
 	{
-		glPushMatrix();
+		if (visualizacion.test(Visualizacion::Lineas))
 		{
-			glTranslatef(60, 0, -60);
-			glScalef(30, 30, 30);
-			cono->Dibujar(dibujo);
+			glLineWidth(2);
+			glPolygonMode(GL_FRONT, GL_LINE);
+			DibujarMallas(Colores::Verde);
+			glLineWidth(1);
 		}
-		glPopMatrix();
-	}
 
-	if (visibles.test(obj_cubo))
-	{
-		glPushMatrix();
+		if (visualizacion.test(Visualizacion::Puntos))
 		{
-			glTranslatef(-60, 0, 60);
-			cubo->Dibujar(dibujo);
+			glPolygonMode(GL_FRONT, GL_POINT);
+			DibujarMallas(Colores::Azul);
 		}
-		glPopMatrix();
-	}
 
-	if (visibles.test(obj_esfera))
-	{
-		glPushMatrix();
+		if (visualizacion.test(Visualizacion::Solido))
 		{
-			glTranslatef(0, -60, 0);
-			glScalef(30, 30, 30);
-			esfera->Dibujar(dibujo);
+			glPolygonMode(GL_FRONT, GL_FILL);
+			DibujarMallas(Colores::Rojo);
 		}
-		glPopMatrix();
-	}
-
-	if (visibles.test(obj_tetraedro))
-	{
-		glPushMatrix();
-		{
-			glTranslatef(0, 60, 0);
-			tetraedro->Dibujar(dibujo);
-		}
-		glPopMatrix();
-	}
-
-	if (visibles.test(obj_peon))
-	{
-		glPushMatrix();
-		{
-			glTranslatef(60, 0, 60);
-			glScalef(30, 30, 30);
-			peon->Dibujar(dibujo);
-		}
-		glPopMatrix();
 	}
 }
 
