@@ -4,7 +4,6 @@
 #ifndef PRACTICAS_MALLA3D
 #define PRACTICAS_MALLA3D
 
-#include <bitset>
 #include <fstream>
 #include <regex>
 #include <stdexcept>
@@ -15,17 +14,19 @@
 #include "motor.hpp"
 #include "ply.hpp"
 
-/** @enum Bitset
- *
- * @brief Operaciones realizable sobre un `std::bitset`.
+/*
+ * COLORES PARA PINTAR LA MALLA:
+ * Cada color corresponde con un elemento del vector de colores. El color
+ * incoloro provoca un segfault al acceder a él, por lo que hay que comprobar
+ * que no se esté usando.
  */
 
-enum Bitset
-{
-	Flip,
-	Reset,
-	Set
-};
+#define incoloro -1
+#define azul     0
+#define magenta  1
+#define negro    2
+#define rojo     3
+#define verde    4
 
 /** @enum Dibujo
  *
@@ -36,16 +37,6 @@ enum Dibujo
 {
 	Diferido,
 	Inmediato
-};
-
-enum Colores
-{
-	Indefinido,
-	Azul    = 0,
-	Magenta = 1,
-	Negro   = 2,
-	Rojo    = 3,
-	Verde   = 4
 };
 
 /** @class Malla3D
@@ -69,7 +60,7 @@ private:
 	void CalcularNormales    () noexcept;
 	void GenerarAjedrez      () noexcept;
 	void InicializarColores  () noexcept;
-	void InicializarVBOColor (const Colores & color) noexcept;
+	void InicializarVBOColor (const unsigned char color) noexcept;
 
 protected:
 	static std::vector<Tupla3f> tablas_colores[5];
@@ -81,10 +72,11 @@ protected:
 	GLuint vbo_colores[5] = {0};
 	GLuint vbo_caras      = 0;
 	GLuint vbo_vertices   = 0;
+	GLuint vbo_normales   = 0;
 	std::pair<GLuint, GLuint> vbo_caras_ajedrez = {0,0};
 
-	void DibujarDiferido         (Colores color) noexcept;
-	void DibujarInmediato        (Colores color) noexcept;
+	void DibujarDiferido         (const unsigned char color) noexcept;
+	void DibujarInmediato        (const unsigned char color) noexcept;
 	void DibujarAjedrezDiferido  () noexcept;
 	void DibujarAjedrezInmediato () const noexcept;
 
@@ -95,7 +87,10 @@ public:
 	Malla3D (const std::string & ruta);
 
 	void AplicarMaterial (Material nuevo) noexcept;
-	void Dibujar         (Dibujo dibujado, bool ajedrez, Colores color) noexcept;
+	void Dibujar (
+		const Dibujo dibujado,
+		const bool ajedrez,
+		const unsigned char color) noexcept;
 
 	Tupla3u              Cara  (const size_t indice) const;
 	std::vector<Tupla3u> Caras () const noexcept;

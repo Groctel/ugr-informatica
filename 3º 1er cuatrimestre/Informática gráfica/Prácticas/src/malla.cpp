@@ -49,11 +49,11 @@ void Malla3D :: GenerarAjedrez () noexcept
 
 void Malla3D :: InicializarColores () noexcept
 {
-	InicializarColor(tablas_colores[Colores::Azul],    coloresgl::AZUL);
-	InicializarColor(tablas_colores[Colores::Magenta], coloresgl::MAGENTA);
-	InicializarColor(tablas_colores[Colores::Negro],   coloresgl::NEGRO);
-	InicializarColor(tablas_colores[Colores::Rojo],    coloresgl::ROJO);
-	InicializarColor(tablas_colores[Colores::Verde],   coloresgl::VERDE);
+	InicializarColor(tablas_colores[azul],    coloresgl::AZUL);
+	InicializarColor(tablas_colores[magenta], coloresgl::MAGENTA);
+	InicializarColor(tablas_colores[negro],   coloresgl::NEGRO);
+	InicializarColor(tablas_colores[rojo],    coloresgl::ROJO);
+	InicializarColor(tablas_colores[verde],   coloresgl::VERDE);
 }
 
 void Malla3D :: CalcularNormales () noexcept
@@ -76,7 +76,7 @@ void Malla3D :: CalcularNormales () noexcept
 	}
 }
 
-void Malla3D :: InicializarVBOColor (const Colores & color) noexcept
+void Malla3D :: InicializarVBOColor (const unsigned char color) noexcept
 {
 	if (vbo_colores[color] == 0)
 		vbo_colores[color] = VBO(
@@ -94,10 +94,8 @@ void Malla3D :: InicializarVBOColor (const Colores & color) noexcept
  * ajedrez siempre se muestra solo.
  */
 
-void Malla3D :: DibujarDiferido (Colores color) noexcept
+void Malla3D :: DibujarDiferido (const unsigned char color) noexcept
 {
-	InicializarVBOColor(color);
-
 	if (vbo_caras == 0)
 		vbo_caras = VBO(
 			GL_ELEMENT_ARRAY_BUFFER,
@@ -122,7 +120,27 @@ void Malla3D :: DibujarDiferido (Colores color) noexcept
 		glBindBuffer(GL_ARRAY_BUFFER,         vbo_colores[color]);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_caras);
 		{
-			glColorPointer(3, GL_FLOAT, 0, 0);
+			if (glIsEnabled(GL_LIGHTING))
+			{
+				if (vbo_normales == 0)
+					vbo_normales = VBO(
+						GL_ARRAY_BUFFER,
+						normales.size()*3*sizeof(float),
+						normales.data()
+					);
+
+				glEnableClientState(GL_NORMAL_ARRAY);
+				glBindBuffer(GL_ARRAY_BUFFER, vbo_normales);
+				glNormalPointer(GL_FLOAT, 0, 0);
+
+				material.Aplicar();
+			}
+			else
+			{
+				InicializarVBOColor(color);
+				glColorPointer(3, GL_FLOAT, 0, tablas_colores[color].data());
+			}
+
 			glDrawElements(GL_TRIANGLES, caras.size()*3, GL_UNSIGNED_INT, 0);
 		}
 		glBindBuffer(GL_ARRAY_BUFFER,         0);
@@ -140,7 +158,7 @@ void Malla3D :: DibujarDiferido (Colores color) noexcept
  * ajedrez siempre se muestra solo.
  */
 
-void Malla3D :: DibujarInmediato (Colores color) noexcept
+void Malla3D :: DibujarInmediato (const unsigned char color) noexcept
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
@@ -148,18 +166,22 @@ void Malla3D :: DibujarInmediato (Colores color) noexcept
 		if (glIsEnabled(GL_LIGHTING))
 		{
 			glEnableClientState(GL_NORMAL_ARRAY);
-			glNormalPointer(GL_FLOAT,0, normales.data());
+			glNormalPointer(GL_FLOAT, 0, normales.data());
 			material.Aplicar();
+		}
+		else
+		{
+			glColorPointer(3, GL_FLOAT, 0, tablas_colores[color].data());
 		}
 
 		glVertexPointer(3, GL_FLOAT, 0, vertices.data());
-		 glColorPointer(3, GL_FLOAT, 0, tablas_colores[color].data());
 
 		glDrawElements(
 			GL_TRIANGLES,    caras.size()*3,
 			GL_UNSIGNED_INT, caras.data()
 		);
 	}
+	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
@@ -186,21 +208,21 @@ void Malla3D :: DibujarAjedrezDiferido () noexcept
 			caras.data()+caras.size()/2
 		);
 
-	InicializarVBOColor(Colores::Negro);
-	InicializarVBOColor(Colores::Magenta);
+	InicializarVBOColor(negro);
+	InicializarVBOColor(magenta);
 
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
 	{
 		glVertexPointer(3, GL_FLOAT, 0, vertices.data());
 
-		glBindBuffer(GL_ARRAY_BUFFER,         vbo_colores[Colores::Negro]);
+		glBindBuffer(GL_ARRAY_BUFFER,         vbo_colores[negro]);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_caras_ajedrez.first);
 		{
 			glColorPointer(3, GL_FLOAT, 0, 0);
 			glDrawElements(GL_TRIANGLES, (caras.size()/2)*3, GL_UNSIGNED_INT, 0);
 		}
-		glBindBuffer(GL_ARRAY_BUFFER,         vbo_colores[Colores::Magenta]);
+		glBindBuffer(GL_ARRAY_BUFFER,         vbo_colores[magenta]);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_caras_ajedrez.second);
 		{
 			glColorPointer(3, GL_FLOAT, 0, 0);
@@ -226,13 +248,13 @@ void Malla3D :: DibujarAjedrezInmediato () const noexcept
 	{
 		glVertexPointer(3, GL_FLOAT, 0, vertices.data());
 
-		glColorPointer(3, GL_FLOAT, 0, tablas_colores[Colores::Negro].data());
+		glColorPointer(3, GL_FLOAT, 0, tablas_colores[negro].data());
 		glDrawElements(
 			GL_TRIANGLES,    (caras.size()/2)*3,
 			GL_UNSIGNED_INT, caras.data()
 		);
 
-		glColorPointer(3, GL_FLOAT, 0, tablas_colores[Colores::Magenta].data());
+		glColorPointer(3, GL_FLOAT, 0, tablas_colores[magenta].data());
 		glDrawElements(
 			GL_TRIANGLES,    (caras.size()/2)*3,
 			GL_UNSIGNED_INT, caras.data()+(caras.size()/2)
@@ -289,7 +311,11 @@ void Malla3D :: AplicarMaterial (Material nuevo) noexcept
  * @param modo Modo de envío del dibujo a la GPU.
  */
 
-void Malla3D :: Dibujar (Dibujo dibujado, bool ajedrez, Colores color) noexcept
+void Malla3D :: Dibujar (
+	const Dibujo dibujado,
+	const bool ajedrez,
+	const unsigned char color
+) noexcept
 {
 	switch (dibujado)
 	{

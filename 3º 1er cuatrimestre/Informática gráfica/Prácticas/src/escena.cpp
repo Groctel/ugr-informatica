@@ -74,7 +74,10 @@ void Escena :: CambiarObservador () noexcept
 	glRotatef(angulo_observador_x, 1.0, 0.0, 0.0);
 }
 
-void Escena :: DibujarMallas (Colores color, bool ajedrez) const noexcept
+void Escena :: DibujarMallas (
+	const unsigned char color,
+	const bool ajedrez
+) const noexcept
 {
 	if (visibles.test(obj_cilindro))
 	{
@@ -568,7 +571,6 @@ Escena :: ~Escena () noexcept
 	delete tetraedro;
 	delete peon;
 
-	instance = nullptr;
 	exit(0);
 }
 
@@ -616,7 +618,7 @@ void Escena :: Dibujar () noexcept
 	if (visualizacion.test(Visualizacion::Ajedrez))
 	{
 		glPolygonMode(GL_FRONT, GL_FILL);
-		DibujarMallas(Colores::Indefinido, true);
+		DibujarMallas(incoloro, true);
 	}
 	else
 	{
@@ -626,7 +628,7 @@ void Escena :: Dibujar () noexcept
 			{
 				glPolygonMode(GL_FRONT, GL_FILL);
 				AplicarLuces();
-				DibujarMallas(Colores::Indefinido);
+				DibujarMallas(incoloro);
 			}
 			glDisable(GL_LIGHTING);
 		}
@@ -636,7 +638,7 @@ void Escena :: Dibujar () noexcept
 			glLineWidth(2);
 			{
 				glPolygonMode(GL_FRONT, GL_LINE);
-				DibujarMallas(Colores::Verde);
+				DibujarMallas(verde);
 			}
 			glLineWidth(1);
 		}
@@ -644,13 +646,13 @@ void Escena :: Dibujar () noexcept
 		if (visualizacion.test(Visualizacion::Puntos))
 		{
 			glPolygonMode(GL_FRONT, GL_POINT);
-			DibujarMallas(Colores::Azul);
+			DibujarMallas(azul);
 		}
 
 		if (visualizacion.test(Visualizacion::Solido))
 		{
 			glPolygonMode(GL_FRONT, GL_FILL);
-			DibujarMallas(Colores::Rojo);
+			DibujarMallas(rojo);
 		}
 	}
 }

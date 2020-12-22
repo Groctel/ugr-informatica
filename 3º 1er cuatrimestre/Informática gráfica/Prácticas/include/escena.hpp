@@ -90,7 +90,10 @@ private:
 	void AplicarLuces      () noexcept;
 	void CambiarProyeccion (const float ratio_xy) noexcept;
 	void CambiarObservador () noexcept;
-	void DibujarMallas     (Colores color, bool ajedrez=false) const noexcept;
+	void DibujarMallas (
+		const unsigned char color,
+		const bool ajedrez=false
+	) const noexcept;
 
 	void SeleccionDibujado      (unsigned char tecla) noexcept;
 	void SeleccionLuces         (unsigned char tecla) noexcept;
