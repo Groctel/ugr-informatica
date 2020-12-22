@@ -29,10 +29,17 @@ Escena :: Escena () noexcept
 
 	luz0 (new LuzDireccional(
 		GL_LIGHT0,
-		{1, 0, 0, 1},
-		{1, 1, 0, 1},
-		{1, 0, 1, 1},
-		{3, 5, 20}
+		{0, 0, 0, 1},
+		{1, 1, 1, 1},
+		{1, 1, 1, 1},
+		{0, 0, 10}
+	)),
+	luz1 (new LuzPosicional(
+		GL_LIGHT1,
+		{0, 0, 0, 1},
+		{1, 1, 1, 1},
+		{1, 1, 1, 1},
+		{200, 150, 200}
 	)),
 
 	// http://devernay.free.fr/cours/opengl/materials.html
@@ -87,6 +94,7 @@ Escena :: Escena () noexcept
 void Escena :: AplicarLuces () noexcept
 {
 	luz0->Aplicar();
+	luz1->Aplicar();
 }
 
 /** @fn void Escena :: CambiarProyeccion (const float ratio_xy) noexcept
@@ -231,6 +239,10 @@ void Escena :: SeleccionLuces (unsigned char tecla) noexcept
 			luz0->Pulsar();
 		break;
 
+		case '1':
+			luz1->Pulsar();
+		break;
+
 		default:
 			TeclasComunes(tecla);
 			continuar = false;
@@ -343,22 +355,38 @@ void Escena :: SeleccionVisualizacion (unsigned char tecla) noexcept
 	{
 		case 'A':
 			visualizacion.flip(Visualizacion::Ajedrez);
+			if (visualizacion.test(Visualizacion::Iluminacion))
+				visualizacion.flip(Visualizacion::Iluminacion);
 		break;
 
 		case 'I':
 			visualizacion.flip(Visualizacion::Iluminacion);
+			if (visualizacion.test(Visualizacion::Ajedrez))
+				visualizacion.flip(Visualizacion::Ajedrez);
+			if (visualizacion.test(Visualizacion::Lineas))
+				visualizacion.flip(Visualizacion::Lineas);
+			if (visualizacion.test(Visualizacion::Puntos))
+				visualizacion.flip(Visualizacion::Puntos);
+			if (visualizacion.test(Visualizacion::Solido))
+				visualizacion.flip(Visualizacion::Solido);
 		break;
 
 		case 'L':
 			visualizacion.flip(Visualizacion::Lineas);
+			if (visualizacion.test(Visualizacion::Iluminacion))
+				visualizacion.flip(Visualizacion::Iluminacion);
 		break;
 
 		case 'P':
 			visualizacion.flip(Visualizacion::Puntos);
+			if (visualizacion.test(Visualizacion::Iluminacion))
+				visualizacion.flip(Visualizacion::Iluminacion);
 		break;
 
 		case 'S':
 			visualizacion.flip(Visualizacion::Solido);
+			if (visualizacion.test(Visualizacion::Iluminacion))
+				visualizacion.flip(Visualizacion::Iluminacion);
 		break;
 
 		default:
@@ -426,14 +454,18 @@ void Escena :: MsgSeleccionDibujado (bool reescribir) const noexcept
 void Escena :: MsgSeleccionLuces (bool reescribir) const noexcept
 {
 	if (reescribir)
-		std::cout << "\033[3A";
+		std::cout << "\033[4A";
 
 	std::cout
 		<< coloresterm::AZUL_B << "SELECCIÓN DE LUCES:" << std::endl
 		<< coloresterm::CIAN_B << "[" << coloresterm::AMARILLO_B << "0"
 		<< coloresterm::CIAN_B << "]" << coloresterm::NORMAL
 		<< (luz0->Activada() ? coloresterm::VERDE : coloresterm::ROJO)
-		<< " Luz 0"
+		<< " Luz 0" << std::endl
+		<< coloresterm::CIAN_B << "[" << coloresterm::AMARILLO_B << "1"
+		<< coloresterm::CIAN_B << "]" << coloresterm::NORMAL
+		<< (luz1->Activada() ? coloresterm::VERDE : coloresterm::ROJO)
+		<< " Luz 1"
 		<< coloresterm::NORMAL << std::endl;
 
 	MsgTeclasComunes();
@@ -617,6 +649,7 @@ Escena :: ~Escena () noexcept
 	delete peon;
 
 	delete luz0;
+	delete luz1;
 
 	delete esmeralda;
 	delete oro;

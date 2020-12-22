@@ -11,6 +11,7 @@
 #include "ejes.hpp"
 #include "esfera.hpp"
 #include "luz_direccional.hpp"
+#include "luz_posicional.hpp"
 #include "malla.hpp"
 #include "material.hpp"
 #include "motor.hpp"
@@ -81,6 +82,7 @@ private:
 	ObjRevolucion * peon      = nullptr;
 
 	LuzDireccional * luz0 = nullptr;
+	LuzPosicional  * luz1 = nullptr;
 
    Material * esmeralda = nullptr;
    Material * perla     = nullptr;
