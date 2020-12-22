@@ -2,23 +2,23 @@
 
 Material :: Material ()
 :
-	brillo    (0.5f),
 	ambiente  ({0.2f, 0.2f, 0.2f, 1.0f}),
 	difuso    ({0.8f, 0.8f, 0.8f, 1.0f}),
-	especular ({0.0f, 0.0f, 0.0f, 1.0f})
+	especular ({0.0f, 0.0f, 0.0f, 1.0f}),
+	brillo    (0.5f)
 { }
 
 Material :: Material (
-	const float bri,
 	const Tupla4f & amb,
 	const Tupla4f & dif,
-	const Tupla4f & esp
+	const Tupla4f & esp,
+	const float bri
 ) noexcept
 :
-	brillo    (bri),
 	ambiente  (amb),
 	difuso    (dif),
-	especular (esp)
+	especular (esp),
+	brillo    (bri)
 {
 	ambiente[3] = difuso[3] = especular[3] = 1.0f;
 }

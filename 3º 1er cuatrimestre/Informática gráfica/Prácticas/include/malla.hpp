@@ -47,7 +47,7 @@ enum Dibujo
 class Malla3D
 {
 private:
-	Material material;
+	Material * material;
 
 	GLuint VBO (const GLuint & tipo, const GLuint & bytes,
 		const GLvoid * datos) const noexcept;
@@ -86,7 +86,7 @@ public:
 	Malla3D ();
 	Malla3D (const std::string & ruta);
 
-	void AplicarMaterial (Material nuevo) noexcept;
+	void AplicarMaterial (Material * nuevo) noexcept;
 	void Dibujar (
 		const Dibujo dibujado,
 		const bool ajedrez,

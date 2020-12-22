@@ -133,7 +133,7 @@ void Malla3D :: DibujarDiferido (const unsigned char color) noexcept
 				glBindBuffer(GL_ARRAY_BUFFER, vbo_normales);
 				glNormalPointer(GL_FLOAT, 0, 0);
 
-				material.Aplicar();
+				material->Aplicar();
 			}
 			else
 			{
@@ -167,7 +167,7 @@ void Malla3D :: DibujarInmediato (const unsigned char color) noexcept
 		{
 			glEnableClientState(GL_NORMAL_ARRAY);
 			glNormalPointer(GL_FLOAT, 0, normales.data());
-			material.Aplicar();
+			material->Aplicar();
 		}
 		else
 		{
@@ -297,10 +297,10 @@ Malla3D :: Malla3D (const std::string & ruta)
 	vertices                              = PLY::LeerVertices(fi, dimensiones.first);
 	caras                                 = PLY::LeerCaras(fi, dimensiones.second);
 
-	CalcularNormales();
+	InicializarMalla();
 }
 
-void Malla3D :: AplicarMaterial (Material nuevo) noexcept
+void Malla3D :: AplicarMaterial (Material * nuevo) noexcept
 {
 	material = nuevo;
 }

@@ -7,18 +7,18 @@
 class Material
 {
 private:
-	float   brillo;
 	Tupla4f ambiente;
 	Tupla4f difuso;
 	Tupla4f especular;
+	float   brillo;
 
 public:
 	Material ();
 	Material (
-		const float bri,
 		const Tupla4f & amb,
 		const Tupla4f & dif,
-		const Tupla4f & esp
+		const Tupla4f & esp,
+		const float bri
 	) noexcept;
 
 	void Aplicar () noexcept;

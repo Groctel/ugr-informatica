@@ -12,6 +12,7 @@
 #include "esfera.hpp"
 #include "luz_direccional.hpp"
 #include "malla.hpp"
+#include "material.hpp"
 #include "motor.hpp"
 #include "obj_revolucion.hpp"
 #include "tetraedro.hpp"
@@ -69,7 +70,7 @@ private:
 	GLfloat distancia_observador;
 
 	Menu menu     = Menu::Inactivo;
-	Dibujo dibujo = Dibujo::Inmediato;
+	Dibujo dibujo = Dibujo::Diferido;
 
 	Ejes          * ejes      = nullptr;
 	Cilindro      * cilindro  = nullptr;
@@ -80,6 +81,13 @@ private:
 	ObjRevolucion * peon      = nullptr;
 
 	LuzDireccional * luz0 = nullptr;
+
+   Material * esmeralda = nullptr;
+   Material * perla     = nullptr;
+   Material * plata     = nullptr;
+	Material * oro       = nullptr;
+   Material * ruby      = nullptr;
+   Material * turquesa  = nullptr;
 
 	std::bitset<6> visibles;
 	std::bitset<5> visualizacion;
