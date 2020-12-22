@@ -243,6 +243,30 @@ void Escena :: SeleccionLuces (unsigned char tecla) noexcept
 			luz1->Pulsar();
 		break;
 
+		case 'A':
+			angulos.rotx = !angulos.rotx;
+		break;
+
+		case 'B':
+			angulos.roty = !angulos.roty;
+		break;
+
+		case '<':
+			if (angulos.rotx)
+				luz0->VariarRotX(-0.05);
+
+			if (angulos.roty)
+				luz0->VariarRotY(-0.05);
+		break;
+
+		case '>':
+			if (angulos.rotx)
+				luz0->VariarRotX(0.05);
+
+			if (angulos.roty)
+				luz0->VariarRotY(0.05);
+		break;
+
 		default:
 			TeclasComunes(tecla);
 			continuar = false;
@@ -440,11 +464,11 @@ void Escena :: MsgSeleccionDibujado (bool reescribir) const noexcept
 	std::cout
 		<< coloresterm::AZUL_B << "SELECCIÓN DE DIBUJADO:" << std::endl
 		<< coloresterm::CIAN_B << "[" << coloresterm::AMARILLO_B << "D"
-		<< coloresterm::CIAN_B << "]" << coloresterm::NORMAL
+		<< coloresterm::CIAN_B << "]"
 		<< (dibujo == Dibujo::Diferido ? coloresterm::VERDE : coloresterm::ROJO)
 		<< " Modo diferido" << std::endl
 		<< coloresterm::CIAN_B << "[" << coloresterm::AMARILLO_B << "I"
-		<< coloresterm::CIAN_B << "]" << coloresterm::NORMAL
+		<< coloresterm::CIAN_B << "]"
 		<< (dibujo == Dibujo::Inmediato ? coloresterm::VERDE : coloresterm::ROJO)
 		<< " Modo inmediato" << coloresterm::NORMAL << std::endl;
 
@@ -454,18 +478,32 @@ void Escena :: MsgSeleccionDibujado (bool reescribir) const noexcept
 void Escena :: MsgSeleccionLuces (bool reescribir) const noexcept
 {
 	if (reescribir)
-		std::cout << "\033[4A";
+		std::cout << "\033[8A";
 
 	std::cout
 		<< coloresterm::AZUL_B << "SELECCIÓN DE LUCES:" << std::endl
 		<< coloresterm::CIAN_B << "[" << coloresterm::AMARILLO_B << "0"
-		<< coloresterm::CIAN_B << "]" << coloresterm::NORMAL
+		<< coloresterm::CIAN_B << "]"
 		<< (luz0->Activada() ? coloresterm::VERDE : coloresterm::ROJO)
 		<< " Luz 0" << std::endl
 		<< coloresterm::CIAN_B << "[" << coloresterm::AMARILLO_B << "1"
-		<< coloresterm::CIAN_B << "]" << coloresterm::NORMAL
+		<< coloresterm::CIAN_B << "]"
 		<< (luz1->Activada() ? coloresterm::VERDE : coloresterm::ROJO)
-		<< " Luz 1"
+		<< " Luz 1" << std::endl
+		<< coloresterm::CIAN_B << "[" << coloresterm::AMARILLO_B << "A"
+		<< coloresterm::CIAN_B << "]"
+		<< (angulos.rotx ? coloresterm::VERDE : coloresterm::ROJO)
+		<< " Rotación x en luces direccionales (ángulo alfa)" << std::endl
+		<< coloresterm::CIAN_B << "[" << coloresterm::AMARILLO_B << "B"
+		<< coloresterm::CIAN_B << "]"
+		<< (angulos.roty ? coloresterm::VERDE : coloresterm::ROJO)
+		<< " Rotación y en luces direccionales (ángulo beta)" << std::endl
+		<< coloresterm::CIAN_B << "[" << coloresterm::AMARILLO_B << "<"
+		<< coloresterm::CIAN_B << "]" << coloresterm::NORMAL
+		<< " Decremento del ángulo" << std::endl
+		<< coloresterm::CIAN_B << "[" << coloresterm::AMARILLO_B << ">"
+		<< coloresterm::CIAN_B << "]" << coloresterm::NORMAL
+		<< " Incremento del ángulo"
 		<< coloresterm::NORMAL << std::endl;
 
 	MsgTeclasComunes();
@@ -492,7 +530,7 @@ void Escena :: MsgSeleccionMenu () const noexcept
 		<< " Selección de objeto" << std::endl
 		<< coloresterm::CIAN_B << "[" << coloresterm::AMARILLO_B << "V"
 		<< coloresterm::CIAN_B << "]" << coloresterm::NORMAL
-		<< " Selección de visualización" << coloresterm::NORMAL << std::endl;
+		<< " Selección de visualización" << std::endl;
 
 	MsgTeclasComunes();
 }
@@ -513,37 +551,31 @@ void Escena :: MsgSeleccionObjeto (bool reescribir) noexcept
 		<< coloresterm::CIAN_B << "["
 		<< coloresterm::AMARILLO_B << "C"
 		<< coloresterm::CIAN_B << "]"
-		<< coloresterm::NORMAL
 		<< (visibles.test(obj_cubo) ? coloresterm::VERDE : coloresterm::ROJO)
 		<< " Cubo" << std::endl
 		<< coloresterm::CIAN_B << "["
 		<< coloresterm::AMARILLO_B << "I"
 		<< coloresterm::CIAN_B << "]"
-		<< coloresterm::NORMAL
 		<< (visibles.test(obj_cilindro) ? coloresterm::VERDE : coloresterm::ROJO)
 		<< " Cilindro" << std::endl
 		<< coloresterm::CIAN_B << "["
 		<< coloresterm::AMARILLO_B << "O"
 		<< coloresterm::CIAN_B << "]"
-		<< coloresterm::NORMAL
 		<< (visibles.test(obj_cono) ? coloresterm::VERDE : coloresterm::ROJO)
 		<< " Cono" << std::endl
 		<< coloresterm::CIAN_B << "["
 		<< coloresterm::AMARILLO_B << "E"
 		<< coloresterm::CIAN_B << "]"
-		<< coloresterm::NORMAL
 		<< (visibles.test(obj_esfera) ? coloresterm::VERDE : coloresterm::ROJO)
 		<< " Esfera" << std::endl
 		<< coloresterm::CIAN_B << "["
 		<< coloresterm::AMARILLO_B << "T"
 		<< coloresterm::CIAN_B << "]"
-		<< coloresterm::NORMAL
 		<< (visibles.test(obj_tetraedro) ? coloresterm::VERDE : coloresterm::ROJO)
 		<< " Tetraedro" << std::endl
 		<< coloresterm::CIAN_B << "["
 		<< coloresterm::AMARILLO_B << "P"
 		<< coloresterm::CIAN_B << "]"
-		<< coloresterm::NORMAL
 		<< (visibles.test(obj_peon) ? coloresterm::VERDE : coloresterm::ROJO)
 		<< " Peon"
 		<< coloresterm::NORMAL << std::endl;
@@ -565,35 +597,35 @@ void Escena :: MsgSeleccionVisualizacion (bool reescribir) const noexcept
 	std::cout
 		<< coloresterm::AZUL_B << "SELECCIÓN DE VISUALIZACIÓN:" << std::endl
 		<< coloresterm::CIAN_B << "[" << coloresterm::AMARILLO_B << "A"
-		<< coloresterm::CIAN_B << "]" << coloresterm::NORMAL
+		<< coloresterm::CIAN_B << "]"
 		<< (visualizacion.test(Visualizacion::Ajedrez)
 				? coloresterm::VERDE
 				: coloresterm::ROJO
 			)
 		<< " Modo ajedrez" << std::endl
 		<< coloresterm::CIAN_B << "[" << coloresterm::AMARILLO_B << "I"
-		<< coloresterm::CIAN_B << "]" << coloresterm::NORMAL
+		<< coloresterm::CIAN_B << "]"
 		<< (visualizacion.test(Visualizacion::Iluminacion)
 				? coloresterm::VERDE
 				: coloresterm::ROJO
 			)
 		<< " Modo iluminación" << std::endl
 		<< coloresterm::CIAN_B << "[" << coloresterm::AMARILLO_B << "L"
-		<< coloresterm::CIAN_B << "]" << coloresterm::NORMAL
+		<< coloresterm::CIAN_B << "]"
 		<< (visualizacion.test(Visualizacion::Lineas)
 				? coloresterm::VERDE
 				: coloresterm::ROJO
 			)
 		<< " Modo líneas" << std::endl
 		<< coloresterm::CIAN_B << "[" << coloresterm::AMARILLO_B << "P"
-		<< coloresterm::CIAN_B << "]" << coloresterm::NORMAL
+		<< coloresterm::CIAN_B << "]"
 		<< (visualizacion.test(Visualizacion::Puntos)
 				? coloresterm::VERDE
 				: coloresterm::ROJO
 			)
 		<< " Modo puntos" << std::endl
 		<< coloresterm::CIAN_B << "[" << coloresterm::AMARILLO_B << "S"
-		<< coloresterm::CIAN_B << "]" << coloresterm::NORMAL
+		<< coloresterm::CIAN_B << "]"
 		<< (visualizacion.test(Visualizacion::Solido)
 				? coloresterm::VERDE
 				: coloresterm::ROJO

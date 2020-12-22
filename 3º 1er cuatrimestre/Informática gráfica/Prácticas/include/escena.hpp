@@ -5,6 +5,7 @@
 #define PRACTICAS_ESCENA
 
 #include <bitset>
+#include <utility>
 #include "cilindro.hpp"
 #include "cono.hpp"
 #include "cubo.hpp"
@@ -30,6 +31,15 @@
 #define obj_esfera    3
 #define obj_tetraedro 4
 #define obj_peon      5
+
+/*
+ * ÁNGULOS DE LAS LUCES DIRECCIONALES:
+ * El ángulo a editar en las luces direccionales se almacena en el std::pair
+ * angulo. Estas macros ofrecen una ayuda para referenciarlas.
+ */
+
+#define rotx first
+#define roty second
 
 enum Menu
 {
@@ -93,6 +103,7 @@ private:
 
 	std::bitset<6> visibles;
 	std::bitset<5> visualizacion;
+	std::pair<bool, bool> angulos = {false, false};
 
 	Escena () noexcept;
 	Escena (const Escena & otra) = delete;

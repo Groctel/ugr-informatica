@@ -11,11 +11,8 @@ LuzDireccional :: LuzDireccional (
 	Luz(id_nuevo, amb, dif, esp, {direccion[X], direccion[Y], direccion[Z], 0}),
 	posicion_original({direccion[X], direccion[Y], direccion[Z], 0})
 {
-	rotacion_x = atanf(
-		(sqrt(direccion[X] * direccion[X] + direccion[Y] * direccion[Y]))
-		/ direccion[Y]
-	);
-	rotacion_y = atanf(direccion[X] / direccion[Y]);
+	rotacion_x = abs(atan2f(direccion[X], direccion[Y]));
+	rotacion_y = asin(direccion[Y] / sqrt(direccion | direccion));
 }
 
 void LuzDireccional :: VariarRotX (const float incremento) noexcept
