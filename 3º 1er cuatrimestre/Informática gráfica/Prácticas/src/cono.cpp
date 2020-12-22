@@ -16,5 +16,4 @@ Cono :: Cono (
 		perfil[i] = {(radio / divisiones) * (divisiones-i-1), base + despl * i, 0};
 
 	Revolucionar(perfil, iteraciones);
-	InicializarMalla();
 }
