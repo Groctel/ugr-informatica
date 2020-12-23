@@ -10,6 +10,7 @@
 #include <string>
 #include <utility>
 #include "colores.hpp"
+#include "globals.hpp"
 #include "material.hpp"
 #include "motor.hpp"
 #include "ply.hpp"
@@ -97,6 +98,9 @@ public:
 
 	Tupla3f              Vertice  (const size_t indice) const;
 	std::vector<Tupla3f> Vertices () const noexcept;
+
+	Tupla3f              Normal   (const size_t indice) const;
+	std::vector<Tupla3f> Normales () const noexcept;
 };
 
 #endif

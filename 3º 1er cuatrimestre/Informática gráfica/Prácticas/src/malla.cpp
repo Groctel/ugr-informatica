@@ -58,22 +58,28 @@ void Malla3D :: InicializarColores () noexcept
 
 void Malla3D :: CalcularNormales () noexcept
 {
-	Tupla3f normal;
+	Tupla3f pre_normal_cara;
 
 	normales.resize(vertices.size());
 
 	for (auto it = normales.begin(); it != normales.end(); ++it)
-		(*it) = {0,0,0};
+		*it = {0,0,0};
 
 	for (auto it = caras.cbegin(); it != caras.cend(); ++it)
 	{
-		normal = (vertices[(*it)[Y]] - vertices[(*it)[X]]
-			* vertices[(*it)[Z]] - vertices[(*it)[X]]).normalized();
+		pre_normal_cara = (
+			vertices[(*it)[Y]] - vertices[(*it)[X]]
+			*
+			vertices[(*it)[Z]] - vertices[(*it)[X]]
+		);
 
-		normales[(*it)[X]] = normales[(*it)[X]] + normal;
-		normales[(*it)[Y]] = normales[(*it)[Y]] + normal;
-		normales[(*it)[Z]] = normales[(*it)[Z]] + normal;
+		normales[(*it)[X]] = normales[(*it)[X]] + pre_normal_cara;
+		normales[(*it)[Y]] = normales[(*it)[Y]] + pre_normal_cara;
+		normales[(*it)[Z]] = normales[(*it)[Z]] + pre_normal_cara;
 	}
+
+	for (auto it = normales.begin(); it != normales.end(); ++it)
+		*it = it->Normalise();
 }
 
 void Malla3D :: InicializarVBOColor (const unsigned char color) noexcept
@@ -177,7 +183,7 @@ void Malla3D :: DibujarInmediato (const unsigned char color) noexcept
 		glVertexPointer(3, GL_FLOAT, 0, vertices.data());
 
 		glDrawElements(
-			GL_TRIANGLES,    caras.size()*3,
+			GL_TRIANGLES,    caras.size() * 3,
 			GL_UNSIGNED_INT, caras.data()
 		);
 	}
@@ -363,7 +369,7 @@ std::vector<Tupla3u> Malla3D :: Caras () const noexcept
 
 /** @fn Tupla3i Malla3D :: Vertice (const size_t indice) const
  *
- * @brief Consulta el vértice indicada.
+ * @brief Consulta el vértice indicado.
  * @param indice Índice del vértice a consultar en la tabla de vértices.
  * @return Tupla con el vértice consultado.
  * @exception std::out_of_range Intento de acceso a vértice sobre el máximo.
@@ -385,4 +391,30 @@ Tupla3f Malla3D :: Vertice (const size_t indice) const
 std::vector<Tupla3f> Malla3D :: Vertices () const noexcept
 {
 	return vertices;
+}
+
+/** @fn Tupla3i Malla3D :: Normal (const size_t indice) const
+ *
+ * @brief Consulta la normal indicada.
+ * @param indice Índice de la normal a consultar en la tabla de normales.
+ * @return Tupla con la normal consultada.
+ * @exception std::out_of_range Intento de acceso a noemal sobre el máximo.
+ */
+
+Tupla3f Malla3D :: Normal (const size_t indice) const
+{
+	if (indice >= normales.size())
+		throw std::out_of_range("Intento de acceso a normal sobre el máximo.");
+	return normales[indice];
+}
+
+/** @fn std::vector<Tupla3f> Malla3D :: Normales () const noexcept
+ *
+ * @brief Consulta la tabla de normales.
+ * @return Tabla de normales del modelo.
+ */
+
+std::vector<Tupla3f> Malla3D :: Normales () const noexcept
+{
+	return normales;
 }

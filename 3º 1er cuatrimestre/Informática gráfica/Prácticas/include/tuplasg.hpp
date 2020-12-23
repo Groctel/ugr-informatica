@@ -29,7 +29,7 @@ public:
 	inline Tupla<T,n> operator -   ()                        const noexcept;
 	inline Tupla<T,n> operator *   (const T & escalar)       const noexcept;
 	inline Tupla<T,n> operator /   (const T & escalar)       const noexcept;
-	inline       T    operator |   (const Tupla & der)       const noexcept;
+	inline       T    operator |   (const Tupla & otra)      const noexcept;
 	inline       T &  operator []  (const uint32_t indice);
 	inline const T &  operator []  (const uint32_t indice)   const;
 	inline            operator T * ()                        noexcept;
@@ -40,7 +40,7 @@ public:
 	inline friend std::ostream & operator <<
 		(std::ostream & os, const Tupla<N,u> & tupla);
 
-	Tupla<T,n> normalized() const;
+	Tupla<T,n> Normalise() const;
 };
 
 template <typename T>
@@ -223,7 +223,7 @@ inline std::ostream & operator << (std::ostream & os, const Tupla<N,u> & tupla)
 }
 
 template <typename T, uint32_t n>
-inline Tupla<T,n> Tupla<T,n> :: normalized () const
+inline Tupla<T,n> Tupla<T,n> :: Normalise () const
 {
 	T lenSq = 0;
 
