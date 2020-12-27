@@ -1,0 +1,41 @@
+\section{Métodos elementales de conteo}\label{metodos-elementales-de-conteo}
+
+A lo largo de este tema vamos a ver cómo computar las diferentes formas en las que se puede dispone de varios elementos concretos y abstractos.
+Antes de nada, vamos a redefinir las operaciones suma y producto para trabajar de forma más eficiente con ellas.
+
+\subsection{Principio de inclusión-exclusión}\label{principio-de-inclusion-exclusion}
+
+\subsubsection{Principio de la suma}
+
+\[A \cap B = \emptyset \Rightarrow |A \cup B| = |A| + |B|\]
+
+Si tenemos dos conjuntos disjuntos, es decir, que $a \neq b, \forall a \in A, b \in B$, podemos contar los elementos de ambos conjuntos empezando a contar todos los de $A$ y seguir con los de $B$ hasta llegar al total.
+Sin embargo, si conocemos la cardinalidad de los conjuntos, podemos tomar el atajo de simplemente sumarlas.
+Vamos a aplicar este princpio a la combinatoria para encontrar el número de formas de las que se pueden realizar varias tareas siempre que dichas tareas sean incompatibles.
+Por ejemplo, podemos usar este principio para contar las diferentes formas de elegir manzanas de dos cestos, ya que no podemos coger manzanas de dos cestos a la vez con una mano.
+
+Si los sucesos no son incompatibles, usamos la forma general del princpio de inclusión-exclusión:
+
+\[|A \cup B| = |A| + |B| - |A \cap B|\]
+
+Por ejemplo, seguimos este principio para calcular el número de animales que o bien viven en la sabana ($A$) o son herbívoros ($B$) pero no ambos ($A \cap B$).
+Este princpio es escalable a más conjuntos.
+En el caso de tres, por ejemplo, tenemos la siguiente expresión:
+
+\[|A \cup B \cup C| = |A| + |B| + |C| - |A \cap B| - |A \cap C| - |B \cap C| + |A \cap B \cap C|\]
+
+Vemos que tenemos que sumar las uniones de números impares de conjuntos y restar las pares, por lo que podemos dar una forma general para este principio:
+
+\[|A_1 \cup A_2 \cup \cdots \cup A_n| = \sum_{k=1}^{n} {(-1)}^{k+1} \cdot \sum_{1 \leq i_1 < \cdots < i_k \leq n} |A_{i_1} \cap A_{i_2} \cap \cdots \cap A_{i_n}|\]
+
+\subsection{Principio del producto}\label{principio-del-producto}
+
+\[A_1 \times A_2 \times \cdots \times A_3| = |A_1| \cdot |A_2| \cdots |A_n|\]
+
+Volviendo a la analogía de las tareas, utilizamos el principio del producto para contar las diferentes formas en las que podemos resolver varias tareas consecutivas, de forma que, si cada tarea $A_i$ se puede de $|A_i|$ formas, dicha tarea y la siguiente ($A_{i+1}$) se pueden resolver de $|A_i| \cdot |A_{i+1}|$ formas.
+Este principio es escalable a cualquier número de tareas.
+
+\subsection{Principio el palomar}\label{principio-del-palomar}
+
+Dado un palomar con $n$ agujeros para $p$ palomas en el que $p > n$, necesariamente tendrá que haber un agujero con más de una paloma.
+De la misma forma, cualquier elemento $p$ que se desee repartir en $n$ partes, siempre habrá dos elementos repartidos en la misma parte si $p > n$.
