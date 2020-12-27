@@ -1,0 +1,25 @@
+\chapter{}
+
+\section{Enunciado}
+
+Obtener la gramática para el lenguaje de palíndromos de orden par.
+
+\section{Solución}
+
+\begin{align*}
+	G &= (V, T, P, S) : \\
+	V &= \{E\} \\
+	T &= \{a, b, c, d, e\} \\
+	P &=
+		\begin{cases}
+			E \rightarrow aEa      \\
+			E \rightarrow bEb      \\
+			E \rightarrow cEc      \\
+			E \rightarrow dEd      \\
+			E \rightarrow eEe      \\
+			E \rightarrow \epsilon \\
+ 		\end{cases} \\
+	S &= E
+\end{align*}
+
+La solución propuesta es válida para el conjunto $T = \{a, b, c, d, e\}$, pero es fácilmente escalable añadiendo, reduciendo o modificando $T$ y las reglas de $P$ asociadas a sus elementos de forma que para cada símbolo $t \in T$ exista un $p \in P$ tal que $p = E \rightarrow tEt$.

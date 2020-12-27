@@ -1,0 +1,37 @@
+\documentclass[10pt, a4paper]{aqademic}
+
+\usepackage[spanish]{babel}
+	\selectlanguage{spanish}
+
+% Document packages
+
+\usepackage{amsmath}
+\usepackage[type=CC, modifier=by-nc-sa, version=4.0]{doclicense}
+\usepackage{tikz}
+	\usetikzlibrary{arrows,automata}
+
+% Document settings
+
+\author{Atanasio José Rubio Gil}
+\title{Modelos de computación}
+
+\AqSetChapter{Problema}
+
+% Document composition
+
+\begin{document}
+
+\AqMaketitle[%
+	cover    = logo-ugr.png,
+	org      = Grado en Ingeniería Informática,
+	subtitle = Problemas,
+	url      = https://github.com/Groctel/ugr-informatica
+]
+
+\input{RecursosTeX/post-portada.tex}
+\tableofcontents
+
+\input{Problemas/Gramática palíndromos orden par.tex}
+\input{Problemas/AF a regex y viceversa.tex}
+
+\end{document}
