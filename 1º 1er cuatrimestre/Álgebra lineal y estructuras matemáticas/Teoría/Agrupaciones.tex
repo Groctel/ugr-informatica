@@ -1,0 +1,249 @@
+\section{Agrupaciones}\label{agrupaciones}
+
+En este tema vamos a ver las diferentes formas de agrupar los elementos de un conjunto.
+Para diferenciarlas, tendremos en cuenta el número de elementos de dicho conjunto que agrupamos y si nos importa o no su orden.
+Como regla general podemos fijarnos en el siguiente diagrama para elegir el tipo de agrupación que queremos utilizar a la hora de resolver el ejercicio:
+
+\[
+	\text{¿Todos los elementos?}
+	\begin{cases}
+		\text{\textbf{SÍ\@:} Permutación. ¿Repeticiones?}
+		\begin{cases}
+			\text{\textbf{SÍ\@: }} PR_{n}^{k} = \frac{n!}{\prod_{1}^{k}(n_k!)} \\
+			\text{\textbf{NO\@: }} P_n = n! \\
+		\end{cases}
+		\\
+		\\
+		\text{\textbf{NO\@:} ¿Ordenados?}
+		\begin{cases}
+			\text{\textbf{Sí\@:} Variación. ¿Repeticiones?}
+			\begin{cases}
+				\text{\textbf{SÍ\@: }} VR_{m}^{n} = m^n \\
+				\text{\textbf{NO\@: }} V_{m}^{n} = \frac{m!}{(m-n)!} \\
+			\end{cases}
+			\\
+			\\
+			\text{\textbf{NO\@:} Combinación. ¿Repeticiones?}
+			\begin{cases}
+				\text{\textbf{SÍ\@: }} CR_{m}^{n} = \frac{(m+n-1)!}{n!(m-1)!} \\
+				\text{\textbf{NO\@: }} C_{m}^{n} = \frac{m!}{n!(m-n)!}
+			\end{cases}
+		\end{cases}
+	\end{cases}
+\]
+
+Supongamos que, como todo conocedor de la ciencia probabilística que se precie, somos los orgullosos poseedores de la típica caja con pelotas de colores\textsuperscript{TM}.
+Las tres agrupaciones que podemos hacer con las pelotas de la caja son sacarlas una a una, ordenarlas en fila y meterlas de vuelta a la caja.
+Todos los problemas de combinatoria se pueden reducir a operaciones con las pelotas de nuestra caja, por lo que vamos a utilizar esta analogía, junto con otras, para definir las diferentes agrupaciones.
+
+\subsection{Variaciones}\label{variaciones}
+
+Hablamos de variaciones cuando sacamos pelotas de la caja.
+Cada vez que saquemos una pelota apuntaremos su color y el orden en el que la hemos sacado.
+Por ejemplo, podríamos obtener la siguiente lista:
+
+\begin{center}
+\begin{tabular}{c l}
+	\textbf{Orden} & \textbf{Color} \\
+	\toprule
+	1              & Amarillo       \\
+	2              & Celeste        \\
+	3              & Burdeos        \\
+	4              & Dorado
+\end{tabular}
+\end{center}
+
+Podría darse el caso de que, cada vez que tomásemos una pelota, la devolviésemos a la caja.
+En este caso, podríamos obtener la siguiente lista:
+
+\begin{center}
+\begin{tabular}{c l}
+	\textbf{Orden} & \textbf{Color} \\
+	\toprule
+	1              & Celeste        \\
+	2              & Amarillo       \\
+	3              & Celeste        \\
+	4              & Burdeos
+\end{tabular}
+\end{center}
+
+Vamos a dar una definición formal a esta idea intuitiva.
+
+\subsubsection{Variaciones con repetición}
+
+Llamamos variaciones con repetición de $n$ elementos tomados de $m$ en $m$ y lo expresamos formalmente como $VR_{n}^{m}$ a cada una de las formas en las que podemos elegir $m$ elementos de un conjunto de cardinal $n$ pudiendo haber repetidos.
+Diferenciamos las elecciones según el elemento que hemos escogido y el orden en el que lo hemos hecho.
+Por ejemplo, éstas son las diferentes formas en las que podemos escoger, con repeticiones, entre Atanasio, Bizancio, Clotilde y Delfina:
+
+\[VR_{m}^{n} = m^n\]
+
+\[
+\begin{array}{cccc}
+	aa & ba & ca & da \\
+	ab & bb & cb & db \\
+	ac & bc & cc & dc \\
+	ad & bd & cd & dd
+\end{array}
+\]
+
+Debemos tener en cuenta que la primera vez que elegimos a Atanasio o a Clotilde no tiene nada que ver con la segunda vez que lo hacemos, ya que unas representan las tuplas $\{1,a\}$ y $\{1,c\}$ mientras que las otras, las tuplas $\{2,a\}$ y $\{2,b\}$.
+
+\subsubsection{Variaciones sin repetición}
+
+Llamamos variaciones sin repetición de $n$ elementos tomados de $m$ en $m$ y lo expresamos formalmente como $V_{n}^{m}$ a cada una de las formas en las que podemos elegir $m$ elementos de un conjunto de $n$ no pudiendo haber repetidos.
+Diferenciamos las elecciones según el elemento que hemos escogido y el orden en el que lo hemos hecho.
+Vamos a utilizar el mismo ejemplo que antes pero sin repetir nombres:
+
+\[V_{m}^{n} = \frac{m!}{(m-n)!}\]
+
+\[
+\begin{array}{cccc}
+	   & ba & ca & da \\
+	ab &    & cb & db \\
+	ac & bc &    & dc \\
+	ad & bd & cd &
+\end{array}
+\]
+
+Dado que no podemos repetir elementos, no podemos elegir nunca $aa$, $bb$, $cc$ o $dd$.
+Cada vez que elegimos elementos, el primero lo podemos elegir de $n$ formas, el segundo de $n - 1$, el tercero de $n - 2$ y así hasta $n - m + 1$ formas.
+Simplificamos la expresión en un cociente de factoriales para obtener el total de variaciones sin repetición sobre un conjunto.
+
+\subsection{Permutaciones}\label{permutaciones}
+
+Hablamos de permutaciones cuando tomamos todas las pelotas de nuestra caja y las colocamos en orden sobre la mesa.
+Al hacer esto, anotamos el orden en el que aparecen los colores, siendo cada una de las formas en las que podemos agrupar las pelotas una permutación.
+Por ejemplo, podríamos obtener la siguiente lista:
+
+\begin{itemize}
+	\item
+		Celeste, Burdeos, Dorado, Amarillo.
+	\item
+		Amarillo, Celeste, Dorado, Burdeos.
+	\item
+		Burdeos, Amarillo, Celeste, Dorado.
+	\item
+		Celeste, Dorado, Amarillo, Burdeos.
+\end{itemize}
+
+Para ordenar las pelotas hemos tenido que sacarlas todas de la caja y una forma de ordenarlas sería ir colocándolas según las sacásemos.
+Esto funciona porque, realmente, las permutaciones son variaciones con o sin repetición donde $n = m$.
+Al igual que tenemos variaciones con repetición, tenemos también permutaciones con repetición.
+Éstas se presentan cuando tenemos varias pelotas del mismo color, de forma que la lista podría ser de la siguiente forma si tuviéramos dos pelotas celestes:
+
+\begin{itemize}
+	\item
+		Celeste, Burdeos, Dorado, Amarillo, Celeste.
+	\item
+		Celeste, Burdeos, Dorado, Amarillo, Celeste.
+	\item
+		Amarillo, Celeste, Celeste, Dorado, Burdeos.
+	\item
+		Burdeos, Celeste, Amarillo, Celeste, Dorado.
+	\item
+		Celeste, Dorado, Amarillo, Celeste, Burdeos.
+\end{itemize}
+
+Aunque para el primer y segundo elemento las pelotas celestes se intercambian de sitio, ambas permutaciones son iguales porque estamos teniendo en cuenta el color de las pelotas, no su identidad original.
+De la misma forma, al ordenar las letras de \texttt{algebra}, la primera y la última \texttt{a} deben considerarse iguales.
+
+Vamos a dar una definición formal a esta idea intuitiva.
+
+\subsubsection{Permutaciones sin repetición}
+
+Llamamos permutaciones sin repetición de $n$ elementos y lo expresamos formalmente como $P_n$ a cada una de las formas en las que podemos ordenar los $n$ elementos de un conjunto no pudiendo haber repetidos.
+Continuamos con Atanasio, Bizancio, Clotilde y Delfina para ver las diferentes formas en las que podemos arreglar el conjunto:
+
+\[P_n = n!\]
+
+\[
+\begin{array}{cccc}
+	abcd & bacd & cabd & dabc \\
+	abdc & badc & cadb & dacb \\
+	acbd & bcad & cbad & dbac \\
+	acdb & bcda & cbda & dbca \\
+	adbc & bdac & cdab & dcab \\
+	adcb & bdca & cdba & dcba
+\end{array}
+\]
+
+\subsubsection{Permutaciones con repetición}
+
+Llamamos permutaciones con repetición de $n$ elementos con $k$ tipos de elementos y lo expresamos formalmente como $PR_{n}^{n_k}$ a cada una de las formas en las que podemos ordenar los $n$ elementos de un conjunto en el que podemos diferenciar $k$ tipos de elementos.
+Vamos a ver de qué formas podemos ordenar a dos Atanasios, Bizancio y Clotilde:
+
+\[PR_{n}^{k} = \frac{n!}{\prod_{1}^{k}(n_k!)}\]
+
+\[
+\begin{array}{cccc}
+	abca & baca & caba & aabc \\
+	abac & baac & caab & aacb \\
+	acba & bcaa & cbaa & abac \\
+	acab & bcaa & cbaa & abca \\
+	aabc & baac & caab & acab \\
+	aacb & baca & caba & acba
+\end{array}
+\]
+
+Es fácil ver que tenemos varias respuestas iguales como dos $cbaa$, por ejemplo.
+Para calcular el total de permutaciones debemos tener en cuenta el número total de elementos ($n = 4$) y el número de elementos de cada tipo.
+El número de elementos de cada tipo $i$ se representa como $n_i$, por lo que lo introducimos en la fórmula general mostrada anteriormente.
+Vamos a desarrollarla para este caso:
+
+\[PR_{4}^{3} = \frac{4!}{2! \cdot 1! \cdot 1!} = \frac{24}{2} = 12\]
+
+\subsection{Combinaciones}\label{combinaciones}
+
+Hablamos de combinaciones cuando metemos pelotas en la caja.
+No nos importa el orden en que las vamos metiendo, sino el resultado final, que son las pelotas que hay en la caja.
+Por ello, una caja con las pelotas de color Amarillo y Celeste es lo mismo que otra con las pelotas de color Celeste y Amarillo.
+Por tanto, cuando trabajemos con combinaciones lo haremos igual que si trabajásemos con conjuntos (o multiconjuntos en caso de que haya repeticiones).
+
+Vamos a dar una definición formal a esta idea intuitiva.
+
+\subsubsection{Combinaciones sin repetición}
+
+Llamamos combinaciones sin repetición de $n$ elementos tomados de $m$ en $m$ y lo expresamos formalmente como $C_{m}^{n}$ a cada una de las formas en las que podemos seleccionar $m$ elementos de un conjunto de cardinal $n$ no pudiendo haber repetidos.
+Diferenciamos las elecciones únicamente por el elemento escogido, nunca por el orden en el que lo hemos hecho.
+Por ejemplo, Atanasio, Bizancio, Clotilde y Delfina están a la espera del resultado de un sorteo para un viaje a la Luna que escogerá a dos de ellos para embarcarse.
+Vamos a ver de qué formas formas pueden salir elegidos:
+
+\[C_{m}^{n} = \frac{m!}{n!(m-n)!}\]
+
+\[
+\begin{array}{cccc}
+	ab &    &    \\
+	ac & bc &    \\
+	ad & bd & cd \\
+\end{array}
+\]
+
+Podemos ver esta tabla como los elementos de una matriz $4 \times 4$ inferiores a la diagonal principal.
+Los elementos de la diagonal principal serían $aa$, $bb$, $cc$ y $dd$ y, sobre ella, estarían los mismos elementos que vemos pero invertidos (el elemento $(2,1) = ab$ sería el $(1,2) = ba$).
+Como no nos importa el orden y no tenemos repeticiones, nos quedamos con sólo una de las dos mitades\footnote{%
+	Este razonamiento es el mismo que aplicamos al programar ejercicios de cálculo de rutas con una matriz de adyacencia:
+	La distancia de una ciudad $i$ a $i$ es 0 y no la contamos y la distancia de $i$ a $j$ es la misma que de $j$ a $i$, por lo que sólo necesitamos reservar media matriz.
+}.
+
+\subsubsection{Combinaciones sin repetición}
+
+Llamamos combinaciones sin repetición de $n$ elementos tomados de $m$ en $m$ y lo expresamos formalmente como $CR_{m}^{n}$ a cada una de las formas en las que podemos seleccionar $m$ elementos de un conjunto de cardinal $n$ pudiendo haber repetidos.
+Diferenciamos las elecciones únicamente por el elemento escogido, nunca por el orden en el que lo hemos hecho.
+Volvamos al ejemplo viaje espacial.
+Los organizadores del sorteo le han hecho la jugada a los participantes y van a tener que competir por el puesto recolectando \textit{me gustas}.
+Como sólo tienen dos amigos aparte de ellos mismos, veamos cómo podrían repartirse esos dos pulgares arriba:
+
+\[CR_{m}^{n} = \frac{(m+n-1)!}{n!(m-1)!}\]
+
+\[
+\begin{array}{cccc}
+	aa &    &    &    \\
+	ab & bb &    &    \\
+	ac & bc & cc &    \\
+	ad & bd & cd & dd \\
+\end{array}
+\]
+
+En este caso sí contamos con la diagonal principal de la matriz, pues admitimos valores repetidos.
+También observamos que hemos metido la pelota de color Amarillo en la caja dos veces pero sólo tenemos una pelota de ese color.
+¡Es lo que pasa por estudiar matemáticas y no física!
