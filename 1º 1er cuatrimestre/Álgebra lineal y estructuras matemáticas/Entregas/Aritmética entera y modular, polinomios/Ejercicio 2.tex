@@ -1,0 +1,224 @@
+\section{}\label{ej-1-2}
+
+\subsection*{Enunciado}
+
+Sea $a$ el número formado por las tres últimas cifras de tu DNI\@.
+Resuelve el siguiente sistema de congruencias:
+
+\[
+\left\{
+\begin{array}{rcrl}
+	(a^2 +4)x & \equiv & 11 & \mod 27 \\
+	26x       & \equiv & 40 & \mod 56 \\
+	7x        & \equiv & 9  & \mod 55 \\
+	19^{470}x & \equiv & 21 & \mod 53
+\end{array}
+\right.
+\]
+
+\subsection*{Resolución}
+
+Las últimas tres cifras de mi DNI son $a=757$, por lo que $a^2 + 4 = 757^2 + 4 = 573053$.
+Reescribimos el sistema de congruencias:
+
+\[
+\left\{
+\begin{array}{rcrl}
+	573053x   & \equiv & 11 & \mod 27 \\
+	26x       & \equiv & 40 & \mod 56 \\
+	7x        & \equiv & 9  & \mod 55 \\
+	19^{470}x & \equiv & 21 & \mod 53
+\end{array}
+\right.
+\]
+
+Vamos a resolver la primera congruencia:
+
+\[573053x \equiv 11 \mod 27\]
+
+Primero reducimos 573053 a módulo 27.
+Tenemos que $573053 = 21224 \cdot 27 + 5$, por lo que $573053 \equiv 5 \mod 27$.
+Sustituimos por dicho valor y tenemos que $5x \equiv 11 \mod 27$.
+Usamos el algoritmo extendido de Euclides para comprobar si $mcd(5,27) = 1$ (aunque se ve fácilmente que sí) y calcular el inverso de $5$ en $\mathbb{Z}_{27}$:
+
+\begin{center}
+\begin{tabular}{r r r}
+	$\boldsymbol{r}$ & $\boldsymbol{c}$ & $\boldsymbol{v}$  \\
+	\toprule
+	27               &                  & 0                 \\
+	5                &                  & 1                 \\
+	2                & 5                & $-6$              \\
+	1                & 2                & $\boldsymbol{11}$ \\
+\end{tabular}
+\end{center}
+
+Como $5^{-1} = 11$ en $\mathbb{Z}_{27}$, multiplicamos ambos lados por $11$ y despejamos $x$ en función de $k_0$:
+
+\[
+\begin{array}{rcrl}
+	5x & \equiv & 11  & \mod 27 \iff \\
+	x  & \equiv & 121 & \mod 27 \iff \\
+	x  & \equiv & 13  & \mod 27 \iff \\
+		&        &     & \boldsymbol{x = 27k_0 + 13}
+\end{array}
+\]
+
+Introducimos el valor de $x$ en la segunda congruencia:
+
+\[
+\begin{array}{rcrl}
+	26x            & \equiv & 40 & \mod 56 \iff \\
+	26(27k_0 + 13) & \equiv & 40 & \mod 56 \iff \\
+	702k_0 + 338   & \equiv & 40 & \mod 56 \iff \\
+	30k_0 + 2      & \equiv & 40 & \mod 56 \iff \\
+	30k_0          & \equiv & 38 & \mod 56
+\end{array}
+\]
+
+Como todos los $mcd(30,38,56) = 2$, dividimos toda la congruencia para simplificar y tenemos que $15k_0 \equiv 19 \mod 28$.
+De nuevo, buscamos el $15^{-1}$ en $\mathbb{Z}_{28}$ con el algoritmo extendido de Euclides:
+
+\begin{center}
+\begin{tabular}{r r r}
+	$\boldsymbol{r}$ & $\boldsymbol{c}$ & $\boldsymbol{v}$   \\
+	\toprule
+	28               &                  & 0                  \\
+	15               &                  & 1                  \\
+	13               & 1                & $-1$               \\
+	2                & 1                & 2                  \\
+	1                & 6                & $\boldsymbol{-13}$ \\
+\end{tabular}
+\end{center}
+
+Como $-13 \equiv 15 \mod 28$, nos quedamos con este último valor y resolvemos:
+
+\[
+\begin{array}{rcrl}
+	15k_0 & \equiv & 19  & \mod 28 \iff \\
+	k_0   & \equiv & 285 & \mod 28 \iff \\
+	k_0   & \equiv & 5   & \mod 28 \iff \\
+         &        &     & \boldsymbol{k_0 = 28k_1 + 5}
+\end{array}
+\]
+
+Actualizamos el valor de $x$ introduciendo el valor de $k_0$:
+
+\[
+\begin{array}{rcll}
+	x              & =              & 27k_0 + 13                & \iff \\
+	x              & =              & 27 \cdot (28k_1 + 5) + 13 & \iff \\
+	\boldsymbol{x} & \boldsymbol{=} & \boldsymbol{756k_1 + 148}
+\end{array}
+\]
+
+Introducimos el valor de $x$ en la tercera congruencia:
+
+\[
+\begin{array}{rcrl}
+	7x              & \equiv & 9   & \mod 55 \iff \\
+	7(756k_1 + 148) & \equiv & 9   & \mod 55 \iff \\
+	5292k_1 + 1036  & \equiv & 9   & \mod 55 \iff \\
+	12k_1 + 46      & \equiv & 9   & \mod 55 \iff \\
+	12k_1           & \equiv & -37 & \mod 55 \iff \\
+	12k_1           & \equiv & 18  & \mod 55
+\end{array}
+\]
+
+Al contrario que la anterior, esta congruencia no es reducible, así que calculamos $12^{-1}$ en $\mathbb{Z}_{55}$ con el algoritmo extendido de Euclides:
+
+\begin{center}
+\begin{tabular}{r r r}
+	$\boldsymbol{r}$ & $\boldsymbol{c}$ & $\boldsymbol{v}$  \\
+	\toprule
+	55               &                  & 0                 \\
+	12               &                  & 1                 \\
+	7                & 4                & $-4$              \\
+	5                & 1                & 5                 \\
+	2                & 1                & $-9$              \\
+	1                & 2                & $\boldsymbol{23}$ \\
+\end{tabular}
+\end{center}
+
+Resolvemos la tercera conguencia multiplicando por el inverso de 12 en $\mathbb{Z}_{55}$, que es 23:
+
+\[
+\begin{array}{rcrl}
+	12k_1 & \equiv & 18  & \mod 55 \iff \\
+	k_1   & \equiv & 414 & \mod 55 \iff \\
+	k_1   & \equiv & 29  & \mod 55 \iff \\
+         &        &     & \boldsymbol{k_1 = 55k_2 + 29}
+\end{array}
+\]
+
+Actualizamos el valor de $x$ introduciendo el valor de $k_1$:
+
+\[
+\begin{array}{rcl}
+	x              & =              & 756k_1 + 148                 \\
+	x              & =              & 756 \cdot (55k_2 + 29) + 148 \\
+	\boldsymbol{x} & \boldsymbol{=} & \boldsymbol{41580k_2 + 22072}
+\end{array}
+\]
+
+Antes de resolver la cuarta congruencia vamos a reducir $19^{470}$ en $\mathbb{Z}_{53}$ haciendo uso del teorema de Euler-Fermat.
+Este teorema nos dice que $a^{\varphi(m)} \equiv 1 \mod m$, por lo que lo primero que tenemos que hacer es calcular $\varphi(53)$.
+Como 53 es primo, $\varphi(53) = 52$ por definición, pues $\varphi(p) = |\mathcal{U}(p)| = p-1$ para todo $p$ primo.
+Usando las propiedades de las potencias y sabiendo que $19^{52} \equiv 1 \mod 53$, reducimos $19^{470}$ a $19^{r}$ para el resto $r$ de realizar la división entera de 470 entre 52.
+Tenemos que $470 = 52 \cdot 9 + 2$ y lo usamos para reducir:
+
+\[19^{470} \equiv 19^2 \cdot 19^{52^9} \equiv 19^2 \cdot 1^9 \equiv 361 \equiv 43 \mod 53\]
+
+Realizada esta simplificación, introducimos el valor de $x$ en la cuarta congruencia:
+
+\[
+\begin{array}{rcrl}
+	43x                  & \equiv & 21 & \mod 53 \iff \\
+	43(41580k_2 + 22072) & \equiv & 21 & \mod 53 \iff \\
+	1787940x + 949096    & \equiv & 21 & \mod 53 \iff \\
+	38x + 25             & \equiv & 21 & \mod 53 \iff \\
+	38x                  & \equiv & -4 & \mod 53 \iff \\
+	38x                  & \equiv & 49 & \mod 53
+\end{array}
+\]
+
+Calculamos el inverso de 38 en $\mathbb{Z}_{53}$:
+
+\begin{center}
+\begin{tabular}{r r r}
+	$\boldsymbol{r}$ & $\boldsymbol{c}$ & $\boldsymbol{v}$ \\
+	\toprule
+	53               &                  & 0                \\
+	38               &                  & 1                \\
+	15               & 1                & $-1$             \\
+	8                & 2                & 3                \\
+	7                & 1                & $-4$             \\
+	1                & 1                & $\boldsymbol{7}$ \\
+\end{tabular}
+\end{center}
+
+Resolvemos la tercera conguencia multiplicando por el inverso de 38 en $\mathbb{Z}_{53}$, que es 7:
+
+\[
+\begin{array}{rcrl}
+	38x & \equiv & 49  & \mod 53 \iff \\
+	x   & \equiv & 343 & \mod 53 \iff \\
+	x   & \equiv & 25  & \mod 53 \iff \\
+       &        &     & \boldsymbol{k_2 = 53k + 25}
+\end{array}
+\]
+
+Para finalizar, actualizamos $x$ sustituyendo por $k_2$:
+
+\[
+\begin{array}{rcl}
+	x              & =              & 41580k_2 + 22072        \\
+	x              & =              & 41580(53k + 25) + 22072 \\
+	\boldsymbol{x} & \boldsymbol{=} & \boldsymbol{2203740k + 1061572}
+\end{array}
+\]
+
+\subsection*{Solución}
+
+Por tanto, la solución a este sistema de congruencias es la siguiente:
+
+\[x = 2203740k + 1061572, \forall k \in\mathbb{Z}\]

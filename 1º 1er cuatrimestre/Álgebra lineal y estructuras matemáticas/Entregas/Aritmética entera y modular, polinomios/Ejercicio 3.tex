@@ -1,0 +1,168 @@
+\section{}\label{ej-1-3}
+
+\subsection*{Enunciado (El problema del mono y los cocos)}
+
+Cinco hombres y un mono naufragan en una isla desierta.
+Durante el primer día los hombres se dedican a recoger cocos.
+Al final del día deciden dejar el reparto para el día siguiente.
+Por la noche, uno de ellos despierta y, desconfiado, decide separar su parte.
+Divide los cocos en cinco montones, toma su parte y, como sobra un coco, se lo da al mono.
+Poco después, un segundo náufrago se despierta y hace lo mismo.
+Al dividir los cocos en cinco montones, vuelve a sobrar un coco y también se lo da al mono.
+Uno tras otro, el tercero, cuarto y quinto náufragos hacen lo mismo.
+Al día siguiente por la mañana, dividen los cocos en cinco montones sin que sobre ninguno.
+¿Cuántos cocos se habían recolectado inicialmente?
+
+\subsection*{Planteamiento del problema}
+
+A lo largo de este problema se da repetidas veces la misma situación: Un náufrago toma un número de cocos y lo divide en cinco montones iguales y sobra 1.
+Para la primera iteración, vamos a definir $x$ como el número total de cocos recolectados (la solución del ejercicio) e $y_1$ como el tamaño de los montones en los que el primer náufrago ha dividido los cocos.
+De esta forma, tenemos la siguiente ecuación diofántica:
+
+\[x = 5y_1 + 1\]
+
+Podemos llamar $y_2$ al tamaño de los montones en lo que divide los cocos el segundo náufrago y conseguir la siguiente ecuación:
+
+\[x - y_1 - 1 = 5y_2 + 1\]
+
+De la misma forma, vamos a plantear el problema completo llamando $y_i$ al tamaño de los montones de cada iteración $i$ e $y$ a la cantidad de cocos que se lleva finalmente cada náufrago:
+
+\[
+\begin{array}{rcl}
+	x                                   & = & 5y_1 + 1 \\
+	x - y_1 - 1                         & = & 5y_2 + 1 \\
+	x - y_1 - y_2 - 2                   & = & 5y_3 + 1 \\
+	x - y_1 - y_2 - y_3 - 3             & = & 5y_4 + 1 \\
+	x - y_1 - y_2 - y_3 - y_4 - 4       & = & 5y_5 + 1 \\
+	x - y_1 - y_2 - y_3 - y_4 - y_5 - 5 & = & 5y
+\end{array}
+\]
+
+\subsection*{Resolución del problema}
+
+Como nuestro objetivo es calcular el número de cocos recolectados inicialmente en función del número de cocos obtenidos por cada uno de los náufragos, vamos a ir expresando cada $y_i$ en función de $x$ en cada una de las expresiones hasta llegar a tener únicamente $x$ e $y$.
+Antes de empezar, vamos a simplificar las expresiones sabiendo que de cada $5y_i$ montones creador por cada náufrago quedan $4y_i$ montones tras tomar su parte, de forma que cada una incluya el mínimo número de variables posibles:
+
+\[
+\left\{
+\begin{array}{rcl}
+	x                                   & = & 5y_1 + 1 \\
+	x - y_1 - 1                         & = & 5y_2 + 1 \\
+	x - y_1 - y_2 - 2                   & = & 5y_3 + 1 \\
+	x - y_1 - y_2 - y_3 - 3             & = & 5y_4 + 1 \\
+	x - y_1 - y_2 - y_3 - y_4 - 4       & = & 5y_5 + 1 \\
+	x - y_1 - y_2 - y_3 - y_4 - y_5 - 5 & = & 5y
+\end{array}
+\right.
+\iff%
+\left\{
+\begin{array}{rcl}
+	x    & = & 5y_1 + 1 \\
+	4y_1 & = & 5y_2 + 1 \\
+	4y_2 & = & 5y_3 + 1 \\
+	4y_3 & = & 5y_4 + 1 \\
+	4y_4 & = & 5y_5 + 1 \\
+	4y_5 & = & 5y
+\end{array}
+\right.
+\]
+
+Comenzamos por la primera expresión:
+
+\[x = 5y_1 + 1 \iff y_1 = \frac{x-1}{5}\]
+
+Para no ir arrastrando fracciones, vamos a multiplicar toda la siguiente expresión por el denominador de la fracción en cuyo numerador se encuentra la $x$ (en este caso 5).
+De esta forma, aunque trabajemos con números mucho más grandes, lo haremos sin ir acumulando fracciones que, inevitablemente, tendríamos que simplificar al final.
+Sustituimos en la segunda expresión:
+
+\[
+\begin{array}{rcll}
+	4y_1                     & = & 5y_2 + 1        & \iff \\
+	4\big(\frac{x-1}{5}\big) & = & 5y_2 + 1        & \iff \\
+	4x - 4                   & = & 25y_2 + 5       & \iff \\
+	y_2                      & = & \frac{4x-9}{25} &
+\end{array}
+\]
+
+Sustituimos en la tercera expresión:
+
+\[
+\begin{array}{rcll}
+	4y_2                       & = & 5y_3 + 1           & \iff \\
+	4\big(\frac{4x-9}{25}\big) & = & 5y_3 + 1           & \iff \\
+	16x - 36                   & = & 125y_3 + 25        & \iff \\
+	y_3                        & = & \frac{16x-61}{125} &
+\end{array}
+\]
+
+Sustituimos en la cuarta expresión:
+
+\[
+\begin{array}{rcll}
+	4y_3                          & = & 5y_4 + 1            & \iff \\
+	4\big(\frac{16x-61}{125}\big) & = & 5y_4 + 1            & \iff \\
+	64x - 244                     & = & 625y_4 + 125        & \iff \\
+	y_4                           & = & \frac{64x-369}{625} &
+\end{array}
+\]
+
+Sustituimos en la quinta expresión:
+
+\[
+\begin{array}{rcll}
+	4y_4                           & = & 5y_5 + 1               & \iff \\
+	4\big(\frac{64x-369}{625}\big) & = & 5y_5 + 1               & \iff \\
+	256x - 976                     & = & 3125y_5 + 625          & \iff \\
+	y_5                            & = & \frac{256x-1601}{3125} &
+\end{array}
+\]
+
+Sustituimos en la sexta expresión:
+
+\[
+\begin{array}{rcll}
+	4y_5                              & = & 5y + 1                   & \iff \\
+	4\big(\frac{256x-1601}{3125}\big) & = & 5y + 1                   & \iff \\
+	1024x - 4244                      & = & 15625y + 3125            & \iff \\
+	y                                 & = & \frac{1024x-5547}{15625} &
+\end{array}
+\]
+
+Con este último resultado, expresamos la ecuación diofántica a resolver:
+
+\[y = \frac{1024x-5547}{15625} \iff 1024x - 15625y = 5547 \iff 1024x \equiv 5547 \mod 15625\]
+
+Como 1024 es potencia de 2 y 15625 es potencia de 5 (es la forma en la que hemos obtenido estos números en los pasos anteriores), es trivial que $mcd(1024,15625)|5547$, aunque lo veremos igualmente en el algoritmo extendido de Euclides para encontrar el ivnerso de $x$ con el que resolver la congruencia:
+
+\begin{center}
+\begin{tabular}{r r r}
+	$\boldsymbol{r}$ & $\boldsymbol{c}$ & $\boldsymbol{v}$     \\
+	\toprule
+	15625            &                  & 0                    \\
+	 1024            &                  & 1                    \\
+	 265             & 15               & $-15$                \\
+	 229             & 3                & 46                   \\
+	 36              & 1                & $-61$                \\
+	 13              & 6                & 412                  \\
+	 10              & 2                & $-885$               \\
+	 3               & 1                & 1297                 \\
+	 1               & 3                & $\boldsymbol{-4776}$ \\
+\end{tabular}
+\end{center}
+
+Tenemos que $-4776 = 10849 \in\mathbb{Z}_{15625}$ y comprobamos que $1024 \cdot 10849 = 1110937 = 1 \in\mathbb{Z}_{15625}$, con lo que finalizamos la resolución de la congruencia:
+
+\[
+\left\{
+\begin{array}{rcrl}
+	1024x & \equiv & 5547 & \mod 15625 \\
+	x     & \equiv & 4773 & \mod 15625 \\
+         &        &      & \boldsymbol{x = 15267y + 4773}
+\end{array}
+\right.
+\]
+
+\subsection*{Solución}
+
+Aunque no sepamos el número exacto de cocos, sabemos que los náufragos recogieron $15267y + 4773$ cocos para $y$ cocos que se repartieron finalmente cada uno.
+Sinceramente, no entiendo cómo no aprovecharon la maquinaria necesaria para recoger tantísimos cocos \textit{el primer día} para salir de la isla.

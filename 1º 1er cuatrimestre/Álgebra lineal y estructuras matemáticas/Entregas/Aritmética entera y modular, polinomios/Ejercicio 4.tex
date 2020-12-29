@@ -1,0 +1,56 @@
+\section{}\label{ej-1-4}
+
+\subsection*{Enunciado}
+
+Factoriza los siguientes polinomios:
+
+\begin{itemize}
+	\item
+		$p(x) = x^8 + a_{7}x^7 + a_{6}x^6 + a_{5}x^5 + a_{4}x^5 + a_{3}x^3 + a_{2}x^2 + a_{1}x + a_0 \in\mathbb{Z}_2[x]$, donde $a_{7}a_{6}a_{5}a_{4}a_{3}a_{2}a_{1}a_{0}$ es tu fecha de nacimiento en formato \texttt{ddmmaaaa}.
+	\item
+		$q(x) = x^9 + 2x^8 + x^7 + x^5 + x^4 + x^2 + 2x + 1 \in\mathbb{Z}_3[x]$.
+\end{itemize}
+
+\subsection*{Resolución para $\boldsymbol{p(x)}$}
+
+Mi fecha de nacimiento en formato \texttt{ddmmaaaa} es \texttt{25101996}, con lo que construimos $p(x)$:
+
+\[p(x) = x^8 + 2x^7 + 5x^6 + 1x^5 + 0x^4 + 1x^3 9x^2 + 9x + 6 = \boldsymbol{x^8 + x^6 + x^5 + x^3 + x^2 + x} \in\mathbb{Z}_2[x]\]
+
+Es trivial que $x$ es un factor, de $p(x)$:
+
+\[\frac{x^8 + x^6 + x^5 + x^3 + x^2 + x}{x} = \boldsymbol{x^7 + x^5 + x^4 + x^2 + x + 1}\]
+
+Comprobamos que $x-1$ es un factor de $x^7 + x^5 + x^4 + x^2 + x + 1$ evaluando con $x = 1$ y calculamos el resto de dividirlo entre dicho polinomio:
+
+\[1^7 + 1^5 + 1^4 + 1^2 + 1 + 1 = 6 = 0 \Rightarrow \frac{x^7 + x^5 + x^4 + x^2 + x + 1}{x-1} = \boldsymbol{x^5 + x^4 + x^3 + x^2 + 1}\]
+
+\begin{center}
+\setlength{\tabcolsep}{1ex}
+\begin{tabular}{r | r r r r r r r r}
+     & 1 & 0 & 1 & 1 & 0 & 1 & 1 & 1 \\
+	1 &   & 1 & 1 & 0 & 1 & 1 & 0 & 1 \\
+	\hline
+	  & 1 & 1 & 0 & 1 & 1 & 0 & 1 & $\boldsymbol{0}$
+\end{tabular}
+\end{center}
+
+Como $x^5 + x^4 + x^3 + x^2 + 1$ es irreducible, finalizamos la operación y damos la solución al ejercicio:
+
+\[x^8 + x^6 + x^5 + x^3 + x^2 + x = \boldsymbol{(x^5 + x^4 + x^3 + x^2 + 1)(x+1)(x)}\]
+
+\subsection*{Resolución para $\boldsymbol{q(x)}$}
+
+Tenemos que $x + 1$ es raíz de $q(x)$:
+
+\begin{center}
+\setlength{\tabcolsep}{1ex}
+\begin{tabular}{r | r r r r r r r r r r}
+     & 1 & 2 & 1 & 0 & 1 & 1 & 0 & 1 & 2                & 1 \\
+	2 &   & 2 & 2 & 0 & 0 & 2 & 0 & 0 & 2                & 2 \\
+	\hline
+     & 1 & 1 & 0 & 0 & 1 & 0 & 0 & 1 & 1 & $\boldsymbol{0}$
+\end{tabular}
+\end{center}
+
+A partir de aquí ningún polinomio irreducible de hasta grado 3 (inclusive) es raíz.

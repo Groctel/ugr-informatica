@@ -1,0 +1,276 @@
+\section{}\label{ej-1-1}
+
+\subsection*{Enunciado}
+
+Tenemos tres garrafas, con capacidades de 21, 35 y 45 litros.
+Vamos a una fuente a por agua y queremos traer 17 litros.
+Antes de salir, nos piden que traigamos, además, 9 litros.
+¿Sería posible, en un sólo viaje, regresar con 17 litros en una garrafa y 9 en la otra?
+Caso de ser posible, explica el procedimiento para lograrlo.
+
+\subsection*{Resolución}
+
+\subsection*{Planteamiento del problema}
+
+Vamos a llamar a las las veces que llenaríamos cada una de las tres garrafas $x$, $y$ y $z$ respectivamente, de forma que la primera garrafa la representaremos como $21x$ porque ésta es la capacidad de agua que acepta.
+Haremos lo mismo para $35y$ y $45z$.
+
+\subsection*{Resolución}
+
+Para comprobar si podemos llevar 17 litros en una de las garrafas vamos a comprobar con qué garrafas sería posible hacer esto.
+Si intentamos resolverlo con sólo dos de las garrafas vemos que es imposible:
+
+\[21x + 35y = 17 \iff 21x \equiv 17 \mod 35 \iff mcd(21,35)\nmid17\]
+\[21x + 45z = 17 \iff 21x \equiv 17 \mod 45 \iff mcd(21,45)\nmid17\]
+\[35y + 45z = 17 \iff 35y \equiv 17 \mod 45 \iff mcd(35,45)\nmid17\]
+
+La única solución que nos queda, por tanto, es usar las tres garrafas.
+Para ello, vamos a ir expresando cada una de las incógnitas en función de $k$.
+Comenzamos por la $x$:
+
+\[21x + 35y + 45z = 17 \iff 35y + 45x = -21z + 17\]
+
+Como $mcd(35,45) = 5$, necesitamos que $x$ sea múltiplo de 5, por lo que planteamos que $-21x + 17 \equiv 0 \mod 5$.
+Resolvemos esta congruencia:
+
+\[
+\begin{array}{rcrl}
+	-21x + 17 & \equiv & 0 & \mod 5 \iff \\
+	4x        & \equiv & 3 & \mod 5
+\end{array}
+\]
+
+Como $mcd(4,5) = 1$ y $1|3$, calculamos el inverso de 4 en $\mathbb{Z}_5$:
+
+\begin{center}
+\begin{tabular}{r r r}
+	$\boldsymbol{r}$ & $\boldsymbol{c}$ & $\boldsymbol{v}$ \\
+	\toprule
+	5                &                  & 0                \\
+	4                &                  & 1                \\
+	1                & 1                & $\boldsymbol{-1}$
+\end{tabular}
+\end{center}
+
+Resolvemos la congruencia:
+
+\[
+\begin{array}{rcrl}
+	4x & \equiv & 3  & \mod 5 \iff \\
+	x  & \equiv & 12 & \mod 5 \iff \\
+	x  & \equiv & 2  & \mod 5 \iff \\
+      &        &    & \boldsymbol{x = 5k_0 + 2}
+\end{array}
+\]
+
+Ahora que tenemos el valor de $x$, vamos a sustituirlo en la ecuación inicial:
+
+\[
+\begin{array}{rcll}
+	35y + 45z & = & -21x + 17          & \iff \\
+	35y + 45z & = & -21(5k_0 + 2) + 17 & \iff \\
+	35y + 45z & = & -105k_0 - 25       & \iff \\
+	7y + 9z   & = & -12k_0 - 5         &
+\end{array}
+\]
+
+Vamos ahora a encontrar el valor de $y$.
+Para ello, planteamos la congruencia con $k_0$ junto al término independiente:
+
+\[
+\begin{array}{rcrl}
+	7y & \equiv & -12k_0 - 5 & \mod 9 \iff \\
+	7y & \equiv & 6k_0 + 4   & \mod 9
+\end{array}
+\]
+
+Como $mcd(7,9) = 1$ y $1|(6k_0 + 4)$, calculamos el inverso de 7 en $\mathbb{Z}_9$:
+
+\begin{center}
+\begin{tabular}{r r r}
+	$\boldsymbol{r}$ & $\boldsymbol{c}$ & $\boldsymbol{v}$  \\
+	\toprule
+	9                &                  & 0                 \\
+	7                &                  & 1                 \\
+	2                & 1                & $-1$              \\
+	1                & 3                & $\boldsymbol{4}$
+\end{tabular}
+\end{center}
+
+Resolvemos la congruencia:
+
+\[
+\begin{array}{rcrl}
+	7y & \equiv & 6k_0 + 4   & \mod 9 \iff \\
+	y  & \equiv & 24k_0 + 16 & \mod 9 \iff \\
+	y  & \equiv & 6k_0 + 7   & \mod 9 \iff \\
+      &        &            & \boldsymbol{y = 6k_0 + 9k_1 + 7}
+\end{array}
+\]
+
+Por último, despejamos el valor de $z$:
+
+\[
+\begin{array}{rcll}
+	7y + 9z                 & =              & -12k_0 - 5                    & \iff \\
+	7(6k_0 + 9k_1 + 7) + 9z & =              & -12k_0 - 5                    & \iff \\
+	42k_0 + 63k_1 + 49 + 9z & =              & -12k_0 - 5                    & \iff \\
+	9z                      & =              & -54k_0 - 63k_1 - 54           & \iff \\
+	\boldsymbol{z}          & \boldsymbol{=} & \boldsymbol{-6k_0 - 7k_1 - 6} &
+\end{array}
+\]
+
+Sustituimos $k_0 = k_1 = 0$ y tenemos las siguientes soluciones para llenar una garrafa con 17 litros:
+
+\[
+\begin{array}{rclcr}
+	x & = & 5k_0 + 2         & = & \boldsymbol{2} \\
+	y & = & 6k_0 + 9k_1 + 7  & = & \boldsymbol{7} \\
+	z & = & -6k_0 - 7k_1 - 6 & = & \boldsymbol{-6}
+\end{array}
+\]
+
+\pagebreak
+
+Pasamos ahora a calcular la solución para traer 9 litros.
+Observamos que sólo se puede hacer con las garrafas de 21 y 45 litros:
+
+\[21x + 35y = 9 \iff 21x \equiv 9 \mod 35 \iff mcd(21,35)\nmid9\]
+\[21x + 45z = 9 \iff 21x \equiv 9 \mod 45 \iff mcd(21,45)|9\]
+\[35y + 45z = 9 \iff 35y \equiv 9 \mod 45 \iff mcd(35,45)\nmid9\]
+
+Resolvemos la congruencia $21x \equiv 9 \mod 45$ dividiéndola entre 3 y usando el algoritmo extendido de Euclides:
+
+\[21x \equiv 9 \mod 45 \iff 7x \equiv 3 \mod 15\]
+
+\begin{center}
+\begin{tabular}{r r r}
+	$\boldsymbol{r}$ & $\boldsymbol{c}$ & $\boldsymbol{v}$  \\
+	\toprule
+	15               &                  & 0                 \\
+	7                &                  & 1                 \\
+	1                & 2                & $\boldsymbol{-2}$ \\
+\end{tabular}
+\end{center}
+
+Resolvemos la congruencia con $-2 = 13$:
+
+\[
+\begin{array}{rcrl}
+	7x & \equiv & 3  & \mod 15 \iff \\
+	x  & \equiv & 39 & \mod 15 \iff \\
+	x  & \equiv & 9  & \mod 15 \iff \\
+      &        &    & \boldsymbol{x = 15k + 9}
+\end{array}
+\]
+
+Despejamos el valor de $y$ con $k = 0$:
+
+\[
+\begin{array}{rcll}
+	7x + 15z       & =              & 3               & \iff \\
+	63 + 15z       & =              & 3               & \iff \\
+	15z            & =              & -60             & \iff \\
+	\boldsymbol{z} & \boldsymbol{=} & \boldsymbol{-4} &
+\end{array}
+\]
+
+Por tanto, los valores para resolver el problema con la garrafa de 9 litros son $\boldsymbol{x = 9}$ e $\boldsymbol{z = -4}$.
+
+\subsection*{Solución}
+
+Para volver con 17 litros en una garrafa necesitamos:
+
+\begin{itemize}
+	\item
+		Llenar la garrafa de 21 litros 2 veces.
+	\item
+		Llenar la garrafa de 35 litros 7 veces.
+	\item
+		Vaciar la garrafa de 45 litros 6 veces.
+\end{itemize}
+
+Para volver con 9 litros en una garrafa necesitamos:
+
+\begin{itemize}
+	\item
+		Llenar la garrafa de 21 litros 9 veces.
+	\item
+		Vaciar la garrafa de 45 litros 4 veces.
+\end{itemize}
+
+Veamos el procedimiento para conseguir las dos cantidades de agua:
+
+\subsubsection*{Garrafa de 17 litros}
+
+\begin{center}
+\begin{tabular}{c c c l}
+	$\boldsymbol{x} (21)$ & $\boldsymbol{y} (35)$ & $\boldsymbol{y} (45)$ & \textbf{Descripción}                   \\
+	\toprule
+	21                    & 0                     & 0                     & Llenamos $x$ por primera vez.          \\
+	0                     & 0                     & 21                    & Trasladamos el contenido de $x$ a $z$. \\
+	21                    & 0                     & 21                    & Llenamos $x$ por segunda vez.          \\
+	21                    & 35                    & 21                    & Llenamos $y$ por primera vez.          \\
+	21                    & 11                    & 45                    & Trasladamos el contenido de $y$ a $z$. \\
+	21                    & 11                    & 0                     & Vaciamos $z$ por primera vez.          \\
+	21                    & 0                     & 11                    & Trasladamos el conenido de $y$ a $z$.  \\
+	21                    & 35                    & 11                    & Llenamos $y$ por segunda vez.          \\
+	21                    & 1                     & 45                    & Trasladamos el conenido de $y$ a $z$.  \\
+	21                    & 1                     & 0                     & Vaciamos $z$ por segunda vez.          \\
+	21                    & 0                     & 1                     & Trasladamos el contenido de $y$ a $z$. \\
+	21                    & 35                    & 1                     & Llenamos $y$ por tercera vez.          \\
+	21                    & 0                     & 36                    & Trasladamos el contenido de $y$ a $z$. \\
+	21                    & 35                    & 36                    & Llenamos $y$ por cuarta vez.           \\
+	21                    & 26                    & 45                    & Trasladamos el contenido de $y$ a $z$. \\
+	21                    & 26                    & 0                     & Vaciamos $z$ por tercera vez.          \\
+	21                    & 0                     & 26                    & Trasladamos el contenido de $y$ a $z$. \\
+	21                    & 35                    & 26                    & Llenamos $y$ por quinta vez.           \\
+	21                    & 16                    & 45                    & Trasladamos el contenido de $y$ a $z$. \\
+	21                    & 16                    & 0                     & Vaciamos $z$ por cuarta vez.           \\
+	21                    & 0                     & 16                    & Trasladamos el contenido de $y$ a $z$. \\
+	21                    & 35                    & 16                    & Llenamos $y$ por sexta vez.            \\
+	21                    & 6                     & 45                    & Trasladamos el contenido de $y$ a $z$. \\
+	21                    & 6                     & 0                     & Vaciamos $z$ por quinta vez.           \\
+	21                    & 0                     & 6                     & Trasladamos el contenido de $y$ a $z$. \\
+	21                    & 35                    & 6                     & Llenamos $y$ por séptima vez.          \\
+	21                    & 0                     & 41                    & Trasladamos el contenido de $y$ a $z$. \\
+	17                    & 0                     & 45                    & Trasladamos el contenido de $x$ a $z$. \\
+	17                    & 0                     & 0                     & Vaciamos $z$ por sexta vez.            \\
+	0                     & 0                     & 17                    & Trasladamos el contenido de $x$ a $z$.
+\end{tabular}
+\end{center}
+
+\pagebreak
+
+\subsubsection*{Garrafa de 9 litros}
+
+En el apartado anterior nos hemos asegurado de dejar libres las garrafas $x$ e $y$.
+Veamos el procedimiento:
+
+\begin{center}
+\begin{tabular}{c c l}
+	$\boldsymbol{x} (21)$ & $\boldsymbol{y} (35)$ & \textbf{Descripción}                   \\
+	\toprule
+	21                    & 0                     & Llenamos $x$ por primera vez.          \\
+	0                     & 21                    & Trasladamos el contenido de $x$ a $z$. \\
+	21                    & 21                    & Llenamos $x$ por segunda vez.          \\
+	0                     & 42                    & Trasladamos el contenido de $x$ a $z$. \\
+	21                    & 42                    & Llenamos $x$ por tercera vez.          \\
+	18                    & 45                    & Trasladamos el contenido de $x$ a $z$. \\
+	18                    & 0                     & Vaciamos $z$ por primera vez.          \\
+	0                     & 18                    & Trasladamos el contenido de $x$ a $z$. \\
+	21                    & 18                    & Llenamos $x$ por cuarta vez.           \\
+	0                     & 39                    & Trasladamos el contenido de $x$ a $z$. \\
+	21                    & 39                    & Llenamos $x$ por quinta vez.           \\
+	15                    & 45                    & Trasladamos el contenido de $x$ a $z$. \\
+	15                    & 0                     & Vaciamos $z$ por segunda vez.          \\
+	0                     & 15                    & Trasladamos el contenido de $x$ a $z$. \\
+	21                    & 15                    & Llenamos $x$ por sexta vez.            \\
+	0                     & 36                    & Trasladamos el contenido de $x$ a $z$. \\
+	21                    & 36                    & Llenamos $x$ por sexta vez.            \\
+	9                     & 45                    & Trasladamos el contenido de $x$ a $z$. \\
+	9                     & 0                     & Vaciamos $z$ por tercera vez.          \\
+\end{tabular}
+\end{center}
+
+Me parece un poco raro que la demostración sea para valores inferiores de $x$ y $z$, pero no encuentro ningún error de procedimiento en el resto del ejercicio.
