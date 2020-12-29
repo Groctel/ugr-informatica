@@ -112,12 +112,14 @@ Sin embargo, existe una forma más sencilla de computar esta operación que sól
 Esta forma es la representación de un número en complemento a otro.
 Vamos a construir primero una intuición al funcionamiento de esta representación:
 
-\begin{align*}
-	143 - 98  = 45  \\
-	100 - 98  = 2   \\
-	143 + 2   = 145 \\
-	144 - 100 = 45
-\end{align*}
+\[
+\begin{array}{rcl}
+	143 - 98  & = & 45  \\
+	100 - 98  & = & 2   \\
+	143 + 2   & = & 145 \\
+	144 - 100 & = & 45
+\end{array}
+\]
 
 Para realizar la operación $143 - 98$ (o cualquier otra operación aparte del ejemplo) podemos realizar la resta directamente o podemos calcular cuánto le falta al sustraendo para llegar a 100, sumarlo y restarle 100.
 Utilizamos este algoritmo de forma diaria al hacer cálculos mentales sin pensar demasiado en el proceso.
@@ -158,7 +160,7 @@ Despreciamos el acarreo del 1 y tenemos que $143 - 98 = 143 + 902 = 45$.
 Esta operación es extremadamente útil en la ingeniería de computadores, ya que permite a los procesadores ahorrarse la implementación de un algoritmo de resta y usar las operaciones \texttt{xor} y \texttt{add}:
 
 \begin{lstlisting}[language={[x86masm]Assembler}]
-xorq %rax, %rax
+negq %rax, %rax
 addq %rbx, %rax
 \end{lstlisting}
 
