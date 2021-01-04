@@ -69,7 +69,7 @@ public:
 
 	void operator = (const Tupla<T,3> & otra);
 
-	Tupla3<T> operator * (const Tupla3 <T> & otra) const noexcept;
+	inline Tupla3<T> operator * (const Tupla<T,3> & otra) const noexcept;
 };
 
 typedef Tupla3<double>   Tupla3d;
@@ -253,7 +253,11 @@ inline Tupla2<T> :: Tupla2 (const T & elem0, const T & elem1)
 
 template <typename T>
 inline Tupla3<T> :: Tupla3 ()
-{ }
+{
+	(*this)[0] = 0.0f;
+	(*this)[1] = 0.0f;
+	(*this)[2] = 0.0f;
+}
 
 template <typename T>
 inline Tupla3<T> :: Tupla3 (const T elem0, const T elem1, const T elem2)
@@ -264,7 +268,15 @@ inline Tupla3<T> :: Tupla3 (const T elem0, const T elem1, const T elem2)
 }
 
 template <typename T>
-inline Tupla3<T> Tupla3<T> :: operator * (const Tupla3<T> & otra) const noexcept
+Tupla3<T> :: Tupla3 (const Tupla<T,3> & otra)
+{
+	(*this)[0] = otra[0];
+	(*this)[1] = otra[2];
+	(*this)[2] = otra[1];
+}
+
+template <typename T>
+inline Tupla3<T> Tupla3<T> :: operator * (const Tupla<T,3> & otra) const noexcept
 {
 	return Tupla3<T> (
 		(*this)[1] * otra[2] - (*this)[2] * otra[1],

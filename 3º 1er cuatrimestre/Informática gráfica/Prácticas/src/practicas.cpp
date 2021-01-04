@@ -44,7 +44,7 @@ int main (int argc, char ** argv)
 
 	glutInitWindowPosition(UI_window_pos_x, UI_window_pos_y);
 	glutInitWindowSize(UI_window_width, UI_window_height);
-	glutCreateWindow("Practicas IG: Atanasio Rubio Gil");
+	glutCreateWindow("Prácticas IG: Atanasio Rubio Gil");
 
 	glutDisplayFunc(Dibujar);
 	glutReshapeFunc(Redimensionar);
@@ -52,6 +52,7 @@ int main (int argc, char ** argv)
 	glutSpecialFunc(GestionTecladoEspecial);
 
 	#ifdef LINUX
+	{
 		const GLenum codigo = glewInit();
 
 		if (codigo != GLEW_OK) {
@@ -59,6 +60,7 @@ int main (int argc, char ** argv)
 				<< glewGetErrorString(codigo) << std::endl;
 			exit(1);
 		}
+	}
 	#endif
 
 	Escena::Instance()->Inicializar(UI_window_width, UI_window_height);

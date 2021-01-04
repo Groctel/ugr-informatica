@@ -7,8 +7,6 @@
 class Luz
 {
 protected:
-	bool activada;
-
 	GLenum  id;
 	Tupla4f color_ambiente;
 	Tupla4f color_difuso;

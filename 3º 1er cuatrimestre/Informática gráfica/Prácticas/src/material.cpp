@@ -1,27 +1,20 @@
 #include "material.hpp"
 
 Material :: Material ()
-:
-	ambiente  ({0.2f, 0.2f, 0.2f, 1.0f}),
-	difuso    ({0.8f, 0.8f, 0.8f, 1.0f}),
-	especular ({0.0f, 0.0f, 0.0f, 1.0f}),
-	brillo    (0.5f)
 { }
 
 Material :: Material (
-	const Tupla4f & amb,
-	const Tupla4f & dif,
-	const Tupla4f & esp,
+	const Tupla3f & amb,
+	const Tupla3f & dif,
+	const Tupla3f & esp,
 	const float bri
 ) noexcept
 :
-	ambiente  (amb),
-	difuso    (dif),
-	especular (esp),
+	ambiente  ({amb[X], amb[Y], amb[Z], 1.0f}),
+	difuso    ({dif[X], dif[Y], dif[Z], 1.0f}),
+	especular ({esp[X], esp[Y], esp[Z], 1.0f}),
 	brillo    (bri)
-{
-	ambiente[3] = difuso[3] = especular[3] = 1.0f;
-}
+{ }
 
 void Material :: Aplicar () noexcept
 {

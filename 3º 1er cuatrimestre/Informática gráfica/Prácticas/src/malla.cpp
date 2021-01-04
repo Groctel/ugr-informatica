@@ -58,7 +58,7 @@ void Malla3D :: InicializarColores () noexcept
 
 void Malla3D :: CalcularNormales () noexcept
 {
-	Tupla3f pre_normal_cara;
+	Tupla3f normal_cara;
 
 	normales.resize(vertices.size());
 
@@ -67,15 +67,15 @@ void Malla3D :: CalcularNormales () noexcept
 
 	for (auto it = caras.cbegin(); it != caras.cend(); ++it)
 	{
-		pre_normal_cara = (
-			vertices[(*it)[Y]] - vertices[(*it)[X]]
+		normal_cara = (
+			(Tupla3f) (vertices[(*it)[1]] - vertices[(*it)[0]])
 			*
-			vertices[(*it)[Z]] - vertices[(*it)[X]]
+			(Tupla3f) (vertices[(*it)[2]] - vertices[(*it)[0]])
 		);
 
-		normales[(*it)[X]] = normales[(*it)[X]] + pre_normal_cara;
-		normales[(*it)[Y]] = normales[(*it)[Y]] + pre_normal_cara;
-		normales[(*it)[Z]] = normales[(*it)[Z]] + pre_normal_cara;
+		normales[(*it)[X]] = normales[(*it)[X]] + normal_cara;
+		normales[(*it)[Y]] = normales[(*it)[Y]] + normal_cara;
+		normales[(*it)[Z]] = normales[(*it)[Z]] + normal_cara;
 	}
 
 	for (auto it = normales.begin(); it != normales.end(); ++it)
@@ -102,13 +102,6 @@ void Malla3D :: InicializarVBOColor (const unsigned char color) noexcept
 
 void Malla3D :: DibujarDiferido (const unsigned char color) noexcept
 {
-	if (vbo_caras == 0)
-		vbo_caras = VBO(
-			GL_ELEMENT_ARRAY_BUFFER,
-			caras.size()*3*sizeof(uint32_t),
-			caras.data()
-		);
-
 	if (vbo_vertices == 0)
 		vbo_vertices = VBO(
 			GL_ARRAY_BUFFER,
@@ -116,17 +109,18 @@ void Malla3D :: DibujarDiferido (const unsigned char color) noexcept
 			vertices.data()
 		);
 
+	if (vbo_caras == 0)
+		vbo_caras = VBO(
+			GL_ELEMENT_ARRAY_BUFFER,
+			caras.size()*3*sizeof(uint32_t),
+			caras.data()
+		);
+
 	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_COLOR_ARRAY);
 	{
-		glBindBuffer(GL_ARRAY_BUFFER, vbo_vertices);
+		if (glIsEnabled(GL_LIGHTING))
 		{
-			glVertexPointer(3, GL_FLOAT, 0, 0);
-		}
-		glBindBuffer(GL_ARRAY_BUFFER,         vbo_colores[color]);
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_caras);
-		{
-			if (glIsEnabled(GL_LIGHTING))
+			glEnableClientState(GL_NORMAL_ARRAY);
 			{
 				if (vbo_normales == 0)
 					vbo_normales = VBO(
@@ -135,21 +129,40 @@ void Malla3D :: DibujarDiferido (const unsigned char color) noexcept
 						normales.data()
 					);
 
-				glEnableClientState(GL_NORMAL_ARRAY);
 				glBindBuffer(GL_ARRAY_BUFFER, vbo_normales);
-				glNormalPointer(GL_FLOAT, 0, 0);
+				{
+					glNormalPointer(GL_FLOAT, 0, 0);
+				}
+				glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 				material->Aplicar();
 			}
-			else
+			glDisableClientState(GL_NORMAL_ARRAY);
+		}
+		else
+		{
+			glEnableClientState(GL_COLOR_ARRAY);
 			{
 				InicializarVBOColor(color);
-				glColorPointer(3, GL_FLOAT, 0, tablas_colores[color].data());
-			}
 
+				glBindBuffer(GL_ARRAY_BUFFER, vbo_colores[color]);
+				{
+					glColorPointer(3, GL_FLOAT, 0, 0);
+				}
+				glBindBuffer(GL_ARRAY_BUFFER, 0);
+			}
+		}
+
+		glBindBuffer(GL_ARRAY_BUFFER, vbo_vertices);
+		{
+			glVertexPointer(3, GL_FLOAT, 0, 0);
+		}
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_caras);
+		{
 			glDrawElements(GL_TRIANGLES, caras.size()*3, GL_UNSIGNED_INT, 0);
 		}
-		glBindBuffer(GL_ARRAY_BUFFER,         0);
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 	}
 	glDisableClientState(GL_COLOR_ARRAY);
@@ -167,17 +180,20 @@ void Malla3D :: DibujarDiferido (const unsigned char color) noexcept
 void Malla3D :: DibujarInmediato (const unsigned char color) noexcept
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
-	glEnableClientState(GL_COLOR_ARRAY);
 	{
 		if (glIsEnabled(GL_LIGHTING))
 		{
 			glEnableClientState(GL_NORMAL_ARRAY);
-			glNormalPointer(GL_FLOAT, 0, normales.data());
-			material->Aplicar();
+			{
+				glNormalPointer(GL_FLOAT, 0, normales.data());
+				material->Aplicar();
+			}
+			glDisableClientState(GL_NORMAL_ARRAY);
 		}
 		else
 		{
-			glColorPointer(3, GL_FLOAT, 0, tablas_colores[color].data());
+			glEnableClientState(GL_COLOR_ARRAY);
+				glColorPointer(3, GL_FLOAT, 0, tablas_colores[color].data());
 		}
 
 		glVertexPointer(3, GL_FLOAT, 0, vertices.data());
@@ -187,7 +203,6 @@ void Malla3D :: DibujarInmediato (const unsigned char color) noexcept
 			GL_UNSIGNED_INT, caras.data()
 		);
 	}
-	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
@@ -272,8 +287,8 @@ void Malla3D :: DibujarAjedrezInmediato () const noexcept
 
 void Malla3D :: InicializarMalla () noexcept
 {
-	CalcularNormales();
 	GenerarAjedrez();
+	CalcularNormales();
 	InicializarColores();
 }
 

@@ -1,8 +1,6 @@
 #include "luz.hpp"
 
 Luz :: Luz () noexcept
-:
-	activada (false)
 { }
 
 Luz :: Luz (
@@ -13,7 +11,6 @@ Luz :: Luz (
 	const Tupla4f & pos
 ) noexcept
 :
-	activada        (false),
 	id              (id_nuevo),
 	color_ambiente  (amb),
 	color_difuso    (dif),
@@ -23,12 +20,12 @@ Luz :: Luz (
 
 bool Luz :: Activada () const noexcept
 {
-	return activada;
+	return glIsEnabled(id);
 }
 
 void Luz :: Aplicar () noexcept
 {
-	if (activada)
+	if (glIsEnabled(id))
 	{
 		glLightfv(id, GL_AMBIENT,  color_ambiente);
 		glLightfv(id, GL_DIFFUSE,  color_difuso);
@@ -39,10 +36,8 @@ void Luz :: Aplicar () noexcept
 
 void Luz :: Pulsar () noexcept
 {
-	activada = !activada;
-
-	if (activada)
-		glEnable(id);
-	else
+	if (glIsEnabled(id))
 		glDisable(id);
+	else
+		glEnable(id);
 }
