@@ -6,18 +6,19 @@
 
 #include <bitset>
 #include <utility>
-#include "cilindro.hpp"
-#include "cono.hpp"
-#include "cubo.hpp"
 #include "ejes.hpp"
-#include "esfera.hpp"
-#include "luz_direccional.hpp"
-#include "luz_posicional.hpp"
-#include "malla.hpp"
+#include "luces/luz_direccional.hpp"
+#include "luces/luz_posicional.hpp"
+#include "mallas/cilindro.hpp"
+#include "mallas/cono.hpp"
+#include "mallas/cubo.hpp"
+#include "mallas/esfera.hpp"
+#include "mallas/malla.hpp"
+#include "mallas/obj_revolucion.hpp"
+#include "mallas/tetraedro.hpp"
 #include "material.hpp"
+#include "modelo-jerarquico/jirafa.hpp"
 #include "motor.hpp"
-#include "obj_revolucion.hpp"
-#include "tetraedro.hpp"
 
 /*
  * OBJETOS VISIBLES EN LA ESCENA:
@@ -29,8 +30,9 @@
 #define obj_cono      1
 #define obj_cubo      2
 #define obj_esfera    3
-#define obj_tetraedro 4
-#define obj_peon      5
+#define obj_jirafa    4
+#define obj_tetraedro 5
+#define obj_peon      6
 
 /*
  * ÁNGULOS DE LAS LUCES DIRECCIONALES:
@@ -88,6 +90,7 @@ private:
 	Cono          * cono      = nullptr;
 	Cubo          * cubo      = nullptr;
 	Esfera        * esfera    = nullptr;
+	Jirafa        * jirafa    = nullptr;
 	Tetraedro     * tetraedro = nullptr;
 	ObjRevolucion * peon      = nullptr;
 
@@ -101,7 +104,7 @@ private:
    Material * ruby      = nullptr;
    Material * turquesa  = nullptr;
 
-	std::bitset<6> visibles;
+	std::bitset<7> visibles;
 	std::bitset<5> visualizacion;
 	std::pair<bool, bool> angulos = {false, false};
 

@@ -1,7 +1,10 @@
 makedir = .
 bin     = $(makedir)/bin
 doc     = $(makedir)/doc
-inc     = $(makedir)/include
+lgh     = $(makedir)/luces
+lig     = $(makedir)/libig
+mdl     = $(makedir)/modelo-jerarquico
+msh     = $(makedir)/mallas
 obj     = $(makedir)/obj
 src     = $(makedir)/src
 tst     = $(makedir)/tests
@@ -10,16 +13,17 @@ uname = $(shell uname -s)
 linux = $(findstring Linux, $(uname))
 macos = $(findstring Darwin, $(uname))
 
-glumacos   = /System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGLU.dylib
-libscommon = -ljpeg
-libslinux  = -lGLEW -lGLU -lglut -lGL
-libsmacos  = -framework OpenGL -framework GLUT $(glumacos)
-libs       = $(libscommon) $(if $(linux), $(libslinux), $(libsmacos))
+glumacos    = /System/Library/Frameworks/OpenGL.framework/Versions/A/Libraries/libGLU.dylib
+libscommon  = -ljpeg
+libslinux   = -lGLEW -lGLU -lglut -lGL
+libsmacos   = -framework OpenGL -framework GLUT $(glumacos)
+libs        = $(libscommon) $(if $(linux), $(libslinux), $(libsmacos))
 
-cxxcommon = -std=c++17 -g -Wall -Wextra -Wpedantic -Wfloat-equal -I$(inc) $(libs)
-cxxlinux  = -DLINUX
-cxxmacos  = -DMACOS
-CXXFLAGS  = $(cxxcommon) $(if $(linux), $(cxxlinux), $(cxxmacos))
+includelist = -I$(makedir) -I$(lig)
+cxxcommon   = -std=c++17 -g -Wall -Wextra -Wpedantic -Wfloat-equal $(includelist) $(libs)
+cxxlinux    = -DLINUX
+cxxmacos    = -DMACOS
+CXXFLAGS    = $(cxxcommon) $(if $(linux), $(cxxlinux), $(cxxmacos))
 
 gtest      = /usr/include/gtest/
 gtestlibs  = /usr/lib/libgtest.so
@@ -69,12 +73,14 @@ $(bin)/practicas: $(src)/practicas.cpp \
 		$(obj)/escena.o \
 		$(obj)/esfera.o \
 		$(obj)/globals.o \
+		$(obj)/jirafa.o \
 		$(obj)/luz.o \
 		$(obj)/luz_direccional.o \
 		$(obj)/luz_posicional.o \
 		$(obj)/malla.o \
 		$(obj)/material.o \
 		$(obj)/obj_revolucion.o \
+		$(obj)/patas_jirafa.o \
 		$(obj)/ply.o \
 		$(obj)/tetraedro.o
 	$(CXX) $(CXXFLAGS) -o $@ $^
@@ -87,55 +93,65 @@ $(bin)/tests: $(tst)/tests.cpp \
 		$(obj)/ply.o
 	$(CXX) $(gtestflags) -o $@ $^
 
-$(obj)/cilindro.o: $(src)/cilindro.cpp $(inc)/cilindro.hpp \
-		$(obj)/obj_revolucion.o
+$(obj)/cilindro.o: $(msh)/cilindro.cpp $(msh)/cilindro.hpp \
+		$(msh)/obj_revolucion.cpp $(msh)/obj_revolucion.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-$(obj)/cono.o: $(src)/cono.cpp $(inc)/cono.hpp \
-		$(obj)/obj_revolucion.o
+$(obj)/cono.o: $(msh)/cono.cpp $(msh)/cono.hpp \
+		$(msh)/obj_revolucion.cpp $(msh)/obj_revolucion.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-$(obj)/cubo.o: $(src)/cubo.cpp $(inc)/cubo.hpp \
-		$(obj)/malla.o
+$(obj)/cubo.o: $(msh)/cubo.cpp $(msh)/cubo.hpp \
+		$(msh)/malla.cpp $(msh)/malla.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-$(obj)/ejes.o: $(src)/ejes.cpp $(inc)/ejes.hpp
+$(obj)/ejes.o: $(src)/ejes.cpp $(src)/ejes.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-$(obj)/escena.o: $(src)/escena.cpp $(inc)/escena.hpp
+$(obj)/escena.o: $(src)/escena.cpp $(src)/escena.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-$(obj)/esfera.o: $(src)/esfera.cpp $(inc)/esfera.hpp \
-		$(obj)/obj_revolucion.o
+$(obj)/esfera.o: $(msh)/esfera.cpp $(msh)/esfera.hpp \
+		$(msh)/obj_revolucion.cpp $(msh)/obj_revolucion.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-$(obj)/globals.o: $(src)/globals.cpp $(inc)/globals.hpp
+$(obj)/globals.o: $(lig)/globals.cpp $(lig)/globals.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-$(obj)/luz.o: $(src)/luz.cpp $(inc)/luz.hpp
+$(obj)/jirafa.o: $(mdl)/jirafa.cpp $(mdl)/jirafa.hpp \
+		$(msh)/cubo.cpp $(msh)/malla.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-$(obj)/luz_direccional.o: $(src)/luz_direccional.cpp $(inc)/luz_direccional.hpp
+$(obj)/luz.o: $(lgh)/luz.cpp $(lgh)/luz.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-$(obj)/luz_posicional.o: $(src)/luz_posicional.cpp $(inc)/luz_posicional.hpp
+$(obj)/luz_direccional.o: $(lgh)/luz_direccional.cpp $(lgh)/luz_direccional.hpp \
+		$(lgh)/luz.cpp $(lgh)/luz.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-$(obj)/malla.o: $(src)/malla.cpp $(inc)/malla.hpp \
-		$(obj)/ply.o
+$(obj)/luz_posicional.o: $(lgh)/luz_posicional.cpp $(lgh)/luz_posicional.hpp \
+		$(lgh)/luz.cpp $(lgh)/luz.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-$(obj)/material.o: $(src)/material.cpp $(inc)/material.hpp
+$(obj)/malla.o: $(msh)/malla.cpp $(msh)/malla.hpp \
+		$(lig)/ply.cpp $(lig)/ply.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-$(obj)/ply.o: $(src)/ply.cpp $(inc)/ply.hpp
+$(obj)/material.o: $(src)/material.cpp $(src)/material.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-$(obj)/obj_revolucion.o: $(src)/obj_revolucion.cpp $(inc)/obj_revolucion.hpp \
-		$(obj)/globals.o \
-		$(obj)/malla.o
+$(obj)/ply.o: $(lig)/ply.cpp $(lig)/ply.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-$(obj)/tetraedro.o: $(src)/tetraedro.cpp $(inc)/tetraedro.hpp \
-		$(obj)/malla.o
+$(obj)/patas_jirafa.o: $(mdl)/patas_jirafa.cpp $(mdl)/patas_jirafa.hpp \
+		$(msh)/cubo.cpp $(msh)/malla.hpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(obj)/obj_revolucion.o: $(msh)/obj_revolucion.cpp $(msh)/obj_revolucion.hpp \
+		$(lig)/globals.cpp $(lig)/globals.hpp \
+		$(msh)/malla.cpp $(msh)/malla.hpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(obj)/tetraedro.o: $(msh)/tetraedro.cpp $(msh)/tetraedro.hpp \
+		$(msh)/malla.cpp $(msh)/malla.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@

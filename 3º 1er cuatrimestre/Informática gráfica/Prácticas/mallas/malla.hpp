@@ -11,9 +11,9 @@
 #include <utility>
 #include "colores.hpp"
 #include "globals.hpp"
-#include "material.hpp"
 #include "motor.hpp"
 #include "ply.hpp"
+#include "src/material.hpp"
 
 /*
  * COLORES PARA PINTAR LA MALLA:
@@ -48,7 +48,7 @@ enum Dibujo
 class Malla3D
 {
 private:
-	Material * material;
+	Material * material = nullptr;
 
 	GLuint VBO (const GLuint & tipo, const GLuint & bytes,
 		const GLvoid * datos) const noexcept;
@@ -91,7 +91,8 @@ public:
 	void Dibujar (
 		const Dibujo dibujado,
 		const bool ajedrez,
-		const unsigned char color) noexcept;
+		const unsigned char color
+	) noexcept;
 
 	Tupla3u              Cara  (const size_t indice) const;
 	std::vector<Tupla3u> Caras () const noexcept;

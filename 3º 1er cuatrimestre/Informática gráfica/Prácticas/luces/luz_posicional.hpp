@@ -1,7 +1,7 @@
 #ifndef PRACTICAS_LUZPOSICIONAL
 #define PRACTICAS_LUZPOSICIONAL
 
-#include "luz.hpp"
+#include "luces/luz.hpp"
 #include "tuplasg.hpp"
 
 class LuzPosicional : public Luz

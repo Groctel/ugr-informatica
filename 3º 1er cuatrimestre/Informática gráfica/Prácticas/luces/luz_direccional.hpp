@@ -1,7 +1,7 @@
 #ifndef PRACTICAS_LUZDIRECCIONAL
 #define PRACTICAS_LUZDIRECCIONAL
 
-#include "luz.hpp"
+#include "luces/luz.hpp"
 #include "tuplasg.hpp"
 
 class LuzDireccional : public Luz

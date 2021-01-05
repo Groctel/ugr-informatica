@@ -24,6 +24,7 @@ Escena :: Escena () noexcept
 	cono      (new Cono(1, 5, 20, 30)),
 	cubo      (new Cubo(30)),
 	esfera    (new Esfera(1, 20)),
+	jirafa    (new Jirafa()),
 	tetraedro (new Tetraedro(30)),
 	peon      (new ObjRevolucion("plys/peon.ply", 20, Tapas::Ambas)),
 
@@ -171,6 +172,16 @@ void Escena :: DibujarMallas (
 			glTranslatef(0, -60, 0);
 			glScalef(30, 30, 30);
 			esfera->Dibujar(dibujo, ajedrez, color);
+		}
+		glPopMatrix();
+	}
+
+	if (visibles.test(obj_jirafa))
+	{
+		glPushMatrix();
+		{
+			glScalef(30, 30, 30);
+			jirafa->Dibujar(dibujo, ajedrez, color);
 		}
 		glPopMatrix();
 	}
@@ -343,6 +354,10 @@ void Escena :: SeleccionObjeto (unsigned char tecla) noexcept
 
 		case 'E':
 			visibles.flip(obj_esfera);
+		break;
+
+		case 'J':
+			visibles.flip(obj_jirafa);
 		break;
 
 		case 'T':
@@ -544,7 +559,7 @@ void Escena :: MsgSeleccionMenu () const noexcept
 void Escena :: MsgSeleccionObjeto (bool reescribir) noexcept
 {
 	if (reescribir)
-		std::cout << "\033[8A";
+		std::cout << "\033[9A";
 
 	std::cout
 		<< coloresterm::AZUL_B << "SELECCIÓN DE OBJETO:" << std::endl
@@ -568,6 +583,11 @@ void Escena :: MsgSeleccionObjeto (bool reescribir) noexcept
 		<< coloresterm::CIAN_B << "]"
 		<< (visibles.test(obj_esfera) ? coloresterm::VERDE : coloresterm::ROJO)
 		<< " Esfera" << std::endl
+		<< coloresterm::CIAN_B << "["
+		<< coloresterm::AMARILLO_B << "J"
+		<< coloresterm::CIAN_B << "]"
+		<< (visibles.test(obj_jirafa) ? coloresterm::VERDE : coloresterm::ROJO)
+		<< " Jirafa" << std::endl
 		<< coloresterm::CIAN_B << "["
 		<< coloresterm::AMARILLO_B << "T"
 		<< coloresterm::CIAN_B << "]"
