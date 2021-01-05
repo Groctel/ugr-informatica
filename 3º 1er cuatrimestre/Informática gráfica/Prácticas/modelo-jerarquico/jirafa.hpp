@@ -8,7 +8,7 @@ class Jirafa
 {
 private:
 	Cubo        * tronco_inferior = nullptr;
-	PatasJirafa * patas = nullptr;
+	PatasJirafa * patas           = nullptr;
 
 public:
 	 Jirafa () noexcept;

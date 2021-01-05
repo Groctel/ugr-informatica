@@ -14,14 +14,15 @@ void Jirafa :: Dibujar (
 {
 	glPushMatrix();
 	{
-		glScalef(0.75, 1, 1.625);
+		glScalef(0.75f, 1.0f, 1.625f);
 		tronco_inferior->Dibujar(dibujado, ajedrez, color);
 	}
 	glPopMatrix();
 
 	glPushMatrix();
 	{
-		glScalef(0.25, 1.75, .25);
+		glScalef(0.25f, 1.75f, .25f);
+		glTranslatef(0.0f, -1.5f, 0.0f);
 		patas->Dibujar(dibujado, ajedrez, color);
 	}
 	glPopMatrix();
