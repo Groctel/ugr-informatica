@@ -144,6 +144,9 @@ public:
 
 	bool GestionTeclado         (unsigned char Tecla1, int x, int y) noexcept;
 	void GestionTecladoEspecial (int Tecla1, int x, int y) noexcept;
+
+	bool EstadoVisualizacion    (Visualizacion vis) const noexcept;
+	void ModificarVisualizacion (Visualizacion vis) noexcept;
 };
 
 #endif

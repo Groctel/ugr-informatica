@@ -1,4 +1,26 @@
+/** @file luz_direccional.cpp
+ */
+
 #include "luz_direccional.hpp"
+
+/** @fn LuzDireccional :: LuzDireccional (
+ * 	const GLenum  id_nuevo,
+ * 	const Tupla4f & amb,
+ * 	const Tupla4f & dif,
+ * 	const Tupla4f & esp,
+ * 	const Tupla4f & pos
+ * ) noexcept
+ *
+ * @brief Constructor con argumentos.
+ * @param id_nuevo Identificador de luz reconocible por OpenGL.
+ * @param amb Color ambiente de la luz.
+ * @param dif Color difusa de la luz.
+ * @param esp Color especular de la luz.
+ * @param pos Posición de la luz en la escena.
+ *
+ * Llama a `Luz::Luz()` de forma que el cuarto elemento de `direccion` valga
+ * siempre 0.
+ */
 
 LuzDireccional :: LuzDireccional (
 	const GLenum id_nuevo,
@@ -15,6 +37,12 @@ LuzDireccional :: LuzDireccional (
 	rotacion_y = asin(direccion[Y] / sqrt(direccion | direccion));
 }
 
+/** @fn void LuzDireccional :: VariarRotX (const float incremento) noexcept
+ *
+ * @brief Modifica la rotación alrededor del eje x (ángulo alfa).
+ * @param incremento Factor de rotación.
+ */
+
 void LuzDireccional :: VariarRotX (const float incremento) noexcept
 {
 	rotacion_x = std::fmod(rotacion_x + incremento, 2.0f * M_PI);
@@ -28,6 +56,12 @@ void LuzDireccional :: VariarRotX (const float incremento) noexcept
 	posicion[Z] = cos(rotacion_x) * cos(rotacion_y)
 		* sqrt(posicion_original | posicion_original);
 }
+
+/** @fn void LuzDireccional :: VariarRotY (const float incremento) noexcept
+ *
+ * @brief Modifica la rotación alrededor del eje y (ángulo beta).
+ * @param incremento Factor de rotación.
+ */
 
 void LuzDireccional :: VariarRotY (const float incremento) noexcept
 {

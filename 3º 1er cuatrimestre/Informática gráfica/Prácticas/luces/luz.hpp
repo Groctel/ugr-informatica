@@ -1,8 +1,16 @@
+/** @file luz.hpp
+ */
+
 #ifndef PRACTICAS_LUZ
 #define PRACTICAS_LUZ
 
 #include "motor.hpp"
 #include "tuplasg.hpp"
+
+/** @class Luz
+ *
+ * @brief Fuente de iluminación arrojable sobre los objetos de la escena.
+ */
 
 class Luz
 {

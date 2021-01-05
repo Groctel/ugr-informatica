@@ -393,39 +393,39 @@ void Escena :: SeleccionVisualizacion (unsigned char tecla) noexcept
 	switch (toupper(tecla))
 	{
 		case 'A':
-			visualizacion.flip(Visualizacion::Ajedrez);
+			ModificarVisualizacion(Visualizacion::Ajedrez);
 			if (visualizacion.test(Visualizacion::Iluminacion))
-				visualizacion.flip(Visualizacion::Iluminacion);
+				ModificarVisualizacion(Visualizacion::Iluminacion);
 		break;
 
 		case 'I':
-			visualizacion.flip(Visualizacion::Iluminacion);
+			ModificarVisualizacion(Visualizacion::Iluminacion);
 			if (visualizacion.test(Visualizacion::Ajedrez))
-				visualizacion.flip(Visualizacion::Ajedrez);
+				ModificarVisualizacion(Visualizacion::Ajedrez);
 			if (visualizacion.test(Visualizacion::Lineas))
-				visualizacion.flip(Visualizacion::Lineas);
+				ModificarVisualizacion(Visualizacion::Lineas);
 			if (visualizacion.test(Visualizacion::Puntos))
-				visualizacion.flip(Visualizacion::Puntos);
+				ModificarVisualizacion(Visualizacion::Puntos);
 			if (visualizacion.test(Visualizacion::Solido))
-				visualizacion.flip(Visualizacion::Solido);
+				ModificarVisualizacion(Visualizacion::Solido);
 		break;
 
 		case 'L':
-			visualizacion.flip(Visualizacion::Lineas);
+			ModificarVisualizacion(Visualizacion::Lineas);
 			if (visualizacion.test(Visualizacion::Iluminacion))
-				visualizacion.flip(Visualizacion::Iluminacion);
+				ModificarVisualizacion(Visualizacion::Iluminacion);
 		break;
 
 		case 'P':
-			visualizacion.flip(Visualizacion::Puntos);
+			ModificarVisualizacion(Visualizacion::Puntos);
 			if (visualizacion.test(Visualizacion::Iluminacion))
-				visualizacion.flip(Visualizacion::Iluminacion);
+				ModificarVisualizacion(Visualizacion::Iluminacion);
 		break;
 
 		case 'S':
-			visualizacion.flip(Visualizacion::Solido);
+			ModificarVisualizacion(Visualizacion::Solido);
 			if (visualizacion.test(Visualizacion::Iluminacion))
-				visualizacion.flip(Visualizacion::Iluminacion);
+				ModificarVisualizacion(Visualizacion::Iluminacion);
 		break;
 
 		default:
@@ -886,3 +886,12 @@ void Escena :: GestionTecladoEspecial (int tecla, int x, int y) noexcept
 	}
 }
 
+bool Escena :: EstadoVisualizacion (Visualizacion vis) const noexcept
+{
+	return visualizacion.test(vis);
+}
+
+void Escena :: ModificarVisualizacion (Visualizacion vis) noexcept
+{
+	visualizacion.flip(vis);
+}

@@ -1,21 +1,25 @@
 #include <gtest/gtest.h>
-#include "cubo.hpp"
 #include "globals.hpp"
-#include "malla.hpp"
-#include "obj_revolucion.hpp"
+#include "mallas/cubo.hpp"
+#include "mallas/malla.hpp"
+#include "mallas/obj_revolucion.hpp"
+#include "src/escena.hpp"
 #include "tuplasg.hpp"
 
-class TuplaTest : public testing::Test {
+class TuplaTest : public testing::Test
+{
 protected:
 	Tupla<int, 3> tupla3i;
 };
 
-class MallaTest : public testing::Test {
+class MallaTest : public testing::Test
+{
 protected:
 	Malla3D malla;
 };
 
-class CuboTest : public testing::Test {
+class CuboTest : public testing::Test
+{
 protected:
 	Cubo cubo;
 };
@@ -35,15 +39,6 @@ TEST_F (TuplaTest, DosTuplasConstruidasIgualSonIguales)
 	EXPECT_EQ(*tupla1, *tupla2);
 }
 
-/* TEST_F (TuplaTest, DosTuplasConDistintoTipoSonDiferentes) */
-/* { */
-/* 	Tupla3i tupla1 {1, 2, 3}; */
-/* 	Tupla3u tupla2 {1, 2, 3}; */
-
-/* 	EXPECT_NE(tupla1, tupla2); */
-/* 	EXPECT_NE(*tupla1, *tupla2); */
-/* } */
-
 TEST (GlobalsTest, DosFloatsIgualesSonIguales)
 {
 	float a = 0.5436546354;
@@ -52,92 +47,52 @@ TEST (GlobalsTest, DosFloatsIgualesSonIguales)
 	EXPECT_EQ(FloatEq(a,b), true);
 }
 
-TEST_F (MallaTest, LosModosDeVisualizacionEmpiezanApagados)
+TEST (EscenaTest, LosModosDeVisualizacionEmpiezanApagados)
 {
-	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Ajedrez), false);
-	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Lineas), false);
-	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Puntos), false);
-	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Solido), false);
+	EXPECT_EQ(Escena::Instance()->EstadoVisualizacion(Visualizacion::Ajedrez), false);
+	EXPECT_EQ(Escena::Instance()->EstadoVisualizacion(Visualizacion::Lineas), false);
+	EXPECT_EQ(Escena::Instance()->EstadoVisualizacion(Visualizacion::Puntos), false);
+	EXPECT_EQ(Escena::Instance()->EstadoVisualizacion(Visualizacion::Solido), false);
 }
 
-TEST_F (MallaTest, PuedoCambiarElModoAjedrez)
+TEST (EscenaTest, PuedoCambiarElModoAjedrez)
 {
-	ASSERT_EQ(malla.EstadoVisualizacion(Visualizacion::Ajedrez), false);
+	ASSERT_EQ(Escena::Instance()->EstadoVisualizacion(Visualizacion::Ajedrez), false);
 
-	malla.ModificarVisualizacion(Visualizacion::Ajedrez, Bitset::Set);
-	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Ajedrez), true);
-	malla.ModificarVisualizacion(Visualizacion::Ajedrez, Bitset::Set);
-	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Ajedrez), true);
-
-	malla.ModificarVisualizacion(Visualizacion::Ajedrez, Bitset::Reset);
-	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Ajedrez), false);
-	malla.ModificarVisualizacion(Visualizacion::Ajedrez, Bitset::Reset);
-	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Ajedrez), false);
-
-	malla.ModificarVisualizacion(Visualizacion::Ajedrez);
-	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Ajedrez), true);
-	malla.ModificarVisualizacion(Visualizacion::Ajedrez);
-	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Ajedrez), false);
+	Escena::Instance()->ModificarVisualizacion(Visualizacion::Ajedrez);
+	EXPECT_EQ(Escena::Instance()->EstadoVisualizacion(Visualizacion::Ajedrez), true);
+	Escena::Instance()->ModificarVisualizacion(Visualizacion::Ajedrez);
+	EXPECT_EQ(Escena::Instance()->EstadoVisualizacion(Visualizacion::Ajedrez), false);
 }
 
-TEST_F (MallaTest, PuedoCambiarElModoAristas)
+TEST (EscenaTest, PuedoCambiarElModoAristas)
 {
-	ASSERT_EQ(malla.EstadoVisualizacion(Visualizacion::Lineas), false);
+	ASSERT_EQ(Escena::Instance()->EstadoVisualizacion(Visualizacion::Lineas), false);
 
-	malla.ModificarVisualizacion(Visualizacion::Lineas, Bitset::Set);
-	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Lineas), true);
-	malla.ModificarVisualizacion(Visualizacion::Lineas, Bitset::Set);
-	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Lineas), true);
-
-	malla.ModificarVisualizacion(Visualizacion::Lineas, Bitset::Reset);
-	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Lineas), false);
-	malla.ModificarVisualizacion(Visualizacion::Lineas, Bitset::Reset);
-	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Lineas), false);
-
-	malla.ModificarVisualizacion(Visualizacion::Lineas);
-	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Lineas), true);
-	malla.ModificarVisualizacion(Visualizacion::Lineas);
-	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Lineas), false);
+	Escena::Instance()->ModificarVisualizacion(Visualizacion::Lineas);
+	EXPECT_EQ(Escena::Instance()->EstadoVisualizacion(Visualizacion::Lineas), true);
+	Escena::Instance()->ModificarVisualizacion(Visualizacion::Lineas);
+	EXPECT_EQ(Escena::Instance()->EstadoVisualizacion(Visualizacion::Lineas), false);
 }
 
-TEST_F (MallaTest, PuedoCambiarElModoPuntos)
+TEST (EscenaTest, PuedoCambiarElModoPuntos)
 {
-	ASSERT_EQ(malla.EstadoVisualizacion(Visualizacion::Puntos), false);
+	ASSERT_EQ(Escena::Instance()->EstadoVisualizacion(Visualizacion::Puntos), false);
 
-	malla.ModificarVisualizacion(Visualizacion::Puntos, Bitset::Set);
-	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Puntos), true);
-	malla.ModificarVisualizacion(Visualizacion::Puntos, Bitset::Set);
-	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Puntos), true);
-
-	malla.ModificarVisualizacion(Visualizacion::Puntos, Bitset::Reset);
-	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Puntos), false);
-	malla.ModificarVisualizacion(Visualizacion::Puntos, Bitset::Reset);
-	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Puntos), false);
-
-	malla.ModificarVisualizacion(Visualizacion::Puntos);
-	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Puntos), true);
-	malla.ModificarVisualizacion(Visualizacion::Puntos);
-	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Puntos), false);
+	Escena::Instance()->ModificarVisualizacion(Visualizacion::Puntos);
+	EXPECT_EQ(Escena::Instance()->EstadoVisualizacion(Visualizacion::Puntos), true);
+	Escena::Instance()->ModificarVisualizacion(Visualizacion::Puntos);
+	EXPECT_EQ(Escena::Instance()->EstadoVisualizacion(Visualizacion::Puntos), false);
 }
 
-TEST_F (MallaTest, PuedoCambiarElModoSolido)
+TEST (EscenaTest, PuedoCambiarElModoSolido)
 {
-	ASSERT_EQ(malla.EstadoVisualizacion(Visualizacion::Solido), false);
+	ASSERT_EQ(Escena::Instance()->EstadoVisualizacion(Visualizacion::Solido), false);
 
-	malla.ModificarVisualizacion(Visualizacion::Solido, Bitset::Set);
-	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Solido), true);
-	malla.ModificarVisualizacion(Visualizacion::Solido, Bitset::Set);
-	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Solido), true);
-
-	malla.ModificarVisualizacion(Visualizacion::Solido, Bitset::Reset);
-	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Solido), false);
-	malla.ModificarVisualizacion(Visualizacion::Solido, Bitset::Reset);
-	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Solido), false);
-
-	malla.ModificarVisualizacion(Visualizacion::Solido);
-	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Solido), true);
-	malla.ModificarVisualizacion(Visualizacion::Solido);
-	EXPECT_EQ(malla.EstadoVisualizacion(Visualizacion::Solido), false);
+	Escena::Instance()->ModificarVisualizacion(Visualizacion::Solido);
+	EXPECT_EQ(Escena::Instance()->EstadoVisualizacion(Visualizacion::Solido), true);
+	Escena::Instance()->ModificarVisualizacion(Visualizacion::Solido);
+	EXPECT_EQ(Escena::Instance()->EstadoVisualizacion(Visualizacion::Solido), false);
 }
 
 TEST (PLYTest, AbreFicherosAcabenONoEnPuntoPLY)
@@ -209,14 +164,13 @@ TEST (PLYTest, PuedoCargarPeon)
 
 TEST (ObjRevolucionTest, PuedoCargarUnObjRevolucionAPartirDeUnPLY)
 {
-	ObjRevolucion objr("plys/peon.ply");
+	ObjRevolucion objr("plys/peon.ply", 50);
 }
 
 TEST (ObjRevolucionTest, LaRevolucionRedimensionaPorElNumeroDeIteracionesMasTapas)
 {
-	ObjRevolucion objr("Peon", "plys/peon.ply");
-	objr.Revolucionar(100);
-	EXPECT_EQ(objr.Vertices().size(), objr.Perfil().size()*100+2);
+	ObjRevolucion objr("plys/peon.ply", 100);
+	EXPECT_EQ(objr.Vertices().size(), 11*100+2);
 }
 
 int main (int argc, char ** argv)

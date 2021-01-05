@@ -86,11 +86,23 @@ $(bin)/practicas: $(src)/practicas.cpp \
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
 $(bin)/tests: $(tst)/tests.cpp \
+		$(obj)/cilindro.o \
+		$(obj)/cono.o \
 		$(obj)/cubo.o \
+		$(obj)/ejes.o \
+		$(obj)/escena.o \
+		$(obj)/esfera.o \
 		$(obj)/globals.o \
+		$(obj)/jirafa.o \
+		$(obj)/luz.o \
+		$(obj)/luz_direccional.o \
+		$(obj)/luz_posicional.o \
 		$(obj)/malla.o \
+		$(obj)/material.o \
 		$(obj)/obj_revolucion.o \
-		$(obj)/ply.o
+		$(obj)/patas_jirafa.o \
+		$(obj)/ply.o \
+		$(obj)/tetraedro.o
 	$(CXX) $(gtestflags) -o $@ $^
 
 $(obj)/cilindro.o: $(msh)/cilindro.cpp $(msh)/cilindro.hpp \
