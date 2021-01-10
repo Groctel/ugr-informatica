@@ -1,0 +1,178 @@
+\section{Sistemas de ecuaciones lineales}\label{sistemas-de-ecuaciones-lineales}
+
+\subsection{Definición}\label{definicion}
+
+\[a_1 \cdot x_1 + a_2 \cdot x_2 + \cdots + a_{n-1} \cdot x_{n-1} + a_n \cdot x_n = b\]
+
+Llamamos ecuación lineal con coeficientes en un cuerpo $K$ a una expresión que iguala la adición de una serie de productos de elementos $a_i \in K$ llamados coeficientes y elementos $x_i \notin K$ llamados incógnitas a un elemento $b \in K$ llamado término independiente.
+Las incógnitas son valores que desconocemos y debemos encontrar para que la expresión sea cierta, de forma que llamamos solución de la ecuación a los elementos de $K$ por los que debemos sustituir cada una de las incógnitas para hacerla cierta.
+Cada elemento debe ir acompañado de una única incógnica y el exponente de ésta debe ser 1.
+
+\[
+	\left\{
+	\begin{array}{cc cc cc cc ccc}
+		a_{11} \cdot x_{11} & + & a_{12} \cdot x_{12} & + & \cdots & + & a_{1{n-1}} \cdot x_{1{n-1}} & + & a_{1n} \cdot x_{1n} & = & b_{1}  \\
+		a_{21} \cdot x_{21} & + & a_{22} \cdot x_{22} & + & \cdots & + & a_{2{n-1}} \cdot x_{2{n-1}} & + & a_{2n} \cdot x_{2n} & = & b_{2}  \\
+		\vdots              & + & \vdots              & + & \ddots & + & \vdots                      & + & \vdots              & = & \vdots \\
+		a_{n1} \cdot x_{n1} & + & a_{n2} \cdot x_{n2} & + & \cdots & + & a_{n{n-1}} \cdot x_{n{n-1}} & + & a_{nn} \cdot x_{nn} & = & b_{n}
+	\end{array}
+	\right.
+\]
+
+Llamamos sistema de ecuaciones lineales a un conjunto de ecuaciones lineales cuya solución debe contener la misma asignación de elementos de $K$ a cada incógnita de forma que ésta sea solución para todas las ecuaciones del sistema.
+Una particularidad de los sistemas de ecuaciones lineales con la que vamos a trabajar a lo largo de este tema es que pueden representarse en forma de matriz.
+Más exactamente:
+
+\[
+	\begin{pmatrix}[ccccc|c]
+		a_{11} & a_{12} & \cdots & a_{1{n-1}} & a_{1n} & b_{1}  \\
+		a_{21} & a_{22} & \cdots & a_{2{n-1}} & a_{2n} & b_{2}  \\
+		\vdots & \vdots & \ddots & \vdots     & \vdots & \vdots \\
+		a_{n1} & a_{n2} & \cdots & a_{n{n-1}} & a_{nn} & b_{n}
+	\end{pmatrix}
+\]
+
+A esta forma de representar el sistema la llamamos matriz ampliada $(A|b)$.
+Estos términos $A$ y $b$ vienen dados por las dos siguientes matrices:
+
+\begin{figure}[h!]
+\[
+	\begin{array}{cccc}
+		\begin{pmatrix}
+			a_{11} & a_{12} & \cdots & a_{1{n-1}} & a_{1n} \\
+			a_{21} & a_{22} & \cdots & a_{2{n-1}} & a_{2n} \\
+			\vdots & \vdots & \ddots & \vdots     & \vdots \\
+			a_{n1} & a_{n2} & \cdots & a_{n{n-1}} & a_{nn}
+		\end{pmatrix}
+		&&
+		\begin{pmatrix}
+			b_{1}  \\
+			b_{2}  \\
+			\vdots \\
+			b_{n}
+		\end{pmatrix}
+	\end{array}
+\]
+\caption{Matriz de coeficientes $A$ (izquierda) y matriz de términos independientes $b$ (derecha).}
+\end{figure}
+
+No se nos olvidan las incógnitas, que expresamos en la matriz de incógnitas $x$:
+
+\[
+	\begin{pmatrix}
+		x_{1}  \\
+		x_{2}  \\
+		\vdots \\
+		x_{n}
+	\end{pmatrix}
+\]
+
+Con estos elementos, podemos escribir el sistema como $A \cdot x = b$.
+
+\subsection{Discusión y resolución de sistemas}\label{discusion-y-resolucion-de-sistemas}
+
+Podemos clasificar los sistemas de ecuaciones de la siguiente forma:
+
+\begin{itemize}
+	\item\textbf{Sistemas incompatibles (SI):}
+		No tienen ninguna solución.
+	\item\textbf{Sistemas compatibles:}
+		Tienen al menos una solución.
+		Distinguimos dos tipos:
+		\begin{itemize}
+			\item\textbf{Sistemas compatibles determinados (SCD):}
+				Tienen exactamente una solución.
+			\item\textbf{Sistemas compatibles indeterminados (SCI):}
+				Tienen más de una solución.
+		\end{itemize}
+\end{itemize}
+
+Una forma sencilla de encontrar la solución de estos sitemas es computando la forma normal de Hermite de la matriz ampliada de los mismos, de forma que distinguimos tres casos en dicha forma:
+
+\begin{itemize}
+	\item\textbf{Sistemas incompatibles:}
+		Al menos una fila contiene un único término no nulo a la derecha del todo (en la columna de los coeficientes).
+		Esto es imposible porque no puede darse que $0 \cdot x_1 + 0 \cdot x_2 + \cdot + 0 \cdot x_{n-1} + 0 \cdot x_n = 1$.
+	\item\textbf{Sistemas compatibles determinados:}
+		Aparece la matriz identidad a la izquierda, de forma que se asocia un término idependiente a cada incógnita.
+	\item\textbf{Sistemas compatibles indeterminados:}
+		Al menos una fila es nula, de forma que al menos una fila debe contener coeficientes de al menos dos incógnitas.
+\end{itemize}
+
+\begin{figure}[h!]
+\[
+	\begin{array}{c cc c cc c}
+		\text{Sistema incompatible:} && \text{Sistema compatible determinado:} && \text{Sistema compatible indeterminado:}
+
+		\\ && && && \\
+
+		\begin{pmatrix}
+			3 & 0 & 1 & 4 \\
+			0 & 0 & 2 & 3 \\
+			0 & 0 & 0 & 2
+		\end{pmatrix}
+
+		&&
+
+		\begin{pmatrix}
+			3 & 0 & 0 & 1 \\
+			0 & 2 & 0 & 3 \\
+			0 & 0 & 5 & 2
+		\end{pmatrix}
+
+		&&
+
+		\begin{pmatrix}
+			3 & 0 & 4 & 1 \\
+			0 & 2 & 0 & 3 \\
+			0 & 0 & 0 & 0
+		\end{pmatrix}
+
+		\\ && && && \\
+
+		\left\{
+		\begin{array}{cc cc cc c}
+			3x & + & 0 & + & 1z & = & 4 \\
+			0  & + & 0 & + & 2z & = & 3 \\
+			0  & + & 0 & + & 0  & = & 2
+		\end{array}
+		\right.
+
+		&&
+
+		\left\{
+		\begin{array}{cc cc cc c}
+			3x & + & 0  & + & 0  & = & 1 \\
+			0  & + & 2y & + & 0  & = & 3 \\
+			0  & + & 0  & + & 5z & = & 2
+		\end{array}
+		\right.
+
+		&&
+
+		\left\{
+		\begin{array}{cc cc cc c}
+			3x & + & 0  & + & 4z & = & 1 \\
+			0  & + & 2y & + & 0  & = & 3 \\
+		\end{array}
+		\right.
+	\end{array}
+\]
+\caption{Representación matricial de los tres tipos de sistemas de ecuaciones lineales.}
+\end{figure}
+
+Con este conocimiento podemos hacer una asociación directa entre el rango de la matriz con la que representamos un sistema de $n$ incógnitas y su tipo:
+
+\begin{itemize}
+	\item\textbf{Sistemas incompatibles:}
+		$rg(A) < rg(A|b)$.
+	\item\textbf{Sistemas compatibles:}
+		$rg(A) = rg(A|b)$.
+		Distinguimos dos casos en función de sus incógnitas:
+		\begin{itemize}
+			\item\textbf{Sistemas compatibles determinados:}
+				$rg(A) = n$.
+			\item\textbf{Sistemas compatibles indeterminados:}
+				$rg(A) < n$.
+		\end{itemize}
+\end{itemize}
