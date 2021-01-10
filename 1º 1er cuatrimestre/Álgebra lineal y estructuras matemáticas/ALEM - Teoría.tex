@@ -67,6 +67,13 @@
 	\end{tikzpicture}
 }
 
+\makeatletter
+\renewcommand*\env@matrix[1][*\c@MaxMatrixCols c]{%
+  \hskip -\arraycolsep
+  \let\@ifnextchar\new@ifnextchar
+  \array{#1}}
+\makeatother
+
 \definecolor{light-gray}{gray}{0.75}
 
 % Document composition
@@ -100,5 +107,9 @@
 	\input{Teoría/Métodos elementales de conteo.tex}
 	\input{Teoría/Agrupaciones.tex}
 	\input{Teoría/Números combinatorios.tex}
+
+\chapter{Matrices, sistemas de ecuaciones y determinantes}\label{matrices-sistemas-de-ecuaciones-y-determinantes}
+	\input{Teoría/Matrices.tex}
+	\input{Teoría/Sistemas de ecuaciones lineales.tex}
 
 \end{document}
