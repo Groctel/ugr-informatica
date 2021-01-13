@@ -1,0 +1,81 @@
+\chapter{}
+
+\section{Enunciado}
+
+Para un lenguaje libre contexto que vosotros elijáis, comprobar si una gramatica para el lenguaje es ambigua encontrando dos árboles de derivación distintos para una misma cadena del lenguaje.
+
+\section{Solución}
+
+Especificamos la siguiente gramática:
+
+\begin{align*}
+	G &= (V, T, P, S) : \\
+	V &= \{E\} \\
+	T &= \{a, b, c, d, e\} \\
+	P &=
+		\begin{cases}
+		\begin{array}{lll}
+			E \rightarrow /E/ &  & E \rightarrow /bE      \\
+			E \rightarrow aEa &  & E \rightarrow /cE      \\
+			E \rightarrow bEb &  & E \rightarrow a        \\
+			E \rightarrow cEc &  & E \rightarrow b        \\
+			E \rightarrow a/E &  & E \rightarrow c        \\
+			E \rightarrow b/E &  & E \rightarrow /        \\
+			E \rightarrow c/E &  & E \rightarrow \epsilon \\
+			E \rightarrow /aE &  &
+		\end{array}
+ 		\end{cases} \\
+	S &= E
+\end{align*}
+
+Vamos a demostrar que la cadena \texttt{a/b/c/b/a} puede ser generada por una gramática ambigua generando dos árboles de derivación:
+
+\begin{center}
+\begin{tikzpicture}
+\Tree
+[.\texttt{E}
+	[.\texttt{a} ]
+	[.\texttt{E}
+		[.\texttt{/} ]
+		[.\texttt{E}
+			[.\texttt{b} ]
+			[.\texttt{E}
+				[.\texttt{/} ]
+				[.\texttt{E}
+					[.\texttt{c} ]
+				]
+				[.\texttt{/} ]
+			]
+			[.\texttt{b} ]
+		]
+		[.\texttt{/} ]
+	]
+	[.\texttt{a} ]
+]
+\end{tikzpicture}
+\ \ \ \ \ \ \ \ \ \ \ \ \ \ \ \
+\begin{tikzpicture}
+\Tree
+[.\texttt{E}
+	[.\texttt{a} ]
+	[.\texttt{/} ]
+	[.\texttt{E}
+		[.\texttt{b} ]
+		[.\texttt{/} ]
+		[.\texttt{E}
+			[.\texttt{c} ]
+			[.\texttt{/} ]
+			[.\texttt{E}
+				[.\texttt{b} ]
+				[.\texttt{/} ]
+				[.\texttt{E}
+					[.\texttt{a} ]
+				]
+			]
+		]
+	]
+]
+\end{tikzpicture}
+\end{center}
+
+De esta forma, demostramos que la gramática es ambigua.

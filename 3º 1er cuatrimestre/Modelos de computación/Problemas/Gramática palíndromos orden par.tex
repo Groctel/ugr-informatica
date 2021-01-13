@@ -6,6 +6,8 @@ Obtener la gramática para el lenguaje de palíndromos de orden par.
 
 \section{Solución}
 
+Para que las palabras sean de longitud par, vamos a crear reglas de producción que generen un carácter a ambos lados del único símbolo no terminal, de forma que la palabra se genere ``de dentro hacia fuera'' y sólo sustituir el símbolo no terminal por la regla anteriormente descrita y por la cadena vacía.
+
 \begin{align*}
 	G &= (V, T, P, S) : \\
 	V &= \{E\} \\
@@ -22,4 +24,6 @@ Obtener la gramática para el lenguaje de palíndromos de orden par.
 	S &= E
 \end{align*}
 
-La solución propuesta es válida para el conjunto $T = \{a, b, c, d, e\}$, pero es fácilmente escalable añadiendo, reduciendo o modificando $T$ y las reglas de $P$ asociadas a sus elementos de forma que para cada símbolo $t \in T$ exista un $p \in P$ tal que $p = E \rightarrow tEt$.
+La solución propuesta es válida para el conjunto $T = \{a, b, c, d, e\}$, pero es fácilmente escalable añadiendo, reduciendo o modificando $T$ y las reglas de $P$ asociadas a sus elementos de forma que se cumpla lo siguiente:
+
+\[\exists p \in P : p = E \rightarrow tEt, \forall t \in T\]

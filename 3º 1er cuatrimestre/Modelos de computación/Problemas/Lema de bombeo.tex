@@ -1,0 +1,46 @@
+\chapter{}
+
+\section{Enunciado}
+
+Aplicación del Lema de Bombeo para lenguajes regulares (palíndromos).
+
+\section{Solución}
+
+Para que una palabra $u$ sea un palíndromo debe darse que $u = u^{-1}$.
+Vamos a plantear con ello el siguiente lenguaje:
+
+\[L = \Big\{u \in {\{0,1\}}^* : u = u^{-1}\Big\}\]
+
+Suponemos que $L$ es regular, por lo que debe satisfacer el Lema de Bombeo y verificarse:
+
+\[
+	\exists n \in\mathbb{N}, z = uvw : uvw = 0^{n}1^{n}0^{n} \land |z| = 3n \geq n, \forall z \in L
+\]
+
+Esta expresión debe verificarse con tres condiciones.
+Las evaluamos una a una.
+
+\subsection*{$|uv| \leq n$}
+
+Para que se dé esta propiedad, necesariamente se debe tener $uv = \{0^i : i \leq n\}$, pues más allá del primer tercio de ceros la longitud de la cadena sobrepasa $n$.
+De esta forma, definimos $u$, $v$ y $w$ de la siguiente forma:
+
+\[
+	uvw =
+	\begin{cases}
+		u = 0^i               \\
+		v = 0^j               \\
+		w = 0^{n-(i+1)}1^n0^n \\
+	\end{cases}
+\]
+
+Continuamos con este resultado en mente.
+
+\subsection*{$|v| \geq 1$}
+
+Esta propiedad nos dice que debe haber al menos un cero, ya que $v= 0^j$ debe cumplir que $j \geq 1$.
+Con este resultado y el anterior, pasamos al último punto.
+
+\subsection*{$uv^{i}w \in L, \forall i \geq 0$}
+
+En este caso, llegamos a la contradicción, puesto que debemos tener que $uv^{0}w$ sea un palíndromo, pero no puede serlo, ya que en este caso tenemos que $0^{i}0^{n-(i+j)}1^{n}0^{n} = 0^{n-j}1^{n}0^{n} \notin L$, ya que esta cadena no contiene el mismo número de ceros a la izquierda que a la derecha, por lo que $L$ no es un lenguaje regular.
