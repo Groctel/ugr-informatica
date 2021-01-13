@@ -97,12 +97,12 @@ private:
 	LuzDireccional * luz0 = nullptr;
 	LuzPosicional  * luz1 = nullptr;
 
-   Material * esmeralda = nullptr;
-   Material * perla     = nullptr;
-   Material * plata     = nullptr;
-	Material * oro       = nullptr;
-   Material * ruby      = nullptr;
-   Material * turquesa  = nullptr;
+	Material * cromo = nullptr;
+	Material * goma_negra     = nullptr;
+	Material * estanio     = nullptr;
+	Material * laton       = nullptr;
+	Material * obsidiana      = nullptr;
+	Material * turquesa  = nullptr;
 
 	std::bitset<7> visibles;
 	std::bitset<5> visualizacion;

@@ -15,9 +15,9 @@ private:
 public:
 	Material ();
 	Material (
-		const Tupla3f & amb,
-		const Tupla3f & dif,
-		const Tupla3f & esp,
+		const Tupla4f & amb,
+		const Tupla4f & dif,
+		const Tupla4f & esp,
 		const float bri
 	) noexcept;
 

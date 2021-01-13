@@ -30,65 +30,65 @@ Escena :: Escena () noexcept
 
 	luz0 (new LuzDireccional(
 		GL_LIGHT0,
-		{0, 0, 0, 1},
-		{0.5f, 0.5f, 0.5f, 1},
-		{0.5f, 0.5f, 0.5f, 1},
-		{0, 0, 10}
+		{0,   0,   0, 1},
+		{1,   1,   1, 1},
+		{1,   1,   1, 1},
+		{200, 150, 200}
 	)),
 	luz1 (new LuzPosicional(
 		GL_LIGHT1,
-		{0.5f, 0.5f, 0.5f, 1},
-		{0.5f, 0.5f, 0.5f, 1},
-		{0.5f, 0.5f, 0.5f, 1},
-		{0, 0, 0}
+		{0, 0, 0, 1},
+		{1, 1, 1, 1},
+		{1, 1, 1, 1},
+		{0, 0, 10}
 	)),
 
-	// http://devernay.free.fr/cours/opengl/materials.html
-   esmeralda (new Material(
-		{0.0215f,  0.1745f,   0.0215f},
-		{0.07568f, 0.61424f,  0.07568f},
-		{0.633f,   0.727811f, 0.633f},
-		0.6f
+	// http://www.it.hiof.no/~borres/j3d/explain/light/p-materials.html
+   cromo (new Material(
+		{0.25f,     0.25f,     0.25f,     1.0f},
+		{0.4f,      0.4f,      0.4f,      1.0f},
+		{0.774597f, 0.774597f, 0.774597f, 1.0f},
+		76.8f
 	)),
-   perla (new Material(
-		{0.25f,     0.20725f,  0.20725f},
-		{1.0f,      0.829f,    0.829f},
-		{0.296648f, 0.296648f, 0.296648f},
-		0.88f
+   goma_negra (new Material(
+		{0.02f, 0.02f, 0.02f, 1.0f},
+		{0.01f, 0.01f, 0.01f, 1.0f},
+		{0.4f,  0.4f,  0.4f,  1.0f},
+		10.0f
 	)),
-   plata (new Material(
-		{0.19225f,  0.19225f,  0.19225f},
-		{0.50754f,  0.50754f,  0.50754f},
-		{0.508273f, 0.508273f, 0.508273f},
-		0.4f
+   estanio (new Material(
+		{0.105882f, 0.058824f, 0.113725f, 1.0f},
+		{0.427451f, 0.470588f, 0.541176f, 1.0f},
+		{0.333333f, 0.333333f, 0.521569f, 1.0f},
+		9.84615f
 	)),
-	oro (new Material(
-		{0.24725f,  0.1995f,   0.0745f},
-		{0.75164f,  0.60648f,  0.22648f},
-		{0.628281f, 0.555802f, 0.366065f},
-		0.4f
+	laton (new Material(
+		{0.329412f, 0.223529f, 0.027451f, 1.0f},
+		{0.780392f, 0.568627f, 0.113725f, 1.0f},
+		{0.992157f, 0.941176f, 0.807843f, 1.0f},
+		27.8974f
 	)),
-   ruby (new Material(
-		{0.1745f,   0.01175f,  0.01175f},
-		{0.61424f,  0.04136f,  0.04136f},
-		{0.727811f, 0.626959f, 0.626959f},
-		0.6f
+   obsidiana (new Material(
+		{0.05375f,  0.05f,     0.06625f,  0.82f},
+		{0.18275f,  0.17f,     0.22525f,  0.82f},
+		{0.332741f, 0.328634f, 0.346435f, 0.82f},
+		38.4f
 	)),
    turquesa (new Material(
-		{0.1f,      0.18725f, 0.1745f},
-		{0.396f,    0.74151f, 0.69102f},
-		{0.297254f, 0.30829f, 0.306678f},
-		0.1f
+		{0.1f,      0.18725f, 0.1745f,   1.0f},
+		{0.396f,    0.74151f, 0.69102f,  1.0f},
+		{0.297254f, 0.30829f, 0.306678f, 1.0f},
+		12.8f
 	))
 {
 	distancia_observador = 4 * plano_delantero,
 	ejes->NuevoTamanio(5000);
 
-	cilindro->AplicarMaterial(esmeralda);
-	cono->AplicarMaterial(perla);
-	cubo->AplicarMaterial(plata);
-	esfera->AplicarMaterial(oro);
-	tetraedro->AplicarMaterial(ruby);
+	cilindro->AplicarMaterial(cromo);
+	cono->AplicarMaterial(goma_negra);
+	cubo->AplicarMaterial(estanio);
+	esfera->AplicarMaterial(laton);
+	tetraedro->AplicarMaterial(obsidiana);
 	peon->AplicarMaterial(turquesa);
 }
 
@@ -703,11 +703,11 @@ Escena :: ~Escena () noexcept
 	delete luz0;
 	delete luz1;
 
-	delete esmeralda;
-	delete oro;
-	delete perla;
-	delete plata;
-	delete ruby;
+	delete cromo;
+	delete laton;
+	delete goma_negra;
+	delete estanio;
+	delete obsidiana;
 	delete turquesa;
 
 	exit(0);

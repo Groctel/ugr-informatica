@@ -196,6 +196,7 @@ $(mdl)/jirafa.o: $(mdl)/jirafa.cpp $(mdl)/jirafa.hpp \
 
 $(mdl)/patas_jirafa.o: $(mdl)/patas_jirafa.cpp $(mdl)/patas_jirafa.hpp \
 		$(msh)/cubo.cpp $(msh)/cubo.hpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Src
 # ------------------------------------------------------------------------------
