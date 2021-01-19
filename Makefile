@@ -3,6 +3,7 @@ BIN      = $(MAKEDIR)/bin
 
 C21      = $(MAKEDIR)/2º\ 1er\ cuatrimestre
 C22      = $(MAKEDIR)/2º\ 2º\ cuatrimestre
+C31      = $(MAKEDIR)/3º\ 1er\ cuatrimestre
 
 AC       = $(C22)/Arquitectura\ de\ computadores
 ALG      = $(C22)/Algorítmica
@@ -10,14 +11,16 @@ ED       = $(C21)/Estructuras\ de\ datos
 FBD      = $(C22)/Fundamentos\ de\ bases\ de\ datos
 FIS      = $(C22)/Fundamentos\ de\ la\ ingeniería\ del\ software
 IA       = $(C22)/Inteligencia\ artificial
+MC       = $(C31)/Modelos\ de\ computación
 SO       = $(C21)/Sistemas\ operativos
 
-AC_OUT   = $(BIN)"/Arquitectura\ de\ computadores"
+AC_OUT   = $(BIN)/"Arquitectura\ de\ computadores"
 ALG_OUT  = $(BIN)/"Algorítmica"
 ED_OUT   = $(BIN)/"Estructuras\ de\ datos"
 FBD_OUT  = $(BIN)/"Fundamentos\ de\ bases\ de\ datos"
 FIS_OUT  = $(BIN)/"Fundamentos\ de\ la\ ingeniería\ del\ software"
 IA_OUT   = $(BIN)/"Inteligencia\ artificial"
+MC_OUT   = $(BIN)/"Modelos\ de\ computación"
 SO_OUT   = $(BIN)/"Sistemas\ operativos"
 
 AQADEMIA = $${HOME}/texmf/tex/latex/aqademia/
@@ -66,7 +69,7 @@ endef
 
 all: aqademia build
 
-build: saludo c21 c22 despedida
+build: saludo c21 c22 mc despedida
 
 aqademia:
 	@printf "\033[35;1m:: \033[0mActualizando aqademia...\n"
@@ -85,6 +88,7 @@ despedida:
 
 c21: ed so
 c22: ac alg fbd fis ia
+c31: mc
 
 ac:
 	@$(MAKE) -s -C $(AC) OUT=$(AC_OUT)
@@ -109,6 +113,10 @@ fis:
 ia:
 	@$(MAKE) -s -C $(IA) OUT=$(IA_OUT)
 	$(call limpiatex, $(IA))
+
+mc:
+	@$(MAKE) -s -C $(MC) OUT=$(MC_OUT)
+	$(call limpiatex, $(MC))
 
 so:
 	@$(MAKE) -s -C $(SO) OUT=$(SO_OUT)
