@@ -3,7 +3,8 @@
 Jirafa :: Jirafa () noexcept
 :
 	tronco_inferior (new Cubo()),
-	patas           (new PatasJirafa())
+	patas           (new PatasJirafa()),
+	tronco_superior (new TroncoSuperiorJirafa())
 { }
 
 void Jirafa :: Dibujar (
@@ -14,22 +15,30 @@ void Jirafa :: Dibujar (
 {
 	glPushMatrix();
 	{
-		glScalef(0.75f, 1.0f, 1.625f);
+		glScalef(12.0f, 16.0f, 26.0f);
 		tronco_inferior->Dibujar(dibujado, ajedrez, color);
 	}
 	glPopMatrix();
 
 	glPushMatrix();
 	{
-		glScalef(0.25f, 1.75f, .25f);
-		glTranslatef(0.0f, -1.5f, 0.0f);
+		glScalef(4.0f, 27.0f, 4.0f);
+		glTranslatef(0.0f, -1.4f, 0.0f);
 		patas->Dibujar(dibujado, ajedrez, color);
+	}
+	glPopMatrix();
+
+	glPushMatrix();
+	{
+		glTranslatef(0.0f, 0.0f, 14.0f);
+		tronco_superior->Dibujar(dibujado, ajedrez, color);
 	}
 	glPopMatrix();
 }
 
 Jirafa :: ~Jirafa () noexcept
 {
-	delete tronco_inferior;
 	delete patas;
+	delete tronco_inferior;
+	delete tronco_superior;
 }

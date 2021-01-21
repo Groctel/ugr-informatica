@@ -98,8 +98,10 @@ $(bin)/practicas: $(src)/practicas.cpp \
 		$(lgh)/luz_posicional.o \
 		$(lig)/globals.o \
 		$(lig)/ply.o \
+		$(mdl)/cabeza.o \
 		$(mdl)/jirafa.o \
 		$(mdl)/patas_jirafa.o \
+		$(mdl)/tronco_superior.o \
 		$(msh)/cilindro.o \
 		$(msh)/cono.o \
 		$(msh)/cubo.o \
@@ -118,8 +120,10 @@ $(bin)/tests: $(tst)/tests.cpp \
 		$(lgh)/luz_posicional.o \
 		$(lig)/globals.o \
 		$(lig)/ply.o \
+		$(mdl)/cabeza.o \
 		$(mdl)/jirafa.o \
 		$(mdl)/patas_jirafa.o \
+		$(mdl)/tronco_superior.o \
 		$(msh)/cilindro.o \
 		$(msh)/cono.o \
 		$(msh)/cubo.o \
@@ -167,7 +171,7 @@ $(msh)/cono.o: $(msh)/cono.cpp $(msh)/cono.hpp \
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(msh)/cubo.o: $(msh)/cubo.cpp $(msh)/cubo.hpp \
-		$(msh)/malla.cpp $(msh)/malla.hpp
+		$(msh)/malla.cpp    $(msh)/malla.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(msh)/esfera.o: $(msh)/esfera.cpp $(msh)/esfera.hpp \
@@ -190,11 +194,21 @@ $(msh)/tetraedro.o: $(msh)/tetraedro.cpp $(msh)/tetraedro.hpp \
 # Modelo jerárquico
 # ------------------------------------------------------------------------------
 
+$(mdl)/cabeza.o: $(mdl)/cabeza.cpp $(mdl)/cabeza.hpp \
+		$(msh)/cubo.cpp $(msh)/cubo.hpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
 $(mdl)/jirafa.o: $(mdl)/jirafa.cpp $(mdl)/jirafa.hpp \
-		$(msh)/cubo.cpp $(msh)/malla.hpp
+		$(mdl)/patas_jirafa.cpp    $(mdl)/patas_jirafa.hpp \
+		$(mdl)/tronco_superior.cpp $(mdl)/tronco_superior.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(mdl)/patas_jirafa.o: $(mdl)/patas_jirafa.cpp $(mdl)/patas_jirafa.hpp \
+		$(msh)/cubo.cpp $(msh)/cubo.hpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(mdl)/tronco_superior.o: $(mdl)/tronco_superior.cpp $(mdl)/tronco_superior.hpp \
+		$(mdl)/cabeza.cpp $(mdl)/cabeza.hpp \
 		$(msh)/cubo.cpp $(msh)/cubo.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 

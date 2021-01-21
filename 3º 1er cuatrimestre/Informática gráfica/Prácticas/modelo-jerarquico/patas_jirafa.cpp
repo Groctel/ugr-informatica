@@ -16,18 +16,18 @@ void PatasJirafa :: Dibujar (
 {
 	glPushMatrix();
 	{
-		glTranslatef(0, 0, -5.5);
+		glTranslatef(0, 0, -5);
 
 		glPushMatrix();
 		{
-			glTranslatef(-2, 0, 0);
+			glTranslatef(-1.5, 0, 0);
 			delantera_izda->Dibujar(dibujado, ajedrez, color);
 		}
 		glPopMatrix();
 
 		glPushMatrix();
 		{
-			glTranslatef(2, 0, 0);
+			glTranslatef(1.5, 0, 0);
 			delantera_dcha->Dibujar(dibujado, ajedrez, color);
 		}
 		glPopMatrix();
@@ -36,18 +36,18 @@ void PatasJirafa :: Dibujar (
 
 	glPushMatrix();
 	{
-		glTranslatef(0, 0, 5.5);
+		glTranslatef(0, 0, 5);
 
 		glPushMatrix();
 		{
-			glTranslatef(-2, 0, 0);
+			glTranslatef(-1.5, 0, 0);
 			trasera_izda->Dibujar(dibujado, ajedrez, color);
 		}
 		glPopMatrix();
 
 		glPushMatrix();
 		{
-			glTranslatef(2, 0, 0);
+			glTranslatef(1.5, 0, 0);
 			trasera_dcha->Dibujar(dibujado, ajedrez, color);
 		}
 		glPopMatrix();
