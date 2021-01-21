@@ -15,21 +15,24 @@
 namespace jpg
 {
 
+typedef unsigned char pixel;
+
 class Imagen
 {
 private:
-	unsigned char * pixeles = nullptr;
-	unsigned int altura     = 0;
-	unsigned int anchura    = 0;
+	unsigned int altura  = 0;
+	unsigned int anchura = 0;
+	pixel * pixeles      = nullptr;
 
 public:
 	 Imagen (const std::string & ruta);
 	~Imagen ();
 
-	unsigned char * Pixeles () noexcept;
-	unsigned char * Pixel   (unsigned int despl_hor, unsigned int despl_ver);
 	unsigned long   Altura  () const noexcept;
 	unsigned long   Anchura () const noexcept;
+
+	pixel * Pixeles () noexcept;
+	pixel * Pixel   (unsigned int despl_hor, unsigned int despl_ver);
 
 	void Guardar (const std::string & ruta);
 };

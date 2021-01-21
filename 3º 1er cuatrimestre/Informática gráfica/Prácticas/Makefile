@@ -103,8 +103,10 @@ $(bin)/practicas: $(src)/practicas.cpp \
 		$(lig)/luz.o \
 		$(lig)/malla.o \
 		$(lig)/material.o \
+		$(lig)/objply.o \
 		$(lig)/obj_revolucion.o \
 		$(lig)/ply.o \
+		$(lig)/textura.o \
 		$(mdl)/cabeza.o \
 		$(mdl)/jirafa.o \
 		$(mdl)/patas_jirafa.o \
@@ -127,8 +129,10 @@ $(bin)/tests: $(tst)/tests.cpp \
 		$(lig)/luz.o \
 		$(lig)/malla.o \
 		$(lig)/material.o \
+		$(lig)/objply.o \
 		$(lig)/obj_revolucion.o \
 		$(lig)/ply.o \
+		$(lig)/textura.o \
 		$(mdl)/cabeza.o \
 		$(mdl)/jirafa.o \
 		$(mdl)/patas_jirafa.o \
@@ -156,12 +160,20 @@ $(lig)/material.o: $(lig)/material.cpp $(lig)/material.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
+$(lig)/objply.o: $(lig)/objply.cpp $(lig)/objply.hpp \
+		$(lig)/malla.cpp $(lig)/malla.hpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
 $(lig)/obj_revolucion.o: $(lig)/obj_revolucion.cpp $(lig)/obj_revolucion.hpp \
 		$(glb)/globals.hpp \
-		$(lig)/malla.cpp   $(lig)/malla.hpp
+		$(lig)/malla.cpp $(lig)/malla.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(lig)/ply.o: $(lig)/ply.cpp $(lig)/ply.hpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(lig)/textura.o: $(lig)/textura.cpp $(lig)/textura.hpp \
+		$(jpg)/jpg_imagen.cpp $(jpg)/jpg_imagen.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # LibJPG

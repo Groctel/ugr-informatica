@@ -1,17 +1,18 @@
 #include <string>
 #include <vector>
+#include "libjpg/jpg_imagen.hpp"
 #include "motor.hpp"
 
 class Textura
 {
 private:
-	GLuint textura_id = 0;
-	int altura;
-	int anchura;
-	std::vector<unsigned char> datos;
+	GLuint id;
+	unsigned long altura;
+	unsigned long anchura;
+	std::vector<jpg::pixel> datos;
 
 public:
-	Textura (std::string ruta);
+	Textura (const std::string  & ruta) noexcept;
 
-	void Activar ();
+	void Activar () noexcept;
 };
