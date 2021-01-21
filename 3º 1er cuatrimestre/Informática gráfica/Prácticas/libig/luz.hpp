@@ -4,8 +4,8 @@
 #ifndef PRACTICAS_LUZ
 #define PRACTICAS_LUZ
 
+#include "global/tuplasg.hpp"
 #include "motor.hpp"
-#include "tuplasg.hpp"
 
 /** @class Luz
  *

@@ -4,8 +4,8 @@
 #ifndef PRACTICAS_LUZPOSICIONAL
 #define PRACTICAS_LUZPOSICIONAL
 
-#include "luces/luz.hpp"
-#include "tuplasg.hpp"
+#include "global/tuplasg.hpp"
+#include "luz.hpp"
 
 /** @class LuzPosicional
  *

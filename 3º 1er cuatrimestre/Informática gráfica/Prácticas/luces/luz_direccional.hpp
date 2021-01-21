@@ -4,8 +4,8 @@
 #ifndef PRACTICAS_LUZDIRECCIONAL
 #define PRACTICAS_LUZDIRECCIONAL
 
-#include "luces/luz.hpp"
-#include "tuplasg.hpp"
+#include "global/tuplasg.hpp"
+#include "luz.hpp"
 
 /** @class LuzDireccional
  *

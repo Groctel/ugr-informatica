@@ -17,9 +17,9 @@ inline void Ejes :: InicializarColores () noexcept
 {
 	colores.resize(6);
 
-	colores[0] = colores[1] = coloresgl::ROJO;
-	colores[2] = colores[3] = coloresgl::VERDE;
-	colores[4] = colores[5] = coloresgl::AZUL;
+	colores[0] = colores[1] = RGBRojo;
+	colores[2] = colores[3] = RGBVerde;
+	colores[4] = colores[5] = RGBAzul;
 }
 
 /** @fn inline void Ejes :: InicializarVertices () noexcept

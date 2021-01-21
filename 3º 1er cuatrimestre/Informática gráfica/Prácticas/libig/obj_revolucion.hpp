@@ -8,9 +8,9 @@
 #include <string>
 #include <utility>
 #include <vector>
-#include "globals.hpp"
+#include "global/globals.hpp"
+#include "global/tuplasg.hpp"
 #include "malla.hpp"
-#include "tuplasg.hpp"
 
 enum Tapas
 {

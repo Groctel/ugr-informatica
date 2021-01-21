@@ -9,11 +9,12 @@
 #include <stdexcept>
 #include <string>
 #include <utility>
-#include "colores.hpp"
-#include "globals.hpp"
+#include "global/colores.hpp"
+#include "global/globals.hpp"
+#include "material.hpp"
 #include "motor.hpp"
 #include "ply.hpp"
-#include "src/material.hpp"
+#include "textura.hpp"
 
 /*
  * COLORES PARA PINTAR LA MALLA:
@@ -55,7 +56,7 @@ private:
 
 	void InicializarColor (
 		std::vector<Tupla3f> & tabla,
-		const coloresgl::color & color
+		const RGB & color
 	) noexcept;
 
 	void CalcularNormales    () noexcept;
@@ -70,6 +71,9 @@ protected:
 	std::vector<Tupla3f> vertices;
 	std::vector<Tupla3f> normales;
 
+	/* Textura * textura = nullptr; */
+	/* std::vector<Tupla2f> coord_textura; */
+
 	GLuint vbo_colores[5] = {0};
 	GLuint vbo_caras      = 0;
 	GLuint vbo_vertices   = 0;
@@ -81,7 +85,8 @@ protected:
 	void DibujarAjedrezDiferido  () noexcept;
 	void DibujarAjedrezInmediato () const noexcept;
 
-	void InicializarMalla () noexcept;
+	void InicializarMalla   () noexcept;
+	void InicializarTextura () noexcept;
 
 public:
 	Malla3D ();

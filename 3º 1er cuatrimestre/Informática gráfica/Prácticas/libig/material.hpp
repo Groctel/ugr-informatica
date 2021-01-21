@@ -2,7 +2,7 @@
 #define PRACTICAS_MATERIAL
 
 #include "motor.hpp"
-#include "tuplasg.hpp"
+#include "global/tuplasg.hpp"
 
 class Material
 {

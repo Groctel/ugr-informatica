@@ -8,6 +8,7 @@
 makedir = .
 bin     = $(makedir)/bin
 doc     = $(makedir)/doc
+glb     = $(makedir)/global
 jpg     = $(makedir)/libjpg
 lgh     = $(makedir)/luces
 lig     = $(makedir)/libig
@@ -94,10 +95,15 @@ test: all $(bin)/tests
 # ------------------------------------------------------------------------------
 
 $(bin)/practicas: $(src)/practicas.cpp \
-		$(lgh)/luz.o \
+		$(jpg)/jpg_imagen.o \
+		$(jpg)/jpg_memsrc.o \
+		$(jpg)/jpg_readwrite.o \
 		$(lgh)/luz_direccional.o \
 		$(lgh)/luz_posicional.o \
-		$(lig)/globals.o \
+		$(lig)/luz.o \
+		$(lig)/malla.o \
+		$(lig)/material.o \
+		$(lig)/obj_revolucion.o \
 		$(lig)/ply.o \
 		$(mdl)/cabeza.o \
 		$(mdl)/jirafa.o \
@@ -107,22 +113,21 @@ $(bin)/practicas: $(src)/practicas.cpp \
 		$(msh)/cono.o \
 		$(msh)/cubo.o \
 		$(msh)/esfera.o \
-		$(msh)/malla.o \
-		$(msh)/obj_revolucion.o \
 		$(msh)/tetraedro.o \
 		$(src)/ejes.o \
-		$(src)/escena.o \
-		$(src)/material.o
+		$(src)/escena.o
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
 $(bin)/tests: $(tst)/tests.cpp \
 		$(jpg)/jpg_imagen.o \
 		$(jpg)/jpg_memsrc.o \
 		$(jpg)/jpg_readwrite.o \
-		$(lgh)/luz.o \
 		$(lgh)/luz_direccional.o \
 		$(lgh)/luz_posicional.o \
-		$(lig)/globals.o \
+		$(lig)/luz.o \
+		$(lig)/malla.o \
+		$(lig)/material.o \
+		$(lig)/obj_revolucion.o \
 		$(lig)/ply.o \
 		$(mdl)/cabeza.o \
 		$(mdl)/jirafa.o \
@@ -132,18 +137,28 @@ $(bin)/tests: $(tst)/tests.cpp \
 		$(msh)/cono.o \
 		$(msh)/cubo.o \
 		$(msh)/esfera.o \
-		$(msh)/malla.o \
-		$(msh)/obj_revolucion.o \
 		$(msh)/tetraedro.o \
 		$(src)/ejes.o \
-		$(src)/escena.o \
-		$(src)/material.o
+		$(src)/escena.o
 	$(CXX) $(gtestflags) -o $@ $^
 
 # LibIG
 # ------------------------------------------------------------------------------
 
-$(lig)/globals.o: $(lig)/globals.cpp $(lig)/globals.hpp
+$(lig)/luz.o: $(lig)/luz.cpp $(lig)/luz.hpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(lig)/malla.o: $(lig)/malla.cpp $(lig)/malla.hpp \
+		$(lig)/ply.cpp $(lig)/ply.hpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(lig)/material.o: $(lig)/material.cpp $(lig)/material.hpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(lig)/obj_revolucion.o: $(lig)/obj_revolucion.cpp $(lig)/obj_revolucion.hpp \
+		$(glb)/globals.hpp \
+		$(lig)/malla.cpp   $(lig)/malla.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(lig)/ply.o: $(lig)/ply.cpp $(lig)/ply.hpp
@@ -164,47 +179,35 @@ $(jpg)/jpg_readwrite.o: $(jpg)/jpg_readwrite.cpp $(jpg)/jpg_readwrite.hpp
 # Luces
 # ------------------------------------------------------------------------------
 
-$(lgh)/luz.o: $(lgh)/luz.cpp $(lgh)/luz.hpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
-
 $(lgh)/luz_direccional.o: $(lgh)/luz_direccional.cpp $(lgh)/luz_direccional.hpp \
-		$(lgh)/luz.cpp $(lgh)/luz.hpp
+		$(lig)/luz.cpp $(lig)/luz.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(lgh)/luz_posicional.o: $(lgh)/luz_posicional.cpp $(lgh)/luz_posicional.hpp \
-		$(lgh)/luz.cpp $(lgh)/luz.hpp
+		$(lig)/luz.cpp $(lig)/luz.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Mallas
 # ------------------------------------------------------------------------------
 
 $(msh)/cilindro.o: $(msh)/cilindro.cpp $(msh)/cilindro.hpp \
-		$(msh)/obj_revolucion.cpp $(msh)/obj_revolucion.hpp
+		$(lig)/obj_revolucion.cpp $(lig)/obj_revolucion.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(msh)/cono.o: $(msh)/cono.cpp $(msh)/cono.hpp \
-		$(msh)/obj_revolucion.cpp $(msh)/obj_revolucion.hpp
+		$(lig)/obj_revolucion.cpp $(lig)/obj_revolucion.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(msh)/cubo.o: $(msh)/cubo.cpp $(msh)/cubo.hpp \
-		$(msh)/malla.cpp    $(msh)/malla.hpp
+		$(lig)/malla.cpp $(lig)/malla.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(msh)/esfera.o: $(msh)/esfera.cpp $(msh)/esfera.hpp \
-		$(msh)/obj_revolucion.cpp $(msh)/obj_revolucion.hpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
-
-$(msh)/malla.o: $(msh)/malla.cpp $(msh)/malla.hpp \
-		$(lig)/ply.cpp $(lig)/ply.hpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
-
-$(msh)/obj_revolucion.o: $(msh)/obj_revolucion.cpp $(msh)/obj_revolucion.hpp \
-		$(lig)/globals.cpp $(lig)/globals.hpp \
-		$(msh)/malla.cpp   $(msh)/malla.hpp
+		$(lig)/obj_revolucion.cpp $(lig)/obj_revolucion.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(msh)/tetraedro.o: $(msh)/tetraedro.cpp $(msh)/tetraedro.hpp \
-		$(msh)/malla.cpp $(msh)/malla.hpp
+		$(lig)/malla.cpp $(lig)/malla.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Modelo jerárquico
@@ -242,13 +245,10 @@ $(src)/escena.o: $(src)/escena.cpp $(src)/escena.hpp \
 		$(msh)/cono.cpp            $(msh)/cono.hpp \
 		$(msh)/cubo.cpp            $(msh)/cubo.hpp \
 		$(msh)/esfera.cpp          $(msh)/esfera.hpp \
-		$(msh)/malla.cpp           $(msh)/malla.hpp \
-		$(msh)/obj_revolucion.cpp  $(msh)/obj_revolucion.hpp \
+		$(lig)/malla.cpp           $(lig)/malla.hpp \
+		$(lig)/obj_revolucion.cpp  $(lig)/obj_revolucion.hpp \
 		$(msh)/tetraedro.cpp       $(msh)/tetraedro.hpp \
 		$(src)/ejes.cpp            $(src)/ejes.hpp \
-		$(src)/material.cpp        $(src)/material.hpp
+		$(lig)/material.cpp        $(lig)/material.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
-$(src)/material.o: $(src)/material.cpp $(src)/material.hpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
-	$(CXX) $(CXXFLAGS) -c $< -o $@

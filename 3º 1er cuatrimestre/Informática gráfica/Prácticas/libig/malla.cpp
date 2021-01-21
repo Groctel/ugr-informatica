@@ -5,8 +5,7 @@
 
 std::vector<Tupla3f> Malla3D :: tablas_colores[5];
 
-/** @fn GLuint Malla3D :: VBO (GLuint tipo, GLuint bytes, GLvoid * datos) const noexcept
- *
+/**
  * @brief Procesa y genera un VBO para una tabla de la malla.
  * @param tipo Tipo de búfer a procesar.
  * @param bytes Tamaño del búfer a procesar.
@@ -27,34 +26,60 @@ GLuint Malla3D :: VBO (const GLuint & tipo, const GLuint & bytes,
 	return vbo;
 }
 
+/**
+ * @brief Carga un color en la tabla de colores.
+ * @param tabla Tabla de colores a modificar.
+ * @param color Color a cargar en la tabla.
+ */
+
 void Malla3D :: InicializarColor (
 	std::vector<Tupla3f> & tabla,
-	const coloresgl::color & color
+	const RGB & color
 ) noexcept
 {
-	size_t indice_vacio = tabla.size();
-
 	if (vertices.size() > tabla.size())
+	{
+		size_t tamanio_original = tabla.size();
+
 		tabla.resize(vertices.size());
 
-	for (; indice_vacio < tabla.size(); indice_vacio++)
-		tabla[indice_vacio] = color;
+		for (size_t i = tamanio_original; i < tabla.size(); i++)
+			tabla[i] = color;
+	}
 }
+
+/**
+ * @brief Modifica el orden de las caras para la visualización en ajedrez.
+ */
 
 void Malla3D :: GenerarAjedrez () noexcept
 {
+	Tupla3u intercambia;
+
 	for (size_t i = 0; i < caras.size()/2; i+=2)
-		std::swap(caras[i], caras[caras.size()-i-1]);
+	{
+		intercambia             = caras[i];
+		caras[i]                = caras[caras.size()-i-1];
+		caras[caras.size()-i-1] = intercambia;
+	}
 }
+
+/**
+ * @brief Inicializa todos los colores mediante llamadas a InicializarColor.
+ */
 
 void Malla3D :: InicializarColores () noexcept
 {
-	InicializarColor(tablas_colores[azul],    coloresgl::AZUL);
-	InicializarColor(tablas_colores[magenta], coloresgl::MAGENTA);
-	InicializarColor(tablas_colores[negro],   coloresgl::NEGRO);
-	InicializarColor(tablas_colores[rojo],    coloresgl::ROJO);
-	InicializarColor(tablas_colores[verde],   coloresgl::VERDE);
+	InicializarColor(tablas_colores[azul],    RGBAzul);
+	InicializarColor(tablas_colores[magenta], RGBMagenta);
+	InicializarColor(tablas_colores[negro],   RGBNegro);
+	InicializarColor(tablas_colores[rojo],    RGBRojo);
+	InicializarColor(tablas_colores[verde],   RGBVerde);
 }
+
+/**
+ * @brief Rellena el vector de normales con la correspondiente a cada vértice.
+ */
 
 void Malla3D :: CalcularNormales () noexcept
 {
@@ -82,6 +107,11 @@ void Malla3D :: CalcularNormales () noexcept
 		*it = it->Normalise();
 }
 
+/**
+ * @brief Inicializa el vbo de un color utilizado por la malla.
+ * @param color Índice del color a inicializar.
+ */
+
 void Malla3D :: InicializarVBOColor (const unsigned char color) noexcept
 {
 	if (vbo_colores[color] == 0)
@@ -92,8 +122,7 @@ void Malla3D :: InicializarVBOColor (const unsigned char color) noexcept
 		);
 }
 
-/** @fn void Malla3D :: DibujarDiferido (GLenum modo) noexcept
- *
+/**
  * @brief Dibuja el modelo en modo diferido.
  *
  * Permite dibujar más de una visualización del modelo a la vez, pero el modo
@@ -169,8 +198,7 @@ void Malla3D :: DibujarDiferido (const unsigned char color) noexcept
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-/** @fn void Malla3D :: DibujarInmediato (GLenum modo) noexcept
- *
+/**
  * @brief Dibuja el modelo en modo inmediato.
  *
  * Permite dibujar más de una visualización del modelo a la vez, pero el modo
@@ -207,8 +235,7 @@ void Malla3D :: DibujarInmediato (const unsigned char color) noexcept
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-/** @fn void Malla3D :: EnviarAjedrezDiferido () const noexcept
- *
+/**
  * @brief Envía a la GPU los datos de dibujo de la visualización en ajedrez del
  * modelo en modo diferido.
  */
@@ -256,8 +283,7 @@ void Malla3D :: DibujarAjedrezDiferido () noexcept
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-/** @fn void Malla3D :: EnviarAjedrezInmediato () const noexcept
- *
+/**
  * @brief Envía a la GPU los datos de dibujo de la visualización en ajedrez del
  * modelo en modo inmediato.
  */
@@ -285,6 +311,11 @@ void Malla3D :: DibujarAjedrezInmediato () const noexcept
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
+/**
+ * @brief LLama a todas las funciones de inicialización de la malla y actúa como
+ * interfaz de éstas para clases descendientes.
+ */
+
 void Malla3D :: InicializarMalla () noexcept
 {
 	GenerarAjedrez();
@@ -292,44 +323,36 @@ void Malla3D :: InicializarMalla () noexcept
 	InicializarColores();
 }
 
-/** @fn void Malla3D :: InicializarColores (
- * 	Tupla3f puntos,
- * 	Tupla3f lineas,
- * 	Tupla3f solido
- * ) noexcept
- *
- * @brief Crea las tablas de colores
- * @param puntos Color de los puntos
- * @param lineas Color de las líneas
- * @param solido Color de las caras sólidas
- *
- * La tabla creada tiene tantos elementos como vértices tenga la malla,
- * asignando por defecto el color azul a los puntos, el verde a las líneas y el
- * rojo a las caras pintadas en modo sólido.
+/**
+ * @brief Inicializa la textura asignada a la malla
+ */
+
+void Malla3D :: InicializarTextura () noexcept
+{
+
+}
+
+/**
+ * @brief Constructor por defecto vacío necesario para las clases descendientes.
  */
 
 Malla3D :: Malla3D ()
 { }
 
-Malla3D :: Malla3D (const std::string & ruta)
-{
-	std::ifstream fi                      = PLY::Abrir(ruta);
-	std::pair<size_t, size_t> dimensiones = PLY::LeerCabecera(fi);
-	vertices                              = PLY::LeerVertices(fi, dimensiones.first);
-	caras                                 = PLY::LeerCaras(fi, dimensiones.second);
-
-	InicializarMalla();
-}
+/**
+ * @brief Asigna un nuevo material a la malla.
+ */
 
 void Malla3D :: AplicarMaterial (Material * nuevo) noexcept
 {
 	material = nuevo;
 }
 
-/** @fn void Malla3D :: Dibujar (Dibujo modo) noexcept
- *
+/**
  * @brief Dibuja el modelo en el modo indicado.
- * @param modo Modo de envío del dibujo a la GPU.
+ * @param dibujado Modo de envío del dibujo a la GPU.
+ * @param ajedrez Condición de dibujado en modo ajedrez.
+ * @param color Color con el que dibujar la malla.
  */
 
 void Malla3D :: Dibujar (
@@ -356,12 +379,9 @@ void Malla3D :: Dibujar (
 	}
 }
 
-/** @fn Tupla3i Malla3D :: Cara (const size_t indice) const
- *
+/**
  * @brief Consulta la cara indicada.
  * @param indice Índice de la cara a consultar en la tabla de caras.
- * @return Tupla con la cara consultada.
- * @exception std::out_of_range Intento de acceso a cara sobre el máximo.
  */
 
 Tupla3u Malla3D :: Cara (const size_t indice) const
@@ -371,10 +391,8 @@ Tupla3u Malla3D :: Cara (const size_t indice) const
 	return caras[indice];
 }
 
-/** @fn std::vector<Tupla3i> Malla3D :: Caras () const noexcept
- *
+/**
  * @brief Consulta la tabla de caras.
- * @return Tabla de caras del modelo.
  */
 
 std::vector<Tupla3u> Malla3D :: Caras () const noexcept
@@ -382,12 +400,9 @@ std::vector<Tupla3u> Malla3D :: Caras () const noexcept
 	return caras;
 }
 
-/** @fn Tupla3i Malla3D :: Vertice (const size_t indice) const
- *
+/**
  * @brief Consulta el vértice indicado.
  * @param indice Índice del vértice a consultar en la tabla de vértices.
- * @return Tupla con el vértice consultado.
- * @exception std::out_of_range Intento de acceso a vértice sobre el máximo.
  */
 
 Tupla3f Malla3D :: Vertice (const size_t indice) const
@@ -397,10 +412,8 @@ Tupla3f Malla3D :: Vertice (const size_t indice) const
 	return vertices[indice];
 }
 
-/** @fn std::vector<Tupla3f> Malla3D :: Vertices () const noexcept
- *
+/**
  * @brief Consulta la tabla de vértices.
- * @return Tabla de vértices del modelo.
  */
 
 std::vector<Tupla3f> Malla3D :: Vertices () const noexcept
@@ -408,12 +421,9 @@ std::vector<Tupla3f> Malla3D :: Vertices () const noexcept
 	return vertices;
 }
 
-/** @fn Tupla3i Malla3D :: Normal (const size_t indice) const
- *
+/**
  * @brief Consulta la normal indicada.
  * @param indice Índice de la normal a consultar en la tabla de normales.
- * @return Tupla con la normal consultada.
- * @exception std::out_of_range Intento de acceso a noemal sobre el máximo.
  */
 
 Tupla3f Malla3D :: Normal (const size_t indice) const
@@ -423,10 +433,8 @@ Tupla3f Malla3D :: Normal (const size_t indice) const
 	return normales[indice];
 }
 
-/** @fn std::vector<Tupla3f> Malla3D :: Normales () const noexcept
- *
+/**
  * @brief Consulta la tabla de normales.
- * @return Tabla de normales del modelo.
  */
 
 std::vector<Tupla3f> Malla3D :: Normales () const noexcept

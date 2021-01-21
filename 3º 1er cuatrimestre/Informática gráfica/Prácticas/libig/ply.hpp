@@ -6,7 +6,7 @@
 #include <string>
 #include <utility>
 #include <vector>
-#include "tuplasg.hpp"
+#include "global/tuplasg.hpp"
 
 class PLY {
 private:

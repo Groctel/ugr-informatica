@@ -13,12 +13,12 @@
 #include "mallas/cono.hpp"
 #include "mallas/cubo.hpp"
 #include "mallas/esfera.hpp"
-#include "mallas/malla.hpp"
-#include "mallas/obj_revolucion.hpp"
 #include "mallas/tetraedro.hpp"
+#include "malla.hpp"
 #include "material.hpp"
 #include "modelo-jerarquico/jirafa.hpp"
 #include "motor.hpp"
+#include "obj_revolucion.hpp"
 
 /*
  * OBJETOS VISIBLES EN LA ESCENA:

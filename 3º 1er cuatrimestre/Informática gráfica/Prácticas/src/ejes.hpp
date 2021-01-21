@@ -6,9 +6,9 @@
 
 #include <stdexcept>
 #include <vector>
-#include "colores.hpp"
+#include "global/colores.hpp"
+#include "global/tuplasg.hpp"
 #include "motor.hpp"
-#include "tuplasg.hpp"
 
 /** @class Ejes
  *
