@@ -8,6 +8,7 @@
 makedir = .
 bin     = $(makedir)/bin
 doc     = $(makedir)/doc
+jpg     = $(makedir)/libjpg
 lgh     = $(makedir)/luces
 lig     = $(makedir)/libig
 mdl     = $(makedir)/modelo-jerarquico
@@ -115,6 +116,9 @@ $(bin)/practicas: $(src)/practicas.cpp \
 	$(CXX) $(CXXFLAGS) -o $@ $^
 
 $(bin)/tests: $(tst)/tests.cpp \
+		$(jpg)/jpg_imagen.o \
+		$(jpg)/jpg_memsrc.o \
+		$(jpg)/jpg_readwrite.o \
 		$(lgh)/luz.o \
 		$(lgh)/luz_direccional.o \
 		$(lgh)/luz_posicional.o \
@@ -143,6 +147,18 @@ $(lig)/globals.o: $(lig)/globals.cpp $(lig)/globals.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(lig)/ply.o: $(lig)/ply.cpp $(lig)/ply.hpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+# LibJPG
+# ------------------------------------------------------------------------------
+
+$(jpg)/jpg_imagen.o: $(jpg)/jpg_imagen.cpp $(jpg)/jpg_imagen.hpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(jpg)/jpg_memsrc.o: $(jpg)/jpg_memsrc.cpp $(jpg)/jpg_memsrc.hpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(jpg)/jpg_readwrite.o: $(jpg)/jpg_readwrite.cpp $(jpg)/jpg_readwrite.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 # Luces
