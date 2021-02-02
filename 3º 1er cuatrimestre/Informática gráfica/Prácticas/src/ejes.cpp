@@ -3,8 +3,7 @@
 
 #include "ejes.hpp"
 
-/** @fn inline void Ejes :: InicializarColores ()
- *
+/**
  * @brief Crea las tablas de colores
  *
  * Crea los ejes con los siguientes colores:
@@ -22,8 +21,7 @@ inline void Ejes :: InicializarColores () noexcept
 	colores[4] = colores[5] = RGBAzul;
 }
 
-/** @fn inline void Ejes :: InicializarVertices () noexcept
- *
+/**
  * @brief Crea la tabla de vértices de los ejes
  */
 
@@ -39,8 +37,7 @@ inline void Ejes :: InicializarVertices () noexcept
 	vertices[5] = {0,        0,        tamanio };
 }
 
-/** @fn Ejes :: Ejes (float tam)
- *
+/**
  * @brief Constructor con argumento
  * @param tam tamaño de los ejes
  *
@@ -58,8 +55,16 @@ Ejes :: Ejes (float tam)
 	InicializarColores();
 }
 
-/** @fn void Ejes :: Dibujar ()
- *
+/**
+ * @brief Consultor del tamaño de los ejes
+ */
+
+float Ejes :: Tamanio () const noexcept
+{
+	return tamanio;
+}
+
+/**
  * @brief Envía a la GPU los datos de dibujo de las visualizaciones de los ejes.
  */
 
@@ -77,19 +82,7 @@ void Ejes :: Dibujar () const noexcept
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
-/** @fn float Ejes :: Tamanio () const noexcept
- *
- * @brief Consultor del tamaño de los ejes
- * @return Tamaño de los ejes
- */
-
-float Ejes :: Tamanio () const noexcept
-{
-	return tamanio;
-}
-
-/** @fn void Ejes :: NuevoTamanio (float nuevo)
- *
+/**
  * @brief Modificador del tamaño de los ejes.
  */
 

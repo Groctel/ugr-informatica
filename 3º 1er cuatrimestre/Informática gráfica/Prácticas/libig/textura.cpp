@@ -1,4 +1,12 @@
+/** @file libig/objply.cpp
+ */
+
 #include "textura.hpp"
+
+/**
+ * @brief Constructor de la textura a partir de una imagen JPG.
+ * @param ruta Ruta del fichero JPG.
+ */
 
 Textura :: Textura (const std::string & ruta) noexcept
 {
@@ -24,10 +32,13 @@ Textura :: Textura (const std::string & ruta) noexcept
 		}
 	}
 
-	id = ~0;
-
+	id = nulltxr;
 	delete imagen;
 }
+
+/**
+ * @brief Activa la textura si aún no ha sido activada.
+ */
 
 void Textura :: Activar () noexcept
 {
@@ -35,9 +46,9 @@ void Textura :: Activar () noexcept
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S,     GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T,     GL_REPEAT);
-	/* glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR); */
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
-	if (id == (GLuint) ~0)
+	if (id == (GLuint) nulltxr)
 	{
 		glGenTextures(1, &id);
 		glBindTexture(GL_TEXTURE_2D, id);

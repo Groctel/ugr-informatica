@@ -1,8 +1,17 @@
+/** @file mallas/esfera.cpp
+ */
+
 #include "esfera.hpp"
+
+/**
+ * @brief Constructor con argumentos.
+ * @param radio Radio de la esfera.
+ * @param iteraciones Factor de definición de la esfera al revolucionarse.
+ */
 
 Esfera :: Esfera (const float radio, const size_t iteraciones) noexcept
 {
-	std::vector<Tupla3f> perfil(iteraciones);
+	perfil.resize(iteraciones);
 
 	for (size_t i = 0; i < iteraciones; i++)
 	{
@@ -15,5 +24,5 @@ Esfera :: Esfera (const float radio, const size_t iteraciones) noexcept
 		};
 	}
 
-	Revolucionar(perfil, iteraciones);
+	Revolucionar(iteraciones);
 }

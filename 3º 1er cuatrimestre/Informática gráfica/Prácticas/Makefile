@@ -180,13 +180,13 @@ $(lig)/textura.o: $(lig)/textura.cpp $(lig)/textura.hpp \
 # ------------------------------------------------------------------------------
 
 $(jpg)/jpg_imagen.o: $(jpg)/jpg_imagen.cpp $(jpg)/jpg_imagen.hpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -c $< -o $@ -ljpeg
 
 $(jpg)/jpg_memsrc.o: $(jpg)/jpg_memsrc.cpp $(jpg)/jpg_memsrc.hpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -c $< -o $@ -ljpeg
 
 $(jpg)/jpg_readwrite.o: $(jpg)/jpg_readwrite.cpp $(jpg)/jpg_readwrite.hpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) -c $< -o $@ -ljpeg
 
 # Luces
 # ------------------------------------------------------------------------------

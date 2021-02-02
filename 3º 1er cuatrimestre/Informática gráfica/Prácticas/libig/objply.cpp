@@ -1,4 +1,12 @@
+/** @file libig/objply.cpp
+ */
+
 #include "objply.hpp"
+
+/**
+ * @brief Constructor a partir de PLY.
+ * @param ruta Ruta del fichero PLY.
+ */
 
 ObjPLY :: ObjPLY (const std::string & ruta)
 {

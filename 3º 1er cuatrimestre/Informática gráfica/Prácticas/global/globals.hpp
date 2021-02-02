@@ -1,5 +1,4 @@
-/**
- * @file global/global_functions.hpp
+/** @file global/global_functions.hpp
  */
 
 #ifndef PRACTICAS_GLOBALS

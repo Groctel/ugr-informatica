@@ -1,8 +1,16 @@
+/** @file libig/material.hpp
+ */
+
 #ifndef PRACTICAS_MATERIAL
 #define PRACTICAS_MATERIAL
 
 #include "motor.hpp"
 #include "global/tuplasg.hpp"
+
+/** @class Material
+ *
+ * @brief Reflejador de la Luz sobre la Malla3D.
+ */
 
 class Material
 {
@@ -13,7 +21,6 @@ private:
 	float   brillo    = 0;
 
 public:
-	Material ();
 	Material (
 		const Tupla4f & amb,
 		const Tupla4f & dif,

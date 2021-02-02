@@ -28,9 +28,9 @@ private:
 public:
 	Ejes (float tam=1000);
 
-	void Dibujar () const noexcept;
-
 	float Tamanio () const noexcept;
+
+	void Dibujar      () const noexcept;
 	void NuevoTamanio (float tam);
 };
 

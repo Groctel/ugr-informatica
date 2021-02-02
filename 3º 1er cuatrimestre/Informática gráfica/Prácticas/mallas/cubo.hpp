@@ -1,4 +1,4 @@
-/** @file cubo.hpp
+/** @file mallas/cubo.hpp
  */
 
 #ifndef PRACTICAS_CUBO

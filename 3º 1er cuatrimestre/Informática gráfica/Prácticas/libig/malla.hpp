@@ -31,7 +31,6 @@
 #define verde    4
 
 /** @enum Dibujo
- *
  * @brief Modos de envío de las órdenes de dibujo a la GPU.
  */
 
@@ -42,7 +41,6 @@ enum Dibujo
 };
 
 /** @class Malla3D
- *
  * @brief Malla de caras triangulares de la que heredan el resto de modelos.
  */
 
@@ -50,9 +48,6 @@ class Malla3D
 {
 private:
 	Material * material = nullptr;
-
-	GLuint VBO (const GLuint & tipo, const GLuint & bytes,
-		const GLvoid * datos) const noexcept;
 
 	void InicializarColor (
 		std::vector<Tupla3f> & tabla,
@@ -71,8 +66,8 @@ protected:
 	std::vector<Tupla3f> vertices;
 	std::vector<Tupla3f> normales;
 
-	/* Textura * textura = nullptr; */
-	/* std::vector<Tupla2f> coord_textura; */
+	Textura * textura = nullptr;
+	std::vector<Tupla2f> coord_textura;
 
 	GLuint vbo_colores[5] = {0};
 	GLuint vbo_caras      = 0;
@@ -85,14 +80,20 @@ protected:
 	void DibujarAjedrezDiferido  () noexcept;
 	void DibujarAjedrezInmediato () const noexcept;
 
+	virtual void EnviarDibujoDiferido () noexcept;
+
 	void InicializarMalla   () noexcept;
 	void InicializarTextura () noexcept;
 
+	GLuint VBO (const GLuint & tipo, const GLuint & bytes,
+		const GLvoid * datos) const noexcept;
+
 public:
-	Malla3D ();
-	Malla3D (const std::string & ruta);
+	         Malla3D () noexcept;
+	virtual ~Malla3D () noexcept;
 
 	void AplicarMaterial (Material * nuevo) noexcept;
+	void AplicarTextura  (Textura * nueva) noexcept;
 	void Dibujar (
 		const Dibujo dibujado,
 		const bool ajedrez,

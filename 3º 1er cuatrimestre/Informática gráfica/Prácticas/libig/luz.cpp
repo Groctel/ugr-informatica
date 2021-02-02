@@ -3,22 +3,14 @@
 
 #include "luz.hpp"
 
-/** @fn Luz :: Luz () noexcept
- *
+/**
  * @brief Constructor por defecto.
  */
 
 Luz :: Luz () noexcept
 { }
 
-/** @fn Luz :: Luz (
- * 	const GLenum  id_nuevo,
- * 	const Tupla4f & amb,
- * 	const Tupla4f & dif,
- * 	const Tupla4f & esp,
- * 	const Tupla4f & pos
- * ) noexcept
- *
+/**
  * @brief Constructor con argumentos.
  * @param id_nuevo Identificador de luz reconocible por OpenGL.
  * @param amb Color ambiente de la luz.
@@ -42,10 +34,8 @@ Luz :: Luz (
 	posicion        (pos)
 { }
 
-/** @fn bool Luz :: Activada () const noexcept
- *
+/**
  * @brief Consultor del estado de activación de la luz.
- * @return Valor del bit de estado de la luz en OpenGL.
  */
 
 bool Luz :: Activada () const noexcept
@@ -53,8 +43,7 @@ bool Luz :: Activada () const noexcept
 	return glIsEnabled(id);
 }
 
-/** @fn void Luz :: Aplicar () noexcept
- *
+/**
  * @brief Hace incidir la luz sobre los objetos de la escena.
  *
  * Para que la luz se aplique sobre los objetos, se debe activar previamente
@@ -72,8 +61,7 @@ void Luz :: Aplicar () noexcept
 	}
 }
 
-/** @fn void Luz :: Pulsar () noexcept
- *
+/**
  * @brief Modificador del estado de activación de la luz.
  *
  * Cada llamada invierte el bit de estado de la luz de OpenGL, de forma que

@@ -131,20 +131,6 @@ void Malla3D :: InicializarVBOColor (const unsigned char color) noexcept
 
 void Malla3D :: DibujarDiferido (const unsigned char color) noexcept
 {
-	if (vbo_vertices == 0)
-		vbo_vertices = VBO(
-			GL_ARRAY_BUFFER,
-			vertices.size()*3*sizeof(float),
-			vertices.data()
-		);
-
-	if (vbo_caras == 0)
-		vbo_caras = VBO(
-			GL_ELEMENT_ARRAY_BUFFER,
-			caras.size()*3*sizeof(uint32_t),
-			caras.data()
-		);
-
 	glEnableClientState(GL_VERTEX_ARRAY);
 	{
 		if (glIsEnabled(GL_LIGHTING))
@@ -182,17 +168,7 @@ void Malla3D :: DibujarDiferido (const unsigned char color) noexcept
 			}
 		}
 
-		glBindBuffer(GL_ARRAY_BUFFER, vbo_vertices);
-		{
-			glVertexPointer(3, GL_FLOAT, 0, 0);
-		}
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_caras);
-		{
-			glDrawElements(GL_TRIANGLES, caras.size()*3, GL_UNSIGNED_INT, 0);
-		}
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		EnviarDibujoDiferido();
 	}
 	glDisableClientState(GL_COLOR_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
@@ -215,6 +191,17 @@ void Malla3D :: DibujarInmediato (const unsigned char color) noexcept
 			{
 				glNormalPointer(GL_FLOAT, 0, normales.data());
 				material->Aplicar();
+
+				if (textura != nullptr)
+				{
+					textura->Activar();
+
+					glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+					{
+						glTexCoordPointer(2, GL_FLOAT, 0, coord_textura.data());
+					}
+					glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+				}
 			}
 			glDisableClientState(GL_NORMAL_ARRAY);
 		}
@@ -311,6 +298,35 @@ void Malla3D :: DibujarAjedrezInmediato () const noexcept
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
+void Malla3D :: EnviarDibujoDiferido () noexcept
+{
+	if (vbo_vertices == 0)
+		vbo_vertices = VBO(
+			GL_ARRAY_BUFFER,
+			vertices.size()*3*sizeof(float),
+			vertices.data()
+		);
+
+	if (vbo_caras == 0)
+		vbo_caras = VBO(
+			GL_ELEMENT_ARRAY_BUFFER,
+			caras.size()*3*sizeof(uint32_t),
+			caras.data()
+		);
+
+	glBindBuffer(GL_ARRAY_BUFFER, vbo_vertices);
+	{
+		glVertexPointer(3, GL_FLOAT, 0, 0);
+	}
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_caras);
+	{
+		glDrawElements(GL_TRIANGLES, caras.size()*3, GL_UNSIGNED_INT, 0);
+	}
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
 /**
  * @brief LLama a todas las funciones de inicialización de la malla y actúa como
  * interfaz de éstas para clases descendientes.
@@ -328,15 +344,16 @@ void Malla3D :: InicializarMalla () noexcept
  */
 
 void Malla3D :: InicializarTextura () noexcept
-{
-
-}
+{ }
 
 /**
  * @brief Constructor por defecto vacío necesario para las clases descendientes.
  */
 
-Malla3D :: Malla3D ()
+Malla3D :: Malla3D () noexcept
+{ }
+
+Malla3D :: ~Malla3D () noexcept
 { }
 
 /**
@@ -346,6 +363,27 @@ Malla3D :: Malla3D ()
 void Malla3D :: AplicarMaterial (Material * nuevo) noexcept
 {
 	material = nuevo;
+}
+
+/**
+ * @brief Asigna una nueva textura a la malla y rellena el vector de coordenadas
+ * de la misma.
+ */
+
+void Malla3D :: AplicarTextura (Textura * nueva) noexcept
+{
+	textura = nueva;
+	coord_textura.resize(vertices.size());
+
+	for (size_t i = 0; i < coord_textura.size(); i++)
+	{
+		coord_textura[i] = {
+			vertices[i][X],
+			(vertices[i][Y] - vertices[0][Y])
+				/
+			(vertices[vertices.size()][Y] - vertices[0][Y])
+		};
+	}
 }
 
 /**

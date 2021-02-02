@@ -43,6 +43,10 @@
 #define rotx first
 #define roty second
 
+/** @enum Menu
+ * @brief Estado actual del menú de control de la escena.
+ */
+
 enum Menu
 {
 	Inactivo,
@@ -53,7 +57,6 @@ enum Menu
 };
 
 /** @enum Visualizacion
- *
  * @brief Modos de visualización de los modelos.
  */
 
@@ -63,8 +66,13 @@ enum Visualizacion
 	Lineas      = 1,
 	Puntos      = 2,
 	Solido      = 3,
-	Iluminacion = 4
+	Iluminacion = 4,
+	Texturas    = 5,
 };
+
+/** @class Escena
+ * @brief Gestor principal de la muestra de todos los objetos en la ventana.
+ */
 
 class Escena
 {
@@ -97,15 +105,17 @@ private:
 	LuzDireccional * luz0 = nullptr;
 	LuzPosicional  * luz1 = nullptr;
 
-	Material * cromo = nullptr;
-	Material * goma_negra     = nullptr;
-	Material * estanio     = nullptr;
-	Material * laton       = nullptr;
-	Material * obsidiana      = nullptr;
-	Material * turquesa  = nullptr;
+	Material * cromo      = nullptr;
+	Material * goma_negra = nullptr;
+	Material * estanio    = nullptr;
+	Material * laton      = nullptr;
+	Material * obsidiana  = nullptr;
+	Material * turquesa   = nullptr;
+
+	Textura * madera = nullptr;
 
 	std::bitset<7> visibles;
-	std::bitset<5> visualizacion;
+	std::bitset<6> visualizacion;
 	std::pair<bool, bool> angulos = {false, false};
 
 	Escena () noexcept;

@@ -76,7 +76,9 @@ Escena :: Escena () noexcept
 		{0.396f,    0.74151f, 0.69102f,  1.0f},
 		{0.297254f, 0.30829f, 0.306678f, 1.0f},
 		12.8f
-	))
+	)),
+
+	madera (new Textura("texturas/madera.jpg"))
 {
 	distancia_observador = 4 * plano_delantero,
 	ejes->NuevoTamanio(5000);
@@ -87,6 +89,8 @@ Escena :: Escena () noexcept
 	esfera->AplicarMaterial(laton);
 	tetraedro->AplicarMaterial(obsidiana);
 	peon->AplicarMaterial(turquesa);
+
+	cubo->AplicarTextura(madera);
 }
 
 void Escena :: AplicarLuces () noexcept
@@ -122,6 +126,10 @@ void Escena :: CambiarObservador () noexcept
 	glRotatef(angulo_observador_y, 0.0 ,1.0, 0.0);
 	glRotatef(angulo_observador_x, 1.0, 0.0, 0.0);
 }
+
+/**
+ * @brief Llama a las funciones de dibujado de las mallas activas.
+ */
 
 void Escena :: DibujarMallas (
 	const unsigned char color,
@@ -232,6 +240,11 @@ void Escena :: SeleccionDibujado (unsigned char tecla) noexcept
 		MsgSeleccionDibujado(true);
 }
 
+/**
+ * @brief Selector y manipulador de las luces.
+ * @param tecla Tecla pulsada por el usuario.
+ */
+
 void Escena :: SeleccionLuces (unsigned char tecla) noexcept
 {
 	bool continuar = true;
@@ -280,12 +293,9 @@ void Escena :: SeleccionLuces (unsigned char tecla) noexcept
 		MsgSeleccionLuces(true);
 }
 
-/** @fn void Escena :: SeleccionMenu (unsigned char tecla) noexcept
- *
+/**
  * @brief Seleccionador del submenú de la escena.
  * @param tecla Tecla pulsada por el usuario.
- *
- * Cambia el menú al seleccionado por el usuario.
  */
 
 void Escena :: SeleccionMenu (unsigned char tecla) noexcept
@@ -318,12 +328,9 @@ void Escena :: SeleccionMenu (unsigned char tecla) noexcept
 	}
 }
 
-/** @fn void Escena :: SeleccionObjeto (unsigned char tecla) noexcept
- *
+/**
  * @brief Seleccionador del objeto con el que interactuar.
  * @param tecla Tecla pulsada por el usuario.
- *
- * Alterna la muestra del objeto seleccionado.
  */
 
 void Escena :: SeleccionObjeto (unsigned char tecla) noexcept
@@ -370,12 +377,9 @@ void Escena :: SeleccionObjeto (unsigned char tecla) noexcept
 		MsgSeleccionObjeto(true);
 }
 
-/** @fn void Escena :: SeleccionVisualizacion (unsigned char tecla) noexcept
- *
+/**
  * @brief Seleccionador de la visualización de los objetos visibles.
  * @param tecla Tecla pulsada por el usuario.
- *
- * Alterna los diferentes modos de visualización para los objetos visibles.
  */
 
 void Escena :: SeleccionVisualizacion (unsigned char tecla) noexcept
@@ -385,39 +389,40 @@ void Escena :: SeleccionVisualizacion (unsigned char tecla) noexcept
 	switch (toupper(tecla))
 	{
 		case 'A':
-			ModificarVisualizacion(Visualizacion::Ajedrez);
-			if (visualizacion.test(Visualizacion::Iluminacion))
-				ModificarVisualizacion(Visualizacion::Iluminacion);
+			visualizacion.flip(Visualizacion::Ajedrez);
+			visualizacion.reset(Visualizacion::Iluminacion);
 		break;
 
 		case 'I':
-			ModificarVisualizacion(Visualizacion::Iluminacion);
-			if (visualizacion.test(Visualizacion::Ajedrez))
-				ModificarVisualizacion(Visualizacion::Ajedrez);
-			if (visualizacion.test(Visualizacion::Lineas))
-				ModificarVisualizacion(Visualizacion::Lineas);
-			if (visualizacion.test(Visualizacion::Puntos))
-				ModificarVisualizacion(Visualizacion::Puntos);
-			if (visualizacion.test(Visualizacion::Solido))
-				ModificarVisualizacion(Visualizacion::Solido);
+			visualizacion.flip(Visualizacion::Iluminacion);
+			visualizacion.reset(Visualizacion::Ajedrez);
+			visualizacion.reset(Visualizacion::Lineas);
+			visualizacion.reset(Visualizacion::Puntos);
+			visualizacion.reset(Visualizacion::Solido);
 		break;
 
 		case 'L':
-			ModificarVisualizacion(Visualizacion::Lineas);
-			if (visualizacion.test(Visualizacion::Iluminacion))
-				ModificarVisualizacion(Visualizacion::Iluminacion);
+			visualizacion.flip(Visualizacion::Lineas);
+			visualizacion.reset(Visualizacion::Iluminacion);
 		break;
 
 		case 'P':
-			ModificarVisualizacion(Visualizacion::Puntos);
-			if (visualizacion.test(Visualizacion::Iluminacion))
-				ModificarVisualizacion(Visualizacion::Iluminacion);
+			visualizacion.flip(Visualizacion::Puntos);
+			visualizacion.reset(Visualizacion::Iluminacion);
 		break;
 
 		case 'S':
-			ModificarVisualizacion(Visualizacion::Solido);
-			if (visualizacion.test(Visualizacion::Iluminacion))
-				ModificarVisualizacion(Visualizacion::Iluminacion);
+			visualizacion.flip(Visualizacion::Solido);
+			visualizacion.reset(Visualizacion::Iluminacion);
+		break;
+
+		case 'T':
+			visualizacion.flip(Visualizacion::Texturas);
+
+			if (visualizacion.test(Visualizacion::Texturas))
+				glEnable(GL_TEXTURE_2D);
+			else
+				glDisable(GL_TEXTURE_2D);
 		break;
 
 		default:
@@ -430,8 +435,7 @@ void Escena :: SeleccionVisualizacion (unsigned char tecla) noexcept
 		MsgSeleccionVisualizacion(true);
 }
 
-/** @fn void Escena :: TeclasComunes (unsigned char tecla) noexcept
- *
+/**
  * @brief Gestor de teclas pulsables en todos los menús.
  * @param tecla Tecla pulsada por el usuario.
  *
@@ -457,8 +461,7 @@ void Escena :: TeclasComunes (unsigned char tecla) noexcept
 	}
 }
 
-/** @fn void Escena :: MsgSeleccionDibujado (bool reescribir) const noexcept
- *
+/**
  * @brief Muestra el texto del menú de selección de dibujado.
  * @param reescribir Superposición del menú nuevo sobre el antiguo.
  */
@@ -480,6 +483,11 @@ void Escena :: MsgSeleccionDibujado (bool reescribir) const noexcept
 
 	MsgTeclasComunes();
 }
+
+/**
+ * @brief Muestra el texto del menú de selección y manipulación de luces.
+ * @param reescribir Superposición del menú nuevo sobre el antiguo.
+ */
 
 void Escena :: MsgSeleccionLuces (bool reescribir) const noexcept
 {
@@ -513,8 +521,7 @@ void Escena :: MsgSeleccionLuces (bool reescribir) const noexcept
 	MsgTeclasComunes();
 }
 
-/** @fn void Escena :: MsgSeleccionMenu (bool reescribir) const noexcept
- *
+/**
  * @brief Muestra el texto del menú de selección de submenús.
  * @param reescribir Superposición del menú nuevo sobre el antiguo.
  */
@@ -539,8 +546,7 @@ void Escena :: MsgSeleccionMenu () const noexcept
 	MsgTeclasComunes();
 }
 
-/** @fn void Escena :: MsgSeleccionObjeto (bool reescribir) const noexcept
- *
+/**
  * @brief Muestra el texto del menú de selección de objetos.
  * @param reescribir Superposición del menú nuevo sobre el antiguo.
  */
@@ -584,8 +590,7 @@ void Escena :: MsgSeleccionObjeto (bool reescribir) noexcept
 	MsgTeclasComunes();
 }
 
-/** @fn void Escena :: MsgSeleccionVisualizacion (bool reescribir) const noexcept
- *
+/**
  * @brief Muestra el texto del menú de selección de modos de visualización.
  * @param reescribir Superposición del menú nuevo sobre el antiguo.
  */
@@ -593,7 +598,7 @@ void Escena :: MsgSeleccionObjeto (bool reescribir) noexcept
 void Escena :: MsgSeleccionVisualizacion (bool reescribir) const noexcept
 {
 	if (reescribir)
-		std::cout << "\033[7A";
+		std::cout << "\033[8A";
 
 	std::cout
 		<< TermAzulB << "SELECCIÓN DE VISUALIZACIÓN:" << std::endl
@@ -615,13 +620,16 @@ void Escena :: MsgSeleccionVisualizacion (bool reescribir) const noexcept
 
 		<< TermCianB << "[" << TermAmarilloB << "S" << TermCianB << "]"
 		<< (visualizacion.test(Visualizacion::Solido) ? TermVerde : TermRojo)
-		<< " Modo sólido" << TermNormal << std::endl;
+		<< " Modo sólido" << std::endl
+
+		<< TermCianB << "[" << TermAmarilloB << "T" << TermCianB << "]"
+		<< (visualizacion.test(Visualizacion::Texturas) ? TermVerde : TermRojo)
+		<< " Modo texturas" << TermNormal << std::endl;
 
 	MsgTeclasComunes();
 }
 
-/** @fn void Escena :: MsgTeclasComunes () const noexcept
- *
+/**
  * @brief Muestra el texto de las teclas comunes a todos los menús.
  */
 
@@ -637,8 +645,7 @@ void Escena :: MsgTeclasComunes () const noexcept
 		<< std::endl;
 }
 
-/** @fn Escena * Escena :: Instance () noexcept
- *
+/**
  * @brief Instanciador para cumplir con el patrón Singleton.
  */
 
@@ -650,8 +657,7 @@ Escena * Escena :: Instance () noexcept
 	return instance;
 }
 
-/** @fn Escena :: ~Escena () noexcept
- *
+/**
  * @brief Destructor por defecto.
  *
  * Libera todos los objetos creados y almacenados en memoria.
@@ -677,17 +683,15 @@ Escena :: ~Escena () noexcept
 	delete obsidiana;
 	delete turquesa;
 
+	delete madera;
+
 	exit(0);
 }
 
-/** @fn void Escena :: Inicializar (int anchura_ventana, int altura_ventana) noexcept
- *
+/**
  * @brief Inicializa los aspectos de dibujo de la escena.
  * @param anchura_ventana Anchura de la ventana en la que se muestra la escena.
  * @param altura_ventana Altura de la ventana en la que se muestra la escena.
- *
- * Llama a las funciones de OpenGL correspondientes para inicializar el motor
- * con los parámetros deseados.
  */
 
 void Escena :: Inicializar (int anchura_ventana, int altura_ventana) noexcept
@@ -713,8 +717,7 @@ void Escena :: Inicializar (int anchura_ventana, int altura_ventana) noexcept
 	MsgSeleccionMenu();
 }
 
-/** @fn void Escena :: Dibujar () noexcept
- *
+/**
  * @brief Llama a las funciones de dibujo de cada uno de los objetos visibles.
  */
 
@@ -763,8 +766,7 @@ void Escena :: Dibujar () noexcept
 	}
 }
 
-/** @fn void Escena :: Redimensionar (int nueva_anchura, int nueva_altura) noexcept
- *
+/**
  * @brief Redimensiona la escena a nuevos valores.
  * @param nueva_anchura Nueva anchura de la escena.
  * @param nueva_altura Nueva altura de la escena.
@@ -779,8 +781,7 @@ void Escena :: Redimensionar (int nueva_anchura, int nueva_altura) noexcept
 	glViewport(0, 0, nueva_anchura, nueva_altura);
 }
 
-/** @fn bool Escena :: GestionTeclado (unsigned char tecla, int x, int y) noexcept
- *
+/**
  * @brief Llama a las funciones adecuadas según la tecla pulsada.
  * @param tecla Tecla pulsada por el usuario.
  * @param x Parámetro no utilizado de glut.
@@ -815,8 +816,7 @@ bool Escena :: GestionTeclado (unsigned char tecla, int x, int y) noexcept
 	return activa;
 }
 
-/** @fn bool Escena :: GestionTecladoEspecial (unsigned char tecla, int x, int y) noexcept
- *
+/**
  * @brief Llama a las funciones adecuadas según la tecla pulsada.
  * @param tecla Tecla pulsada por el usuario.
  * @param x Parámetro no utilizado de glut.
@@ -853,10 +853,23 @@ void Escena :: GestionTecladoEspecial (int tecla, int x, int y) noexcept
 	}
 }
 
+/**
+ * @brief Consultor del estado de visualización de los objetos de la escena.
+ * @param vis Estado de visualización a consultar.
+ */
+
 bool Escena :: EstadoVisualizacion (Visualizacion vis) const noexcept
 {
 	return visualizacion.test(vis);
 }
+
+/**
+ * @brief Modificador del estado de visualización de los objetos de la escena.
+ * @param vis Estado de visualización a modificar.
+ *
+ * Al estar almacenados los estados en un `std::bitset`, la visuación se
+ * modifica invirtiendo su estado actual.
+ */
 
 void Escena :: ModificarVisualizacion (Visualizacion vis) noexcept
 {

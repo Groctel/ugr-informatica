@@ -1,7 +1,15 @@
+/** @file libig/material.cpp
+ */
+
 #include "material.hpp"
 
-Material :: Material ()
-{ }
+/**
+ * @brief Constructor con argumentos.
+ * @param amb Color del reflejo para la luz ambiente.
+ * @param dif Color del reflejo para la luz difusa.
+ * @param esp Color del reflejo para la luz especular.
+ * @param bri Factor de brillo del material.
+ */
 
 Material :: Material (
 	const Tupla4f & amb,
@@ -15,6 +23,10 @@ Material :: Material (
 	especular (esp),
 	brillo    (bri)
 { }
+
+/**
+ * @brief Aplicador del material sobre la Malla3D en la que se encuentra.
+ */
 
 void Material :: Aplicar () noexcept
 {

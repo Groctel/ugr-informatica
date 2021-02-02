@@ -3,9 +3,8 @@
 
 #include "tetraedro.hpp"
 
-/** @fn inline void Tetraedro :: InicializarCaras () noexcept
- *
- * @brief Crea las cuatro caras del tetraedro
+/**
+ * @brief Crea las cuatro caras del tetraedro.
  *
  * La tupla de cada cara comienza con el vértice del mismo índice de la tabla
  * para verificar su corrección.
@@ -21,10 +20,9 @@ inline void Tetraedro :: InicializarCaras () noexcept
 	caras[3]  = {3, 1, 0};
 }
 
-/** @fn inline void Tetraedro :: InicializarVertices (const float escala) noexcept
- *
- * @brief Crea la tabla de vértices del tetraedro
- * @param escala Factor de escalado de los lados del cubo
+/**
+ * @brief Crea la tabla de vértices del tetraedro.
+ * @param escala Factor de escalado de los lados del cubo.
  */
 
 inline void Tetraedro :: InicializarVertices (const float escala) noexcept
@@ -40,10 +38,9 @@ inline void Tetraedro :: InicializarVertices (const float escala) noexcept
 	vertices[3] = {0,       altura,  0       };
 }
 
-/** @fn Tetraedro :: Tetraedro (const float escala) noexcept
- *
- * @brief Constructor con argumento
- * @param escala Factor de escalado de los lados del tetraedro
+/**
+ * @brief Constructor con argumento.
+ * @param escala Factor de escalado de los lados del tetraedro.
  *
  * Llama a las funciones de inicialización propias y heredadas para crear el
  * tetraedro.
