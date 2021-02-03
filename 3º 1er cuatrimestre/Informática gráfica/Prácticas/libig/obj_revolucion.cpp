@@ -4,13 +4,236 @@
 #include "obj_revolucion.hpp"
 
 /**
+ * @brief Envía a la GPU los datos de dibujo de la visualización en ajedrez del
+ * modelo en modo diferido teniendo en cuenta si se muestran o no las tapas.
+ */
+
+void ObjRevolucion :: DibujarAjedrezDiferido () noexcept
+{
+	size_t caras_revolucion = (perfil.size() - 1) * iteraciones;
+
+	if (vbo_caras_ajedrez.first == 0)
+		vbo_caras_ajedrez.first = VBO(
+			GL_ELEMENT_ARRAY_BUFFER,
+			caras_revolucion * 3 * sizeof(uint32_t),
+			caras.data()
+		);
+
+	if (vbo_caras_ajedrez.second == 0)
+		vbo_caras_ajedrez.second = VBO(
+			GL_ELEMENT_ARRAY_BUFFER,
+			caras_revolucion * 3 * sizeof(uint32_t),
+			caras.data() + caras_revolucion
+		);
+
+	InicializarVBOColor(negro);
+	InicializarVBOColor(magenta);
+
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+	{
+		glVertexPointer(3, GL_FLOAT, 0, vertices.data());
+
+		glBindBuffer(GL_ARRAY_BUFFER,         vbo_colores[negro]);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_caras_ajedrez.first);
+		{
+			glColorPointer(3, GL_FLOAT, 0, 0);
+			glDrawElements(GL_TRIANGLES, 3 * caras_revolucion, GL_UNSIGNED_INT, 0);
+
+			if (mostrar_tapas)
+			{
+				if (vbo_caras_ajedrez_tapas.first == 0)
+					vbo_caras_ajedrez_tapas.first = VBO(
+						GL_ELEMENT_ARRAY_BUFFER,
+						iteraciones * 3 * sizeof(uint32_t),
+						caras.data() + 2 * caras_revolucion
+					);
+
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_caras_ajedrez_tapas.first);
+				glDrawElements(GL_TRIANGLES, 3 * iteraciones, GL_UNSIGNED_INT, 0);
+			}
+		}
+		glBindBuffer(GL_ARRAY_BUFFER,         vbo_colores[magenta]);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_caras_ajedrez.second);
+		{
+			glColorPointer(3, GL_FLOAT, 0, 0);
+			glDrawElements(GL_TRIANGLES, 3 * caras_revolucion, GL_UNSIGNED_INT, 0);
+
+			if (mostrar_tapas)
+			{
+				if (vbo_caras_ajedrez_tapas.second == 0)
+					vbo_caras_ajedrez_tapas.second = VBO(
+						GL_ELEMENT_ARRAY_BUFFER,
+						iteraciones * 3 * sizeof(uint32_t),
+						caras.data() + 2 * caras_revolucion + iteraciones
+					);
+
+				glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_caras_ajedrez_tapas.second);
+				glDrawElements(GL_TRIANGLES, 3 * iteraciones, GL_UNSIGNED_INT, 0);
+			}
+		}
+		glBindBuffer(GL_ARRAY_BUFFER,         0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+	}
+	glDisableClientState(GL_COLOR_ARRAY);
+	glDisableClientState(GL_VERTEX_ARRAY);
+}
+
+/**
+ * @brief Envía a la GPU los datos de dibujo de la visualización en ajedrez del
+ * modelo en modo inmediato teniendo en cuenta si se muestran o no las tapas.
+ */
+
+void ObjRevolucion :: DibujarAjedrezInmediato () const noexcept
+{
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+	{
+		glVertexPointer(3, GL_FLOAT, 0, vertices.data());
+
+		glColorPointer(3, GL_FLOAT, 0, tablas_colores[negro].data());
+		glDrawElements(
+			GL_TRIANGLES,    (caras.size()/2)*3,
+			GL_UNSIGNED_INT, caras.data()
+		);
+
+		glColorPointer(3, GL_FLOAT, 0, tablas_colores[magenta].data());
+		glDrawElements(
+			GL_TRIANGLES,    (caras.size()/2)*3,
+			GL_UNSIGNED_INT, caras.data()+(caras.size()/2)
+		);
+	}
+	glDisableClientState(GL_COLOR_ARRAY);
+	glDisableClientState(GL_VERTEX_ARRAY);
+}
+
+/**
+ * @brief Llama a las funciones de dibujado en modo diferido teniendo en cuenta
+ * si se muestran o no las tapas.
+ */
+
+void ObjRevolucion :: EnviarDibujoDiferido () noexcept
+{
+	size_t total_caras = caras.size();
+
+	if (mostrar_tapas)
+	{
+		if (vbo_vertices == 0)
+			vbo_vertices = VBO(
+				GL_ARRAY_BUFFER,
+				vertices.size()*3*sizeof(float),
+				vertices.data()
+			);
+
+		if (vbo_caras == 0)
+			vbo_caras = VBO(
+				GL_ELEMENT_ARRAY_BUFFER,
+				caras.size()*3*sizeof(uint32_t),
+				caras.data()
+			);
+	}
+	else
+	{
+		total_caras = 2 * (perfil.size() - 1) * iteraciones;
+
+		if (vbo_vertices_sin_tapas == 0)
+			vbo_vertices_sin_tapas = VBO(
+				GL_ARRAY_BUFFER,
+				perfil.size() * iteraciones * 3 * sizeof(float),
+				vertices.data()
+			);
+
+		if (vbo_caras_sin_tapas == 0)
+			vbo_caras_sin_tapas = VBO(
+				GL_ELEMENT_ARRAY_BUFFER,
+				total_caras * 3 * sizeof(uint32_t),
+				caras.data()
+			);
+	}
+
+	glBindBuffer(
+		GL_ARRAY_BUFFER,
+		(mostrar_tapas ? vbo_vertices : vbo_vertices_sin_tapas)
+	); {
+		glVertexPointer(3, GL_FLOAT, 0, 0);
+	}
+	glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+	glBindBuffer(
+		GL_ELEMENT_ARRAY_BUFFER,
+		(mostrar_tapas ? vbo_caras : vbo_caras_sin_tapas)
+	); {
+		glDrawElements(GL_TRIANGLES, 3 * total_caras, GL_UNSIGNED_INT, 0);
+	}
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
+/**
+ * @brief Llama a las funciones de dibujado en modo inmediato teniendo en cuenta
+ * si se muestran o no las tapas.
+ */
+
+void ObjRevolucion :: EnviarDibujoInmediato () const noexcept
+{
+	std::vector<Tupla3f> vertices_usados;
+	size_t total_caras = caras.size();
+
+	if (mostrar_tapas)
+	{
+		vertices_usados = vertices;
+	}
+	else
+	{
+		total_caras = 2 * (perfil.size() - 1) * iteraciones;
+
+		std::vector<Tupla3f>::const_iterator ultimo_vertice =
+			vertices.cbegin() + perfil.size() * iteraciones;
+
+		vertices_usados = std::vector<Tupla3f>(vertices.cbegin(), ultimo_vertice);
+	}
+
+	glVertexPointer(3, GL_FLOAT, 0, vertices_usados.data());
+
+	glDrawElements(
+		GL_TRIANGLES,    total_caras * 3,
+		GL_UNSIGNED_INT, caras.data()
+	);
+}
+
+/**
+ * @brief Modifica el orden de las caras para la visualización en ajedrez
+ * respetando la presencia de las tapas.
+ */
+
+void ObjRevolucion :: GenerarAjedrez () noexcept
+{
+	Tupla3u intercambia;
+
+	size_t caras_revolucion = 2 * (perfil.size() - 1) * iteraciones;
+
+	for (size_t i = 0; i < caras_revolucion / 2; i+=2)
+	{
+		intercambia                     = caras[i];
+		caras[i]                        = caras[caras_revolucion - i - 1];
+		caras[caras_revolucion - i - 1] = intercambia;
+	}
+
+	for (size_t i = 0; i < (caras.size() - caras_revolucion) / 2; i+=2)
+	{
+		intercambia                 = caras[i + caras_revolucion];
+		caras[i + caras_revolucion] = caras[caras.size() - i - 1];
+		caras[caras.size() - i - 1] = intercambia;
+	}
+}
+
+/**
  * @brief Genera la tabla de caras de la Malla3D ascendente.
  * @param tapas Especificación de la construcción de las tapas en la revolución.
  */
 
 void ObjRevolucion :: GenerarCaras (Tapas tapas) noexcept
 {
-	caras.resize(2 * (vertices.size() - tapas - 1) + iteraciones * tapas);
+	caras.resize((2 * (perfil.size() - 1) + tapas) * iteraciones);
 
 	size_t indice_cara = 0;
 
@@ -264,44 +487,23 @@ ObjRevolucion :: ObjRevolucion (
 	Revolucionar(iteraciones, tapas, eje);
 }
 
+/**
+ * @brief Consultor del estado de muestra de las tapas
+ */
+
 bool ObjRevolucion :: MuestraTapas () const noexcept
 {
 	return mostrar_tapas;
 }
 
-void ObjRevolucion :: EnviarDibujoDiferido () noexcept
-{
-	if (vbo_vertices == 0)
-		vbo_vertices = VBO(
-			GL_ARRAY_BUFFER,
-			vertices.size() * 3 *sizeof(float) -
-				(mostrar_tapas ? 0 : (vertices.size() - perfil.size() * iteraciones)),
-			vertices.data()
-		);
-
-	if (vbo_caras == 0)
-		vbo_caras = VBO(
-			GL_ELEMENT_ARRAY_BUFFER,
-			caras.size() * 3 * sizeof(uint32_t) -
-				(mostrar_tapas ? 0 : (caras.size() - 2 * perfil.size() * iteraciones)),
-			caras.data()
-		);
-
-	glBindBuffer(GL_ARRAY_BUFFER, vbo_vertices);
-	{
-		glVertexPointer(3, GL_FLOAT, 0, 0);
-	}
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, vbo_caras);
-	{
-		glDrawElements(GL_TRIANGLES, caras.size()*3, GL_UNSIGNED_INT, 0);
-	}
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-}
+/**
+ * @brief Modificador del estado de muestra de las tapas.
+ * @param nuevo_estado Nuevo estado de la muestra de tapas
+ */
 
 void ObjRevolucion :: MostrarTapas (const bool nuevo_estado) noexcept
 {
 	mostrar_tapas = nuevo_estado;
 	vbo_vertices = vbo_caras = 0;
 }
+

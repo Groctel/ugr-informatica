@@ -211,12 +211,7 @@ void Malla3D :: DibujarInmediato (const unsigned char color) noexcept
 				glColorPointer(3, GL_FLOAT, 0, tablas_colores[color].data());
 		}
 
-		glVertexPointer(3, GL_FLOAT, 0, vertices.data());
-
-		glDrawElements(
-			GL_TRIANGLES,    caras.size() * 3,
-			GL_UNSIGNED_INT, caras.data()
-		);
+		EnviarDibujoInmediato();
 	}
 	glDisableClientState(GL_COLOR_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
@@ -232,14 +227,14 @@ void Malla3D :: DibujarAjedrezDiferido () noexcept
 	if (vbo_caras_ajedrez.first == 0)
 		vbo_caras_ajedrez.first = VBO(
 			GL_ELEMENT_ARRAY_BUFFER,
-			(caras.size()/2)*3*sizeof(int),
+			(caras.size() / 2) * 3 * sizeof(uint32_t),
 			caras.data()
 		);
 
 	if (vbo_caras_ajedrez.second == 0)
 		vbo_caras_ajedrez.second = VBO(
 			GL_ELEMENT_ARRAY_BUFFER,
-			(caras.size()/2)*3*sizeof(int),
+			(caras.size() / 2) * 3 * sizeof(uint32_t),
 			caras.data()+caras.size()/2
 		);
 
@@ -298,6 +293,10 @@ void Malla3D :: DibujarAjedrezInmediato () const noexcept
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
 
+/**
+ * @brief Llama a las funciones de dibujado en modo diferido.
+ */
+
 void Malla3D :: EnviarDibujoDiferido () noexcept
 {
 	if (vbo_vertices == 0)
@@ -325,6 +324,20 @@ void Malla3D :: EnviarDibujoDiferido () noexcept
 		glDrawElements(GL_TRIANGLES, caras.size()*3, GL_UNSIGNED_INT, 0);
 	}
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+}
+
+/**
+ * @brief Llama a las funciones de dibujado en modo inmediato.
+ */
+
+void Malla3D :: EnviarDibujoInmediato () const noexcept
+{
+	glVertexPointer(3, GL_FLOAT, 0, vertices.data());
+
+	glDrawElements(
+		GL_TRIANGLES,    caras.size() * 3,
+		GL_UNSIGNED_INT, caras.data()
+	);
 }
 
 /**

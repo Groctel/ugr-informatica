@@ -17,7 +17,7 @@ Escena :: Escena () noexcept
 	angulo_observador_y (0.0),
 
 	ejes      (new Ejes()),
-	cilindro  (new Cilindro(1, 5, 20, 30)),
+	cilindro  (new Cilindro(1, 5, 3, 3)),
 	cono      (new Cono(1, 5, 20, 30)),
 	cubo      (new Cubo(30)),
 	esfera    (new Esfera(1, 20)),
@@ -425,6 +425,13 @@ void Escena :: SeleccionVisualizacion (unsigned char tecla) noexcept
 				glDisable(GL_TEXTURE_2D);
 		break;
 
+		case 'X':
+			cilindro->MostrarTapas(!cilindro->MuestraTapas());
+			cono->MostrarTapas(!cono->MuestraTapas());
+			esfera->MostrarTapas(!esfera->MuestraTapas());
+			peon->MostrarTapas(!peon->MuestraTapas());
+		break;
+
 		default:
 			TeclasComunes(tecla);
 			continuar = false;
@@ -598,7 +605,7 @@ void Escena :: MsgSeleccionObjeto (bool reescribir) noexcept
 void Escena :: MsgSeleccionVisualizacion (bool reescribir) const noexcept
 {
 	if (reescribir)
-		std::cout << "\033[8A";
+		std::cout << "\033[9A";
 
 	std::cout
 		<< TermAzulB << "SELECCIÓN DE VISUALIZACIÓN:" << std::endl
@@ -624,7 +631,11 @@ void Escena :: MsgSeleccionVisualizacion (bool reescribir) const noexcept
 
 		<< TermCianB << "[" << TermAmarilloB << "T" << TermCianB << "]"
 		<< (visualizacion.test(Visualizacion::Texturas) ? TermVerde : TermRojo)
-		<< " Modo texturas" << TermNormal << std::endl;
+		<< " Modo texturas" << std::endl
+
+		<< TermCianB << "[" << TermAmarilloB << "X" << TermCianB << "]"
+		<< (peon->MuestraTapas() ? TermVerde : TermRojo)
+		<< " Mostrar tapas" << TermNormal << std::endl;
 
 	MsgTeclasComunes();
 }

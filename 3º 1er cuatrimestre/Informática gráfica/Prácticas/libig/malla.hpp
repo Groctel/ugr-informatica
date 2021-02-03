@@ -55,9 +55,9 @@ private:
 	) noexcept;
 
 	void CalcularNormales    () noexcept;
-	void GenerarAjedrez      () noexcept;
 	void InicializarColores  () noexcept;
-	void InicializarVBOColor (const unsigned char color) noexcept;
+
+	virtual void GenerarAjedrez () noexcept;
 
 protected:
 	static std::vector<Tupla3f> tablas_colores[5];
@@ -77,13 +77,15 @@ protected:
 
 	void DibujarDiferido         (const unsigned char color) noexcept;
 	void DibujarInmediato        (const unsigned char color) noexcept;
-	void DibujarAjedrezDiferido  () noexcept;
-	void DibujarAjedrezInmediato () const noexcept;
 
-	virtual void EnviarDibujoDiferido () noexcept;
+	virtual void DibujarAjedrezDiferido  () noexcept;
+	virtual void DibujarAjedrezInmediato () const noexcept;
+	virtual void EnviarDibujoDiferido    () noexcept;
+	virtual void EnviarDibujoInmediato   () const noexcept;
 
-	void InicializarMalla   () noexcept;
-	void InicializarTextura () noexcept;
+	void InicializarMalla    () noexcept;
+	void InicializarTextura  () noexcept;
+	void InicializarVBOColor (const unsigned char color) noexcept;
 
 	GLuint VBO (const GLuint & tipo, const GLuint & bytes,
 		const GLvoid * datos) const noexcept;

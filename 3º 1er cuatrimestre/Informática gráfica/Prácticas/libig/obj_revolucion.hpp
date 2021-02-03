@@ -42,8 +42,18 @@ class ObjRevolucion : public Malla3D
 {
 private:
 	size_t iteraciones = 0;
-	bool mostrar_tapas = false;
+	bool mostrar_tapas = true;
 
+	GLuint vbo_vertices_sin_tapas = 0;
+	GLuint vbo_caras_sin_tapas    = 0;
+	std::pair<GLuint, GLuint> vbo_caras_ajedrez_tapas = {0,0};
+
+	void DibujarAjedrezDiferido  () noexcept override;
+	void DibujarAjedrezInmediato () const noexcept override;
+	void EnviarDibujoDiferido    () noexcept override;
+	void EnviarDibujoInmediato   () const noexcept override;
+
+	void GenerarAjedrez  () noexcept override;
 	void GenerarCaras    (Tapas tapas) noexcept;
 	void GenerarVertices (Tapas tapas, EjeRotacion eje) noexcept;
 
@@ -82,8 +92,7 @@ public:
 	bool MuestraTapas () const noexcept;
 
 	void AplicarTextura (const ModoTextura modo) noexcept;
-	void EnviarDibujoDiferido () noexcept;
-	void MostrarTapas (const bool nuevo_estado) noexcept;
+	void MostrarTapas   (const bool nuevo_estado) noexcept;
 };
 
 #endif
