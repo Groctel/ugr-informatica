@@ -19,7 +19,7 @@ Escena :: Escena () noexcept
 	cielo     (new Esfera(1, 50)),
 	esfera    (new Esfera(1, 20)),
 	tetraedro (new Tetraedro(30)),
-	peon      (new ObjRevolucion("plys/peon.ply", 20, Tapas::Ambas)),
+	peon      (new ObjRevolucion("plys/peon.ply", 20, Tapas::Ambas, EjeY, true)),
 	araxxor   (new Araxxor()),
 
 	luz0 (new LuzDireccional(
@@ -234,12 +234,12 @@ void Escena :: DibujarMallas (
 	const bool seleccion
 ) const noexcept
 {
-	glPushMatrix();
-	{
-		glScalef(1600, 1600, 1600);
-		cielo->Dibujar(dibujo, ajedrez, color, seleccion);
-	}
-	glPopMatrix();
+	/* glPushMatrix(); */
+	/* { */
+	/* 	glScalef(1600, 1600, 1600); */
+	/* 	cielo->Dibujar(dibujo, ajedrez, color, seleccion); */
+	/* } */
+	/* glPopMatrix(); */
 
 	/* for (int i = 0; i < CUADRANTES; i++) */
 	/* { */

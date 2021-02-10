@@ -505,11 +505,15 @@ void ObjRevolucion :: RotarVerticesZ () noexcept
 void ObjRevolucion :: Revolucionar (
 	size_t nuevas_iteraciones,
 	Tapas tapas,
-	EjeRotacion eje
+	EjeRotacion eje,
+	bool invertir
 ) noexcept
 {
 	if (iteraciones == 0)
 		iteraciones = nuevas_iteraciones;
+
+	if (invertir)
+		perfil = std::vector(perfil.rbegin(), perfil.rend());
 
 	GenerarVertices(tapas, eje);
 	GenerarCaras(tapas);
@@ -535,18 +539,18 @@ ObjRevolucion :: ObjRevolucion (
 	const std::string & ruta,
 	size_t nuevas_iteraciones,
 	Tapas tapas,
-	EjeRotacion eje
+	EjeRotacion eje,
+	bool invertir
 ) noexcept
 :
 	iteraciones(nuevas_iteraciones)
 {
 	std::ifstream fi     = PLY::Abrir(ruta);
 	CabeceraPLY cabecera = PLY::LeerCabecera(fi);
-
-	perfil = PLY::LeerVertices(fi, cabecera);
+	perfil               = PLY::LeerVertices(fi, cabecera);
 	fi.close();
 
-	Revolucionar(iteraciones, tapas, eje);
+	Revolucionar(iteraciones, tapas, eje, invertir);
 }
 
 /**
@@ -561,13 +565,14 @@ ObjRevolucion :: ObjRevolucion (
 	const std::vector<Tupla3f> & nuevo_perfil,
 	size_t nuevas_iteraciones,
 	Tapas tapas,
-	EjeRotacion eje
+	EjeRotacion eje,
+	bool invertir
 ) noexcept
 :
 	iteraciones (nuevas_iteraciones),
 	perfil      (nuevo_perfil)
 {
-	Revolucionar(iteraciones, tapas, eje);
+	Revolucionar(iteraciones, tapas, eje, invertir);
 }
 
 /**

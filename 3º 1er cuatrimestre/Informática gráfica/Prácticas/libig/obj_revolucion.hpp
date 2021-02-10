@@ -52,7 +52,8 @@ protected:
 	void Revolucionar  (
 		size_t nuevas_iteraciones,
 		Tapas tapas = Tapas::Ambas,
-		EjeRotacion eje = EjeY
+		EjeRotacion eje = EjeY,
+		bool invertir = false
 	) noexcept;
 
 public:
@@ -62,14 +63,16 @@ public:
 		const std::string & ruta,
 		size_t nuevas_iteraciones,
 		Tapas tapas = Tapas::Ambas,
-		EjeRotacion eje = EjeY
+		EjeRotacion eje = EjeY,
+		bool invertir = false
 	) noexcept;
 
 	ObjRevolucion (
 		const std::vector<Tupla3f> & nuevo_perfil,
 		size_t nuevas_iteraciones,
 		Tapas tapas = Tapas::Ambas,
-		EjeRotacion eje = EjeY
+		EjeRotacion eje = EjeY,
+		bool invertir = false
 	) noexcept;
 
 	bool MuestraTapas () const noexcept;
