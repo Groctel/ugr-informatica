@@ -8,35 +8,14 @@
 #include <string>
 #include <utility>
 #include <vector>
+#include "enum.hpp"
 #include "global/globals.hpp"
 #include "global/tuplasg.hpp"
 #include "malla.hpp"
+#include "ply.hpp"
 
 #define tapa_inf first
 #define tapa_sup second
-
-/** @enum EjeRotacion
- * @brief Eje alrededor del cual se ha de rotar un ObjRevolucion.
- */
-
-enum EjeRotacion
-{
-	EjeX,
-	EjeY,
-	EjeZ
-};
-
-/** @enum Tapas
- * @brief Cantidad de tapas con las que crear un ObjRevolucion.
- */
-
-enum Tapas
-{
-	Ninguna  = 0,
-	Superior = 1,
-	Inferior = 1,
-	Ambas    = 2
-};
 
 class ObjRevolucion : public Malla3D
 {
@@ -47,6 +26,10 @@ private:
 	GLuint vbo_vertices_sin_tapas = 0;
 	GLuint vbo_caras_sin_tapas    = 0;
 	std::pair<GLuint, GLuint> vbo_caras_ajedrez_tapas = {0,0};
+
+	void AplicarTexturaCilindrica () noexcept;
+	void AplicarTexturaEsferica   () noexcept;
+	void AplicarTexturaPlana      () noexcept;
 
 	void DibujarAjedrezDiferido  () noexcept override;
 	void DibujarAjedrezInmediato () const noexcept override;
@@ -91,7 +74,7 @@ public:
 
 	bool MuestraTapas () const noexcept;
 
-	void AplicarTextura (const ModoTextura modo) noexcept;
+	void AplicarTextura (Textura * nueva, const ModoTextura modo) noexcept;
 	void MostrarTapas   (const bool nuevo_estado) noexcept;
 };
 

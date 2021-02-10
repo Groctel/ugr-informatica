@@ -11,6 +11,7 @@
 
 #include <string>
 #include "malla.hpp"
+#include "ply.hpp"
 
 class ObjPLY : public Malla3D
 {

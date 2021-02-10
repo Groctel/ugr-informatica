@@ -9,11 +9,12 @@
 #include <stdexcept>
 #include <string>
 #include <utility>
+#include "enum.hpp"
 #include "global/colores.hpp"
 #include "global/globals.hpp"
+#include "global/tuplasg.hpp"
 #include "material.hpp"
 #include "motor.hpp"
-#include "ply.hpp"
 #include "textura.hpp"
 
 /*
@@ -23,22 +24,14 @@
  * que no se esté usando.
  */
 
-#define incoloro -1
-#define azul     0
-#define magenta  1
-#define negro    2
-#define rojo     3
-#define verde    4
+#define COLORES 5
 
-/** @enum Dibujo
- * @brief Modos de envío de las órdenes de dibujo a la GPU.
- */
-
-enum Dibujo
-{
-	Diferido,
-	Inmediato
-};
+#define incoloro ~0
+#define azul      0
+#define magenta   1
+#define negro     2
+#define rojo      3
+#define verde     4
 
 /** @class Malla3D
  * @brief Malla de caras triangulares de la que heredan el resto de modelos.
@@ -47,6 +40,9 @@ enum Dibujo
 class Malla3D
 {
 private:
+	Tupla3f centro             = {0, 0, 0};
+	Tupla3f centro_perspectiva = {0, 0, 0};
+
 	Material * material = nullptr;
 
 	void InicializarColor (
@@ -54,13 +50,15 @@ private:
 		const RGB & color
 	) noexcept;
 
-	void CalcularNormales    () noexcept;
-	void InicializarColores  () noexcept;
+	void CalcularCentro     () noexcept;
+	void CalcularNormales   () noexcept;
+	void InicializarColores () noexcept;
 
 	virtual void GenerarAjedrez () noexcept;
 
 protected:
-	static std::vector<Tupla3f> tablas_colores[5];
+	static std::vector<Tupla3f> tablas_colores[COLORES];
+	       std::vector<Tupla3f> color_seleccion;
 
 	std::vector<Tupla3u> caras;
 	std::vector<Tupla3f> vertices;
@@ -69,14 +67,16 @@ protected:
 	Textura * textura = nullptr;
 	std::vector<Tupla2f> coord_textura;
 
-	GLuint vbo_colores[5] = {0};
-	GLuint vbo_caras      = 0;
-	GLuint vbo_vertices   = 0;
-	GLuint vbo_normales   = 0;
+	GLuint vbo_colores[COLORES]                 = {0};
+	GLuint vbo_color_seleccion                  = 0;
+	GLuint vbo_caras                            = 0;
+	GLuint vbo_vertices                         = 0;
+	GLuint vbo_normales                         = 0;
 	std::pair<GLuint, GLuint> vbo_caras_ajedrez = {0,0};
 
-	void DibujarDiferido         (const unsigned char color) noexcept;
-	void DibujarInmediato        (const unsigned char color) noexcept;
+	void DibujarDiferido  (const unsigned char color) noexcept;
+	void DibujarInmediato (const unsigned char color) noexcept;
+	void DibujarSeleccion (const Dibujo dibujado) noexcept;
 
 	virtual void DibujarAjedrezDiferido  () noexcept;
 	virtual void DibujarAjedrezInmediato () const noexcept;
@@ -84,7 +84,6 @@ protected:
 	virtual void EnviarDibujoInmediato   () const noexcept;
 
 	void InicializarMalla    () noexcept;
-	void InicializarTextura  () noexcept;
 	void InicializarVBOColor (const unsigned char color) noexcept;
 
 	GLuint VBO (const GLuint & tipo, const GLuint & bytes,
@@ -95,15 +94,23 @@ public:
 	virtual ~Malla3D () noexcept;
 
 	void AplicarMaterial (Material * nuevo) noexcept;
-	void AplicarTextura  (Textura * nueva) noexcept;
+	void AplicarTextura  (Textura * nueva, const bool calcular=true) noexcept;
+	void Invertir        () noexcept;
+
 	void Dibujar (
 		const Dibujo dibujado,
-		const bool ajedrez,
-		const unsigned char color
+		const bool ajedrez=false,
+		const unsigned char color=incoloro,
+		const bool seleccion=false
 	) noexcept;
 
-	Tupla3u              Cara  (const size_t indice) const;
-	std::vector<Tupla3u> Caras () const noexcept;
+	void NuevoColorSeleccion (const Tupla3f & color) noexcept;
+
+	Tupla3u              Cara     (const size_t indice) const;
+	std::vector<Tupla3u> Caras    () const noexcept;
+
+	Tupla3f Centro         () const noexcept;
+	Tupla3f ColorSeleccion () const noexcept;
 
 	Tupla3f              Vertice  (const size_t indice) const;
 	std::vector<Tupla3f> Vertices () const noexcept;

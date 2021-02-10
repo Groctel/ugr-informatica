@@ -10,11 +10,12 @@
 
 ObjPLY :: ObjPLY (const std::string & ruta)
 {
-	std::ifstream fi                      = PLY::Abrir(ruta);
-	std::pair<size_t, size_t> dimensiones = PLY::LeerCabecera(fi);
-	vertices                              = PLY::LeerVertices(fi, dimensiones.first);
-	caras                                 = PLY::LeerCaras(fi, dimensiones.second);
+	std::ifstream fi     = PLY::Abrir(ruta);
+	CabeceraPLY cabecera = PLY::LeerCabecera(fi);
+	vertices             = PLY::LeerVertices(fi, cabecera);
+	caras                = PLY::LeerCaras(fi, cabecera);
+	normales             = PLY::LeerNormales(fi, cabecera);
+	coord_textura        = PLY::LeerCoordTextura(fi, cabecera);
 
 	InicializarMalla();
 }
-

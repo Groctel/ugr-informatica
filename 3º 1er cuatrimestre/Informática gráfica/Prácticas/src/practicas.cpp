@@ -31,6 +31,24 @@ void GestionTecladoEspecial (int tecla, int x, int y)
 	glutPostRedisplay();
 }
 
+void ClickRaton (int boton, int estado, int x, int y)
+{
+	Escena::Instance()->ClickRaton(boton, estado, x, y);
+	glutPostRedisplay();
+}
+
+void MovimientoRaton (int x, int y)
+{
+	Escena::Instance()->MovimientoRaton(x, y);
+	glutPostRedisplay();
+}
+
+void ReproducirAnimacion ()
+{
+	Escena::Instance()->ReproducirAnimacion();
+	glutPostRedisplay();
+}
+
 int main (int argc, char ** argv)
 {
 	const int
@@ -48,8 +66,14 @@ int main (int argc, char ** argv)
 
 	glutDisplayFunc(Dibujar);
 	glutReshapeFunc(Redimensionar);
+
 	glutKeyboardFunc(GestionTeclado);
 	glutSpecialFunc(GestionTecladoEspecial);
+
+	glutMouseFunc(ClickRaton);
+	glutMotionFunc(MovimientoRaton);
+
+	glutIdleFunc(ReproducirAnimacion);
 
 	#ifdef LINUX
 	{

@@ -3,6 +3,85 @@
 
 #include "obj_revolucion.hpp"
 
+void ObjRevolucion :: AplicarTexturaCilindrica () noexcept
+{
+	float alpha, beta, h;
+	float s, t;
+
+	for (size_t i = 0; i < coord_textura.size(); i++)
+	{
+		alpha = atan2(vertices[i][Z], vertices[i][X]);
+		h     = vertices[i][Y];
+		s     = fmod(1.0 + alpha / (2 * M_PI), 1.0f);
+		t     = (h - perfil.front()[Y]) / (perfil.back()[Y] - perfil.front()[Y]);
+
+		coord_textura[i] = {s, t};
+	}
+
+	for (size_t i = (perfil.size() * iteraciones); i < perfil.size() * (iteraciones + 1); i++){
+		alpha = atan2( vertices[i][Z], vertices[i][X] );
+		h = vertices[i][Y];
+
+		s = 1.0f;
+		t = (h - perfil.front()[Y] ) / (perfil.back()[Y] - perfil.front()[Y]) ;
+
+		coord_textura[i] = {s, t};
+	}
+}
+
+void ObjRevolucion :: AplicarTexturaEsferica () noexcept
+{
+	float alpha, beta, h;
+	float s, t;
+
+	for (size_t i = 0; i < coord_textura.size(); i++){
+		alpha = atan2( vertices[i][Z], vertices[i][X] );
+		beta = atan2( vertices[i][Y], sqrt( pow( vertices[i][X] ,2) + pow ( vertices[i][Z] ,2) ) );
+
+		s = 1 - ( 0.5 + (alpha/(M_PI*2)) );
+		s += 0.5;
+		s = fmod(s, 1.0);
+		t = 0.5 + beta/M_PI;
+
+		coord_textura[i] = {s, t};
+	}
+
+	// asignamos las coordenadas de los extremos
+	for (size_t i = 0; i < vertices.size(); i = i + perfil.size()){
+		size_t a = i + perfil.size()/2;
+		alpha = atan2( vertices[a][Z], vertices[a][X] );
+
+		s = 1 - ( 0.5 + (alpha/(M_PI*2)) );
+		s += 0.5;
+		s = fmod(s, 1.0);
+
+		coord_textura[i] = {s, 0.0f};
+		coord_textura[i + perfil.size() - 1] = {s, 1.0f};
+
+	}
+
+	for (size_t i = perfil.size() * iteraciones ; i < vertices.size(); i++){
+		alpha = atan2( vertices[i][Z], vertices[i][X] );
+		beta = atan2( vertices[i][Y], sqrt( pow( vertices[i][X] ,2) + pow ( vertices[i][Z] ,2) ) );
+
+		s = 1.0;
+		t = 0.5 + beta/M_PI;
+
+		coord_textura[i] = {s, t};
+	}
+}
+
+void ObjRevolucion :: AplicarTexturaPlana () noexcept
+{
+	for (size_t i = 0; i < coord_textura.size(); i++)
+		coord_textura[i] = {
+			vertices[i][X],
+			(vertices[i][Y] - vertices.front()[Y])
+				/
+			(vertices.back()[Y] - vertices.front()[Y])
+		};
+}
+
 /**
  * @brief Envía a la GPU los datos de dibujo de la visualización en ajedrez del
  * modelo en modo diferido teniendo en cuenta si se muestran o no las tapas.
@@ -121,14 +200,14 @@ void ObjRevolucion :: EnviarDibujoDiferido () noexcept
 		if (vbo_vertices == 0)
 			vbo_vertices = VBO(
 				GL_ARRAY_BUFFER,
-				vertices.size()*3*sizeof(float),
+				vertices.size() * 3 * sizeof(float),
 				vertices.data()
 			);
 
 		if (vbo_caras == 0)
 			vbo_caras = VBO(
 				GL_ELEMENT_ARRAY_BUFFER,
-				caras.size()*3*sizeof(uint32_t),
+				total_caras * 3 * sizeof(uint32_t),
 				caras.data()
 			);
 	}
@@ -151,18 +230,16 @@ void ObjRevolucion :: EnviarDibujoDiferido () noexcept
 			);
 	}
 
-	glBindBuffer(
-		GL_ARRAY_BUFFER,
-		(mostrar_tapas ? vbo_vertices : vbo_vertices_sin_tapas)
-	); {
+	glBindBuffer(GL_ARRAY_BUFFER,
+		(mostrar_tapas ? vbo_vertices : vbo_vertices_sin_tapas));
+	{
 		glVertexPointer(3, GL_FLOAT, 0, 0);
 	}
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 
-	glBindBuffer(
-		GL_ELEMENT_ARRAY_BUFFER,
-		(mostrar_tapas ? vbo_caras : vbo_caras_sin_tapas)
-	); {
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER,
+		(mostrar_tapas ? vbo_caras : vbo_caras_sin_tapas));
+	{
 		glDrawElements(GL_TRIANGLES, 3 * total_caras, GL_UNSIGNED_INT, 0);
 	}
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
@@ -282,13 +359,16 @@ void ObjRevolucion :: GenerarCaras (Tapas tapas) noexcept
  * @brief Genera la tabla de vértices de la Malla3D ascendente.
  * @param tapas Especificación de la construcción de las tapas en la revolución.
  * @param eje Eje alrededor del cual ha de rotarse el objeto en su construcción.
+ *
+ * Tras rotar los vértices copia el perfil al final para el punto necesario por
+ * la presencia de texturas.
  */
 
 void ObjRevolucion :: GenerarVertices (Tapas tapas, EjeRotacion eje) noexcept
 {
 	std::pair<Tupla3f, Tupla3f> puntos_tapas = DetectarTapas(eje);
 
-	vertices.resize(perfil.size() * iteraciones + tapas);
+	vertices.resize(perfil.size() * (iteraciones + 1) + tapas);
 
 	switch (eje)
 	{
@@ -296,6 +376,9 @@ void ObjRevolucion :: GenerarVertices (Tapas tapas, EjeRotacion eje) noexcept
 		case EjeY: RotarVerticesY(); break;
 		case EjeZ: RotarVerticesZ(); break;
 	}
+
+	for (size_t i = 0; i < perfil.size(); i++)
+		vertices[vertices.size()-i-tapas-1] = perfil[perfil.size()-i-1];
 
 	if (tapas == Tapas::Inferior || tapas == Tapas::Ambas)
 		vertices[vertices.size()-tapas] = puntos_tapas.tapa_inf;
@@ -457,10 +540,10 @@ ObjRevolucion :: ObjRevolucion (
 :
 	iteraciones(nuevas_iteraciones)
 {
-	std::ifstream fi                    = PLY::Abrir(ruta);
-	std::pair<size_t, size_t> tamanios  = PLY::LeerCabecera(fi);
+	std::ifstream fi     = PLY::Abrir(ruta);
+	CabeceraPLY cabecera = PLY::LeerCabecera(fi);
 
-	perfil = PLY::LeerVertices(fi, tamanios.first);
+	perfil = PLY::LeerVertices(fi, cabecera);
 	fi.close();
 
 	Revolucionar(iteraciones, tapas, eje);
@@ -494,6 +577,22 @@ ObjRevolucion :: ObjRevolucion (
 bool ObjRevolucion :: MuestraTapas () const noexcept
 {
 	return mostrar_tapas;
+}
+
+void ObjRevolucion :: AplicarTextura (
+	Textura * nueva,
+	const ModoTextura modo
+) noexcept
+{
+	textura = nueva;
+	coord_textura.resize(vertices.size());
+
+	switch (modo)
+	{
+		case Cilindrica: AplicarTexturaCilindrica(); break;
+		case Esferica:   AplicarTexturaEsferica();   break;
+		case Plana:      AplicarTexturaPlana();      break;
+	}
 }
 
 /**

@@ -30,7 +30,7 @@ Imagen :: ~Imagen ()
  * @brief Consultor al vector de píxeles de la imagen.
  */
 
-pixel * Imagen :: Pixeles () noexcept
+color_pixel * Imagen :: Pixeles () noexcept
 {
 	return pixeles;
 }
@@ -41,7 +41,7 @@ pixel * Imagen :: Pixeles () noexcept
  * @param despl_ver Posición vertical del píxel consultado.
  */
 
-pixel * Imagen :: Pixel (unsigned int despl_hor, unsigned int despl_ver)
+color_pixel * Imagen :: Pixel (unsigned int despl_hor, unsigned int despl_ver)
 {
 	return pixeles + 3 * (anchura * despl_ver + despl_hor);
 }

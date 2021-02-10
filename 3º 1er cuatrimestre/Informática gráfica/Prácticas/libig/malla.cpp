@@ -3,7 +3,7 @@
 
 #include "malla.hpp"
 
-std::vector<Tupla3f> Malla3D :: tablas_colores[5];
+std::vector<Tupla3f> Malla3D :: tablas_colores[COLORES];
 
 /**
  * @brief Procesa y genera un VBO para una tabla de la malla.
@@ -75,6 +75,12 @@ void Malla3D :: InicializarColores () noexcept
 	InicializarColor(tablas_colores[negro],   RGBNegro);
 	InicializarColor(tablas_colores[rojo],    RGBRojo);
 	InicializarColor(tablas_colores[verde],   RGBVerde);
+}
+
+void Malla3D :: CalcularCentro () noexcept
+{
+	for (size_t i = 0; i < vertices.size(); i++)
+		centro = vertices[i] / vertices.size();
 }
 
 /**
@@ -151,25 +157,34 @@ void Malla3D :: DibujarDiferido (const unsigned char color) noexcept
 				glBindBuffer(GL_ARRAY_BUFFER, 0);
 
 				material->Aplicar();
+
+				if (textura != nullptr)
+				{
+					textura->Activar();
+					glEnable(GL_TEXTURE_2D);
+					glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+					glTexCoordPointer(2, GL_FLOAT, 0, coord_textura.data());
+				}
+
 			}
 			glDisableClientState(GL_NORMAL_ARRAY);
 		}
 		else
 		{
+			InicializarVBOColor(color);
 			glEnableClientState(GL_COLOR_ARRAY);
-			{
-				InicializarVBOColor(color);
 
-				glBindBuffer(GL_ARRAY_BUFFER, vbo_colores[color]);
-				{
-					glColorPointer(3, GL_FLOAT, 0, 0);
-				}
-				glBindBuffer(GL_ARRAY_BUFFER, 0);
+			glBindBuffer(GL_ARRAY_BUFFER, vbo_colores[color]);
+			{
+				glColorPointer(3, GL_FLOAT, 0, 0);
 			}
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
 		}
 
 		EnviarDibujoDiferido();
 	}
+	glDisable(GL_TEXTURE_2D);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
@@ -208,13 +223,64 @@ void Malla3D :: DibujarInmediato (const unsigned char color) noexcept
 		else
 		{
 			glEnableClientState(GL_COLOR_ARRAY);
-				glColorPointer(3, GL_FLOAT, 0, tablas_colores[color].data());
+			glColorPointer(3, GL_FLOAT, 0, tablas_colores[color].data());
 		}
 
 		EnviarDibujoInmediato();
 	}
 	glDisableClientState(GL_COLOR_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
+}
+
+void Malla3D :: DibujarSeleccion (const Dibujo dibujado) noexcept
+{
+	if (color_seleccion.size() > 0)
+	{
+				// Para calcular los centros de los objetos
+		GLfloat mat[16];
+		glGetFloatv(GL_MODELVIEW_MATRIX, mat);
+
+		Tupla3f n_centro;
+
+		// aplicamos la transformacion de la matriz al punto
+		n_centro[X] = mat[0] * centro[X] + mat[4] * centro[Y] + mat[8] * centro[Z] + mat[12];
+		n_centro[Y] = mat[1] * centro[X] + mat[5] * centro[Y] + mat[9] * centro[Z] + mat[13];
+		n_centro[Z] = mat[2] * centro[X] + mat[6] * centro[Y] + mat[10] * centro[Z] + mat[14];
+
+		centro_perspectiva = n_centro;
+
+		glEnableClientState(GL_VERTEX_ARRAY);
+		glEnableClientState(GL_COLOR_ARRAY);
+		{
+			switch (dibujado)
+			{
+				case Dibujo::Diferido:
+					if (vbo_color_seleccion == 0)
+						vbo_color_seleccion = VBO(
+							GL_ARRAY_BUFFER,
+							vertices.size() * 3 * sizeof(float),
+							color_seleccion.data()
+						);
+
+
+					glBindBuffer(GL_ARRAY_BUFFER, vbo_color_seleccion);
+					{
+						glColorPointer(3, GL_FLOAT, 0, 0);
+					}
+					glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+					EnviarDibujoDiferido();
+				break;
+
+				case Dibujo::Inmediato:
+					glColorPointer(3, GL_FLOAT, 0, color_seleccion.data());
+					EnviarDibujoInmediato();
+				break;
+			}
+		}
+		glDisableClientState(GL_COLOR_ARRAY);
+		glDisableClientState(GL_VERTEX_ARRAY);
+	}
 }
 
 /**
@@ -348,16 +414,10 @@ void Malla3D :: EnviarDibujoInmediato () const noexcept
 void Malla3D :: InicializarMalla () noexcept
 {
 	GenerarAjedrez();
+	CalcularCentro();
 	CalcularNormales();
 	InicializarColores();
 }
-
-/**
- * @brief Inicializa la textura asignada a la malla
- */
-
-void Malla3D :: InicializarTextura () noexcept
-{ }
 
 /**
  * @brief Constructor por defecto vacío necesario para las clases descendientes.
@@ -383,19 +443,34 @@ void Malla3D :: AplicarMaterial (Material * nuevo) noexcept
  * de la misma.
  */
 
-void Malla3D :: AplicarTextura (Textura * nueva) noexcept
+void Malla3D :: AplicarTextura (Textura * nueva, const bool calcular) noexcept
 {
 	textura = nueva;
 	coord_textura.resize(vertices.size());
 
-	for (size_t i = 0; i < coord_textura.size(); i++)
+	if (calcular)
 	{
-		coord_textura[i] = {
-			vertices[i][X],
-			(vertices[i][Y] - vertices[0][Y])
-				/
-			(vertices[vertices.size()][Y] - vertices[0][Y])
-		};
+		for (size_t i = 0; i < coord_textura.size(); i++)
+		{
+			coord_textura[i] = {
+				vertices[i][X],
+				(vertices[i][Y] - vertices.front()[Y])
+					/
+				(vertices.back()[Y] - vertices.front()[Y])
+			};
+		}
+	}
+}
+
+void Malla3D :: Invertir () noexcept
+{
+	uint32_t intercambia;
+
+	for (size_t i = 0; i < caras.size(); i++)
+	{
+		intercambia = caras[i][Y];
+		caras[i][Y] = caras[i][Z];
+		caras[i][Z] = intercambia;
 	}
 }
 
@@ -409,25 +484,41 @@ void Malla3D :: AplicarTextura (Textura * nueva) noexcept
 void Malla3D :: Dibujar (
 	const Dibujo dibujado,
 	const bool ajedrez,
-	const unsigned char color
+	const unsigned char color,
+	const bool seleccion
 ) noexcept
 {
-	switch (dibujado)
+	if (seleccion)
 	{
-		case Dibujo::Diferido:
-			if (ajedrez)
-				DibujarAjedrezDiferido();
-			else
-				DibujarDiferido(color);
-		break;
-
-		case Dibujo::Inmediato:
-			if (ajedrez)
-				DibujarAjedrezInmediato();
-			else
-				DibujarInmediato(color);
-		break;
+		DibujarSeleccion(dibujado);
 	}
+	else
+	{
+		switch (dibujado)
+		{
+			case Dibujo::Diferido:
+				if (ajedrez)
+					DibujarAjedrezDiferido();
+				else
+					DibujarDiferido(color);
+			break;
+
+			case Dibujo::Inmediato:
+				if (ajedrez)
+					DibujarAjedrezInmediato();
+				else
+					DibujarInmediato(color);
+			break;
+		}
+	}
+}
+
+void Malla3D :: NuevoColorSeleccion (const Tupla3f & color) noexcept
+{
+	color_seleccion.resize(vertices.size());
+
+	for (size_t i = 0; i < vertices.size(); i++)
+		color_seleccion[i] = color;
 }
 
 /**
@@ -449,6 +540,19 @@ Tupla3u Malla3D :: Cara (const size_t indice) const
 std::vector<Tupla3u> Malla3D :: Caras () const noexcept
 {
 	return caras;
+}
+
+Tupla3f Malla3D :: Centro () const noexcept
+{
+	return centro_perspectiva;
+}
+
+Tupla3f Malla3D :: ColorSeleccion () const noexcept
+{
+	if (color_seleccion.size() > 0)
+		return color_seleccion[0];
+	else
+		return {0, 0, 0};
 }
 
 /**

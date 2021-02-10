@@ -5,6 +5,7 @@
 #include <iostream>
 #include <stdexcept>
 #include <limits>
+#include "globals.hpp"
 
 #define X 0
 #define Y 1
@@ -271,8 +272,8 @@ template <typename T>
 Tupla3<T> :: Tupla3 (const Tupla<T,3> & otra)
 {
 	(*this)[0] = otra[0];
-	(*this)[1] = otra[2];
-	(*this)[2] = otra[1];
+	(*this)[1] = otra[1];
+	(*this)[2] = otra[2];
 }
 
 template <typename T>

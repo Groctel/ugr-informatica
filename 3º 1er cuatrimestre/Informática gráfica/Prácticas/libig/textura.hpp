@@ -1,23 +1,13 @@
-/** @file libig/objply.hpp
+/** @file libig/textura.hpp
  */
 
 #include <string>
 #include <vector>
+#include "enum.hpp"
 #include "libjpg/jpg_imagen.hpp"
 #include "motor.hpp"
 
 #define nulltxr ~0
-
-/** @enum ModoTextura
- * @brief Algoritmo a seguir a la hora de aplicar la textura a un objeto.
- */
-
-enum ModoTextura
-{
-	Cilindrica,
-	Esferica,
-	Plana
-};
 
 /** @class Textura
  *
@@ -27,13 +17,19 @@ enum ModoTextura
 class Textura
 {
 private:
-	GLuint id;
+	GLuint id         = nulltxr;
+	GLenum filtro_min = GL_NEAREST;
+	GLenum filtro_max = GL_NEAREST;
 	unsigned long altura;
 	unsigned long anchura;
-	std::vector<jpg::pixel> datos;
+	std::vector<jpg::color_pixel> pixeles;
 
 public:
-	Textura (const std::string  & ruta) noexcept;
+	Textura (
+		const std::string & ruta,
+		GLenum min=GL_NEAREST,
+		GLenum max=GL_NEAREST
+	) noexcept;
 
 	void Activar () noexcept;
 };

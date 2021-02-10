@@ -33,7 +33,7 @@ LuzDireccional :: LuzDireccional (
 	Luz(id_nuevo, amb, dif, esp, {direccion[X], direccion[Y], direccion[Z], 0}),
 	posicion_original({direccion[X], direccion[Y], direccion[Z], 0})
 {
-	rotacion_x = abs(atan2f(direccion[X], direccion[Y]));
+	rotacion_x = fabs(atan2f(direccion[X], direccion[Y]));
 	rotacion_y = asin(direccion[Y] / sqrt(direccion | direccion));
 }
 
