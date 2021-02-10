@@ -29,15 +29,15 @@ void Flor :: Dibujar (
 {
 	glPushMatrix();
 	{
-		glTranslatef(0, 7, 0);
+		tallo->Dibujar(dibujado, ajedrez, color, seleccion,  1);
+		tallo->Dibujar(dibujado, ajedrez, color, seleccion, -1);
+		glTranslatef(0, 5.0f, 0);
 
 		petalos->Dibujar(dibujado, ajedrez, color, seleccion,  1);
 		petalos->Dibujar(dibujado, ajedrez, color, seleccion, -1);
 	}
 	glPopMatrix();
 
-	tallo->Dibujar(dibujado, ajedrez, color, seleccion,  1);
-	tallo->Dibujar(dibujado, ajedrez, color, seleccion, -1);
 }
 
 int Flor :: PosX () const noexcept

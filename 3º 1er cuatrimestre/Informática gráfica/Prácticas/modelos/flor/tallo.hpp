@@ -6,7 +6,8 @@
 class TalloFlor
 {
 private:
-	static ObjPLY * tallo;
+	static ObjPLY * tallo_frontal;
+	static ObjPLY * tallo_trasero;
 
 public:
 	 TalloFlor () noexcept;

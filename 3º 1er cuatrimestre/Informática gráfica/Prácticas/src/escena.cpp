@@ -260,21 +260,20 @@ void Escena :: DibujarMallas (
 				glPopMatrix();
 			}
 
-		/* for (int j = 0; j < FLORES/CUADRANTES; j++) */
-		/* { */
-		/* 	glPushMatrix(); */
-		/* 	{ */
-		/* 		glTranslatef(0, 30, 0); */
-		/* 		glTranslatef( */
-		/* 			eje_x * (40 * flores[(FLORES*i)/CUADRANTES + j]->PosX() - 20), */
-		/* 			-20, */
-		/* 			eje_z * (40 * flores[(FLORES*i)/CUADRANTES + j]->PosY() - 20) */
-		/* 		); */
-		/* 		glScalef(2, 2, 2); */
-		/* 		flores[(FLORES*i)/CUADRANTES + j]->Dibujar(dibujo, ajedrez, color, seleccion); */
-		/* 	} */
-		/* 	glPopMatrix(); */
-		/* } */
+		for (int j = 0; j < FLORES/CUADRANTES; j++)
+		{
+			glPushMatrix();
+			{
+				glTranslatef(
+					eje_x * (40 * flores[(FLORES*i)/CUADRANTES + j]->PosX()),
+					0,
+					eje_z * (40 * flores[(FLORES*i)/CUADRANTES + j]->PosY())
+				);
+				glScalef(2.5f, 2.5f, 2.5f);
+				flores[(FLORES*i)/CUADRANTES + j]->Dibujar(dibujo, ajedrez, color, seleccion);
+			}
+			glPopMatrix();
+		}
 	}
 
 	if (visibles.test(obj_araxxor))

@@ -1,25 +1,36 @@
 #include "modelos/flor/tallo.hpp"
 
-ObjPLY * TalloFlor :: tallo = nullptr;
+ObjPLY * TalloFlor :: tallo_frontal = nullptr;
+ObjPLY * TalloFlor :: tallo_trasero = nullptr;
 
 TalloFlor :: TalloFlor () noexcept
 {
-	if (tallo == nullptr)
-		tallo = new ObjPLY("plys/flor/tallo.ply");
+	if (tallo_frontal == nullptr)
+		tallo_frontal = new ObjPLY("plys/flor/tallo_frontal.ply");
+
+	if (tallo_trasero == nullptr)
+		tallo_trasero = new ObjPLY("plys/flor/tallo_trasero.ply");
 }
 
 TalloFlor :: ~TalloFlor () noexcept
 {
-	if (tallo != nullptr)
+	if (tallo_frontal != nullptr)
 	{
-		delete tallo;
-		tallo = nullptr;
+		delete tallo_frontal;
+		tallo_frontal = nullptr;
+	}
+
+	if (tallo_trasero != nullptr)
+	{
+		delete tallo_trasero;
+		tallo_trasero = nullptr;
 	}
 }
 
 void TalloFlor :: AplicarMaterial (Material * nuevo) noexcept
 {
-	tallo->AplicarMaterial(nuevo);
+	tallo_frontal->AplicarMaterial(nuevo);
+	tallo_trasero->AplicarMaterial(nuevo);
 }
 
 void TalloFlor :: Dibujar (
@@ -33,8 +44,9 @@ void TalloFlor :: Dibujar (
 	glPushMatrix();
 	{
 		glRotatef(espejo * 45.0f, 0.0f, 1.0f, 0.0f);
-		/* glScalef(1, 5, 0.001); */
-		tallo->Dibujar(dibujado, ajedrez, color, seleccion);
+		tallo_frontal->Dibujar(dibujado, ajedrez, color, seleccion);
+		glRotatef(180.0f, 0, 1.0f, 0);
+		tallo_trasero->Dibujar(dibujado, ajedrez, color, seleccion);
 	}
 	glPopMatrix();
 }

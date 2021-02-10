@@ -6,7 +6,8 @@
 class PetalosFlor
 {
 private:
-	static ObjPLY * petalos;
+	static ObjPLY * petalos_frontales;
+	static ObjPLY * petalos_traseros;
 
 public:
 	 PetalosFlor () noexcept;

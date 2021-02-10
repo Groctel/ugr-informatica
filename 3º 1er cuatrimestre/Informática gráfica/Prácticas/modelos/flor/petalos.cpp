@@ -1,25 +1,36 @@
 #include "modelos/flor/petalos.hpp"
 
-ObjPLY * PetalosFlor :: petalos = nullptr;
+ObjPLY * PetalosFlor :: petalos_frontales = nullptr;
+ObjPLY * PetalosFlor :: petalos_traseros = nullptr;
 
 PetalosFlor :: PetalosFlor () noexcept
 {
-	if (petalos == nullptr)
-		petalos = new ObjPLY("plys/flor/petalos.ply");
+	if (petalos_frontales == nullptr)
+		petalos_frontales = new ObjPLY("plys/flor/petalos_frontales.ply");
+
+	if (petalos_traseros == nullptr)
+		petalos_traseros = new ObjPLY("plys/flor/petalos_traseros.ply");
 }
 
 PetalosFlor :: ~PetalosFlor () noexcept
 {
-	if (petalos != nullptr)
+	if (petalos_frontales != nullptr)
 	{
-		delete petalos;
-		petalos = nullptr;
+		delete petalos_frontales;
+		petalos_frontales = nullptr;
+	}
+
+	if (petalos_traseros != nullptr)
+	{
+		delete petalos_traseros;
+		petalos_traseros = nullptr;
 	}
 }
 
 void PetalosFlor :: AplicarMaterial (Material * nuevo) noexcept
 {
-	petalos->AplicarMaterial(nuevo);
+	petalos_frontales->AplicarMaterial(nuevo);
+	petalos_traseros->AplicarMaterial(nuevo);
 }
 
 void PetalosFlor :: Dibujar (
@@ -33,8 +44,9 @@ void PetalosFlor :: Dibujar (
 	glPushMatrix();
 	{
 		glRotatef(espejo * 45.0f, 0.0f, 1.0f, 0.0f);
-		/* glScalef(4, 2, 0.001); */
-		petalos->Dibujar(dibujado, ajedrez, color, seleccion);
+		petalos_frontales->Dibujar(dibujado, ajedrez, color, seleccion);
+		glRotatef(180.0f, 0, 1.0f, 0);
+		petalos_traseros->Dibujar(dibujado, ajedrez, color, seleccion);
 	}
 	glPopMatrix();
 }

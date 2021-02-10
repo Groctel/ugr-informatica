@@ -279,8 +279,8 @@ $(mdl)/araxxor/pata.o: $(mdl)/araxxor/pata.cpp $(mdl)/araxxor/pata.hpp
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(mdl)/flor.o: $(mdl)/flor.cpp $(mdl)/flor.hpp \
-		$(mdl)/flor/petalos.cpp $(mdl)/flor/petalos.hpp \
-		$(mdl)/flor/tallo.cpp $(mdl)/flor/tallo.hpp
+		$(mdl)/flor/petalos.o \
+		$(mdl)/flor/tallo.o
 	$(CXX) $(CXXFLAGS) -c $< -o $@
 
 $(mdl)/flor/petalos.o: $(mdl)/flor/petalos.cpp $(mdl)/flor/petalos.hpp
