@@ -15,10 +15,10 @@ Escena :: Escena () noexcept
 	cilindro  (new Cilindro(1, 5, 20, 30)),
 	cono      (new Cono(1, 5, 20, 30)),
 	cuadro    (new Cuadro()),
-	cubo      (new Cubo(20)),
+	cubo      (new Cubo()),
 	cielo     (new Esfera(1, 50)),
 	esfera    (new Esfera(1, 20)),
-	tetraedro (new Tetraedro(30)),
+	tetraedro (new Tetraedro()),
 	peon      (new ObjRevolucion("plys/peon.ply", 20, Tapas::Ambas, EjeY, true)),
 	araxxor   (new Araxxor()),
 
@@ -122,7 +122,7 @@ Escena :: Escena () noexcept
 		for (int j = 0; j < TAM_SUELO; j++)
 			for (int k = 0; k < TAM_SUELO; k++)
 			{
-				suelo[k][j][i] = new Cubo(20);
+				suelo[k][j][i] = new Cuadro();
 				suelo[k][j][i]->AplicarMaterial(plastico_verde);
 
 				if (gen_tierra(gen) >= 60)
@@ -234,47 +234,48 @@ void Escena :: DibujarMallas (
 	const bool seleccion
 ) const noexcept
 {
-	/* glPushMatrix(); */
-	/* { */
-	/* 	glScalef(1600, 1600, 1600); */
-	/* 	cielo->Dibujar(dibujo, ajedrez, color, seleccion); */
-	/* } */
-	/* glPopMatrix(); */
+	glPushMatrix();
+	{
+		glScalef(1600, 1600, 1600);
+		cielo->Dibujar(dibujo, ajedrez, color, seleccion);
+	}
+	glPopMatrix();
 
-	/* for (int i = 0; i < CUADRANTES; i++) */
-	/* { */
-	/* 	const int eje_x = (i % 3 == 0) ? 1 : -1; */
-	/* 	const int eje_z = (i > 1)      ? 1 : -1; */
+	for (int i = 0; i < CUADRANTES; i++)
+	{
+		const int eje_x = (i % 3 == 0) ? 1 : -1;
+		const int eje_z = (i > 1)      ? 1 : -1;
 
-	/* 	for (int j = 1; j <= TAM_SUELO; j++) */
-	/* 		for (int k = 1; k <= TAM_SUELO; k++) */
-	/* 		{ */
-	/* 			glPushMatrix(); */
-	/* 			{ */
-	/* 				glScalef(1, 0, 1); */
-	/* 				glTranslatef(eje_x * (40 * j - 20), -20, eje_z * (40 * k - 20)); */
+		for (int j = 1; j <= TAM_SUELO; j++)
+			for (int k = 1; k <= TAM_SUELO; k++)
+			{
+				glPushMatrix();
+				{
+					glTranslatef(eje_x * (40 * j - 20), 0, eje_z * (40 * k - 20));
+					glRotatef(90.0f, -1.0f, 0, 0);
+					glScalef(40, 40, 1);
 
-	/* 				suelo[k-1][j-1][i]->Dibujar(dibujo, ajedrez, color, seleccion); */
-	/* 			} */
-	/* 			glPopMatrix(); */
-	/* 		} */
+					suelo[k-1][j-1][i]->Dibujar(dibujo, ajedrez, color, seleccion);
+				}
+				glPopMatrix();
+			}
 
-	/* 	for (int j = 0; j < FLORES/CUADRANTES; j++) */
-	/* 	{ */
-	/* 		glPushMatrix(); */
-	/* 		{ */
-	/* 			glTranslatef(0, 30, 0); */
-	/* 			glTranslatef( */
-	/* 				eje_x * (40 * flores[(FLORES*i)/CUADRANTES + j]->PosX() - 20), */
-	/* 				-20, */
-	/* 				eje_z * (40 * flores[(FLORES*i)/CUADRANTES + j]->PosY() - 20) */
-	/* 			); */
-	/* 			glScalef(2, 2, 2); */
-	/* 			flores[(FLORES*i)/CUADRANTES + j]->Dibujar(dibujo, ajedrez, color, seleccion); */
-	/* 		} */
-	/* 		glPopMatrix(); */
-	/* 	} */
-	/* } */
+		/* for (int j = 0; j < FLORES/CUADRANTES; j++) */
+		/* { */
+		/* 	glPushMatrix(); */
+		/* 	{ */
+		/* 		glTranslatef(0, 30, 0); */
+		/* 		glTranslatef( */
+		/* 			eje_x * (40 * flores[(FLORES*i)/CUADRANTES + j]->PosX() - 20), */
+		/* 			-20, */
+		/* 			eje_z * (40 * flores[(FLORES*i)/CUADRANTES + j]->PosY() - 20) */
+		/* 		); */
+		/* 		glScalef(2, 2, 2); */
+		/* 		flores[(FLORES*i)/CUADRANTES + j]->Dibujar(dibujo, ajedrez, color, seleccion); */
+		/* 	} */
+		/* 	glPopMatrix(); */
+		/* } */
+	}
 
 	if (visibles.test(obj_araxxor))
 	{

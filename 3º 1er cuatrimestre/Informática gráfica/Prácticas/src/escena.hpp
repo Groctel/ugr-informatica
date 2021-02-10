@@ -108,7 +108,7 @@ private:
 	Araxxor * araxxor = nullptr;
 
 	Flor * flores[FLORES];
-	Cubo * suelo[TAM_SUELO][TAM_SUELO][CUADRANTES];
+	Cuadro * suelo[TAM_SUELO][TAM_SUELO][CUADRANTES];
 
 	LuzDireccional * luz0 = nullptr;
 	LuzPosicional  * luz1 = nullptr;

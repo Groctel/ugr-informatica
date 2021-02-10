@@ -16,10 +16,10 @@ class Cubo : public Malla3D
 {
 private:
 	inline void InicializarCaras    () noexcept;
-	inline void InicializarVertices (const float escala) noexcept;
+	inline void InicializarVertices () noexcept;
 
 public:
-	Cubo (const float escala=1) noexcept;
+	Cubo () noexcept;
 };
 
 #endif

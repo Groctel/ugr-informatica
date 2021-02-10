@@ -16,10 +16,10 @@ class Tetraedro : public Malla3D
 {
 private:
 	inline void InicializarCaras    () noexcept;
-	inline void InicializarVertices (const float escala) noexcept;
+	inline void InicializarVertices () noexcept;
 
 public:
-	Tetraedro (const float escala=1) noexcept;
+	Tetraedro () noexcept;
 };
 
 #endif

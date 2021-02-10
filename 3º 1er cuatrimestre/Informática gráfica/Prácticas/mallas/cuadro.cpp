@@ -23,14 +23,14 @@ inline void Cuadro :: InicializarCaras () noexcept
  * @param escala Factor de escalado de los lados del cuadro.
  */
 
-inline void Cuadro :: InicializarVertices (const float escala) noexcept
+inline void Cuadro :: InicializarVertices () noexcept
 {
 	vertices.resize(4);
 
-	vertices[0] = {0,      0,      0};
-	vertices[1] = {escala, 0,      0};
-	vertices[2] = {0,      escala, 0};
-	vertices[3] = {escala, escala, 0};
+	vertices[0] = {0,    0,    0};
+	vertices[1] = {1.0f, 0,    0};
+	vertices[2] = {0,    1.0f, 0};
+	vertices[3] = {1.0f, 1.0f, 0};
 }
 
 /**
@@ -41,9 +41,9 @@ inline void Cuadro :: InicializarVertices (const float escala) noexcept
  * cuadro.
  */
 
-Cuadro :: Cuadro (const float escala) noexcept
+Cuadro :: Cuadro () noexcept
 {
-	InicializarVertices(escala);
+	InicializarVertices();
 	InicializarCaras();
 	InicializarMalla();
 }

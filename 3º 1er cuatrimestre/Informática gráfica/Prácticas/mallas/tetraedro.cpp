@@ -22,33 +22,31 @@ inline void Tetraedro :: InicializarCaras () noexcept
 
 /**
  * @brief Crea la tabla de vértices del tetraedro.
- * @param escala Factor de escalado de los lados del cubo.
  */
 
-inline void Tetraedro :: InicializarVertices (const float escala) noexcept
+inline void Tetraedro :: InicializarVertices () noexcept
 {
 	vertices.resize(4);
 
-	float mediana = sqrt(pow(escala, 2) - pow(escala/2, 2));
-	float altura  = sqrt(pow(escala, 2) - pow(mediana/3, 2));
+	float mediana = sqrt(1 - 1/4.0f);
+	float altura  = sqrt(1 - pow(mediana/3.0f, 2));
 
-	vertices[0] = {-escala, -altura, -mediana};
-	vertices[1] = {escala,  -altura, -mediana};
-	vertices[2] = {0,       -altura, mediana };
-	vertices[3] = {0,       altura,  0       };
+	vertices[0] = {-1, -altura, -mediana};
+	vertices[1] = {1,  -altura, -mediana};
+	vertices[2] = {0,  -altura, mediana };
+	vertices[3] = {0,  altura,  0       };
 }
 
 /**
  * @brief Constructor con argumento.
- * @param escala Factor de escalado de los lados del tetraedro.
  *
  * Llama a las funciones de inicialización propias y heredadas para crear el
  * tetraedro.
  */
 
-Tetraedro :: Tetraedro (const float escala) noexcept
+Tetraedro :: Tetraedro () noexcept
 {
-	InicializarVertices(escala);
+	InicializarVertices();
 	InicializarCaras();
 	InicializarMalla();
 }

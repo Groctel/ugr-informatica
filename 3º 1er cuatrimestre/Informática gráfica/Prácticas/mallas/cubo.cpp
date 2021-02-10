@@ -31,34 +31,32 @@ inline void Cubo :: InicializarCaras () noexcept
 
 /**
  * @brief Crea la tabla de vértices del cubo.
- * @param escala Factor de escalado de los lados del cubo.
  */
 
-inline void Cubo :: InicializarVertices (const float escala) noexcept
+inline void Cubo :: InicializarVertices () noexcept
 {
 	vertices.resize(8);
 
-	vertices[0] = {-escala, -escala, -escala};
-	vertices[1] = {-escala, -escala,  escala};
-	vertices[2] = {-escala,  escala, -escala};
-	vertices[3] = {-escala,  escala,  escala};
-	vertices[4] = { escala, -escala, -escala};
-	vertices[5] = { escala, -escala,  escala};
-	vertices[6] = { escala,  escala, -escala};
-	vertices[7] = { escala,  escala,  escala};
+	vertices[0] = {-1, -1, -1};
+	vertices[1] = {-1, -1,  1};
+	vertices[2] = {-1,  1, -1};
+	vertices[3] = {-1,  1,  1};
+	vertices[4] = { 1, -1, -1};
+	vertices[5] = { 1, -1,  1};
+	vertices[6] = { 1,  1, -1};
+	vertices[7] = { 1,  1,  1};
 }
 
 /**
  * @brief Constructor con argumento.
- * @param escala Factor de escalado de los lados del cubo.
  *
  * Llama a las funciones de inicialización propias y heredadas para crear el
  * cubo.
  */
 
-Cubo :: Cubo (const float escala) noexcept
+Cubo :: Cubo () noexcept
 {
-	InicializarVertices(escala);
+	InicializarVertices();
 	InicializarCaras();
 	InicializarMalla();
 }

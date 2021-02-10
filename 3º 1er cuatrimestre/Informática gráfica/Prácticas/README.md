@@ -4,7 +4,6 @@
 
 - La cámara en primera persona hace lo que le da la gana.
 - El giro de la cámara con las teclas la acerca poco a poco.
-- La textura de los cuadros se ve mal al montar el suelo.
 - Mirar sistema coordenadas luz.
 
 ## Requisitos de las prácticas

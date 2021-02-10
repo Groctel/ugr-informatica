@@ -454,9 +454,9 @@ void Malla3D :: AplicarTextura (Textura * nueva, const bool calcular) noexcept
 		{
 			coord_textura[i] = {
 				vertices[i][X],
-				(vertices[i][Y] - vertices.front()[Y])
+				(vertices[i][Y] - vertices[0][Y])
 					/
-				(vertices.back()[Y] - vertices.front()[Y])
+				(vertices[vertices.size()-1][Y] - vertices[0][Y])
 			};
 		}
 	}
