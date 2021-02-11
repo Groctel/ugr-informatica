@@ -162,8 +162,8 @@ void Camara :: Zoom (const float factor) noexcept
 
 void Camara :: GirarExaminar (const int x, const int y) noexcept
 {
-	RotarExaminarX(fabs(y) * DEG_TO_RAD);
-	RotarExaminarY(     x  * DEG_TO_RAD);
+	RotarExaminarX(abs(y) * DEG_TO_RAD);
+	RotarExaminarY(    x  * DEG_TO_RAD);
 }
 
 void Camara :: Girar1raPersona (const int x, const int y) noexcept
@@ -175,59 +175,65 @@ void Camara :: Girar1raPersona (const int x, const int y) noexcept
 void Camara :: RotarExaminarX (const float angulo) noexcept
 {
 	Tupla3f eye_centro = eye - at;
+	float   modulo     = sqrt(eye_centro | eye_centro);
 
 	eye_centro[Y] = cos(angulo) * eye_centro[Y] - sin(angulo) * eye_centro[Z];
 	eye_centro[Z] = sin(angulo) * eye_centro[Y] + cos(angulo) * eye_centro[Z];
 
-	eye = eye_centro.Normalise() * sqrt(eye_centro | eye_centro) + at;
+	eye = eye_centro.Normalizar() * modulo + at;
 }
 
 void Camara :: RotarExaminarY (const float angulo) noexcept
 {
 	Tupla3f eye_centro = eye - at;
+	float   modulo     = sqrt(eye_centro | eye_centro);
 
 	eye_centro[X] =  cos(angulo) * eye_centro[X] + sin(angulo) * eye_centro[Z];
 	eye_centro[Z] = -sin(angulo) * eye_centro[X] + cos(angulo) * eye_centro[Z];
 
-	eye = eye_centro.Normalise() * sqrt(eye_centro | eye_centro) + at;
+	eye = eye_centro.Normalizar() * modulo + at;
 }
 
 void Camara :: RotarExaminarZ (const float angulo) noexcept
 {
 	Tupla3f eye_centro = eye - at;
+	float   modulo     = sqrt(eye_centro | eye_centro);
 
 	eye_centro[X] = cos(angulo) * eye_centro[X] - sin(angulo) * eye_centro[Y];
 	eye_centro[Y] = sin(angulo) * eye_centro[X] + cos(angulo) * eye_centro[Y];
 
-	eye = eye_centro.Normalise() * sqrt(eye_centro | eye_centro) + at;
+	eye = eye_centro.Normalizar() * modulo + at;
 }
 
 void Camara :: Rotar1raPersonaX (const float angulo) noexcept
 {
 	Tupla3f at_centro = at - eye;
+	float   modulo    = sqrt(at_centro | at_centro);
 
 	at_centro[Y] = cos(angulo) * at_centro[Y] - sin(angulo) * at_centro[Z];
 	at_centro[Z] = sin(angulo) * at_centro[Y] + cos(angulo) * at_centro[Z];
 
-	at = at_centro.Normalise() * sqrt(at_centro | at_centro) + eye;
+	at = at_centro.Normalizar() * modulo + eye;
 }
 
 void Camara :: Rotar1raPersonaY (const float angulo) noexcept
 {
 	Tupla3f at_centro = at - eye;
+	float   modulo    = sqrt(at_centro | at_centro);
 
 	at_centro[X] =  cos(angulo) * at_centro[X] + sin(angulo) * at_centro[Z];
 	at_centro[Z] = -sin(angulo) * at_centro[X] + cos(angulo) * at_centro[Z];
 
-	at = at_centro.Normalise() * sqrt(at_centro | at_centro) + eye;
+	at = at_centro.Normalizar() * modulo + eye;
 }
 
 void Camara :: Rotar1raPersonaZ (const float angulo) noexcept
 {
 	Tupla3f at_centro = at - eye;
+	float   modulo    = sqrt(at_centro | at_centro);
 
 	at_centro[X] = cos(angulo) * at_centro[X] - sin(angulo) * at_centro[Y];
 	at_centro[Y] = sin(angulo) * at_centro[X] + cos(angulo) * at_centro[Y];
 
-	at = at_centro.Normalise() * sqrt(at_centro | at_centro) + eye;
+	at = at_centro.Normalizar() * modulo + eye;
 }

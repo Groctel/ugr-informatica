@@ -14,12 +14,13 @@ public:
 	~ColmilloAraxxor () noexcept;
 
 	void AplicarMaterial (Material * m) noexcept;
-	void AplicarTextura  (Textura * nueva, const bool calcular) noexcept;
+	void AplicarTextura  (Textura * nueva) noexcept;
 	void Dibujar (
 		const Dibujo dibujado,
 		const bool ajedrez=false,
 		const unsigned char color=incoloro,
-		const bool seleccion=false
+		const bool seleccion=false,
+		const bool marcado=false
 	) noexcept;
 
 	void NuevoColorSeleccion (const Tupla3f & color) noexcept;

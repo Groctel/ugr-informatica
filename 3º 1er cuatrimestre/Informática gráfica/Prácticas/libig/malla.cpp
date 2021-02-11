@@ -3,6 +3,13 @@
 
 #include "malla.hpp"
 
+Material * Malla3D :: material_pdef = new Material(
+	{0.2, 0.2, 0.2, 1.0f},
+	{0.8, 0.8, 0.8, 1.0f},
+	{0.0, 0.0, 0.0, 1.0f},
+	0
+);
+
 std::vector<Tupla3f> Malla3D :: tablas_colores[COLORES];
 
 /**
@@ -70,11 +77,12 @@ void Malla3D :: GenerarAjedrez () noexcept
 
 void Malla3D :: InicializarColores () noexcept
 {
-	InicializarColor(tablas_colores[azul],    RGBAzul);
-	InicializarColor(tablas_colores[magenta], RGBMagenta);
-	InicializarColor(tablas_colores[negro],   RGBNegro);
-	InicializarColor(tablas_colores[rojo],    RGBRojo);
-	InicializarColor(tablas_colores[verde],   RGBVerde);
+	InicializarColor(tablas_colores[amarillo], RGBAmarillo);
+	InicializarColor(tablas_colores[azul],     RGBAzul);
+	InicializarColor(tablas_colores[magenta],  RGBMagenta);
+	InicializarColor(tablas_colores[negro],    RGBNegro);
+	InicializarColor(tablas_colores[rojo],     RGBRojo);
+	InicializarColor(tablas_colores[verde],    RGBVerde);
 }
 
 void Malla3D :: CalcularCentro () noexcept
@@ -89,28 +97,32 @@ void Malla3D :: CalcularCentro () noexcept
 
 void Malla3D :: CalcularNormales () noexcept
 {
-	Tupla3f normal_cara;
+	if (normales.size() > 0)
+		return;
 
 	normales.resize(vertices.size());
 
-	for (auto it = normales.begin(); it != normales.end(); ++it)
-		*it = {0,0,0};
+	for (size_t i = 0; i < normales.size(); i++)
+		normales[i] = {0, 0, 0};
 
-	for (auto it = caras.cbegin(); it != caras.cend(); ++it)
+	for (auto it = caras.begin(); it != caras.end(); ++it)
 	{
-		normal_cara = (
-			(Tupla3f) (vertices[(*it)[1]] - vertices[(*it)[0]])
-			*
-			(Tupla3f) (vertices[(*it)[2]] - vertices[(*it)[0]])
-		);
+		Tupla3f alfa = vertices.at((*it)[1]) - vertices.at((*it)[0]);
+		Tupla3f beta = vertices.at((*it)[2]) - vertices.at((*it)[0]);
 
-		normales[(*it)[X]] = normales[(*it)[X]] + normal_cara;
-		normales[(*it)[Y]] = normales[(*it)[Y]] + normal_cara;
-		normales[(*it)[Z]] = normales[(*it)[Z]] + normal_cara;
-	}
+		Tupla3f normal_cara = alfa * beta;
+
+		normales[(*it)[0]] = normales[(*it)[0]] + normal_cara;
+		normales[(*it)[1]] = normales[(*it)[1]] + normal_cara;
+		normales[(*it)[2]] = normales[(*it)[2]] + normal_cara;
+		}
+
 
 	for (auto it = normales.begin(); it != normales.end(); ++it)
-		*it = it->Normalise();
+	{
+		if (( (*it) | (*it) )> 0)
+			(*it) = (*it).Normalizar();
+	}
 }
 
 /**
@@ -142,32 +154,30 @@ void Malla3D :: DibujarDiferido (const unsigned char color) noexcept
 		if (glIsEnabled(GL_LIGHTING))
 		{
 			glEnableClientState(GL_NORMAL_ARRAY);
+
+			if (vbo_normales == 0)
+				vbo_normales = VBO(
+					GL_ARRAY_BUFFER,
+					normales.size()*3*sizeof(float),
+					normales.data()
+				);
+
+			glBindBuffer(GL_ARRAY_BUFFER, vbo_normales);
 			{
-				if (vbo_normales == 0)
-					vbo_normales = VBO(
-						GL_ARRAY_BUFFER,
-						normales.size()*3*sizeof(float),
-						normales.data()
-					);
-
-				glBindBuffer(GL_ARRAY_BUFFER, vbo_normales);
-				{
-					glNormalPointer(GL_FLOAT, 0, 0);
-				}
-				glBindBuffer(GL_ARRAY_BUFFER, 0);
-
-				material->Aplicar();
-
-				if (textura != nullptr)
-				{
-					textura->Activar();
-					glEnable(GL_TEXTURE_2D);
-					glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-					glTexCoordPointer(2, GL_FLOAT, 0, coord_textura.data());
-				}
-
+				glNormalPointer(GL_FLOAT, 0, 0);
 			}
-			glDisableClientState(GL_NORMAL_ARRAY);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+			material->Aplicar();
+
+			if (textura != nullptr)
+			{
+				textura->Activar();
+
+				glEnable(GL_TEXTURE_2D);
+				glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+				glTexCoordPointer(2, GL_FLOAT, 0, coord_textura.data());
+			}
 		}
 		else
 		{
@@ -184,6 +194,7 @@ void Malla3D :: DibujarDiferido (const unsigned char color) noexcept
 		EnviarDibujoDiferido();
 	}
 	glDisable(GL_TEXTURE_2D);
+	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
@@ -200,25 +211,23 @@ void Malla3D :: DibujarInmediato (const unsigned char color) noexcept
 {
 	glEnableClientState(GL_VERTEX_ARRAY);
 	{
+		glVertexPointer(3, GL_FLOAT, 0, vertices.data());
+
 		if (glIsEnabled(GL_LIGHTING))
 		{
 			glEnableClientState(GL_NORMAL_ARRAY);
+
+			glNormalPointer(GL_FLOAT, 0, normales.data());
+			material->Aplicar();
+
+			if (textura != nullptr)
 			{
-				glNormalPointer(GL_FLOAT, 0, normales.data());
-				material->Aplicar();
+				textura->Activar();
 
-				if (textura != nullptr)
-				{
-					textura->Activar();
-
-					glEnableClientState(GL_TEXTURE_COORD_ARRAY);
-					{
-						glTexCoordPointer(2, GL_FLOAT, 0, coord_textura.data());
-					}
-					glDisableClientState(GL_TEXTURE_COORD_ARRAY);
-				}
+				glEnable(GL_TEXTURE_2D);
+				glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+				glTexCoordPointer(2, GL_FLOAT, 0, coord_textura.data());
 			}
-			glDisableClientState(GL_NORMAL_ARRAY);
 		}
 		else
 		{
@@ -228,6 +237,9 @@ void Malla3D :: DibujarInmediato (const unsigned char color) noexcept
 
 		EnviarDibujoInmediato();
 	}
+	glDisable(GL_TEXTURE_2D);
+	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
+	glDisableClientState(GL_NORMAL_ARRAY);
 	glDisableClientState(GL_COLOR_ARRAY);
 	glDisableClientState(GL_VERTEX_ARRAY);
 }
@@ -398,8 +410,6 @@ void Malla3D :: EnviarDibujoDiferido () noexcept
 
 void Malla3D :: EnviarDibujoInmediato () const noexcept
 {
-	glVertexPointer(3, GL_FLOAT, 0, vertices.data());
-
 	glDrawElements(
 		GL_TRIANGLES,    caras.size() * 3,
 		GL_UNSIGNED_INT, caras.data()
@@ -413,10 +423,11 @@ void Malla3D :: EnviarDibujoInmediato () const noexcept
 
 void Malla3D :: InicializarMalla () noexcept
 {
-	GenerarAjedrez();
 	CalcularCentro();
 	CalcularNormales();
+	GenerarAjedrez();
 	InicializarColores();
+	AplicarMaterial(material_pdef);
 }
 
 /**
@@ -427,7 +438,10 @@ Malla3D :: Malla3D () noexcept
 { }
 
 Malla3D :: ~Malla3D () noexcept
-{ }
+{
+	delete material_pdef;
+	material_pdef = nullptr;
+}
 
 /**
  * @brief Asigna un nuevo material a la malla.
@@ -443,22 +457,23 @@ void Malla3D :: AplicarMaterial (Material * nuevo) noexcept
  * de la misma.
  */
 
-void Malla3D :: AplicarTextura (Textura * nueva, const bool calcular) noexcept
+void Malla3D :: AplicarTextura (Textura * nueva) noexcept
 {
 	textura = nueva;
+
+	if (coord_textura.size() > 0)
+		return;
+
 	coord_textura.resize(vertices.size());
 
-	if (calcular)
+	for (size_t i = 0; i < coord_textura.size(); i++)
 	{
-		for (size_t i = 0; i < coord_textura.size(); i++)
-		{
-			coord_textura[i] = {
-				vertices[i][X],
-				(vertices[i][Y] - vertices[0][Y])
-					/
-				(vertices[vertices.size()-1][Y] - vertices[0][Y])
-			};
-		}
+		coord_textura[i] = {
+			vertices[i][X],
+			(vertices[i][Y] - vertices[0][Y])
+				/
+			(vertices[vertices.size()-1][Y] - vertices[0][Y])
+		};
 	}
 }
 
@@ -485,7 +500,8 @@ void Malla3D :: Dibujar (
 	const Dibujo dibujado,
 	const bool ajedrez,
 	const unsigned char color,
-	const bool seleccion
+	const bool seleccion,
+	const bool marcado
 ) noexcept
 {
 	if (seleccion)
@@ -501,6 +517,14 @@ void Malla3D :: Dibujar (
 					DibujarAjedrezDiferido();
 				else
 					DibujarDiferido(color);
+
+				if (marcado)
+				{
+					glPolygonMode(GL_FRONT, GL_LINE);
+					DibujarDiferido(amarillo);
+					glPolygonMode(GL_FRONT, GL_POINT);
+					DibujarDiferido(amarillo);
+				}
 			break;
 
 			case Dibujo::Inmediato:
@@ -508,6 +532,14 @@ void Malla3D :: Dibujar (
 					DibujarAjedrezInmediato();
 				else
 					DibujarInmediato(color);
+
+				if (marcado)
+				{
+					glPolygonMode(GL_FRONT, GL_LINE);
+					DibujarInmediato(amarillo);
+					glPolygonMode(GL_FRONT, GL_POINT);
+					DibujarInmediato(amarillo);
+				}
 			break;
 		}
 	}

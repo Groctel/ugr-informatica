@@ -18,7 +18,7 @@ private:
 
 public:
 	LuzPosicional (
-		const GLenum  id_nuevo,
+		const GLenum id_nuevo,
 		const Tupla4f & amb,
 		const Tupla4f & dif,
 		const Tupla4f & esp,

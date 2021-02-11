@@ -1,6 +1,7 @@
 /** @file libig/camara.hpp
  */
 
+#include <cmath>
 #include <string>
 #include <vector>
 #include "enum.hpp"
@@ -29,7 +30,7 @@ private:
 	float top;
 	float bottom;
 
-	Malla3D * objeto_fijo;
+	Malla3D * objeto_fijo = nullptr;
 
 public:
 	Camara (

@@ -20,16 +20,17 @@ void AbdomenAraxxor :: AplicarMaterial (Material * m) noexcept
 	abdomen->AplicarMaterial(m);
 }
 
-void AbdomenAraxxor :: AplicarTextura  (Textura * nueva, const bool calcular) noexcept
+void AbdomenAraxxor :: AplicarTextura  (Textura * nueva) noexcept
 {
-	abdomen->AplicarTextura(nueva, calcular);
+	abdomen->AplicarTextura(nueva);
 }
 
 void AbdomenAraxxor :: Dibujar (
 	const Dibujo dibujado,
 	const bool ajedrez,
 	const unsigned char color,
-	const bool seleccion
+	const bool seleccion,
+	const bool marcado
 ) noexcept
 {
 	glPushMatrix();
@@ -37,7 +38,7 @@ void AbdomenAraxxor :: Dibujar (
 		glTranslatef(5.8f, -18.3f, -52.7f);
 		glRotatef(cos(-rotacion) * 5 -5, 1, 0, 0);
 
-		abdomen->Dibujar(dibujado, ajedrez, color, seleccion);
+		abdomen->Dibujar(dibujado, ajedrez, color, seleccion, marcado);
 	}
 	glPopMatrix();
 }

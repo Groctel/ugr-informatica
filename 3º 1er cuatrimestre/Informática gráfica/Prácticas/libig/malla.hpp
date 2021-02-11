@@ -24,14 +24,15 @@
  * que no se esté usando.
  */
 
-#define COLORES 5
+#define COLORES 6
 
 #define incoloro ~0
-#define azul      0
-#define magenta   1
-#define negro     2
-#define rojo      3
-#define verde     4
+#define amarillo  0
+#define azul      1
+#define magenta   2
+#define negro     3
+#define rojo      4
+#define verde     5
 
 /** @class Malla3D
  * @brief Malla de caras triangulares de la que heredan el resto de modelos.
@@ -43,6 +44,7 @@ private:
 	Tupla3f centro             = {0, 0, 0};
 	Tupla3f centro_perspectiva = {0, 0, 0};
 
+	static Material * material_pdef;
 	Material * material = nullptr;
 
 	void InicializarColor (
@@ -94,14 +96,15 @@ public:
 	virtual ~Malla3D () noexcept;
 
 	void AplicarMaterial (Material * nuevo) noexcept;
-	void AplicarTextura  (Textura * nueva, const bool calcular=true) noexcept;
+	void AplicarTextura  (Textura * nueva) noexcept;
 	void Invertir        () noexcept;
 
 	void Dibujar (
 		const Dibujo dibujado,
 		const bool ajedrez=false,
 		const unsigned char color=incoloro,
-		const bool seleccion=false
+		const bool seleccion=false,
+		const bool marcado=false
 	) noexcept;
 
 	void NuevoColorSeleccion (const Tupla3f & color) noexcept;

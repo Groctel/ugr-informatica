@@ -13,24 +13,25 @@ PataAraxxor :: PataAraxxor (
 	Tupla3f nuevo_vec_rot_metatarso,
 	Tupla3f nueva_pos_tarso,
 	Tupla3f nuevo_vec_rot_tarso,
-	float rot_femur,
-	float rot_tibia
+	float rotacion_inicial
 ) noexcept
 :
-	femur             (new ObjPLY(ruta_femur)),
-	tibia             (new ObjPLY(ruta_tibia)),
-	metatarso         (new ObjPLY(ruta_metatarso)),
-	tarso             (new ObjPLY(ruta_tarso)),
-	pos_femur         (nueva_pos_femur),
-	vec_rot_femur     (nuevo_vec_rot_femur),
-	pos_tibia         (nueva_pos_tibia),
-	vec_rot_tibia     (nuevo_vec_rot_tibia),
-	pos_metatarso     (nueva_pos_metatarso),
-	vec_rot_metatarso (nuevo_vec_rot_metatarso),
-	pos_tarso         (nueva_pos_tarso),
-	vec_rot_tarso     (nuevo_vec_rot_tarso),
-	rotacion_femur    (rot_femur),
-	rotacion_tibia    (rot_tibia)
+	femur              (new ObjPLY(ruta_femur)),
+	tibia              (new ObjPLY(ruta_tibia)),
+	metatarso          (new ObjPLY(ruta_metatarso)),
+	tarso              (new ObjPLY(ruta_tarso)),
+	pos_femur          (nueva_pos_femur),
+	vec_rot_femur      (nuevo_vec_rot_femur),
+	pos_tibia          (nueva_pos_tibia),
+	vec_rot_tibia      (nuevo_vec_rot_tibia),
+	pos_metatarso      (nueva_pos_metatarso),
+	vec_rot_metatarso  (nuevo_vec_rot_metatarso),
+	pos_tarso          (nueva_pos_tarso),
+	vec_rot_tarso      (nuevo_vec_rot_tarso),
+	rotacion_femur     (rotacion_inicial),
+	rotacion_tibia     (rotacion_inicial),
+	rotacion_metatarso (rotacion_inicial),
+	rotacion_tarso     (rotacion_inicial)
 { }
 
 PataAraxxor :: ~PataAraxxor () noexcept
@@ -49,19 +50,20 @@ void PataAraxxor :: AplicarMaterial (Material * m) noexcept
 	tarso->AplicarMaterial(m);
 }
 
-void PataAraxxor :: AplicarTextura  (Textura * nueva, const bool calcular) noexcept
+void PataAraxxor :: AplicarTextura  (Textura * nueva) noexcept
 {
-	femur->AplicarTextura(nueva, calcular);
-	tibia->AplicarTextura(nueva, calcular);
-	metatarso->AplicarTextura(nueva, calcular);
-	tarso->AplicarTextura(nueva, calcular);
+	femur->AplicarTextura(nueva);
+	tibia->AplicarTextura(nueva);
+	metatarso->AplicarTextura(nueva);
+	tarso->AplicarTextura(nueva);
 }
 
 void PataAraxxor :: Dibujar (
 	const Dibujo dibujado,
 	const bool ajedrez,
 	const unsigned char color,
-	const bool seleccion
+	const bool seleccion,
+	const bool marcado
 ) noexcept
 {
 	glPushMatrix();
@@ -69,7 +71,7 @@ void PataAraxxor :: Dibujar (
 		glTranslatef(pos_femur[X], pos_femur[Y], pos_femur[Z]);
 		glRotatef(sin(rotacion_femur) * 6, 0.3f, 1, 0.25f);
 
-		femur->Dibujar(dibujado, ajedrez, color, seleccion);
+		femur->Dibujar(dibujado, ajedrez, color, seleccion, marcado);
 
 		glTranslatef(pos_tibia[X], pos_tibia[Y], pos_tibia[Z]);
 		glRotatef(sin(rotacion_tibia) * 10,
@@ -78,7 +80,7 @@ void PataAraxxor :: Dibujar (
 			vec_rot_tibia[Z]
 		);
 
-		tibia->Dibujar(dibujado, ajedrez, color, seleccion);
+		tibia->Dibujar(dibujado, ajedrez, color, seleccion, marcado);
 
 		glTranslatef(pos_metatarso[X], pos_metatarso[Y], pos_metatarso[Z]);
 		glRotatef(
@@ -88,7 +90,7 @@ void PataAraxxor :: Dibujar (
 			vec_rot_metatarso[Z]
 		);
 
-		metatarso->Dibujar(dibujado, ajedrez, color, seleccion);
+		metatarso->Dibujar(dibujado, ajedrez, color, seleccion, marcado);
 
 		glTranslatef(pos_tarso[X], pos_tarso[Y], pos_tarso[Z]);
 		glRotatef(
@@ -98,7 +100,7 @@ void PataAraxxor :: Dibujar (
 			vec_rot_tarso[Z]
 		);
 
-		tarso->Dibujar(dibujado, ajedrez, color, seleccion);
+		tarso->Dibujar(dibujado, ajedrez, color, seleccion, marcado);
 	}
 	glPopMatrix();
 }

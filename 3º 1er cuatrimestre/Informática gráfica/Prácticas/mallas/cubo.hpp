@@ -15,8 +15,9 @@
 class Cubo : public Malla3D
 {
 private:
-	inline void InicializarCaras    () noexcept;
-	inline void InicializarVertices () noexcept;
+	void InicializarCaras        () noexcept;
+	void InicializarCoordTextura () noexcept;
+	void InicializarVertices     () noexcept;
 
 public:
 	Cubo () noexcept;

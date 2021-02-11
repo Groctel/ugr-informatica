@@ -8,6 +8,8 @@ void ObjRevolucion :: AplicarTexturaCilindrica () noexcept
 	float alpha, beta, h;
 	float s, t;
 
+	(void) beta;
+
 	for (size_t i = 0; i < coord_textura.size(); i++)
 	{
 		alpha = atan2(vertices[i][Z], vertices[i][X]);
@@ -33,6 +35,8 @@ void ObjRevolucion :: AplicarTexturaEsferica () noexcept
 {
 	float alpha, beta, h;
 	float s, t;
+
+	(void) h;
 
 	for (size_t i = 0; i < coord_textura.size(); i++){
 		alpha = atan2( vertices[i][Z], vertices[i][X] );
@@ -505,15 +509,29 @@ void ObjRevolucion :: RotarVerticesZ () noexcept
 void ObjRevolucion :: Revolucionar (
 	size_t nuevas_iteraciones,
 	Tapas tapas,
-	EjeRotacion eje,
-	bool invertir
+	EjeRotacion eje
 ) noexcept
 {
 	if (iteraciones == 0)
 		iteraciones = nuevas_iteraciones;
 
-	if (invertir)
-		perfil = std::vector(perfil.rbegin(), perfil.rend());
+	switch (eje)
+	{
+		case EjeX:
+			if (perfil[0][X] > perfil[perfil.size()-1][X])
+				perfil = std::vector(perfil.rbegin(), perfil.rend());
+		break;
+
+		case EjeY:
+			if (perfil[0][Y] > perfil[perfil.size()-1][Y])
+				perfil = std::vector(perfil.rbegin(), perfil.rend());
+		break;
+
+		case EjeZ:
+			if (perfil[0][Z] > perfil[perfil.size()-1][Z])
+				perfil = std::vector(perfil.rbegin(), perfil.rend());
+		break;
+	}
 
 	GenerarVertices(tapas, eje);
 	GenerarCaras(tapas);
@@ -539,8 +557,7 @@ ObjRevolucion :: ObjRevolucion (
 	const std::string & ruta,
 	size_t nuevas_iteraciones,
 	Tapas tapas,
-	EjeRotacion eje,
-	bool invertir
+	EjeRotacion eje
 ) noexcept
 :
 	iteraciones(nuevas_iteraciones)
@@ -550,7 +567,7 @@ ObjRevolucion :: ObjRevolucion (
 	perfil               = PLY::LeerVertices(fi, cabecera);
 	fi.close();
 
-	Revolucionar(iteraciones, tapas, eje, invertir);
+	Revolucionar(iteraciones, tapas, eje);
 }
 
 /**
@@ -565,14 +582,13 @@ ObjRevolucion :: ObjRevolucion (
 	const std::vector<Tupla3f> & nuevo_perfil,
 	size_t nuevas_iteraciones,
 	Tapas tapas,
-	EjeRotacion eje,
-	bool invertir
+	EjeRotacion eje
 ) noexcept
 :
 	iteraciones (nuevas_iteraciones),
 	perfil      (nuevo_perfil)
 {
-	Revolucionar(iteraciones, tapas, eje, invertir);
+	Revolucionar(iteraciones, tapas, eje);
 }
 
 /**

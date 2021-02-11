@@ -3,14 +3,7 @@
 
 #include "luz_posicional.hpp"
 
-/** @fn LuzPosicional :: LuzPosicional (
- * 	const GLenum  id_nuevo,
- * 	const Tupla4f & amb,
- * 	const Tupla4f & dif,
- * 	const Tupla4f & esp,
- * 	const Tupla4f & pos
- * ) noexcept
- *
+/**
  * @brief Constructor con argumentos.
  * @param id_nuevo Identificador de luz reconocible por OpenGL.
  * @param amb Color ambiente de la luz.

@@ -3,14 +3,7 @@
 
 #include "luz_direccional.hpp"
 
-/** @fn LuzDireccional :: LuzDireccional (
- * 	const GLenum  id_nuevo,
- * 	const Tupla4f & amb,
- * 	const Tupla4f & dif,
- * 	const Tupla4f & esp,
- * 	const Tupla4f & pos
- * ) noexcept
- *
+/**
  * @brief Constructor con argumentos.
  * @param id_nuevo Identificador de luz reconocible por OpenGL.
  * @param amb Color ambiente de la luz.
@@ -33,12 +26,14 @@ LuzDireccional :: LuzDireccional (
 	Luz(id_nuevo, amb, dif, esp, {direccion[X], direccion[Y], direccion[Z], 0}),
 	posicion_original({direccion[X], direccion[Y], direccion[Z], 0})
 {
-	rotacion_x = fabs(atan2f(direccion[X], direccion[Y]));
+	rotacion_x = fabs(atan2f(direccion[X], direccion[Z]));
 	rotacion_y = asin(direccion[Y] / sqrt(direccion | direccion));
+
+	if (direccion[X] < 0)
+		rotacion_x += M_PI;
 }
 
-/** @fn void LuzDireccional :: VariarRotX (const float incremento) noexcept
- *
+/**
  * @brief Modifica la rotación alrededor del eje x (ángulo alfa).
  * @param incremento Factor de rotación.
  */
@@ -57,8 +52,7 @@ void LuzDireccional :: VariarRotX (const float incremento) noexcept
 		* sqrt(posicion_original | posicion_original);
 }
 
-/** @fn void LuzDireccional :: VariarRotY (const float incremento) noexcept
- *
+/**
  * @brief Modifica la rotación alrededor del eje y (ángulo beta).
  * @param incremento Factor de rotación.
  */
@@ -67,13 +61,13 @@ void LuzDireccional :: VariarRotY (const float incremento) noexcept
 {
 	rotacion_y += incremento;
 
-	if (rotacion_y > M_PI / 4.0f)
+	if (rotacion_y > M_PI / 2.0f)
 	{
-		rotacion_y = M_PI / 4.0f;
+		rotacion_y = M_PI / 2.0f;
 	}
-	else if (rotacion_y < -(M_PI / 4.0f))
+	else if (rotacion_y < -(M_PI / 2.0f))
 	{
-		rotacion_y = -(M_PI / 4.0f);
+		rotacion_y = -(M_PI / 2.0f);
 	}
 
 	posicion[X] = sin(rotacion_x) * cos(rotacion_y)

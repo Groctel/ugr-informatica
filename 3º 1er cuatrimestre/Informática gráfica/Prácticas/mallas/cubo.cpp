@@ -10,7 +10,7 @@
  * otra del opuesto para crear el efecto ajedrez perfecto del cubo.
  */
 
-inline void Cubo :: InicializarCaras () noexcept
+void Cubo :: InicializarCaras () noexcept
 {
 	caras.resize(12);
 
@@ -33,7 +33,7 @@ inline void Cubo :: InicializarCaras () noexcept
  * @brief Crea la tabla de vértices del cubo.
  */
 
-inline void Cubo :: InicializarVertices () noexcept
+void Cubo :: InicializarVertices () noexcept
 {
 	vertices.resize(8);
 
@@ -60,4 +60,3 @@ Cubo :: Cubo () noexcept
 	InicializarCaras();
 	InicializarMalla();
 }
-

@@ -41,7 +41,7 @@ public:
 	inline friend std::ostream & operator <<
 		(std::ostream & os, const Tupla<N,u> & tupla);
 
-	Tupla<T,n> Normalise() const;
+	Tupla<T,n> Normalizar() const;
 };
 
 template <typename T>
@@ -163,12 +163,12 @@ inline Tupla<T,n> Tupla<T,n> :: operator / (const T & escalar) const noexcept
 template <typename T, uint32_t n>
 inline T Tupla<T,n> :: operator | (const Tupla & otra) const noexcept
 {
-	T resultado = 0;
+	double resultado = 0;
 
 	for (uint32_t i = 0; i < n; i++)
-		resultado += (T) elementos[i] * (T) otra[i];
+		resultado += (double) elementos[i] * (double) otra[i];
 
-	return resultado;
+	return (T) resultado;
 }
 
 template <typename T, uint32_t n>
@@ -224,12 +224,15 @@ inline std::ostream & operator << (std::ostream & os, const Tupla<N,u> & tupla)
 }
 
 template <typename T, uint32_t n>
-inline Tupla<T,n> Tupla<T,n> :: Normalise () const
+inline Tupla<T,n> Tupla<T,n> :: Normalizar () const
 {
-	T lenSq = 0;
+	T lenSq = T(0);
 
 	for (uint32_t i = 0; i < n; i++)
 		lenSq += elementos[i] * elementos[i];
+
+	if (lenSq <= 0.0)
+		throw std::runtime_error("División por cero en la normalización.");
 
 	return (*this) * (T) (1.0 / sqrt((double) lenSq));
 }

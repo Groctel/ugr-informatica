@@ -21,18 +21,19 @@ void CabezaAraxxor :: AplicarMaterial (Material * m) noexcept
 	colmillo_izquierdo->AplicarMaterial(m);
 }
 
-void CabezaAraxxor :: AplicarTextura  (Textura * nueva, const bool calcular) noexcept
+void CabezaAraxxor :: AplicarTextura  (Textura * nueva) noexcept
 {
-	cabeza->AplicarTextura(nueva, calcular);
-	colmillo_derecho->AplicarTextura(nueva, calcular);
-	colmillo_izquierdo->AplicarTextura(nueva, calcular);
+	cabeza->AplicarTextura(nueva);
+	colmillo_derecho->AplicarTextura(nueva);
+	colmillo_izquierdo->AplicarTextura(nueva);
 }
 
 void CabezaAraxxor :: Dibujar (
 	const Dibujo dibujado,
 	const bool ajedrez,
 	const unsigned char color,
-	const bool seleccion
+	const bool seleccion,
+	const bool marcado
 ) noexcept
 {
 	glPushMatrix();
@@ -42,13 +43,13 @@ void CabezaAraxxor :: Dibujar (
 			-86.0f + sin(1.5f * pos_y),
 			-52.8f + sin(0.75f * pos_z)
 		);
-		cabeza->Dibujar(dibujado, ajedrez, color, seleccion);
+		cabeza->Dibujar(dibujado, ajedrez, color, seleccion, marcado);
 
 		glPushMatrix();
 		{
 			glTranslatef(21.6f, 54.8f, -10.3f);
 			glRotatef(cos(pos_y) * 15, 1, 0, 0);
-			colmillo_derecho->Dibujar(dibujado, ajedrez, color, seleccion);
+			colmillo_derecho->Dibujar(dibujado, ajedrez, color, seleccion, marcado);
 		}
 		glPopMatrix();
 
@@ -56,7 +57,7 @@ void CabezaAraxxor :: Dibujar (
 		{
 			glTranslatef(-17.1f, 52.9f, -9.7f);
 			glRotatef(sin(pos_y) * 15, 1, 0, 0);
-			colmillo_izquierdo->Dibujar(dibujado, ajedrez, color, seleccion);
+			colmillo_izquierdo->Dibujar(dibujado, ajedrez, color, seleccion, marcado);
 		}
 		glPopMatrix();
 	}

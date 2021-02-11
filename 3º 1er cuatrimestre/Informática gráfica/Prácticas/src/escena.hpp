@@ -32,13 +32,16 @@
  * visibles. Estas macros definen el nombre de cada una de estas flags.
  */
 
-#define obj_cilindro  0
-#define obj_araxxor   1
-#define obj_cono      2
-#define obj_cubo      3
-#define obj_esfera    4
-#define obj_tetraedro 5
-#define obj_peon      6
+#define obj_araxxor   0
+#define obj_cielo     1
+#define obj_cilindro  2
+#define obj_cono      3
+#define obj_cubo      4
+#define obj_ejes      5
+#define obj_flores    6
+#define obj_peon      7
+#define obj_suelo     8
+#define obj_tetraedro 9
 
 /*
  * ÁNGULOS DE LAS LUCES DIRECCIONALES:
@@ -67,8 +70,12 @@
 
 #define FLORES 200
 
-#define seleccion_cilindro {1, 0, 0}
-#define seleccion_araxxor  {1, 0, 1}
+#define seleccion_araxxor   {0, 0, 0}
+#define seleccion_cilindro  {0, 0, 1}
+#define seleccion_cono      {0, 1, 0}
+#define seleccion_cubo      {0, 1, 1}
+#define seleccion_peon      {1, 0, 0}
+#define seleccion_tetraedro {1, 0, 1}
 
 /** @class Escena
  * @brief Gestor principal de la muestra de todos los objetos en la ventana.
@@ -95,24 +102,27 @@ private:
 	int x_previa = 0;
 	int y_previa = 0;
 
-	Ejes          * ejes      = nullptr;
+	Araxxor       * araxxor   = nullptr;
 	Cilindro      * cilindro  = nullptr;
 	Cono          * cono      = nullptr;
-	Cuadro        * cuadro    = nullptr;
 	Cubo          * cubo      = nullptr;
+	Ejes          * ejes      = nullptr;
 	Esfera        * cielo     = nullptr;
-	Esfera        * esfera    = nullptr;
 	Tetraedro     * tetraedro = nullptr;
 	ObjRevolucion * peon      = nullptr;
 
-	Araxxor * araxxor = nullptr;
+	float rot_araxxor_y = 180.0f;
 
-	Flor * flores[FLORES];
+	Flor   * flores[FLORES];
 	Cuadro * suelo[TAM_SUELO][TAM_SUELO][CUADRANTES];
 
 	LuzDireccional * luz0 = nullptr;
 	LuzPosicional  * luz1 = nullptr;
+	LuzPosicional  * luz2 = nullptr;
 
+	float rot_luz2 = 0;
+
+	Material * bronce         = nullptr;
 	Material * cromo          = nullptr;
 	Material * goma_negra     = nullptr;
 	Material * estanio        = nullptr;
@@ -123,14 +133,13 @@ private:
 
 	Textura * t_araxxor = nullptr;
 	Textura * cesped    = nullptr;
-	Textura * madera    = nullptr;
 	Textura * lata      = nullptr;
 	Textura * tierra    = nullptr;
 
 	Camara * camaras[CAMARAS];
 	Camara * camara_activa = camaras[0];
 
-	std::bitset<7> visibles;
+	std::bitset<10> visibles;
 	std::bitset<6> visualizacion;
 	std::pair<bool, bool> angulos = {false, false};
 
@@ -178,7 +187,7 @@ public:
 	void Dibujar             () noexcept;
 	void DibujarSeleccion    () noexcept;
 	void Redimensionar       (int nueva_anchura, int nueva_altura) noexcept;
-	void ReproducirAnimacion () const noexcept;
+	void ReproducirAnimacion () noexcept;
 
 	bool GestionTeclado         (unsigned char Tecla1, int x, int y) noexcept;
 	void GestionTecladoEspecial (int Tecla1, int x, int y) noexcept;

@@ -1,11 +1,5 @@
 # Informática gráfica
 
-## Bugs:
-
-- La cámara en primera persona hace lo que le da la gana.
-- El giro de la cámara con las teclas la acerca poco a poco.
-- Mirar sistema coordenadas luz.
-
 ## Requisitos de las prácticas
 
 ### Práctica 1
@@ -35,7 +29,7 @@
 | Constructor de revolución a partir de vector de puntos     | 0.050      | [X]      |
 | Generación correcta de geometría                           | 0.050      | [X]      |
 | Generación correcta de topología en el sentido del ejemplo | 0.070      | [X]      |
-| Generación correcta de topología en cualquier sentido      | 0.100      | [ ]      |
+| Generación correcta de topología en cualquier sentido      | 0.100      | [X]      |
 | Detección de existencia de tapas                           | 0.100      | [X]      |
 | Constructores con argumento para crear o no tapas          | 0.100      | [X]      |
 | Visualización opcional de tapas en tiempo de ejecución     | 0.100      | [X]      |
@@ -49,7 +43,7 @@
 | Cálculo correcto de las normales en los vértices                    | 0.100      | [X]      |
 | Los ejes se siguen viendo en color plano                            | 0.100      | [X]      |
 | Uso de array de normales                                            | 0.100      | [X]      |
-| Implementación correcta clase Luz (y subclases)                     | 0.150      | [ ]      |
+| Implementación correcta clase Luz (y subclases)                     | 0.150      | [X]      |
 | Hay al menos una luz direccional                                    | 0.100      | [X]      |
 | Hay al menos una luz puntual                                        | 0.100      | [X]      |
 | Modo de visualización sombreado suave                               | 0.150      | [X]      |
@@ -59,7 +53,7 @@
 
 | Requisito                                                                                        | Puntuación | Completo |
 | ------------------------------------------------------------------------------------------------ | ---------: | :------: |
-| Diseño manual del grafo del modelo jerárquico 0.25                                               | 0.250      | [ ]      |
+| Diseño manual del grafo del modelo jerárquico 0.25                                               | 0.250      | [X]      |
 | Estructura de clases del modelo jerárquico 0.20                                                  | 0.200      | [X]      |
 | Se conservan los modos de visualización 0.10                                                     | 0.100      | [X]      |
 | Movimiento paso a paso con teclado 3 grados de libertad (al menos una rotación y una traslación) | 0.200      | [X]      |
@@ -73,7 +67,7 @@
 | ---------------------------------------------------------------------------------------------------------------- | ---------: | :------: |
 | Asignación correcta de coordenadas de texturas en cuadro                                                         | 0.200      | [X]      |
 | Visualización correcta al menos un objeto con la textura                                                         | 0.150      | [X]      |
-| Animación de la luz puntual                                                                                      | 0.200      | [ ]      |
+| Animación de la luz puntual                                                                                      | 0.200      | [X]      |
 | Extra: Hay en la escena un cilindro texturizado (p.ej. lata de refresco) y una esfera texturizada (p.ej. tierra) | 0.150      | [ ]      |
 
 ### Práctica 6
@@ -85,6 +79,6 @@
 | La cámara activa se mueve en torno al objeto seleccionado con el ratón                  | 0.250      | [X]      |
 | Se puede hacer zoom con cada cámara                                                     | 0.150      | [X]      |
 | Se seleccionan objetos en la escena iluminada con materiales                            | 0.250      | [X]      |
-| La camara activa, sin objeto seleccionado, se mueve en primera persona                  | 0.150      | [ ]      |
+| La camara activa, sin objeto seleccionado, se mueve en primera persona                  | 0.150      | [X]      |
 | Las cámaras conservan su estado al pasar de una a otra                                  | 0.100      | [X]      |
 | Extra: Los objetos seleccionables se visualizan de forma especial                       | 0.120      | [ ]      |

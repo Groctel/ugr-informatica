@@ -4,13 +4,6 @@
 #include "luz.hpp"
 
 /**
- * @brief Constructor por defecto.
- */
-
-Luz :: Luz () noexcept
-{ }
-
-/**
  * @brief Constructor con argumentos.
  * @param id_nuevo Identificador de luz reconocible por OpenGL.
  * @param amb Color ambiente de la luz.
@@ -32,6 +25,13 @@ Luz :: Luz (
 	color_difuso    (dif),
 	color_especular (esp),
 	posicion        (pos)
+{ }
+
+/**
+ * @brief Constructor por defecto necesario para las clases descendientes.
+ */
+
+Luz :: Luz () noexcept
 { }
 
 /**

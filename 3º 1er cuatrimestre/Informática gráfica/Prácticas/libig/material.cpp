@@ -35,7 +35,6 @@ void Material :: Aplicar () noexcept
 	glMaterialfv(GL_FRONT, GL_SPECULAR,  especular);
 	glMaterialf (GL_FRONT, GL_SHININESS, brillo);
 
-	glColorMaterial(GL_FRONT, GL_EMISSION);
 	glColorMaterial(GL_FRONT, GL_AMBIENT);
 	glColorMaterial(GL_FRONT, GL_DIFFUSE);
 	glColorMaterial(GL_FRONT, GL_SPECULAR);

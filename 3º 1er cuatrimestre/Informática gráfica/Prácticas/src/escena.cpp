@@ -11,33 +11,44 @@ Escena * Escena :: instance = nullptr;
 
 Escena :: Escena () noexcept
 :
-	ejes      (new Ejes()),
+	araxxor   (new Araxxor()),
 	cilindro  (new Cilindro(1, 5, 20, 30)),
 	cono      (new Cono(1, 5, 20, 30)),
-	cuadro    (new Cuadro()),
 	cubo      (new Cubo()),
+	ejes      (new Ejes()),
 	cielo     (new Esfera(1, 50)),
-	esfera    (new Esfera(1, 20)),
 	tetraedro (new Tetraedro()),
-	peon      (new ObjRevolucion("plys/peon.ply", 20, Tapas::Ambas, EjeY, true)),
-	araxxor   (new Araxxor()),
+	peon      (new ObjRevolucion("plys/peon.ply", 20, Tapas::Ambas, EjeY)),
 
 	luz0 (new LuzDireccional(
 		GL_LIGHT0,
 		{0,   0,   0, 1},
 		{1,   1,   1, 1},
 		{1,   1,   1, 1},
-		{200, 150, 200}
+		{50.0f, 50.0f, 50.0f}
 	)),
 	luz1 (new LuzPosicional(
 		GL_LIGHT1,
 		{0, 0, 0, 1},
 		{1, 1, 1, 1},
 		{1, 1, 1, 1},
-		{0, 0, 10}
+		{50.0f, 50.0f, 50.0f}
+	)),
+	luz2 (new LuzPosicional(
+		GL_LIGHT2,
+		{1, 1, 1, 1},
+		{1, 1, 1, 1},
+		{1, 1, 1, 1},
+		{0, 0, 0}
 	)),
 
 	// http://www.it.hiof.no/~borres/j3d/explain/light/p-materials.html
+	bronce (new Material(
+		{0.2125f,   0.1275f,   0.054f,    1.0f},
+		{0.714f,    0.4284f,   0.18144f,  1.0f},
+		{0.393548f, 0.271906f, 0.166721f, 1.0f},
+		25.6f
+	)),
    cromo (new Material(
 		{0.25f,     0.25f,     0.25f,     1.0f},
 		{0.4f,      0.4f,      0.4f,      1.0f},
@@ -83,14 +94,13 @@ Escena :: Escena () noexcept
 
 	t_araxxor (new Textura("texturas/araxxor.jpg", GL_LINEAR, GL_LINEAR)),
 	cesped    (new Textura("texturas/grass.jpg")),
-	madera    (new Textura("texturas/madera.jpg")),
 	lata      (new Textura("texturas/text-lata-1.jpg")),
 	tierra    (new Textura("texturas/dirt.jpg")),
 
 	camaras {
 		new Camara(
 			Perspectiva,
-			{100.0f, 100.0f, 100.0f},
+			{0, 100.0f, 200.0f},
 			{0, 0,      0},
 			{0, 1.0f,   0},
 			50.0f,
@@ -101,7 +111,7 @@ Escena :: Escena () noexcept
 			{100.0f, 100.0f, 100.0f},
 			{0, 0,      0},
 			{0, 1.0f,   0},
-			50.0f,
+			30.0f,
 			2000.0f
 		),
 		new Camara(
@@ -109,7 +119,7 @@ Escena :: Escena () noexcept
 			{100.0f, 100.0f, 100.0f},
 			{0, 0,      0},
 			{0, 1.0f,   0},
-			50.0f,
+			30.0f,
 			2000.0f
 		)
 	}
@@ -143,33 +153,53 @@ Escena :: Escena () noexcept
 
 	ejes->NuevoTamanio(5000);
 
+	araxxor->AplicarMaterial(obsidiana);
 	cilindro->AplicarMaterial(cromo);
-	cono->AplicarMaterial(goma_negra);
-	cuadro->AplicarMaterial(cromo);
-	cubo->AplicarMaterial(estanio);
+	cono->AplicarMaterial(estanio);
+	cubo->AplicarMaterial(laton);
 	cielo->AplicarMaterial(turquesa);
-	esfera->AplicarMaterial(laton);
-	tetraedro->AplicarMaterial(obsidiana);
-	peon->AplicarMaterial(turquesa);
-	araxxor->AplicarMaterial(turquesa);
+	tetraedro->AplicarMaterial(goma_negra);
+	peon->AplicarMaterial(bronce);
 
-	araxxor->AplicarTextura(t_araxxor, false);
-	cilindro->AplicarTextura(lata, Cilindrica);
-	cuadro->AplicarTextura(cesped);
-	cubo->AplicarTextura(madera);
+	araxxor->AplicarTextura(t_araxxor);
+	/* cilindro->AplicarTextura(lata, Cilindrica); */
 
 	araxxor->NuevoColorSeleccion(seleccion_araxxor);
 	cilindro->NuevoColorSeleccion(seleccion_cilindro);
+	cono->NuevoColorSeleccion(seleccion_cono);
+	cubo->NuevoColorSeleccion(seleccion_cubo);
+	peon->NuevoColorSeleccion(seleccion_peon);
+	tetraedro->NuevoColorSeleccion(seleccion_tetraedro);
+
+	visualizacion.flip(Iluminacion);
 
 	luz0->Pulsar();
 	luz1->Pulsar();
-	visualizacion.flip(Iluminacion);
+	luz2->Pulsar();
+
+	visibles.flip(obj_araxxor);
+	visibles.flip(obj_cielo);
+	visibles.flip(obj_cilindro);
+	visibles.flip(obj_cono);
+	visibles.flip(obj_cubo);
+	visibles.flip(obj_flores);
+	visibles.flip(obj_peon);
+	visibles.flip(obj_suelo);
+	visibles.flip(obj_tetraedro);
 }
 
 void Escena :: AplicarLuces () noexcept
 {
 	luz0->Aplicar();
 	luz1->Aplicar();
+
+	glPushMatrix();
+	{
+		glRotatef(rot_luz2, 1, 0, 1);
+		glTranslatef(0, 1400.0f, 0);
+		luz2->Aplicar();
+	}
+	glPopMatrix();
 }
 
 /**
@@ -210,8 +240,9 @@ void Escena :: DibujarSeleccion () noexcept
 		glDisable(GL_TEXTURE);
 
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	CambiarObservador();
 	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+	CambiarObservador();
 
 	DibujarMallas(incoloro, false, true);
 
@@ -234,54 +265,24 @@ void Escena :: DibujarMallas (
 	const bool seleccion
 ) const noexcept
 {
-	glPushMatrix();
-	{
-		glScalef(1600, 1600, 1600);
-		cielo->Dibujar(dibujo, ajedrez, color, seleccion);
-	}
-	glPopMatrix();
-
-	for (int i = 0; i < CUADRANTES; i++)
-	{
-		const int eje_x = (i % 3 == 0) ? 1 : -1;
-		const int eje_z = (i > 1)      ? 1 : -1;
-
-		for (int j = 1; j <= TAM_SUELO; j++)
-			for (int k = 1; k <= TAM_SUELO; k++)
-			{
-				glPushMatrix();
-				{
-					glTranslatef(eje_x * (40 * j - 20), 0, eje_z * (40 * k - 20));
-					glRotatef(90.0f, -1.0f, 0, 0);
-					glScalef(40, 40, 1);
-
-					suelo[k-1][j-1][i]->Dibujar(dibujo, ajedrez, color, seleccion);
-				}
-				glPopMatrix();
-			}
-
-		for (int j = 0; j < FLORES/CUADRANTES; j++)
-		{
-			glPushMatrix();
-			{
-				glTranslatef(
-					eje_x * (40 * flores[(FLORES*i)/CUADRANTES + j]->PosX()),
-					0,
-					eje_z * (40 * flores[(FLORES*i)/CUADRANTES + j]->PosY())
-				);
-				glScalef(2.5f, 2.5f, 2.5f);
-				flores[(FLORES*i)/CUADRANTES + j]->Dibujar(dibujo, ajedrez, color, seleccion);
-			}
-			glPopMatrix();
-		}
-	}
-
 	if (visibles.test(obj_araxxor))
 	{
 		glPushMatrix();
 		{
+			glRotatef(rot_araxxor_y, 0, 1.0f, 0);
+			glTranslatef(100.0f, 41.0f, 0);
 			glScalef(0.5f, 0.5f, 0.5f);
 			araxxor->Dibujar(dibujo, ajedrez, color, seleccion);
+		}
+		glPopMatrix();
+	}
+
+	if (visibles.test(obj_cielo))
+	{
+		glPushMatrix();
+		{
+			glScalef(1600, 1600, 1600);
+			cielo->Dibujar(dibujo, ajedrez, color, seleccion);
 		}
 		glPopMatrix();
 	}
@@ -290,7 +291,7 @@ void Escena :: DibujarMallas (
 	{
 		glPushMatrix();
 		{
-			glTranslatef(-60, 0, -60);
+			glTranslatef(-60, 60, -60);
 			glScalef(30, 30, 30);
 			cilindro->Dibujar(dibujo, ajedrez, color, seleccion);
 		}
@@ -301,8 +302,8 @@ void Escena :: DibujarMallas (
 	{
 		glPushMatrix();
 		{
-			glTranslatef(60, 0, -60);
-			glScalef(30, 30, 30);
+			glTranslatef(13, 60, -6);
+			glScalef(8.0f, 8.0f, 8.0f);
 			cono->Dibujar(dibujo, ajedrez, color, seleccion);
 		}
 		glPopMatrix();
@@ -313,29 +314,45 @@ void Escena :: DibujarMallas (
 		glPushMatrix();
 		{
 			glTranslatef(0, 20, 0);
-			glRotatef(-90, 1, 0, 0);
-			glScalef(0.035f, 0.035f, 0.035f);
+			glScalef(20, 20, 20);
 			cubo->Dibujar(dibujo, ajedrez, color, seleccion);
 		}
 		glPopMatrix();
 	}
 
-	if (visibles.test(obj_esfera))
+	if (visibles.test(obj_flores))
 	{
-		glPushMatrix();
+		for (int i = 0; i < CUADRANTES; i++)
 		{
-			glTranslatef(0, -60, 0);
-			glScalef(30, 30, 30);
-			esfera->Dibujar(dibujo, ajedrez, color, seleccion);
+			const int eje_x = (i % 3 == 0) ? 1 : -1;
+			const int eje_z = (i > 1)      ? 1 : -1;
+
+			for (int j = 0; j < FLORES/CUADRANTES; j++)
+			{
+				glPushMatrix();
+				{
+					glTranslatef(
+						eje_x * (40 * flores[(FLORES*i)/CUADRANTES + j]->PosX()),
+						0,
+						eje_z * (40 * flores[(FLORES*i)/CUADRANTES + j]->PosY())
+					);
+					glScalef(2.5f, 2.5f, 2.5f);
+					flores[(FLORES*i)/CUADRANTES + j]->Dibujar(
+						dibujo, ajedrez, color, seleccion
+					);
+				}
+				glPopMatrix();
+			}
 		}
-		glPopMatrix();
 	}
 
 	if (visibles.test(obj_tetraedro))
 	{
 		glPushMatrix();
 		{
-			glTranslatef(0, 60, 0);
+			glTranslatef(-9, 47, 4);
+			glRotatef(68.6f, 0, 1.0f, 0);
+			glScalef(8.0f, 8.0f, 8.0f);
 			tetraedro->Dibujar(dibujo, ajedrez, color, seleccion);
 		}
 		glPopMatrix();
@@ -345,11 +362,34 @@ void Escena :: DibujarMallas (
 	{
 		glPushMatrix();
 		{
-			glTranslatef(60, 0, 60);
-			glScalef(30, 30, 30);
+			glTranslatef(10, 47, 6);
+			glScalef(5, 5, 5);
 			peon->Dibujar(dibujo, ajedrez, color, seleccion);
 		}
 		glPopMatrix();
+	}
+
+	if (visibles.test(obj_suelo))
+	{
+		for (int i = 0; i < CUADRANTES; i++)
+		{
+			const int eje_x = (i % 3 == 0) ? 1 : -1;
+			const int eje_z = (i > 1)      ? 1 : -1;
+
+			for (int j = 1; j <= TAM_SUELO; j++)
+				for (int k = 1; k <= TAM_SUELO; k++)
+				{
+					glPushMatrix();
+					{
+						glTranslatef(eje_x * (40 * j - 20), 0, eje_z * (40 * k - 20));
+						glRotatef(90.0f, -1.0f, 0, 0);
+						glScalef(40, 40, 1);
+
+						suelo[k-1][j-1][i]->Dibujar(dibujo, ajedrez, color, seleccion);
+					}
+					glPopMatrix();
+				}
+		}
 	}
 }
 
@@ -474,6 +514,10 @@ void Escena :: SeleccionLuces (unsigned char tecla) noexcept
 
 		case '1':
 			luz1->Pulsar();
+		break;
+
+		case '2':
+			luz2->Pulsar();
 		break;
 
 		case 'A':
@@ -627,16 +671,28 @@ void Escena :: SeleccionObjeto (unsigned char tecla) noexcept
 			visibles.flip(obj_cubo);
 		break;
 
+		case 'E':
+			visibles.flip(obj_ejes);
+		break;
+
+		case 'F':
+			visibles.flip(obj_flores);
+		break;
+
 		case 'I':
 			visibles.flip(obj_cilindro);
+		break;
+
+		case 'L':
+			visibles.flip(obj_cielo);
 		break;
 
 		case 'O':
 			visibles.flip(obj_cono);
 		break;
 
-		case 'E':
-			visibles.flip(obj_esfera);
+		case 'S':
+			visibles.flip(obj_suelo);
 		break;
 
 		case 'T':
@@ -696,19 +752,9 @@ void Escena :: SeleccionVisualizacion (unsigned char tecla) noexcept
 			visualizacion.reset(Iluminacion);
 		break;
 
-		case 'T':
-			visualizacion.flip(Texturas);
-
-			if (visualizacion.test(Texturas))
-				glEnable(GL_TEXTURE_2D);
-			else
-				glDisable(GL_TEXTURE_2D);
-		break;
-
 		case 'X':
 			cilindro->MostrarTapas(!cilindro->MuestraTapas());
 			cono->MostrarTapas(!cono->MuestraTapas());
-			esfera->MostrarTapas(!esfera->MuestraTapas());
 			peon->MostrarTapas(!peon->MuestraTapas());
 		break;
 
@@ -830,7 +876,7 @@ void Escena :: MsgSeleccionDibujado (bool reescribir) const noexcept
 void Escena :: MsgSeleccionLuces (bool reescribir) const noexcept
 {
 	if (reescribir)
-		std::cout << "\033[8A";
+		std::cout << "\033[9A";
 
 	std::cout
 		<< TermAzulB << "SELECCIÓN DE LUCES:" << std::endl
@@ -842,6 +888,10 @@ void Escena :: MsgSeleccionLuces (bool reescribir) const noexcept
 		<< TermCianB << "[" << TermAmarilloB << "1" << TermCianB << "]"
 		<< (luz1->Activada() ? TermVerde : TermRojo)
 		<< " Luz 1" << std::endl
+
+		<< TermCianB << "[" << TermAmarilloB << "2" << TermCianB << "]"
+		<< (luz2->Activada() ? TermVerde : TermRojo)
+		<< " Luz 2" << std::endl
 
 		<< TermCianB << "[" << TermAmarilloB << "A" << TermCianB << "]"
 		<< (angulos.rotx ? TermVerde : TermRojo)
@@ -942,7 +992,7 @@ void Escena :: MsgSeleccionMovimiento (bool reescribir) const noexcept
 void Escena :: MsgSeleccionObjeto (bool reescribir) noexcept
 {
 	if (reescribir)
-		std::cout << "\033[9A";
+		std::cout << "\033[12A";
 
 	std::cout
 		<< TermAzulB << "SELECCIÓN DE OBJETO:" << std::endl
@@ -955,17 +1005,29 @@ void Escena :: MsgSeleccionObjeto (bool reescribir) noexcept
 		<< (visibles.test(obj_cubo) ? TermVerde : TermRojo)
 		<< " Cubo" << std::endl
 
+		<< TermCianB << "[" << TermAmarilloB << "E" << TermCianB << "]"
+		<< (visibles.test(obj_ejes) ? TermVerde : TermRojo)
+		<< " Ejes" << std::endl
+
+		<< TermCianB << "[" << TermAmarilloB << "F" << TermCianB << "]"
+		<< (visibles.test(obj_flores) ? TermVerde : TermRojo)
+		<< " Flores (no seleccionables)" << std::endl
+
 		<< TermCianB << "[" << TermAmarilloB << "I" << TermCianB << "]"
 		<< (visibles.test(obj_cilindro) ? TermVerde : TermRojo)
 		<< " Cilindro" << std::endl
+
+		<< TermCianB << "[" << TermAmarilloB << "L" << TermCianB << "]"
+		<< (visibles.test(obj_cielo) ? TermVerde : TermRojo)
+		<< " Cielo" << std::endl
 
 		<< TermCianB << "[" << TermAmarilloB << "O" << TermCianB << "]"
 		<< (visibles.test(obj_cono) ? TermVerde : TermRojo)
 		<< " Cono" << std::endl
 
-		<< TermCianB << "[" << TermAmarilloB << "E" << TermCianB << "]"
-		<< (visibles.test(obj_esfera) ? TermVerde : TermRojo)
-		<< " Esfera" << std::endl
+		<< TermCianB << "[" << TermAmarilloB << "S" << TermCianB << "]"
+		<< (visibles.test(obj_suelo) ? TermVerde : TermRojo)
+		<< " Suelo (no seleccionable)" << std::endl
 
 		<< TermCianB << "[" << TermAmarilloB << "T" << TermCianB << "]"
 		<< (visibles.test(obj_tetraedro) ? TermVerde : TermRojo)
@@ -1010,10 +1072,6 @@ void Escena :: MsgSeleccionVisualizacion (bool reescribir) const noexcept
 		<< (visualizacion.test(Solido) ? TermVerde : TermRojo)
 		<< " Modo sólido" << std::endl
 
-		<< TermCianB << "[" << TermAmarilloB << "T" << TermCianB << "]"
-		<< (visualizacion.test(Texturas) ? TermVerde : TermRojo)
-		<< " Modo texturas" << std::endl
-
 		<< TermCianB << "[" << TermAmarilloB << "X" << TermCianB << "]"
 		<< (peon->MuestraTapas() ? TermVerde : TermRojo)
 		<< " Mostrar tapas" << TermNormal << std::endl;
@@ -1039,10 +1097,6 @@ void Escena :: MsgTeclasComunes () const noexcept
 
 void Escena :: SeleccionarMalla (const int x, const int y) noexcept
 {
-	/* glDisable(GL_DITHER); */
-	/* glDisable(GL_LIGHTING); */
-	/* glDisable(GL_TEXTURE_2D); */
-
 	DibujarSeleccion();
 
 	GLint viewport[4];
@@ -1054,15 +1108,30 @@ void Escena :: SeleccionarMalla (const int x, const int y) noexcept
 	Tupla3f pixel_pulsado = {pixel[0], pixel[1], pixel[2]};
 	Malla3D * seleccion = nullptr;
 
-	if (pixel_pulsado == cilindro->ColorSeleccion())
-	{
-		seleccion = cilindro;
-	}
-	else if (pixel_pulsado == araxxor->ColorSeleccion())
+	if (pixel_pulsado == araxxor->ColorSeleccion())
 	{
 		seleccion = araxxor->Cuerpo();
 	}
-
+	else if (pixel_pulsado == cilindro->ColorSeleccion())
+	{
+		seleccion = cilindro;
+	}
+	else if (pixel_pulsado == cono->ColorSeleccion())
+	{
+		seleccion = cono;
+	}
+	else if (pixel_pulsado == cubo->ColorSeleccion())
+	{
+		seleccion = cubo;
+	}
+	else if (pixel_pulsado == peon->ColorSeleccion())
+	{
+		seleccion = peon;
+	}
+	else if (pixel_pulsado == tetraedro->ColorSeleccion())
+	{
+		seleccion = tetraedro;
+	}
 
 	camara_activa->Fijar(seleccion);
 
@@ -1072,11 +1141,6 @@ void Escena :: SeleccionarMalla (const int x, const int y) noexcept
 		camara_activa->NuevoAt(TrasladarPerspectiva(seleccion->Centro()));
 
 	CambiarObservador();
-
-	/* glEnable(GL_TEXTURE_2D); */
-	/* glEnable(GL_LIGHTING); */
-	/* glEnable(GL_DITHER); */
-
 }
 
 /**
@@ -1099,29 +1163,43 @@ Escena * Escena :: Instance () noexcept
 
 Escena :: ~Escena () noexcept
 {
-	delete ejes;
+	delete araxxor;
 	delete cilindro;
 	delete cono;
-	delete cuadro;
 	delete cubo;
-	delete esfera;
+	delete cielo;
+	delete ejes;
 	delete tetraedro;
 	delete peon;
 
 	delete luz0;
 	delete luz1;
+	delete luz2;
 
+	delete bronce;
 	delete cromo;
 	delete laton;
 	delete goma_negra;
 	delete estanio;
 	delete obsidiana;
+	delete plastico_verde;
 	delete turquesa;
 
-	delete madera;
+	delete t_araxxor;
+	delete cesped;
+	delete lata;
+	delete tierra;
 
-	for (size_t i = 0; i < CAMARAS; i++)
+	for (int i = 0; i < FLORES; i++)
+		delete flores[i];
+
+	for (int i = 0; i < CAMARAS; i++)
 		delete camaras[i];
+
+	for (int i = 0; i < CUADRANTES; i++)
+		for (int j = 0; j < TAM_SUELO; j++)
+			for (int k = 0; k < TAM_SUELO; k++)
+				delete suelo[j][k][i];
 
 	exit(0);
 }
@@ -1172,7 +1250,8 @@ void Escena :: Dibujar () noexcept
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	CambiarObservador();
 
-	ejes->Dibujar();
+	if (visibles.test(obj_ejes))
+		ejes->Dibujar();
 
 	if (visualizacion.test(Ajedrez))
 	{
@@ -1232,10 +1311,14 @@ void Escena :: Redimensionar (int nueva_anchura, int nueva_altura) noexcept
 	glViewport(0, 0, nueva_anchura, nueva_altura);
 }
 
-void Escena :: ReproducirAnimacion () const noexcept
+void Escena :: ReproducirAnimacion () noexcept
 {
 	if (animacion)
 	{
+		rot_luz2 += velocidad_animacion * 5;
+
+		rot_araxxor_y += velocidad_animacion * 5;
+
 		araxxor->NuevoMovmiento(Abdomen);
 		araxxor->Mover(velocidad_animacion / 2.0f);
 
@@ -1253,6 +1336,13 @@ void Escena :: ReproducirAnimacion () const noexcept
 
 		araxxor->NuevoMovmiento(Tarso);
 		araxxor->Mover(velocidad_animacion);
+
+		if (camara_activa->ObjetoFijo() == araxxor->Cuerpo())
+			camara_activa->NuevoAt(araxxor->Cuerpo()->Centro());
+
+		if (menu == Menu::SeleccionCamara)
+			MsgSeleccionCamara(true);
+
 	}
 }
 
@@ -1325,11 +1415,11 @@ void Escena :: GestionTecladoEspecial (int tecla, int x, int y) noexcept
 		break;
 
 		case GLUT_KEY_RIGHT:
-			camara_activa->RotarExaminarY(2*DEG_TO_RAD);
+			camara_activa->RotarExaminarY(1*DEG_TO_RAD);
 		break;
 
 		case GLUT_KEY_UP:
-			camara_activa->RotarExaminarX(-2*DEG_TO_RAD);
+			camara_activa->RotarExaminarX(-1*DEG_TO_RAD);
 		break;
 
 		case GLUT_KEY_DOWN:

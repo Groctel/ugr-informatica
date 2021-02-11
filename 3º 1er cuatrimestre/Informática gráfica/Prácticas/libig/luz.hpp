@@ -21,8 +21,6 @@ protected:
 	Tupla4f color_especular;
 	Tupla4f posicion;
 
-public:
-	Luz () noexcept;
 	Luz (
 		const GLenum  id_nuevo,
 		const Tupla4f & amb,
@@ -30,6 +28,9 @@ public:
 		const Tupla4f & esp,
 		const Tupla4f & pos
 	) noexcept;
+
+public:
+	Luz () noexcept;
 
 	bool Activada () const noexcept;
 

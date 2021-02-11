@@ -43,18 +43,18 @@ public:
 		Tupla3f nuevo_vec_rot_metatarso,
 		Tupla3f nueva_pos_tarso,
 		Tupla3f nuevo_vec_rot_tarso,
-		float rot_femur,
-		float rot_tibia
+		float rotacion_inicial=0
 	) noexcept;
 	~PataAraxxor () noexcept;
 
 	void AplicarMaterial (Material * m) noexcept;
-	void AplicarTextura  (Textura * nueva, const bool calcular) noexcept;
+	void AplicarTextura  (Textura * nueva) noexcept;
 	void Dibujar (
 		const Dibujo dibujado,
 		const bool ajedrez=false,
 		const unsigned char color=incoloro,
-		const bool seleccion=false
+		const bool seleccion=false,
+		const bool marcado=false
 	) noexcept;
 
 	void NuevoColorSeleccion (const Tupla3f & color) noexcept;
