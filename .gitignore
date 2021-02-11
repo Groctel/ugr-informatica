@@ -8,3 +8,5 @@ obj/
 *.out
 *.pdf
 *.toc
+
+*.o
