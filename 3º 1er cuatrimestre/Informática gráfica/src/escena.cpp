@@ -270,7 +270,7 @@ void Escena :: DibujarMallas (
 		glPushMatrix();
 		{
 			glRotatef(rot_araxxor_y, 0, 1.0f, 0);
-			glTranslatef(100.0f, 41.0f, 0);
+			glTranslatef(200.0f, 41.0f, 0);
 			glScalef(0.5f, 0.5f, 0.5f);
 			araxxor->Dibujar(dibujo, ajedrez, color, seleccion);
 		}
@@ -1048,10 +1048,11 @@ void Escena :: MsgSeleccionObjeto (bool reescribir) noexcept
 void Escena :: MsgSeleccionVisualizacion (bool reescribir) const noexcept
 {
 	if (reescribir)
-		std::cout << "\033[9A";
+		std::cout << "\033[8A";
 
 	std::cout
 		<< TermAzulB << "SELECCIÓN DE VISUALIZACIÓN:" << std::endl
+
 		<< TermCianB << "[" << TermAmarilloB << "A" << TermCianB << "]"
 		<< (visualizacion.test(Ajedrez) ? TermVerde : TermRojo)
 		<< " Modo ajedrez" << std::endl
