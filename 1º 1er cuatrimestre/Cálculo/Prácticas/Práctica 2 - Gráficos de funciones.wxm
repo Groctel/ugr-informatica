@@ -1,0 +1,212 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 20.11.1 ] */
+/* [wxMaxima: title   start ]
+PRÁCTICA 2 - GRÁFICOS DE FUNCIONES
+   [wxMaxima: title   end   ] */
+
+
+/* [wxMaxima: comment start ]
+ATANASIO RUBIO GIL
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: section start ]
+Dibuja la gráfica de la función polinómica P(x) = 3x^5 − 2x^2 + 4x − 14. ¿Qué puedes comentar de su comportamiento en infinito?
+   [wxMaxima: section end   ] */
+
+
+/* [wxMaxima: input   start ] */
+wxplot2d(3*x^5 - 2*x^2 + 4*x - 14, [x,-10,10]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: section start ]
+Dibuja la gráfica de la función polinómica P(x) = 4x^6 − 10x^3 + 7x + 5. ¿Qué puedes comentar de su comportamiento en infinito?
+   [wxMaxima: section end   ] */
+
+
+/* [wxMaxima: input   start ] */
+wxplot2d(4*x^6 - 10*x^3 + 7*x + 5, [x, -10,10]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: section start ]
+Se considera la función racional Q(x) = (x^2−x−2) / (x^2−4). ¿Cuál es su dominio? ¿Asíntotas? Dibuja en un mismo gráfico la gráfica de Q y de sus asíntotas.
+   [wxMaxima: section end   ] */
+
+
+/* [wxMaxima: section start ]
+Dibuja las gráficas de las funciones f(x) = e^x, g(x) = x^e y h(x)=x^x en el intervalo [0,4]. ¿Cuál de las tres funciones crece más rápido? ¿Y la más lenta? Sin hacer cálculos, descubre el punto de intersección de las tres gráficas.
+   [wxMaxima: section end   ] */
+
+
+/* [wxMaxima: input   start ] */
+wxdraw2d(
+    explicit(exp(x), x,0,4),
+    color=red,
+    explicit(x^%e, x,0,4),
+    color=violet,
+    explicit(x^x, x,0,4)
+);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+wxdraw2d(
+    explicit(exp(x), x,2.5,3),
+    color=red,
+    explicit(x^%e, x,2.5,3),
+    color=violet,
+    explicit(x^x, x,2.5,3)
+);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: section start ]
+Dibuja las gráficas de las funciones recíprocas del seno (cosec(x)), del coseno (sec(x)) y de la tangente (cotan(x)). ¿Qué relación hay entre los ceros de la funciones directas y las asíntotas verticales de las recíprocas?
+   [wxMaxima: section end   ] */
+
+
+/* [wxMaxima: input   start ] */
+wxdraw2d(
+    explicit(csc(x), x,-10,10),
+    color=red,
+    explicit(sec(x), x,-10,10),
+    color=violet,
+    explicit(cot(x), x,-10,10)
+);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: section start ]
+Define las funciones f(x) = e^{−0.4x}, g(x) = 5cos(πx), y h(x) = f(x)g(x).
+   [wxMaxima: section end   ] */
+
+
+/* [wxMaxima: input   start ] */
+f(x):=exp(-0.4*x);
+g(x):=5*cos(%pi*x);
+h(x):=f(x)*g(x);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: subsect start ]
+Dibuja las tres funciones en distintos colores. Compara los ceros de h con los de f y g.
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: input   start ] */
+wxdraw2d(
+    explicit(f(x), x,-10,10),
+    color=red,
+    explicit(g(x), x,-10,10),
+    color=violet,
+    explicit(h(x), x,-10,10)
+);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: subsect start ]
+Considera i(x) = 5f(x), j(x) = −5f(x). Dibuja i, j y h. ¿Por qué a las funciones i(x) y j(x) se les llaman envolventes de h superior e inferior, respectivamente?
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: input   start ] */
+i(x):=5*f(x);
+j(x):=-5*f(x);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+wxdraw2d(
+    explicit(f(x), x,-10,10),
+    color=red,
+    explicit(i(x), x,-10,10),
+    color=violet,
+    explicit(j(x), x,-10,10)
+);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: section start ]
+Representa las funciones hiperbólicas (seno, coseno y tangente hiperbólicas).
+   [wxMaxima: section end   ] */
+
+
+/* [wxMaxima: input   start ] */
+wxplot2d(
+    [sinh(x), cosh(x), tanh(x)],
+    [x, -2, 2]
+);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+Sean f(x)=sin(πx)
+y g(x)=cos(πx)−2. Se considera h(x)=2f(x)+3g(x), una combinación lineal de f y g
+
+. Dibuja las tres funciones en distintos colores y comenta cómo son sus periodos.
+
+Sean f(x)=sin(4x)
+, g(x)=cos(x), y h(x)=3f(x)−g(x). Dibuja las tres funciones en distintos colores. ¿Cuáles son los periodos de f y de g? ¿Y el de h
+
+? ¿Observas alguna diferencia con el ejercicio anterior?
+
+Comprueba gráficamente que las funciones seno y arcoseno son inversas una de otra.
+
+Comprueba que los puntos A=(2–√,1)
+y B=(−2–√,−1) pertenecen a las gráficas de las dos curvas siguientes:la circunferencia de centro (0,0) y radio 3–√ y la hipérbola equilátera. Dibuja, en un mismo gráfico, las dos curvas anteriores, así como los puntos A y B y el centro de la circunferencia dada. Utiliza opciones de color y grosor de línea para diferenciar los distintos objetos representados.;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+wxdraw2d(
+    color = blue,
+    implicit(x^2 +y^2 = 3, x, -2, 2, y, -2,2),
+    xaxis=true,yaxis=true,
+    color = green,
+    implicit((x^2)/3-(y^2)/3 = 1, x, -2, 2, y, -2,2),
+    implicit((x^2)/3+(y^2)/3 = 1, x, -4, 4, y, -4,4),
+    proportional_axes=xy,
+    color = purple,
+    point_size=2,
+    point_type=7,
+    points([sqrt(2), -sqrt(2)],[1,-1])
+);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+wxdraw2d(
+    color = blue,
+    implicit(x^2 +y^2 = 3, x, -2, 2, y, -2,2),
+    xaxis=true,yaxis=true,
+    color = green,
+    implicit(x^2 - y^2 = 1, x, -5, 5, y, -5,5),
+    proportional_axes=xy,
+    color = purple,
+    point_size=2,
+    point_type=7,
+    points([sqrt(2), -sqrt(2)],[1,-1])
+);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+wxdraw2d(
+    xaxis=true,
+    yaxis=true,
+    
+    line_width=6,
+    explicit(asin(x), x,-1,1),
+    
+    color=green,
+    line_width=3,
+    implicit(x=sin(y), x,-1,1, y,-2,2)
+);
+/* [wxMaxima: input   end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 20.11.1"$

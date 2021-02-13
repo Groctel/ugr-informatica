@@ -1,0 +1,128 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 20.07.0 ] */
+/* [wxMaxima: title   start ]
+PRÁCTICA 4 - RESOLUCIÓN DE ECUACIONES
+   [wxMaxima: title   end   ] */
+
+
+/* [wxMaxima: comment start ]
+ATANASIO RUBIO GIL
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: section start ]
+Calcula los puntos donde se cortan las parábolas y = x^2, y = 2x^2 − 3ax + b. Discute todos los casos posibles dependiendo de los valores de a y b.
+   [wxMaxima: section end   ] */
+
+
+/* [wxMaxima: input   start ] */
+f(x):=-x^2 + 3*a*x - b;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+solve([y=x^2, y=2*x^2-3*a*x+b],[x,y]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+wxdraw2d(
+    implicit(y=x^2,x,-15,15,y,0,100),
+    color=blue,
+    implicit(y=2*x^2-3*1*x+1,x,-15,15,y,0,100)
+);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: section start ]
+Dibuja, en un mismo gráfico, la elipse de semiejes a=2 y b=5, y la recta de ecuación y=3−x. Calcular los puntos de corte de ambas curvas y dibujarlos sobre el primer gráfico.
+   [wxMaxima: section end   ] */
+
+
+/* [wxMaxima: input   start ] */
+wxdraw2d(
+    implicit(x^2/2^2 + y^2/5^2 = 1, x,-2.1,2.1, y,-5.1,5.1),
+    color=red,
+    explicit(3-x, x,-2.1,2.1)
+);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: section start ]
+Calcula las soluciones de la ecuación 9sin(x)+2=(x3)/5.
+   [wxMaxima: section end   ] */
+
+
+/* [wxMaxima: input   start ] */
+f(x):=9*sin(x)+2-(x^3/5);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+wxplot2d(f(x),[x,-4,4]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+find_root(f(x),x,-3,-2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+find_root(f(x),x,-1,0);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+find_root(f(x),x,2,4);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: section start ]
+¿Cuántas soluciones tiene la ecuación e^{−x^2} = 2cos(x) en [−10,10]? ¿Cuáles son esas soluciones?
+   [wxMaxima: section end   ] */
+
+
+/* [wxMaxima: input   start ] */
+f(x):=exp(-x^2)-2*cos(x);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+wxplot2d(f(x),[x,-10,10]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+find_root(f(x),x,0,-2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+find_root(f(x),x,-2,-5);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+find_root(f(x),x,-10,-6);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+find_root(f(x),x,0,2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+find_root(f(x),x,2,5);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+find_root(f(x),x,10,6);
+/* [wxMaxima: input   end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 20.07.0"$
