@@ -2,6 +2,15 @@
 
 Apuntes y material del Grado en Ingeniería Informática en la UGR.
 
+## Submódulos
+
+Este repositorio contiene submódulos, por lo que es necesario clonarlo y actualizarlo con las siguientes órdenes:
+
+```sh
+git clone --recurse-submodules
+git pull  --recurse-submodules
+```
+
 ## Compilación
 
 Estos apuntes están diseñados para ser compilados en Linux y presumen una instalación completa y actualizada de [LaTeX](https://www.latex-project.org/).
