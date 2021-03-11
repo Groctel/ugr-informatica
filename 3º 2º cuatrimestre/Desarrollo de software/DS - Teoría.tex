@@ -1,0 +1,35 @@
+\documentclass[10pt, a4paper]{aqademic}
+
+\usepackage[spanish]{babel}
+	\selectlanguage{spanish}
+
+% Document packages
+
+\usepackage[type=CC, modifier=by-nc-sa, version=4.0]{doclicense}
+\usepackage{graphicx}
+	\graphicspath{{img/}}
+
+% Document settings
+
+\author{Caparrós López, Requena García, Romero Lara, Rubio Gil, Sánchez Morales}
+\title{Desarrollo de Software}
+
+\AqSetChapter{Sesión}
+
+% Document composition
+
+\begin{document}
+
+\AqMaketitle[%
+	author   = Paula Caparrós López{,} Leire Requena García{,} Clara María Romero Lara{,} Atanasio José Rubio Gil{,} Antonio Ramón Sánchez Morales,
+	cover    = logo-ugr.png,
+	org      = Grado en Ingeniería Informática,
+	subtitle = Teoría,
+	url      = https://github.com/Groctel/ugr-informatica
+]
+% \tableofcontents
+
+\setcounter{chapter}{1}
+\input{Teoría/Sesión 2.tex}
+
+\end{document}
