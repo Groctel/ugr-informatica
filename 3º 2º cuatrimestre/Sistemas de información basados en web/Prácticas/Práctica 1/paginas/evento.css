@@ -3,20 +3,53 @@ body
 	margin: 0;
 }
 
+.barra-navegacion
+{
+	height: 100%;
+	width: 160px;
+	top: 0;
+	left: 0;
+	float: left;
+	background-color: white;
+	overflow-x: hidden;
+	padding-top: 20px;
+}
+
 .cabecera
 {
+	grid-area: cabecera;
 	padding: 20px;
 	padding-left: 50px;
 }
 
+.contenido
+{
+	grid-area: contenido;
+}
+
+.grid-container {
+  display: grid;
+  grid-template-areas:
+    'cabecera cabecera cabecera cabecera cabecera cabecera'
+    'barra barra barra barra barra barra'
+    'menu menu contenido contenido contenido contenido'
+    'pie pie pie pie pie pie';
+  grid-gap: 10px;
+}
+
 .menu-superior
 {
+	grid-area: barra;
 	position: -webkit-sticky;
 	position: sticky;
-	top: 0;
-	-webkit-box-shadow: 0 8px 10px -6px rgba(0, 0, 0, 0.2);
-	   -moz-box-shadow: 0 8px 10px -6px rgba(0, 0, 0, 0.2);
-	        box-shadow: 0 8px 10px -6px rgba(0, 0, 0, 0.2);
+	top: 10px;
+	margin-left: 10px;
+	margin-right: 10px;
+	border-radius: 20px;
+	background-color: white;
+	-webkit-box-shadow: 0 0px 10px 0px rgba(0, 0, 0, 0.2);
+	   -moz-box-shadow: 0 0px 10px 0px rgba(0, 0, 0, 0.2);
+	        box-shadow: 0 0px 10px 0px rgba(0, 0, 0, 0.2);
 }
 
 .menu-superior ul
@@ -44,4 +77,9 @@ body
 .menu-superior ul li a:hover
 {
 	background-color: #e2e2e2;
+}
+
+footer
+{
+	grid-area: pie;
 }
