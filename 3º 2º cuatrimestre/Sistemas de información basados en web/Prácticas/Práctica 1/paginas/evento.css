@@ -1,0 +1,47 @@
+body
+{
+	margin: 0;
+}
+
+.cabecera
+{
+	padding: 20px;
+	padding-left: 50px;
+}
+
+.menu-superior
+{
+	position: -webkit-sticky;
+	position: sticky;
+	top: 0;
+	-webkit-box-shadow: 0 8px 10px -6px rgba(0, 0, 0, 0.2);
+	   -moz-box-shadow: 0 8px 10px -6px rgba(0, 0, 0, 0.2);
+	        box-shadow: 0 8px 10px -6px rgba(0, 0, 0, 0.2);
+}
+
+.menu-superior ul
+{
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+	overflow: hidden;
+}
+
+.menu-superior ul li
+{
+	float: left;
+}
+
+.menu-superior ul li a
+{
+	display: block;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+	color: black;
+}
+
+.menu-superior ul li a:hover
+{
+	background-color: #e2e2e2;
+}
