@@ -1,5 +1,63 @@
 article
-{ }
+{
+	background-color: #e2e2e2;
+}
+
+article .textbox
+{
+	background-color: white;
+	margin: 10px;
+	padding: 5px 10px;
+	border-radius: 10px;
+}
+
+article .textbox #titulo-taller
+{
+	margin-top: 10px;
+	font-family: 'Montserrat';
+	font-size: 35px;
+	font-weight: bold;
+	text-transform: uppercase;
+}
+
+article .textbox #datos-taller
+{
+	font-family: 'Montserrat';
+	font-size: 20px;
+	font-weight: bold;
+}
+
+article .textbox #descripcion-taller
+{
+	margin-top: 30px;
+}
+
+article .textbox #descripcion-taller #imagenes
+{
+	float: right;
+	margin-right: 10px;
+}
+
+article .textbox #descripcion-taller #imagenes #contenedor
+{
+	padding: 10px;
+	border-radius: 10px;
+	background-color: #e3e3e3;
+	overflow:hidden;
+	background-size:cover;
+	margin-bottom: 10px;
+}
+
+article .textbox #descripcion-taller #imagenes #contenedor img
+{
+	transition: transform .2s;
+	transition-timing-function: linear;
+}
+
+article .textbox #descripcion-taller #imagenes #contenedor img:hover
+{
+	transform: scale(1.5);
+}
 
 body
 {
@@ -10,7 +68,7 @@ body
 
 header
 {
-	padding: 20px 50px;
+	padding: 20px 50px 0px 50px;
 }
 
 header h1
@@ -79,17 +137,16 @@ main
 {
 	display: grid;
 	grid-template-columns: auto auto;
-	grid-gap: 10px;
 }
 
 main .navbar
 {
+	z-index: 0;
 	font-family: 'Montserrat';
 	background-color: white;
 	border-right: 4px solid #e3e3e3;
 	height: 100%;
-	margin-right: 20px;
-	box-shadow: 10px 0 10px -5px #d1d1d1;
+	box-shadow: 10px 0 10px -5px #a1a1a1;
 }
 
 main .navbar #contenido
@@ -163,6 +220,8 @@ main .navbar #contenido ul li a img
 	padding: 14px 16px;
 	text-decoration: none;
 	color: black;
+	transition: background .25s;
+	transition-timing-function: linear;
 }
 
 .topbar #contenido ul li a:hover
