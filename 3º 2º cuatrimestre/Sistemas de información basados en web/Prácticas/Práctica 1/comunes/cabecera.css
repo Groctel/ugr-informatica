@@ -1,0 +1,65 @@
+header
+{
+	padding: 20px 50px 0px 50px;
+}
+
+header h1
+{
+	font-family: 'Montserrat';
+	font-size: 50px;
+}
+
+header h1 img
+{
+	vertical-align: middle;
+	margin-right: 25px;
+	height: 70px;
+}
+
+.topbar
+{
+	z-index: 1;
+	position: sticky;
+	top: 0;
+	background-color: white;
+	padding: 15px 10px 15px 10px;
+	border-bottom: 1px solid #e3e3e3;
+}
+
+.topbar #contenido
+{
+	z-index: 1;
+	top: 15px;
+	border-radius: 25px;
+	box-shadow: 0 0px 10px 0px rgba(0, 0, 0, 0.2);
+	overflow: hidden;
+}
+
+.topbar #contenido ul
+{
+	list-style-type: none;
+	margin: 0;
+	padding: 0;
+}
+
+.topbar #contenido ul li
+{
+	float: left;
+}
+
+.topbar #contenido ul li a
+{
+	display: block;
+	text-align: center;
+	padding: 14px 16px;
+	text-decoration: none;
+	color: black;
+	transition: background .25s;
+	transition-timing-function: linear;
+}
+
+.topbar #contenido ul li a:hover
+{
+	background-color: #e3e3e3;
+}
+

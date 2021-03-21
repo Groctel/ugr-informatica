@@ -5,41 +5,22 @@
 	<meta charset="UTF-8">
 	<link rel="stylesheet" href="/paginas/evento-imprimir.css">
 	<link rel="icon" href="/icon/open-workshop.png">
-	<title>Evento de prueba</title>
+	<title>Introducción a Vim</title>
+
+	<script src="../scripts/jquery-3.6.0.js"></script>
+	<script>
+		$(function(){
+			$("#include_cabecera").load("/comunes/cabecera.html");
+			$("#include_navbar").load("/comunes/navbar.html");
+			$("#include_pie").load("/comunes/pie.html");
+		});
+	</script>
 </head>
 
 <body>
-	<header>
-		<h1><img src="/img/open-workshop-logo.png">Open Workshop</h1>
-	</header>
-
-	<div class="topbar">
-		<div id="contenido">
-			<ul>
-				<li><a href="/index.html">Inicio</a></li>
-				<li><a href="/index.html">Categorías</a></li>
-				<li><a href="/index.html">Mi cuenta</a></li>
-
-				<li style="float:right"><a href="/index.html">Ayuda</a></li>
-			</ul>
-		</div>
-	</div>
-
+	<div id="include_cabecera"></div>
 	<main>
-		<div class="navbar">
-			<div id="contenido">
-				<ul>
-					<li><a href="/index.html"><img src="/icon/material/dashboard.png">Mis talleres</a></li>
-					<li><a href="/index.html"><img src="/icon/material/history.png">Historial</a></li>
-					<li><a href="/index.html"><img src="/icon/material/star.png">Favoritos</a></li>
-				</ul>
-				<ul>
-					<li><a href="/index.html"><img src="/icon/material/add_task.png">Programar taller</a></li>
-					<li><a href="/index.html"><img src="/icon/material/payment.png">Mis pagos</a></li>
-				</ul>
-			</div>
-		</div>
-
+		<div id="include_navbar"></div>
 		<article>
 			<div class="textbox">
 				<div id="titulo-taller">
@@ -111,33 +92,7 @@
 			</div>
 		</article>
 	</main>
-
-	<footer>
-		<div class="enlaces-interes">
-			<div class="lista-enlaces">
-				<h3>Nuestras redes</h3>
-
-				<ul>
-					<li><a href="https://www.linkedin.com/in/atanasiorubio/"><img src="/icon/linkedin.png">LinkedIn</a></li>
-					<li><a href="https://twitter.com/Groctel/"><img src="/icon/twitter.png">Twitter</a></li>
-					<li><a href="https://www.reddit.com/user/Groctel"><img src="/icon/reddit.png">Reddit</a></li>
-				</ul>
-			</div>
-
-			<div class="lista-enlaces">
-				<h3>Contáctanos</h3>
-
-				<ul>
-					<li><a href=""><img src="/icon/mail.png">Correo</a></li>
-					<li><a href="https://t.me/Groctel"><img src="/icon/telegram.png">Telegram</a></li>
-				</ul>
-			</div>
-		</div>
-
-		<p>
-		Esta página y su código están distribuidos bajo la licencia <a href="https://www.gnu.org/licenses/old-licenses/gpl-2.0.html">GNU GENERAL PUBLIC LICENSE Version 2, June 1991</a> en <a href="https://github.com/Groctel/ugr-informatica"><tt>Groctel/ugr-informatica</tt></a>.
-		</p>
-	</footer>
+	<div id="include_pie"></div>
 </body>
 
 </html>
