@@ -1,7 +1,7 @@
 import * as THREE from '../libs/three.module.js'
 import { GUI } from '../libs/dat.gui.module.js'
 import { TrackballControls } from '../libs/TrackballControls.js'
-import { Grapadora } from './Grapadora.js'
+import { MyBox } from './MyBox.js'
 
 class MyScene extends THREE.Scene
 {
@@ -22,11 +22,11 @@ class MyScene extends THREE.Scene
 		this.createGround();
 
 		this.axis  = new THREE.AxesHelper(5);
-		this.model = new Grapadora(this.gui, "Controles de la Grapadora");
+		this.model = new MyBox(this.gui, "Controles de la Caja");
 
 		this.add(this.axis);
 		this.add(this.model);
-	}
+  }
 
 	/*
 	 * Se crea la cámara indicándole el ángulo de visión vertical en grados
@@ -44,7 +44,7 @@ class MyScene extends THREE.Scene
 			1000
 		);
 
-		this.camera.position.set(6, 3, 6);
+		this.camera.position.set(20, 10, 10);
 		let look = new THREE.Vector3(0, 0, 0);
 		this.camera.lookAt(look);
 		this.add(this.camera);
