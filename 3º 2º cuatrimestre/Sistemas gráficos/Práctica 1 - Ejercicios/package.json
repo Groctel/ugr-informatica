@@ -1,0 +1,14 @@
+{
+  "name": "sg_p1",
+  "version": "1.0.0",
+  "description": "Sistemas Gráficos - Práctica 1",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Atanasio Rubio",
+  "license": "GPL-2.0",
+  "devDependencies": {
+    "eslint": "^7.21.0"
+  }
+}

@@ -52,7 +52,7 @@ class Grapadora extends THREE.Object3D
 	}
 
 	/*
-	 * Crea un directorio de la gui con título titlegui que permite modificar la
+	 * Crea un directorio de la GUI con título titlegui que permite modificar la
 	 * apertura de la grapadora. El valor por defecto de dicha apertura se
 	 * especifica en guiControls.
 	 *

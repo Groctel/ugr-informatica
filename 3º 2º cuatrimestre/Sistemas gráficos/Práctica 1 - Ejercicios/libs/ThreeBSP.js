@@ -649,7 +649,7 @@ class ThreeBSP {
 	/*  experimental */
    toBufferGeometry() {
         var i, j,
-            matrix = new  Matrix4().getInverse( this.matrix ),
+            matrix = new  Matrix4().copy( this.matrix ).invert(),
             geometry = new  BufferGeometry(),
             indices = [], positions = [], colors = [], normals = [], uvs = [],
             polygons = this.tree.allPolygons(),
@@ -719,7 +719,7 @@ class ThreeBSP {
     
     toGeometry() {
       var i, j,
-        matrix = new  Matrix4().getInverse( this.matrix ),
+        matrix = new  Matrix4().copy( this.matrix ).invert(),
         geometry = new  Geometry(),
         polygons = this.tree.allPolygons(),
         polygon_count = polygons.length,
