@@ -7,6 +7,7 @@
 	<link rel="icon" href="/icon/open-workshop.png">
 	<title>Introducción a Vim</title>
 
+	<script src="/scripts/comentarios.js" defer></script>
 	<script src="../scripts/jquery-3.6.0.js"></script>
 	<script>
 		$(function(){
@@ -18,14 +19,14 @@
 </head>
 
 <body>
-	<div id="include_cabecera"></div>
+	<div id="include_cabecera" style="position:sticky"></div>
 	<main>
 		<div id="include_navbar"></div>
 		<article>
 			<div class="textbox">
 				<div id="titulo-taller">
 					Introducción a vim
-					<a href="/paginas/evento-imprimir.html"><img src="/icon/material/print.png"></a>
+						<a href="/paginas/evento-imprimir.html"><img src="/icon/material/print-24px.svg"></a>
 				</div>
 				<div id="datos-taller">
 					Atanasio Rubio - Martes 27 de octubre de 2020
@@ -88,11 +89,36 @@
 						A peich consectetur consequat veniam mamaar ut.
 						Minim apetecan hasta luego Lucas sed ahorarr hasta luego Lucas qué dise usteer me cago en tus muelas velit sed.
 					</p>
+					<button type="button" id="boton-comentarios">Mostrar comentarios</button>
+				</div>
+				<div id="comentarios">
+					<div id="cajas">
+					</div>
+
+					<form action="javascript:AniadirComentario()" id="form-comentario">
+						<div id="autor">
+							<div id="nombre">
+								<img src="/icon/material/face-24px.svg">
+								<input type="text" name="nombre" placeholder="Nombre público" size="32" required><br>
+							</div>
+							<div id="email">
+								<img src="/icon/material/email-24px.svg">
+								<input type="text" name="email" placeholder="correo@dominio.*" size="32" required><br>
+							</div>
+						</div>
+
+						<textarea id="form-cuerpo" name="cuerpo" rows="10" cols="90" placeholder="Cuerpo del comentario." required></textarea>
+
+						<div id="enviar">
+							<input type="checkbox" name="tos" value="tos" required>
+							<label for="tos">He leído y acepto las <a href="http://www.wheatonslaw.com/">condiciones de uso</a></label>
+							<button type="submit" id="aniadir-comentario"><img src="/icon/material/send-24px.svg"></button>
+						</div>
+					</form>
 				</div>
 			</div>
 		</article>
 	</main>
 	<div id="include_pie"></div>
 </body>
-
 </html>

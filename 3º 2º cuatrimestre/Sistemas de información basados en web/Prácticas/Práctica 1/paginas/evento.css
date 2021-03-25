@@ -11,6 +11,71 @@ article .textbox
 	border-radius: 10px;
 }
 
+article .textbox #comentarios
+{
+	margin-top: 15px;
+	height: 0;
+	overflow: hidden;
+	transition: 0.5s;
+}
+
+article .textbox #comentarios form
+{
+	margin: 15px;
+}
+
+article .textbox #comentarios form #autor
+{
+	display: grid;
+	grid-template-columns: auto auto;
+	padding-bottom: 15px;
+	margin-right: 3px;
+}
+
+article .textbox #comentarios form #enviar
+{
+	padding-top: 15px;
+}
+
+article .textbox #comentarios form #enviar button
+{
+	float: right;
+	margin-right: 20px;
+}
+
+article .textbox #comentarios #caja-comentario
+{
+	margin: 10px;
+	padding: 15px 20px;
+	border-radius: 25px;
+	box-shadow: 0 0px 10px 0px rgba(0, 0, 0, 0.2);
+}
+
+article .textbox #comentarios #caja-comentario #autor
+{
+	margin-bottom: 5px;
+}
+
+article .textbox #comentarios #caja-comentario #autor #nombre
+{
+	font-size: 16px;
+	font-weight: bold;
+}
+
+article .textbox #comentarios #caja-comentario #autor #email
+{
+	font-size: 12px;
+	color: #1d1d1d;
+	margin-left: 10px;
+}
+
+article .textbox #comentarios #caja-comentario #autor #fecha
+{
+	font-size: 12px;
+	color: #1d1d1d;
+	margin-left: 10px;
+}
+
 article .textbox #titulo-taller
 {
 	margin-top: 10px;
@@ -70,12 +135,30 @@ article .textbox #descripcion-taller #imagenes #contenedor img:hover
 	transform: scale(1.5);
 }
 
+article .textbox #descripcion-taller #boton-comentarios
+{
+	font-size: 17px;
+	font-weight: bold;
+}
+
+article .textbox #descripcion-taller #boton-comentarios:hover
+{
+	text-decoration: underline;
+}
+
 body
 {
 	font-family: 'Open Sans';
 	font-size: 16px;
 	margin: 0 auto;
 	max-width: 1000px;
+}
+
+button {
+  background-color: #FFFFFF;
+  border: none;
+  text-decoration: none;
+  display: inline-block;
 }
 
 main
