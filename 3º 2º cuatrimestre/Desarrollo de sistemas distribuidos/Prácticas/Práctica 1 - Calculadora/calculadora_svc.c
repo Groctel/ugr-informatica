@@ -16,28 +16,76 @@
 #define SIG_PF void(*)(int)
 #endif
 
-static resultado_calculo *
+static resultado_escalar *
 _suma_1 (suma_1_argument *argp, struct svc_req *rqstp)
 {
 	return (suma_1_svc(argp->arg1, argp->arg2, rqstp));
 }
 
-static resultado_calculo *
+static resultado_escalar *
 _resta_1 (resta_1_argument *argp, struct svc_req *rqstp)
 {
 	return (resta_1_svc(argp->arg1, argp->arg2, rqstp));
 }
 
-static resultado_calculo *
+static resultado_escalar *
 _producto_1 (producto_1_argument *argp, struct svc_req *rqstp)
 {
 	return (producto_1_svc(argp->arg1, argp->arg2, rqstp));
 }
 
-static resultado_calculo *
+static resultado_escalar *
 _cociente_1 (cociente_1_argument *argp, struct svc_req *rqstp)
 {
 	return (cociente_1_svc(argp->arg1, argp->arg2, rqstp));
+}
+
+static resultado_vectorial *
+_sumavec_1 (sumavec_1_argument *argp, struct svc_req *rqstp)
+{
+	return (sumavec_1_svc(argp->arg1, argp->arg2, rqstp));
+}
+
+static resultado_vectorial *
+_restavec_1 (restavec_1_argument *argp, struct svc_req *rqstp)
+{
+	return (restavec_1_svc(argp->arg1, argp->arg2, rqstp));
+}
+
+static resultado_vectorial *
+_productovec_1 (productovec_1_argument *argp, struct svc_req *rqstp)
+{
+	return (productovec_1_svc(argp->arg1, argp->arg2, rqstp));
+}
+
+static resultado_vectorial *
+_productovecsc_1 (productovecsc_1_argument *argp, struct svc_req *rqstp)
+{
+	return (productovecsc_1_svc(argp->arg1, argp->arg2, rqstp));
+}
+
+static resultado_matricial *
+_sumamat_1 (sumamat_1_argument *argp, struct svc_req *rqstp)
+{
+	return (sumamat_1_svc(argp->arg1, argp->arg2, rqstp));
+}
+
+static resultado_matricial *
+_restamat_1 (restamat_1_argument *argp, struct svc_req *rqstp)
+{
+	return (restamat_1_svc(argp->arg1, argp->arg2, rqstp));
+}
+
+static resultado_matricial *
+_productomat_1 (productomat_1_argument *argp, struct svc_req *rqstp)
+{
+	return (productomat_1_svc(argp->arg1, argp->arg2, rqstp));
+}
+
+static resultado_matricial *
+_productomatsc_1 (productomatsc_1_argument *argp, struct svc_req *rqstp)
+{
+	return (productomatsc_1_svc(argp->arg1, argp->arg2, rqstp));
 }
 
 static void
@@ -48,6 +96,14 @@ calculadora_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 		resta_1_argument resta_1_arg;
 		producto_1_argument producto_1_arg;
 		cociente_1_argument cociente_1_arg;
+		sumavec_1_argument sumavec_1_arg;
+		restavec_1_argument restavec_1_arg;
+		productovec_1_argument productovec_1_arg;
+		productovecsc_1_argument productovecsc_1_arg;
+		sumamat_1_argument sumamat_1_arg;
+		restamat_1_argument restamat_1_arg;
+		productomat_1_argument productomat_1_arg;
+		productomatsc_1_argument productomatsc_1_arg;
 	} argument;
 	char *result;
 	xdrproc_t _xdr_argument, _xdr_result;
@@ -60,26 +116,74 @@ calculadora_prog_1(struct svc_req *rqstp, register SVCXPRT *transp)
 
 	case Suma:
 		_xdr_argument = (xdrproc_t) xdr_suma_1_argument;
-		_xdr_result = (xdrproc_t) xdr_resultado_calculo;
+		_xdr_result = (xdrproc_t) xdr_resultado_escalar;
 		local = (char *(*)(char *, struct svc_req *)) _suma_1;
 		break;
 
 	case Resta:
 		_xdr_argument = (xdrproc_t) xdr_resta_1_argument;
-		_xdr_result = (xdrproc_t) xdr_resultado_calculo;
+		_xdr_result = (xdrproc_t) xdr_resultado_escalar;
 		local = (char *(*)(char *, struct svc_req *)) _resta_1;
 		break;
 
 	case Producto:
 		_xdr_argument = (xdrproc_t) xdr_producto_1_argument;
-		_xdr_result = (xdrproc_t) xdr_resultado_calculo;
+		_xdr_result = (xdrproc_t) xdr_resultado_escalar;
 		local = (char *(*)(char *, struct svc_req *)) _producto_1;
 		break;
 
 	case Cociente:
 		_xdr_argument = (xdrproc_t) xdr_cociente_1_argument;
-		_xdr_result = (xdrproc_t) xdr_resultado_calculo;
+		_xdr_result = (xdrproc_t) xdr_resultado_escalar;
 		local = (char *(*)(char *, struct svc_req *)) _cociente_1;
+		break;
+
+	case SumaVec:
+		_xdr_argument = (xdrproc_t) xdr_sumavec_1_argument;
+		_xdr_result = (xdrproc_t) xdr_resultado_vectorial;
+		local = (char *(*)(char *, struct svc_req *)) _sumavec_1;
+		break;
+
+	case RestaVec:
+		_xdr_argument = (xdrproc_t) xdr_restavec_1_argument;
+		_xdr_result = (xdrproc_t) xdr_resultado_vectorial;
+		local = (char *(*)(char *, struct svc_req *)) _restavec_1;
+		break;
+
+	case ProductoVec:
+		_xdr_argument = (xdrproc_t) xdr_productovec_1_argument;
+		_xdr_result = (xdrproc_t) xdr_resultado_vectorial;
+		local = (char *(*)(char *, struct svc_req *)) _productovec_1;
+		break;
+
+	case ProductoVecSc:
+		_xdr_argument = (xdrproc_t) xdr_productovecsc_1_argument;
+		_xdr_result = (xdrproc_t) xdr_resultado_vectorial;
+		local = (char *(*)(char *, struct svc_req *)) _productovecsc_1;
+		break;
+
+	case SumaMat:
+		_xdr_argument = (xdrproc_t) xdr_sumamat_1_argument;
+		_xdr_result = (xdrproc_t) xdr_resultado_matricial;
+		local = (char *(*)(char *, struct svc_req *)) _sumamat_1;
+		break;
+
+	case RestaMat:
+		_xdr_argument = (xdrproc_t) xdr_restamat_1_argument;
+		_xdr_result = (xdrproc_t) xdr_resultado_matricial;
+		local = (char *(*)(char *, struct svc_req *)) _restamat_1;
+		break;
+
+	case ProductoMat:
+		_xdr_argument = (xdrproc_t) xdr_productomat_1_argument;
+		_xdr_result = (xdrproc_t) xdr_resultado_matricial;
+		local = (char *(*)(char *, struct svc_req *)) _productomat_1;
+		break;
+
+	case ProductoMatSc:
+		_xdr_argument = (xdrproc_t) xdr_productomatsc_1_argument;
+		_xdr_result = (xdrproc_t) xdr_resultado_matricial;
+		local = (char *(*)(char *, struct svc_req *)) _productomatsc_1;
 		break;
 
 	default:

@@ -6,7 +6,30 @@
 #include "calculadora.h"
 
 bool_t
-xdr_resultado_calculo (XDR *xdrs, resultado_calculo *objp)
+xdr_vecx (XDR *xdrs, vecx *objp)
+{
+	register int32_t *buf;
+
+	 if (!xdr_array (xdrs, (char **)&objp->vecx_val, (u_int *) &objp->vecx_len, ~0,
+		sizeof (int), (xdrproc_t) xdr_int))
+		 return FALSE;
+	return TRUE;
+}
+
+bool_t
+xdr_matx (XDR *xdrs, matx *objp)
+{
+	register int32_t *buf;
+
+	 if (!xdr_u_int (xdrs, &objp->orden))
+		 return FALSE;
+	 if (!xdr_pointer (xdrs, (char **)&objp->filas, sizeof (vecx), (xdrproc_t) xdr_vecx))
+		 return FALSE;
+	return TRUE;
+}
+
+bool_t
+xdr_resultado_escalar (XDR *xdrs, resultado_escalar *objp)
 {
 	register int32_t *buf;
 
@@ -14,7 +37,43 @@ xdr_resultado_calculo (XDR *xdrs, resultado_calculo *objp)
 		 return FALSE;
 	switch (objp->err) {
 	case 0:
-		 if (!xdr_int (xdrs, &objp->resultado_calculo_u.resultado))
+		 if (!xdr_int (xdrs, &objp->resultado_escalar_u.resultado))
+			 return FALSE;
+		break;
+	default:
+		break;
+	}
+	return TRUE;
+}
+
+bool_t
+xdr_resultado_vectorial (XDR *xdrs, resultado_vectorial *objp)
+{
+	register int32_t *buf;
+
+	 if (!xdr_int (xdrs, &objp->err))
+		 return FALSE;
+	switch (objp->err) {
+	case 0:
+		 if (!xdr_vecx (xdrs, &objp->resultado_vectorial_u.resultado))
+			 return FALSE;
+		break;
+	default:
+		break;
+	}
+	return TRUE;
+}
+
+bool_t
+xdr_resultado_matricial (XDR *xdrs, resultado_matricial *objp)
+{
+	register int32_t *buf;
+
+	 if (!xdr_int (xdrs, &objp->err))
+		 return FALSE;
+	switch (objp->err) {
+	case 0:
+		 if (!xdr_matx (xdrs, &objp->resultado_matricial_u.resultado))
 			 return FALSE;
 		break;
 	default:
@@ -57,6 +116,86 @@ bool_t
 xdr_cociente_1_argument (XDR *xdrs, cociente_1_argument *objp)
 {
 	 if (!xdr_int (xdrs, &objp->arg1))
+		 return FALSE;
+	 if (!xdr_int (xdrs, &objp->arg2))
+		 return FALSE;
+	return TRUE;
+}
+
+bool_t
+xdr_sumavec_1_argument (XDR *xdrs, sumavec_1_argument *objp)
+{
+	 if (!xdr_vecx (xdrs, &objp->arg1))
+		 return FALSE;
+	 if (!xdr_vecx (xdrs, &objp->arg2))
+		 return FALSE;
+	return TRUE;
+}
+
+bool_t
+xdr_restavec_1_argument (XDR *xdrs, restavec_1_argument *objp)
+{
+	 if (!xdr_vecx (xdrs, &objp->arg1))
+		 return FALSE;
+	 if (!xdr_vecx (xdrs, &objp->arg2))
+		 return FALSE;
+	return TRUE;
+}
+
+bool_t
+xdr_productovec_1_argument (XDR *xdrs, productovec_1_argument *objp)
+{
+	 if (!xdr_vecx (xdrs, &objp->arg1))
+		 return FALSE;
+	 if (!xdr_vecx (xdrs, &objp->arg2))
+		 return FALSE;
+	return TRUE;
+}
+
+bool_t
+xdr_productovecsc_1_argument (XDR *xdrs, productovecsc_1_argument *objp)
+{
+	 if (!xdr_vecx (xdrs, &objp->arg1))
+		 return FALSE;
+	 if (!xdr_int (xdrs, &objp->arg2))
+		 return FALSE;
+	return TRUE;
+}
+
+bool_t
+xdr_sumamat_1_argument (XDR *xdrs, sumamat_1_argument *objp)
+{
+	 if (!xdr_matx (xdrs, &objp->arg1))
+		 return FALSE;
+	 if (!xdr_matx (xdrs, &objp->arg2))
+		 return FALSE;
+	return TRUE;
+}
+
+bool_t
+xdr_restamat_1_argument (XDR *xdrs, restamat_1_argument *objp)
+{
+	 if (!xdr_matx (xdrs, &objp->arg1))
+		 return FALSE;
+	 if (!xdr_matx (xdrs, &objp->arg2))
+		 return FALSE;
+	return TRUE;
+}
+
+bool_t
+xdr_productomat_1_argument (XDR *xdrs, productomat_1_argument *objp)
+{
+	 if (!xdr_matx (xdrs, &objp->arg1))
+		 return FALSE;
+	 if (!xdr_matx (xdrs, &objp->arg2))
+		 return FALSE;
+	return TRUE;
+}
+
+bool_t
+xdr_productomatsc_1_argument (XDR *xdrs, productomatsc_1_argument *objp)
+{
+	 if (!xdr_matx (xdrs, &objp->arg1))
 		 return FALSE;
 	 if (!xdr_int (xdrs, &objp->arg2))
 		 return FALSE;

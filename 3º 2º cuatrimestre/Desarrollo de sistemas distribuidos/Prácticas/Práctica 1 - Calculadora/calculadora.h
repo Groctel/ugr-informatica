@@ -14,13 +14,41 @@ extern "C" {
 #endif
 
 
-struct resultado_calculo {
+typedef struct {
+	u_int vecx_len;
+	int *vecx_val;
+} vecx;
+
+struct matx {
+	u_int orden;
+	vecx *filas;
+};
+typedef struct matx matx;
+
+
+struct resultado_escalar {
 	int err;
 	union {
 		int resultado;
-	} resultado_calculo_u;
+	} resultado_escalar_u;
 };
-typedef struct resultado_calculo resultado_calculo;
+typedef struct resultado_escalar resultado_escalar;
+
+struct resultado_vectorial {
+	int err;
+	union {
+		vecx resultado;
+	} resultado_vectorial_u;
+};
+typedef struct resultado_vectorial resultado_vectorial;
+
+struct resultado_matricial {
+	int err;
+	union {
+		matx resultado;
+	} resultado_matricial_u;
+};
+typedef struct resultado_matricial resultado_matricial;
 
 struct suma_1_argument {
 	int arg1;
@@ -46,55 +74,177 @@ struct cociente_1_argument {
 };
 typedef struct cociente_1_argument cociente_1_argument;
 
+struct sumavec_1_argument {
+	vecx arg1;
+	vecx arg2;
+};
+typedef struct sumavec_1_argument sumavec_1_argument;
+
+struct restavec_1_argument {
+	vecx arg1;
+	vecx arg2;
+};
+typedef struct restavec_1_argument restavec_1_argument;
+
+struct productovec_1_argument {
+	vecx arg1;
+	vecx arg2;
+};
+typedef struct productovec_1_argument productovec_1_argument;
+
+struct productovecsc_1_argument {
+	vecx arg1;
+	int arg2;
+};
+typedef struct productovecsc_1_argument productovecsc_1_argument;
+
+struct sumamat_1_argument {
+	matx arg1;
+	matx arg2;
+};
+typedef struct sumamat_1_argument sumamat_1_argument;
+
+struct restamat_1_argument {
+	matx arg1;
+	matx arg2;
+};
+typedef struct restamat_1_argument restamat_1_argument;
+
+struct productomat_1_argument {
+	matx arg1;
+	matx arg2;
+};
+typedef struct productomat_1_argument productomat_1_argument;
+
+struct productomatsc_1_argument {
+	matx arg1;
+	int arg2;
+};
+typedef struct productomatsc_1_argument productomatsc_1_argument;
+
 #define CALCULADORA_PROG 20000001
 #define CALCULADORA_VER 1
 
 #if defined(__STDC__) || defined(__cplusplus)
 #define Suma 1
-extern  resultado_calculo * suma_1(int , int , CLIENT *);
-extern  resultado_calculo * suma_1_svc(int , int , struct svc_req *);
+extern  resultado_escalar * suma_1(int , int , CLIENT *);
+extern  resultado_escalar * suma_1_svc(int , int , struct svc_req *);
 #define Resta 2
-extern  resultado_calculo * resta_1(int , int , CLIENT *);
-extern  resultado_calculo * resta_1_svc(int , int , struct svc_req *);
+extern  resultado_escalar * resta_1(int , int , CLIENT *);
+extern  resultado_escalar * resta_1_svc(int , int , struct svc_req *);
 #define Producto 3
-extern  resultado_calculo * producto_1(int , int , CLIENT *);
-extern  resultado_calculo * producto_1_svc(int , int , struct svc_req *);
+extern  resultado_escalar * producto_1(int , int , CLIENT *);
+extern  resultado_escalar * producto_1_svc(int , int , struct svc_req *);
 #define Cociente 4
-extern  resultado_calculo * cociente_1(int , int , CLIENT *);
-extern  resultado_calculo * cociente_1_svc(int , int , struct svc_req *);
+extern  resultado_escalar * cociente_1(int , int , CLIENT *);
+extern  resultado_escalar * cociente_1_svc(int , int , struct svc_req *);
+#define SumaVec 5
+extern  resultado_vectorial * sumavec_1(vecx , vecx , CLIENT *);
+extern  resultado_vectorial * sumavec_1_svc(vecx , vecx , struct svc_req *);
+#define RestaVec 6
+extern  resultado_vectorial * restavec_1(vecx , vecx , CLIENT *);
+extern  resultado_vectorial * restavec_1_svc(vecx , vecx , struct svc_req *);
+#define ProductoVec 7
+extern  resultado_vectorial * productovec_1(vecx , vecx , CLIENT *);
+extern  resultado_vectorial * productovec_1_svc(vecx , vecx , struct svc_req *);
+#define ProductoVecSc 8
+extern  resultado_vectorial * productovecsc_1(vecx , int , CLIENT *);
+extern  resultado_vectorial * productovecsc_1_svc(vecx , int , struct svc_req *);
+#define SumaMat 9
+extern  resultado_matricial * sumamat_1(matx , matx , CLIENT *);
+extern  resultado_matricial * sumamat_1_svc(matx , matx , struct svc_req *);
+#define RestaMat 10
+extern  resultado_matricial * restamat_1(matx , matx , CLIENT *);
+extern  resultado_matricial * restamat_1_svc(matx , matx , struct svc_req *);
+#define ProductoMat 11
+extern  resultado_matricial * productomat_1(matx , matx , CLIENT *);
+extern  resultado_matricial * productomat_1_svc(matx , matx , struct svc_req *);
+#define ProductoMatSc 12
+extern  resultado_matricial * productomatsc_1(matx , int , CLIENT *);
+extern  resultado_matricial * productomatsc_1_svc(matx , int , struct svc_req *);
 extern int calculadora_prog_1_freeresult (SVCXPRT *, xdrproc_t, caddr_t);
 
 #else /* K&R C */
 #define Suma 1
-extern  resultado_calculo * suma_1();
-extern  resultado_calculo * suma_1_svc();
+extern  resultado_escalar * suma_1();
+extern  resultado_escalar * suma_1_svc();
 #define Resta 2
-extern  resultado_calculo * resta_1();
-extern  resultado_calculo * resta_1_svc();
+extern  resultado_escalar * resta_1();
+extern  resultado_escalar * resta_1_svc();
 #define Producto 3
-extern  resultado_calculo * producto_1();
-extern  resultado_calculo * producto_1_svc();
+extern  resultado_escalar * producto_1();
+extern  resultado_escalar * producto_1_svc();
 #define Cociente 4
-extern  resultado_calculo * cociente_1();
-extern  resultado_calculo * cociente_1_svc();
+extern  resultado_escalar * cociente_1();
+extern  resultado_escalar * cociente_1_svc();
+#define SumaVec 5
+extern  resultado_vectorial * sumavec_1();
+extern  resultado_vectorial * sumavec_1_svc();
+#define RestaVec 6
+extern  resultado_vectorial * restavec_1();
+extern  resultado_vectorial * restavec_1_svc();
+#define ProductoVec 7
+extern  resultado_vectorial * productovec_1();
+extern  resultado_vectorial * productovec_1_svc();
+#define ProductoVecSc 8
+extern  resultado_vectorial * productovecsc_1();
+extern  resultado_vectorial * productovecsc_1_svc();
+#define SumaMat 9
+extern  resultado_matricial * sumamat_1();
+extern  resultado_matricial * sumamat_1_svc();
+#define RestaMat 10
+extern  resultado_matricial * restamat_1();
+extern  resultado_matricial * restamat_1_svc();
+#define ProductoMat 11
+extern  resultado_matricial * productomat_1();
+extern  resultado_matricial * productomat_1_svc();
+#define ProductoMatSc 12
+extern  resultado_matricial * productomatsc_1();
+extern  resultado_matricial * productomatsc_1_svc();
 extern int calculadora_prog_1_freeresult ();
 #endif /* K&R C */
 
 /* the xdr functions */
 
 #if defined(__STDC__) || defined(__cplusplus)
-extern  bool_t xdr_resultado_calculo (XDR *, resultado_calculo*);
+extern  bool_t xdr_vecx (XDR *, vecx*);
+extern  bool_t xdr_matx (XDR *, matx*);
+extern  bool_t xdr_matx (XDR *, matx*);
+extern  bool_t xdr_resultado_escalar (XDR *, resultado_escalar*);
+extern  bool_t xdr_resultado_vectorial (XDR *, resultado_vectorial*);
+extern  bool_t xdr_resultado_matricial (XDR *, resultado_matricial*);
 extern  bool_t xdr_suma_1_argument (XDR *, suma_1_argument*);
 extern  bool_t xdr_resta_1_argument (XDR *, resta_1_argument*);
 extern  bool_t xdr_producto_1_argument (XDR *, producto_1_argument*);
 extern  bool_t xdr_cociente_1_argument (XDR *, cociente_1_argument*);
+extern  bool_t xdr_sumavec_1_argument (XDR *, sumavec_1_argument*);
+extern  bool_t xdr_restavec_1_argument (XDR *, restavec_1_argument*);
+extern  bool_t xdr_productovec_1_argument (XDR *, productovec_1_argument*);
+extern  bool_t xdr_productovecsc_1_argument (XDR *, productovecsc_1_argument*);
+extern  bool_t xdr_sumamat_1_argument (XDR *, sumamat_1_argument*);
+extern  bool_t xdr_restamat_1_argument (XDR *, restamat_1_argument*);
+extern  bool_t xdr_productomat_1_argument (XDR *, productomat_1_argument*);
+extern  bool_t xdr_productomatsc_1_argument (XDR *, productomatsc_1_argument*);
 
 #else /* K&R C */
-extern bool_t xdr_resultado_calculo ();
+extern bool_t xdr_vecx ();
+extern bool_t xdr_matx ();
+extern bool_t xdr_matx ();
+extern bool_t xdr_resultado_escalar ();
+extern bool_t xdr_resultado_vectorial ();
+extern bool_t xdr_resultado_matricial ();
 extern bool_t xdr_suma_1_argument ();
 extern bool_t xdr_resta_1_argument ();
 extern bool_t xdr_producto_1_argument ();
 extern bool_t xdr_cociente_1_argument ();
+extern bool_t xdr_sumavec_1_argument ();
+extern bool_t xdr_restavec_1_argument ();
+extern bool_t xdr_productovec_1_argument ();
+extern bool_t xdr_productovecsc_1_argument ();
+extern bool_t xdr_sumamat_1_argument ();
+extern bool_t xdr_restamat_1_argument ();
+extern bool_t xdr_productomat_1_argument ();
+extern bool_t xdr_productomatsc_1_argument ();
 
 #endif /* K&R C */
 
