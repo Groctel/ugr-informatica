@@ -6,13 +6,11 @@ class MyTorus extends THREE.Object3D
 	{
 		super();
 
-		const that = this;
-
 		this.DEFAULTS = {
 			RADIUS:           2,
 			TUBE:             0.5,
 			SEGMENTS_RADIAL:  30,
-			SEGMENTS_TUBULAR: 30
+			SEGMENTS_TUBULAR: 50
 		}
 
 		this.properties = {
@@ -21,88 +19,70 @@ class MyTorus extends THREE.Object3D
 			segments_radial:  this.DEFAULTS.SEGMENTS_RADIAL,
 			segments_tubular: this.DEFAULTS.SEGMENTS_TUBULAR,
 
-			default: function ()
+			default: () =>
 			{
-				this.radius           = that.DEFAULTS.RADIUS;
-				this.tube             = that.DEFAULTS.TUBE;
-				this.segments_radial  = that.DEFAULTS.SEGMENTS_RADIAL;
-				this.segments_tubular = that.DEFAULTS.SEGMENTS_TUBULAR;
+				this.properties.radius           = this.DEFAULTS.RADIUS;
+				this.properties.tube             = this.DEFAULTS.TUBE;
+				this.properties.segments_radial  = this.DEFAULTS.SEGMENTS_RADIAL;
+				this.properties.segments_tubular = this.DEFAULTS.SEGMENTS_TUBULAR;
+				this.reconstructGeometry();
 			}
 		}
 
 		const geometry = new THREE.TorusGeometry(
-			this.properties.radius,
-			this.properties.tube,
-			this.properties.segments_radial,
-			this.properties.segments_tubular
+			this.radius,
+			this.tube,
+			this.segments_radial,
+			this.segments_tubular
 		);
 		const material = new THREE.MeshNormalMaterial();
 		this.mesh      = new THREE.Mesh(geometry, material);
 		this.add(this.mesh);
 
-		this.createGUI(gui);
+		this.constructGUI(gui);
 	}
 
-	createGUI (gui)
+	constructGUI (gui)
 	{
-		const that   = this;
-		const folder = gui.addFolder('Torus properties');
+		const folder = gui.addFolder("Torus properties");
 
 		folder
 			.add(this.properties, 'radius', 0.1, 5.0, 0.1)
-			.name('Radius')
-			.onChange(function ()
-			{
-				that.mesh.geometry = new THREE.TorusGeometry(
-					that.properties.radius,
-					that.properties.tube,
-					that.properties.segments_radial,
-					that.properties.segments_tubular
-				);
-			});
+			.name("Radius")
+			.onChange(() => this.reconstructGeometry())
+			.listen();
 
 		folder
 			.add(this.properties, 'tube', 0.1, 5.0, 0.1)
-			.name('Tube')
-			.onChange(function ()
-			{
-				that.mesh.geometry = new THREE.TorusGeometry(
-					that.properties.radius,
-					that.properties.tube,
-					that.properties.segments_radial,
-					that.properties.segments_tubular
-				);
-			});
+			.name("Tube")
+			.onChange(() => this.reconstructGeometry())
+			.listen();
 
 		folder
 			.add(this.properties, 'segments_radial', 3, 50, 1)
-			.name('Radial segments')
-			.onChange(function ()
-			{
-				that.mesh.geometry = new THREE.TorusGeometry(
-					that.properties.radius,
-					that.properties.tube,
-					that.properties.segments_radial,
-					that.properties.segments_tubular
-				);
-			});
+			.name("Radial segments")
+			.onChange(() => this.reconstructGeometry())
+			.listen();
 
 		folder
 			.add(this.properties, 'segments_tubular', 3, 50, 1)
-			.name('Tubular segments')
-			.onChange(function ()
-			{
-				that.mesh.geometry = new THREE.TorusGeometry(
-					that.properties.radius,
-					that.properties.tube,
-					that.properties.segments_radial,
-					that.properties.segments_tubular
-				);
-			});
+			.name("Tubular segments")
+			.onChange(() => this.reconstructGeometry())
+			.listen();
 
 		folder
 			.add(this.properties, 'default')
-			.name('Default');
+			.name("Default");
+	}
+
+	reconstructGeometry ()
+	{
+		this.mesh.geometry = new THREE.TorusGeometry(
+			this.properties.radius,
+			this.properties.tube,
+			this.properties.segments_radial,
+			this.properties.segments_tubular
+		);
 	}
 
 	update ()

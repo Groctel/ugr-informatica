@@ -6,8 +6,6 @@ class MyIcosahedron extends THREE.Object3D
 	{
 		super();
 
-		const that = this;
-
 		this.DEFAULTS = {
 			RADIUS: 3.0,
 			DETAIL: 0,
@@ -17,10 +15,11 @@ class MyIcosahedron extends THREE.Object3D
 			radius: this.DEFAULTS.RADIUS,
 			detail: this.DEFAULTS.DETAIL,
 
-			default: function ()
+			default: () =>
 			{
-				this.radius = that.DEFAULTS.RADIUS;
-				this.detail = that.DEFAULTS.DETAIL;
+				this.properties.radius = this.DEFAULTS.RADIUS;
+				this.properties.detail = this.DEFAULTS.DETAIL;
+				this.reconstructGeometry();
 			}
 		}
 
@@ -32,39 +31,36 @@ class MyIcosahedron extends THREE.Object3D
 		this.mesh      = new THREE.Mesh(geometry, material);
 		this.add(this.mesh);
 
-		this.createGUI(gui);
+		this.constructGUI(gui);
 	}
 
-	createGUI (gui)
+	constructGUI (gui)
 	{
-		const that   = this;
 		const folder = gui.addFolder('Icosahedron properties');
 
 		folder
 			.add(this.properties, 'radius', 0.1, 5.0, 0.1)
-			.name('Radius')
-			.onChange(function ()
-			{
-				that.mesh.geometry = new THREE.IcosahedronGeometry(
-					that.properties.radius,
-					that.properties.detail
-				);
-			});
+			.name("Radius")
+			.onChange(() => this.reconstructGeometry())
+			.listen();
 
 		folder
 			.add(this.properties, 'detail', 0, 50, 1)
-			.name('Detail')
-			.onChange(function ()
-			{
-				that.mesh.geometry = new THREE.IcosahedronGeometry(
-					that.properties.radius,
-					that.properties.detail
-				);
-			});
+			.name("Detail")
+			.onChange(() => this.reconstructGeometry())
+			.listen();
 
 		folder
 			.add(this.properties, 'default')
-			.name('Default');
+			.name("Default");
+	}
+
+	reconstructGeometry ()
+	{
+		this.mesh.geometry = new THREE.IcosahedronGeometry(
+			this.properties.radius,
+			this.properties.detail
+		);
 	}
 
 	update ()

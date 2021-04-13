@@ -15,10 +15,26 @@ class MyScene extends THREE.Scene
 	{
 		super();
 
-		this.renderer = this.createRenderer(myCanvas);
-		this.gui = this.createGUI ();
-		this.createLights();
-		this.createCamera();
+		this.DEFAULTS = {
+			AXES:            true,
+			LIGHT_INTENSITY: 0.5,
+		};
+
+		this.properties = {
+			axes:            this.DEFAULTS.AXES,
+			light_intensity: this.DEFAULTS.LIGHT_INTENSITY,
+
+			default: () =>
+			{
+				this.axes            = this.DEFAULTS.AXES;
+				this.light_intensity = this.DEFAULTS.LIGHT_INTENSITY;
+			}
+		};
+
+		this.renderer = this.constructRenderer(myCanvas);
+		this.gui      = this.constructGUI ();
+		this.constructLights();
+		this.constructCamera();
 
 		this.box_axes  = new THREE.AxesHelper(3);
 		this.box_model = new MyBox(this.gui);
@@ -61,7 +77,7 @@ class MyScene extends THREE.Scene
 		this.add(this.torus_model);
   }
 
-	createCamera ()
+	constructCamera ()
 	{
 		this.camera = new THREE.PerspectiveCamera(
 			45,
@@ -70,66 +86,62 @@ class MyScene extends THREE.Scene
 			1000
 		);
 
+		const look = new THREE.Vector3(0, 0, 0);
+
 		this.camera.position.set(20, 10, 10);
-		let look = new THREE.Vector3(0, 0, 0);
 		this.camera.lookAt(look);
 		this.add(this.camera);
 
-		this.cameraControl = new TrackballControls(this.camera, this.renderer.domElement);
+		this.camera_control = new TrackballControls(
+			this.camera,
+			this.renderer.domElement
+		);
 
-		this.cameraControl.rotateSpeed = 5;
-		this.cameraControl.zoomSpeed   = 1;
-		this.cameraControl.panSpeed    = 0.5;
-		this.cameraControl.target      = look;
+		this.camera_control.rotateSpeed = 5;
+		this.camera_control.zoomSpeed   = 2;
+		this.camera_control.panSpeed    = 0.5;
+		this.camera_control.target      = look;
 	}
 
-	createGUI ()
+	constructGUI ()
 	{
-		let gui = new GUI();
+		const gui    = new GUI();
+		const folder = gui.addFolder("Lights and axes");
 
-		this.guiControls = new function ()
-		{
-			this.lightIntensity = 0.5;
-			this.axesOnOff = true;
-		}
+		folder
+			.add(this.properties, 'light_intensity', 0, 1, 0.1)
+			.name("Light intensity");
 
-		var folder = gui.addFolder('Lights and axes');
-
-		folder.add(
-			this.guiControls, 'lightIntensity',
-			0, 1, 0.1
-		).name('Light intensity');
-
-		folder.add(this.guiControls, 'axesOnOff').name('Show axes')
+		folder
+			.add(this.properties, 'axes')
+			.name("Show axes");
 
 		return gui;
 	}
 
-	createLights ()
+	constructLights ()
 	{
-		var ambientLight = new THREE.AmbientLight(0xccddee, 0.35);
-		this.spotLight   = new THREE.SpotLight(0xffffff, this.guiControls.lightIntensity);
+		const light    = new THREE.AmbientLight(0xccddee, 0.35);
+		this.spotlight = new THREE.SpotLight(
+			0xffffff,
+			this.properties.light_intensity
+		);
 
-		this.spotLight.position.set(60, 60, 40);
+		this.spotlight.position.set(60, 60, 40);
 
-		this.add(ambientLight);
-		this.add(this.spotLight);
+		this.add(light);
+		this.add(this.spotlight);
 	}
 
-	createRenderer (myCanvas)
+	constructRenderer (myCanvas)
 	{
-		var renderer = new THREE.WebGLRenderer();
+		const renderer = new THREE.WebGLRenderer();
 
 		renderer.setClearColor(new THREE.Color(0xEEEEEE), 1.0);
 		renderer.setSize(window.innerWidth, window.innerHeight);
 		$(myCanvas).append(renderer.domElement);
 
 		return renderer;
-	}
-
-	getCamera ()
-	{
-		return this.camera;
 	}
 
 	setCameraAspect (ratio)
@@ -146,16 +158,16 @@ class MyScene extends THREE.Scene
 
 	update ()
 	{
-		this.renderer.render(this, this.getCamera());
-		this.spotLight.intensity = this.guiControls.lightIntensity;
-		this.cameraControl.update();
+		this.renderer.render(this, this.camera);
+		this.spotlight.intensity = this.properties.light_intensity;
+		this.camera_control.update();
 
-		this.box_axes.visible         = this.guiControls.axesOnOff;
-		this.cone_axes.visible        = this.guiControls.axesOnOff;
-		this.cylinder_axes.visible    = this.guiControls.axesOnOff;
-		this.icosahedron_axes.visible = this.guiControls.axesOnOff;
-		this.sphere_axes.visible      = this.guiControls.axesOnOff;
-		this.torus_axes.visible       = this.guiControls.axesOnOff;
+		this.box_axes.visible         = this.properties.axes;
+		this.cone_axes.visible        = this.properties.axes;
+		this.cylinder_axes.visible    = this.properties.axes;
+		this.icosahedron_axes.visible = this.properties.axes;
+		this.sphere_axes.visible      = this.properties.axes;
+		this.torus_axes.visible       = this.properties.axes;
 
 		this.box_model.update();
 		this.cone_model.update();
@@ -170,8 +182,8 @@ class MyScene extends THREE.Scene
 
 $(function ()
 {
-	var scene = new MyScene("#WebGL-output");
+	const scene = new MyScene("#WebGL-output");
 
-	window.addEventListener("resize", () => scene.onWindowResize());
+	window.addEventListener('resize', () => scene.onWindowResize());
 	scene.update();
 });

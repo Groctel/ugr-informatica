@@ -6,8 +6,6 @@ class MySphere extends THREE.Object3D
 	{
 		super();
 
-		const that = this;
-
 		this.DEFAULTS = {
 			RADIUS:          2.0,
 			SEGMENTS_WIDTH:  32,
@@ -19,11 +17,12 @@ class MySphere extends THREE.Object3D
 			segments_width:  this.DEFAULTS.SEGMENTS_WIDTH,
 			segments_height: this.DEFAULTS.SEGMENTS_HEIGHT,
 
-			default: function ()
+			default: () =>
 			{
-				this.radius          = that.DEFAULTS.RADIUS;
-				this.segments_width  = that.DEFAULTS.SEGMENTS_WIDTH;
-				this.segments_height = that.DEFAULTS.SEGMENTS_HEIGHT;
+				this.properties.radius          = this.DEFAULTS.RADIUS;
+				this.properties.segments_width  = this.DEFAULTS.SEGMENTS_WIDTH;
+				this.properties.segments_height = this.DEFAULTS.SEGMENTS_HEIGHT;
+				this.reconstructGeometry();
 			}
 		}
 
@@ -36,53 +35,43 @@ class MySphere extends THREE.Object3D
 		this.mesh      = new THREE.Mesh(geometry, material);
 		this.add(this.mesh);
 
-		this.createGUI(gui);
+		this.constructGUI(gui);
 	}
 
-	createGUI (gui)
+	constructGUI (gui)
 	{
-		const that   = this;
-		const folder = gui.addFolder('Sphere properties');
+		const folder = gui.addFolder("Sphere properties");
 
 		folder
 			.add(this.properties, 'radius', 0.1, 5.0, 0.1)
-			.name('Radius')
-			.onChange(function ()
-			{
-				that.mesh.geometry = new THREE.SphereGeometry(
-					that.properties.radius,
-					that.properties.segments_width,
-					that.properties.segments_height
-				);
-			});
+			.name("Radius")
+			.onChange(() => this.reconstructGeometry())
+			.listen();
 
 		folder
 			.add(this.properties, 'segments_width', 3, 50, 1)
-			.name('Width segments')
-			.onChange(function ()
-			{
-				that.mesh.geometry = new THREE.SphereGeometry(
-					that.properties.radius,
-					that.properties.segments_width,
-					that.properties.segments_height
-				);
-			});
+			.name("Width segments")
+			.onChange(() => this.reconstructGeometry())
+			.listen();
 
 		folder
 			.add(this.properties, 'segments_height', 3, 50, 1)
-			.name('Height segments')
-			.onChange(function ()
-			{
-				that.mesh.geometry = new THREE.SphereGeometry(
-					that.properties.radius,
-					that.properties.segments_width,
-					that.properties.segments_height
-				);
-			});
+			.name("Height segments")
+			.onChange(() => this.reconstructGeometry())
+			.listen();
 
 		folder
 			.add(this.properties, 'default')
-			.name('Default');
+			.name("Default");
+	}
+
+	reconstructGeometry ()
+	{
+		this.mesh.geometry = new THREE.SphereGeometry(
+			this.properties.radius,
+			this.properties.segments_width,
+			this.properties.segments_height
+		);
 	}
 
 	update ()

@@ -1,4 +1,4 @@
-import * as THREE from '../libs/three.module.js'
+import * as THREE from '../libs/three.module.js';
 
 class MyBox extends THREE.Object3D
 {
@@ -6,26 +6,24 @@ class MyBox extends THREE.Object3D
 	{
 		super();
 
-		const that = this;
-
 		this.DEFAULTS = {
 			SIZE_X: 1.0,
 			SIZE_Y: 1.0,
 			SIZE_Z: 1.0,
-		}
+		};
 
 		this.properties = {
 			size_x: this.DEFAULTS.SIZE_X,
 			size_y: this.DEFAULTS.SIZE_Y,
 			size_z: this.DEFAULTS.SIZE_Z,
 
-			default: function ()
+			default: () =>
 			{
-				that.properties.size_x = that.DEFAULTS.SIZE_X;
-				that.properties.size_y = that.DEFAULTS.SIZE_Y;
-				that.properties.size_z = that.DEFAULTS.SIZE_Z;
+				this.properties.size_x = this.DEFAULTS.SIZE_X;
+				this.properties.size_y = this.DEFAULTS.SIZE_Y;
+				this.properties.size_z = this.DEFAULTS.SIZE_Z;
 			}
-		}
+		};
 
 		const geometry = new THREE.BoxGeometry(
 			this.properties.size_x,
@@ -36,10 +34,10 @@ class MyBox extends THREE.Object3D
 		this.mesh      = new THREE.Mesh(geometry, material);
 		this.add(this.mesh);
 
-		this.createGUI(gui);
+		this.constructGUI(gui);
 	}
 
-	createGUI (gui)
+	constructGUI (gui)
 	{
 		const folder = gui.addFolder ('Box properties');
 
