@@ -1,7 +1,7 @@
-import * as THREE from '../libs/three.module.js'
-import { GUI } from '../libs/dat.gui.module.js'
-import { TrackballControls } from '../libs/TrackballControls.js'
-import { MyBox } from './MyBox.js'
+import * as THREE from '../libs/three.module.js';
+import { GUI } from '../libs/dat.gui.module.js';
+import { TrackballControls } from '../libs/TrackballControls.js';
+import { MyBox } from './MyBox.js';
 
 class MyScene extends THREE.Scene
 {
@@ -11,22 +11,39 @@ class MyScene extends THREE.Scene
 	 * deben añadirse manualmente. Recibe el lienzo html sobre el que se va a
 	 * visualizar.
 	 */
+
 	constructor (myCanvas)
 	{
 		super();
 
-		this.renderer = this.createRenderer(myCanvas);
-		this.gui = this.createGUI ();
-		this.createLights();
-		this.createCamera();
-		this.createGround();
+		this.DEFAULTS = {
+			axes:            true,
+			light_intensity: 0.5,
+		};
 
-		this.axis  = new THREE.AxesHelper(5);
-		this.model = new MyBox(this.gui, "Controles de la Caja");
+		this.properties = {
+			axes:            this.DEFAULTS.axes,
+			light_intensity: this.DEFAULTS.light_intensity,
 
-		this.add(this.axis);
+			default: () =>
+			{
+				this.axes            = this.DEFAULTS.axes;
+				this.light_intensity = this.DEFAULTS.light_intensity;
+			}
+		};
+
+		this.renderer = this.constructRenderer(myCanvas);
+		this.gui      = this.constructGUI();
+		this.constructLights();
+		this.constructCamera();
+		this.constructGround();
+
+		this.axes  = new THREE.AxesHelper(5);
+		this.model = new MyBox(this.gui);
+
+		this.add(this.axes);
 		this.add(this.model);
-  }
+	}
 
 	/*
 	 * Se crea la cámara indicándole el ángulo de visión vertical en grados
@@ -35,7 +52,7 @@ class MyScene extends THREE.Scene
 	 * la misma.
 	 */
 
-	createCamera ()
+	constructCamera ()
 	{
 		this.camera = new THREE.PerspectiveCamera(
 			45,
@@ -44,17 +61,21 @@ class MyScene extends THREE.Scene
 			1000
 		);
 
+		const look = new THREE.Vector3(0, 0, 0);
+
 		this.camera.position.set(20, 10, 10);
-		let look = new THREE.Vector3(0, 0, 0);
 		this.camera.lookAt(look);
 		this.add(this.camera);
 
-		this.cameraControl = new TrackballControls(this.camera, this.renderer.domElement);
+		this.camera_control = new TrackballControls(
+			this.camera,
+			this.renderer.domElement
+		);
 
-		this.cameraControl.rotateSpeed = 5;
-		this.cameraControl.zoomSpeed   = -2;
-		this.cameraControl.panSpeed    = 0.5;
-		this.cameraControl.target      = look;
+		this.camera_control.rotateSpeed = 5;
+		this.camera_control.zoomSpeed   = 2;
+		this.camera_control.panSpeed    = 0.5;
+		this.camera_control.target      = look;
 	}
 
 	/*
@@ -63,16 +84,15 @@ class MyScene extends THREE.Scene
 	 * manualmente antes de añadirlo a la escena.
 	 */
 
-	createGround ()
+	constructGround ()
 	{
-		let geometryGround = new THREE.BoxGeometry(50, 0.2, 50);
-		let textureGround  = new THREE.TextureLoader().load('../imgs/wood.jpg');
-		let materialGround = new THREE.MeshPhongMaterial({map: textureGround});
+		const ground_geom = new THREE.BoxGeometry(50, 0.2, 50);
+		const ground_tex  = new THREE.TextureLoader().load('../imgs/wood.jpg');
+		const ground_mat  = new THREE.MeshPhongMaterial({map: ground_tex});
+		const ground_mesh = new THREE.Mesh(ground_geom, ground_mat);
 
-		let ground = new THREE.Mesh(geometryGround, materialGround);
-		ground.position.y = -0.1;
-
-		this.add (ground);
+		ground_mesh.position.y = -0.1;
+		this.add(ground_mesh);
 	}
 
 	/*
@@ -84,24 +104,18 @@ class MyScene extends THREE.Scene
 	 * los valores mínimo, máximo e incremento.
 	 */
 
-	createGUI ()
+	constructGUI ()
 	{
-		let gui = new GUI();
+		const gui    = new GUI();
+		const folder = gui.addFolder("Light and axes");
 
-		this.guiControls = new function ()
-		{
-			this.lightIntensity = 0.5;
-			this.axisOnOff = true;
-		}
+		folder
+			.add(this.properties, 'light_intensity', 0, 1, 0.1)
+			.name("Light intensity");
 
-		var folder = gui.addFolder('Luz y Ejes');
-
-		folder.add(
-			this.guiControls, 'lightIntensity',
-			0, 1, 0.1
-		).name('Intensidad de la Luz');
-
-		folder.add(this.guiControls, 'axisOnOff').name('Mostrar ejes')
+		folder
+			.add(this.properties, 'axes')
+			.name("Show axes");
 
 		return gui;
 	}
@@ -113,15 +127,18 @@ class MyScene extends THREE.Scene
 	 * y tiene una posición y un punto de mira (por defecto el origen).
 	 */
 
-	createLights ()
+	constructLights ()
 	{
-		var ambientLight = new THREE.AmbientLight(0xccddee, 0.35);
-		this.spotLight   = new THREE.SpotLight(0xffffff, this.guiControls.lightIntensity);
+		const light    = new THREE.AmbientLight(0xccddee, 0.35);
+		this.spotlight = new THREE.SpotLight(
+			0xffffff,
+			this.properties.light_intensity
+		);
 
-		this.spotLight.position.set(60, 60, 40);
+		this.spotlight.position.set(60, 60, 40);
 
-		this.add(ambientLight);
-		this.add(this.spotLight);
+		this.add(light);
+		this.add(this.spotlight);
 	}
 
 	/*
@@ -129,24 +146,15 @@ class MyScene extends THREE.Scene
 	 * y un tamaño y se incluye en el lienzo pasado como argumento.
 	 */
 
-	createRenderer (myCanvas)
+	constructRenderer (myCanvas)
 	{
-		var renderer = new THREE.WebGLRenderer();
+		const renderer = new THREE.WebGLRenderer();
 
 		renderer.setClearColor(new THREE.Color(0xEEEEEE), 1.0);
 		renderer.setSize(window.innerWidth, window.innerHeight);
 		$(myCanvas).append(renderer.domElement);
 
 		return renderer;
-	}
-
-	/*
-	 * Consultor de la cámara de toda la vida.
-	 */
-
-	getCamera ()
-	{
-		return this.camera;
 	}
 
 	/*
@@ -179,13 +187,13 @@ class MyScene extends THREE.Scene
 
 	update ()
 	{
-		this.renderer.render(this, this.getCamera());
-		this.spotLight.intensity = this.guiControls.lightIntensity;
-		this.axis.visible = this.guiControls.axisOnOff;
-		this.cameraControl.update();
+		this.renderer.render(this, this.camera);
+		this.spotlight.intensity = this.properties.light_intensity;
+		this.axes.visible = this.properties.axes;
+		this.camera_control.update();
 		this.model.update();
 
-		requestAnimationFrame(() => this.update())
+		requestAnimationFrame(() => this.update());
 	}
 }
 
@@ -198,7 +206,7 @@ class MyScene extends THREE.Scene
 
 $(function ()
 {
-	var scene = new MyScene("#WebGL-output");
+	const scene = new MyScene("#WebGL-output");
 
 	window.addEventListener("resize", () => scene.onWindowResize());
 	scene.update();
