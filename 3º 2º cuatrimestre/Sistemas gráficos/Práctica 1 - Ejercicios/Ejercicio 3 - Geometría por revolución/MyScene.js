@@ -11,6 +11,7 @@ class MyScene extends THREE.Scene
 		super();
 
 		const outline = [
+			new THREE.Vector3(0.0,  -1.4, 0.0),
 			new THREE.Vector3(1.0,  -1.4, 0.0),
 			new THREE.Vector3(1.0,  -1.1, 0.0),
 			new THREE.Vector3(0.5,  -0.7, 0.0),
@@ -21,7 +22,8 @@ class MyScene extends THREE.Scene
 			new THREE.Vector3(0.5,  0.8, 0.0),
 			new THREE.Vector3(0.55, 1.0, 0.0),
 			new THREE.Vector3(0.5,  1.2, 0.0),
-			new THREE.Vector3(0.3,  1.4, 0.0)
+			new THREE.Vector3(0.3,  1.4, 0.0),
+			new THREE.Vector3(0.0,  1.4, 0.0)
 		];
 
 		this.DEFAULTS = {
