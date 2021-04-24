@@ -19,10 +19,10 @@ all_structs = []
 
 
 class Iface(object):
-    def Ping(self):
+    def ping(self):
         pass
 
-    def SumaEscalar(self, operando1, operando2):
+    def suma_escalar(self, operando1, operando2):
         """
         Parameters:
          - operando1
@@ -31,7 +31,7 @@ class Iface(object):
         """
         pass
 
-    def RestaEscalar(self, operando1, operando2):
+    def resta_escalar(self, operando1, operando2):
         """
         Parameters:
          - operando1
@@ -40,7 +40,7 @@ class Iface(object):
         """
         pass
 
-    def ProductoEscalar(self, operando1, operando2):
+    def producto_escalar(self, operando1, operando2):
         """
         Parameters:
          - operando1
@@ -49,7 +49,7 @@ class Iface(object):
         """
         pass
 
-    def DivisionEscalar(self, operando1, operando2):
+    def division_escalar(self, operando1, operando2):
         """
         Parameters:
          - operando1
@@ -58,7 +58,7 @@ class Iface(object):
         """
         pass
 
-    def SumaVectorial(self, operando1, operando2):
+    def suma_vectorial(self, operando1, operando2):
         """
         Parameters:
          - operando1
@@ -67,7 +67,7 @@ class Iface(object):
         """
         pass
 
-    def RestaVectorial(self, operando1, operando2):
+    def resta_vectorial(self, operando1, operando2):
         """
         Parameters:
          - operando1
@@ -76,7 +76,7 @@ class Iface(object):
         """
         pass
 
-    def ProductoVectorial(self, operando1, operando2):
+    def producto_vectorial(self, operando1, operando2):
         """
         Parameters:
          - operando1
@@ -85,7 +85,7 @@ class Iface(object):
         """
         pass
 
-    def SumaMatricial(self, operando1, operando2):
+    def suma_matricial(self, operando1, operando2):
         """
         Parameters:
          - operando1
@@ -94,7 +94,7 @@ class Iface(object):
         """
         pass
 
-    def RestaMatricial(self, operando1, operando2):
+    def resta_matricial(self, operando1, operando2):
         """
         Parameters:
          - operando1
@@ -103,7 +103,7 @@ class Iface(object):
         """
         pass
 
-    def ProductoMatricial(self, operando1, operando2):
+    def producto_matricial(self, operando1, operando2):
         """
         Parameters:
          - operando1
@@ -120,18 +120,18 @@ class Client(Iface):
             self._oprot = oprot
         self._seqid = 0
 
-    def Ping(self):
-        self.send_Ping()
-        self.recv_Ping()
+    def ping(self):
+        self.send_ping()
+        self.recv_ping()
 
-    def send_Ping(self):
-        self._oprot.writeMessageBegin('Ping', TMessageType.CALL, self._seqid)
-        args = Ping_args()
+    def send_ping(self):
+        self._oprot.writeMessageBegin('ping', TMessageType.CALL, self._seqid)
+        args = ping_args()
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
         self._oprot.trans.flush()
 
-    def recv_Ping(self):
+    def recv_ping(self):
         iprot = self._iprot
         (fname, mtype, rseqid) = iprot.readMessageBegin()
         if mtype == TMessageType.EXCEPTION:
@@ -139,31 +139,31 @@ class Client(Iface):
             x.read(iprot)
             iprot.readMessageEnd()
             raise x
-        result = Ping_result()
+        result = ping_result()
         result.read(iprot)
         iprot.readMessageEnd()
         return
 
-    def SumaEscalar(self, operando1, operando2):
+    def suma_escalar(self, operando1, operando2):
         """
         Parameters:
          - operando1
          - operando2
 
         """
-        self.send_SumaEscalar(operando1, operando2)
-        return self.recv_SumaEscalar()
+        self.send_suma_escalar(operando1, operando2)
+        return self.recv_suma_escalar()
 
-    def send_SumaEscalar(self, operando1, operando2):
-        self._oprot.writeMessageBegin('SumaEscalar', TMessageType.CALL, self._seqid)
-        args = SumaEscalar_args()
+    def send_suma_escalar(self, operando1, operando2):
+        self._oprot.writeMessageBegin('suma_escalar', TMessageType.CALL, self._seqid)
+        args = suma_escalar_args()
         args.operando1 = operando1
         args.operando2 = operando2
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
         self._oprot.trans.flush()
 
-    def recv_SumaEscalar(self):
+    def recv_suma_escalar(self):
         iprot = self._iprot
         (fname, mtype, rseqid) = iprot.readMessageBegin()
         if mtype == TMessageType.EXCEPTION:
@@ -171,33 +171,33 @@ class Client(Iface):
             x.read(iprot)
             iprot.readMessageEnd()
             raise x
-        result = SumaEscalar_result()
+        result = suma_escalar_result()
         result.read(iprot)
         iprot.readMessageEnd()
         if result.success is not None:
             return result.success
-        raise TApplicationException(TApplicationException.MISSING_RESULT, "SumaEscalar failed: unknown result")
+        raise TApplicationException(TApplicationException.MISSING_RESULT, "suma_escalar failed: unknown result")
 
-    def RestaEscalar(self, operando1, operando2):
+    def resta_escalar(self, operando1, operando2):
         """
         Parameters:
          - operando1
          - operando2
 
         """
-        self.send_RestaEscalar(operando1, operando2)
-        return self.recv_RestaEscalar()
+        self.send_resta_escalar(operando1, operando2)
+        return self.recv_resta_escalar()
 
-    def send_RestaEscalar(self, operando1, operando2):
-        self._oprot.writeMessageBegin('RestaEscalar', TMessageType.CALL, self._seqid)
-        args = RestaEscalar_args()
+    def send_resta_escalar(self, operando1, operando2):
+        self._oprot.writeMessageBegin('resta_escalar', TMessageType.CALL, self._seqid)
+        args = resta_escalar_args()
         args.operando1 = operando1
         args.operando2 = operando2
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
         self._oprot.trans.flush()
 
-    def recv_RestaEscalar(self):
+    def recv_resta_escalar(self):
         iprot = self._iprot
         (fname, mtype, rseqid) = iprot.readMessageBegin()
         if mtype == TMessageType.EXCEPTION:
@@ -205,33 +205,33 @@ class Client(Iface):
             x.read(iprot)
             iprot.readMessageEnd()
             raise x
-        result = RestaEscalar_result()
+        result = resta_escalar_result()
         result.read(iprot)
         iprot.readMessageEnd()
         if result.success is not None:
             return result.success
-        raise TApplicationException(TApplicationException.MISSING_RESULT, "RestaEscalar failed: unknown result")
+        raise TApplicationException(TApplicationException.MISSING_RESULT, "resta_escalar failed: unknown result")
 
-    def ProductoEscalar(self, operando1, operando2):
+    def producto_escalar(self, operando1, operando2):
         """
         Parameters:
          - operando1
          - operando2
 
         """
-        self.send_ProductoEscalar(operando1, operando2)
-        return self.recv_ProductoEscalar()
+        self.send_producto_escalar(operando1, operando2)
+        return self.recv_producto_escalar()
 
-    def send_ProductoEscalar(self, operando1, operando2):
-        self._oprot.writeMessageBegin('ProductoEscalar', TMessageType.CALL, self._seqid)
-        args = ProductoEscalar_args()
+    def send_producto_escalar(self, operando1, operando2):
+        self._oprot.writeMessageBegin('producto_escalar', TMessageType.CALL, self._seqid)
+        args = producto_escalar_args()
         args.operando1 = operando1
         args.operando2 = operando2
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
         self._oprot.trans.flush()
 
-    def recv_ProductoEscalar(self):
+    def recv_producto_escalar(self):
         iprot = self._iprot
         (fname, mtype, rseqid) = iprot.readMessageBegin()
         if mtype == TMessageType.EXCEPTION:
@@ -239,33 +239,33 @@ class Client(Iface):
             x.read(iprot)
             iprot.readMessageEnd()
             raise x
-        result = ProductoEscalar_result()
+        result = producto_escalar_result()
         result.read(iprot)
         iprot.readMessageEnd()
         if result.success is not None:
             return result.success
-        raise TApplicationException(TApplicationException.MISSING_RESULT, "ProductoEscalar failed: unknown result")
+        raise TApplicationException(TApplicationException.MISSING_RESULT, "producto_escalar failed: unknown result")
 
-    def DivisionEscalar(self, operando1, operando2):
+    def division_escalar(self, operando1, operando2):
         """
         Parameters:
          - operando1
          - operando2
 
         """
-        self.send_DivisionEscalar(operando1, operando2)
-        return self.recv_DivisionEscalar()
+        self.send_division_escalar(operando1, operando2)
+        return self.recv_division_escalar()
 
-    def send_DivisionEscalar(self, operando1, operando2):
-        self._oprot.writeMessageBegin('DivisionEscalar', TMessageType.CALL, self._seqid)
-        args = DivisionEscalar_args()
+    def send_division_escalar(self, operando1, operando2):
+        self._oprot.writeMessageBegin('division_escalar', TMessageType.CALL, self._seqid)
+        args = division_escalar_args()
         args.operando1 = operando1
         args.operando2 = operando2
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
         self._oprot.trans.flush()
 
-    def recv_DivisionEscalar(self):
+    def recv_division_escalar(self):
         iprot = self._iprot
         (fname, mtype, rseqid) = iprot.readMessageBegin()
         if mtype == TMessageType.EXCEPTION:
@@ -273,33 +273,33 @@ class Client(Iface):
             x.read(iprot)
             iprot.readMessageEnd()
             raise x
-        result = DivisionEscalar_result()
+        result = division_escalar_result()
         result.read(iprot)
         iprot.readMessageEnd()
         if result.success is not None:
             return result.success
-        raise TApplicationException(TApplicationException.MISSING_RESULT, "DivisionEscalar failed: unknown result")
+        raise TApplicationException(TApplicationException.MISSING_RESULT, "division_escalar failed: unknown result")
 
-    def SumaVectorial(self, operando1, operando2):
+    def suma_vectorial(self, operando1, operando2):
         """
         Parameters:
          - operando1
          - operando2
 
         """
-        self.send_SumaVectorial(operando1, operando2)
-        return self.recv_SumaVectorial()
+        self.send_suma_vectorial(operando1, operando2)
+        return self.recv_suma_vectorial()
 
-    def send_SumaVectorial(self, operando1, operando2):
-        self._oprot.writeMessageBegin('SumaVectorial', TMessageType.CALL, self._seqid)
-        args = SumaVectorial_args()
+    def send_suma_vectorial(self, operando1, operando2):
+        self._oprot.writeMessageBegin('suma_vectorial', TMessageType.CALL, self._seqid)
+        args = suma_vectorial_args()
         args.operando1 = operando1
         args.operando2 = operando2
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
         self._oprot.trans.flush()
 
-    def recv_SumaVectorial(self):
+    def recv_suma_vectorial(self):
         iprot = self._iprot
         (fname, mtype, rseqid) = iprot.readMessageBegin()
         if mtype == TMessageType.EXCEPTION:
@@ -307,33 +307,33 @@ class Client(Iface):
             x.read(iprot)
             iprot.readMessageEnd()
             raise x
-        result = SumaVectorial_result()
+        result = suma_vectorial_result()
         result.read(iprot)
         iprot.readMessageEnd()
         if result.success is not None:
             return result.success
-        raise TApplicationException(TApplicationException.MISSING_RESULT, "SumaVectorial failed: unknown result")
+        raise TApplicationException(TApplicationException.MISSING_RESULT, "suma_vectorial failed: unknown result")
 
-    def RestaVectorial(self, operando1, operando2):
+    def resta_vectorial(self, operando1, operando2):
         """
         Parameters:
          - operando1
          - operando2
 
         """
-        self.send_RestaVectorial(operando1, operando2)
-        return self.recv_RestaVectorial()
+        self.send_resta_vectorial(operando1, operando2)
+        return self.recv_resta_vectorial()
 
-    def send_RestaVectorial(self, operando1, operando2):
-        self._oprot.writeMessageBegin('RestaVectorial', TMessageType.CALL, self._seqid)
-        args = RestaVectorial_args()
+    def send_resta_vectorial(self, operando1, operando2):
+        self._oprot.writeMessageBegin('resta_vectorial', TMessageType.CALL, self._seqid)
+        args = resta_vectorial_args()
         args.operando1 = operando1
         args.operando2 = operando2
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
         self._oprot.trans.flush()
 
-    def recv_RestaVectorial(self):
+    def recv_resta_vectorial(self):
         iprot = self._iprot
         (fname, mtype, rseqid) = iprot.readMessageBegin()
         if mtype == TMessageType.EXCEPTION:
@@ -341,33 +341,33 @@ class Client(Iface):
             x.read(iprot)
             iprot.readMessageEnd()
             raise x
-        result = RestaVectorial_result()
+        result = resta_vectorial_result()
         result.read(iprot)
         iprot.readMessageEnd()
         if result.success is not None:
             return result.success
-        raise TApplicationException(TApplicationException.MISSING_RESULT, "RestaVectorial failed: unknown result")
+        raise TApplicationException(TApplicationException.MISSING_RESULT, "resta_vectorial failed: unknown result")
 
-    def ProductoVectorial(self, operando1, operando2):
+    def producto_vectorial(self, operando1, operando2):
         """
         Parameters:
          - operando1
          - operando2
 
         """
-        self.send_ProductoVectorial(operando1, operando2)
-        return self.recv_ProductoVectorial()
+        self.send_producto_vectorial(operando1, operando2)
+        return self.recv_producto_vectorial()
 
-    def send_ProductoVectorial(self, operando1, operando2):
-        self._oprot.writeMessageBegin('ProductoVectorial', TMessageType.CALL, self._seqid)
-        args = ProductoVectorial_args()
+    def send_producto_vectorial(self, operando1, operando2):
+        self._oprot.writeMessageBegin('producto_vectorial', TMessageType.CALL, self._seqid)
+        args = producto_vectorial_args()
         args.operando1 = operando1
         args.operando2 = operando2
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
         self._oprot.trans.flush()
 
-    def recv_ProductoVectorial(self):
+    def recv_producto_vectorial(self):
         iprot = self._iprot
         (fname, mtype, rseqid) = iprot.readMessageBegin()
         if mtype == TMessageType.EXCEPTION:
@@ -375,33 +375,33 @@ class Client(Iface):
             x.read(iprot)
             iprot.readMessageEnd()
             raise x
-        result = ProductoVectorial_result()
+        result = producto_vectorial_result()
         result.read(iprot)
         iprot.readMessageEnd()
         if result.success is not None:
             return result.success
-        raise TApplicationException(TApplicationException.MISSING_RESULT, "ProductoVectorial failed: unknown result")
+        raise TApplicationException(TApplicationException.MISSING_RESULT, "producto_vectorial failed: unknown result")
 
-    def SumaMatricial(self, operando1, operando2):
+    def suma_matricial(self, operando1, operando2):
         """
         Parameters:
          - operando1
          - operando2
 
         """
-        self.send_SumaMatricial(operando1, operando2)
-        return self.recv_SumaMatricial()
+        self.send_suma_matricial(operando1, operando2)
+        return self.recv_suma_matricial()
 
-    def send_SumaMatricial(self, operando1, operando2):
-        self._oprot.writeMessageBegin('SumaMatricial', TMessageType.CALL, self._seqid)
-        args = SumaMatricial_args()
+    def send_suma_matricial(self, operando1, operando2):
+        self._oprot.writeMessageBegin('suma_matricial', TMessageType.CALL, self._seqid)
+        args = suma_matricial_args()
         args.operando1 = operando1
         args.operando2 = operando2
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
         self._oprot.trans.flush()
 
-    def recv_SumaMatricial(self):
+    def recv_suma_matricial(self):
         iprot = self._iprot
         (fname, mtype, rseqid) = iprot.readMessageBegin()
         if mtype == TMessageType.EXCEPTION:
@@ -409,33 +409,33 @@ class Client(Iface):
             x.read(iprot)
             iprot.readMessageEnd()
             raise x
-        result = SumaMatricial_result()
+        result = suma_matricial_result()
         result.read(iprot)
         iprot.readMessageEnd()
         if result.success is not None:
             return result.success
-        raise TApplicationException(TApplicationException.MISSING_RESULT, "SumaMatricial failed: unknown result")
+        raise TApplicationException(TApplicationException.MISSING_RESULT, "suma_matricial failed: unknown result")
 
-    def RestaMatricial(self, operando1, operando2):
+    def resta_matricial(self, operando1, operando2):
         """
         Parameters:
          - operando1
          - operando2
 
         """
-        self.send_RestaMatricial(operando1, operando2)
-        return self.recv_RestaMatricial()
+        self.send_resta_matricial(operando1, operando2)
+        return self.recv_resta_matricial()
 
-    def send_RestaMatricial(self, operando1, operando2):
-        self._oprot.writeMessageBegin('RestaMatricial', TMessageType.CALL, self._seqid)
-        args = RestaMatricial_args()
+    def send_resta_matricial(self, operando1, operando2):
+        self._oprot.writeMessageBegin('resta_matricial', TMessageType.CALL, self._seqid)
+        args = resta_matricial_args()
         args.operando1 = operando1
         args.operando2 = operando2
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
         self._oprot.trans.flush()
 
-    def recv_RestaMatricial(self):
+    def recv_resta_matricial(self):
         iprot = self._iprot
         (fname, mtype, rseqid) = iprot.readMessageBegin()
         if mtype == TMessageType.EXCEPTION:
@@ -443,33 +443,33 @@ class Client(Iface):
             x.read(iprot)
             iprot.readMessageEnd()
             raise x
-        result = RestaMatricial_result()
+        result = resta_matricial_result()
         result.read(iprot)
         iprot.readMessageEnd()
         if result.success is not None:
             return result.success
-        raise TApplicationException(TApplicationException.MISSING_RESULT, "RestaMatricial failed: unknown result")
+        raise TApplicationException(TApplicationException.MISSING_RESULT, "resta_matricial failed: unknown result")
 
-    def ProductoMatricial(self, operando1, operando2):
+    def producto_matricial(self, operando1, operando2):
         """
         Parameters:
          - operando1
          - operando2
 
         """
-        self.send_ProductoMatricial(operando1, operando2)
-        return self.recv_ProductoMatricial()
+        self.send_producto_matricial(operando1, operando2)
+        return self.recv_producto_matricial()
 
-    def send_ProductoMatricial(self, operando1, operando2):
-        self._oprot.writeMessageBegin('ProductoMatricial', TMessageType.CALL, self._seqid)
-        args = ProductoMatricial_args()
+    def send_producto_matricial(self, operando1, operando2):
+        self._oprot.writeMessageBegin('producto_matricial', TMessageType.CALL, self._seqid)
+        args = producto_matricial_args()
         args.operando1 = operando1
         args.operando2 = operando2
         args.write(self._oprot)
         self._oprot.writeMessageEnd()
         self._oprot.trans.flush()
 
-    def recv_ProductoMatricial(self):
+    def recv_producto_matricial(self):
         iprot = self._iprot
         (fname, mtype, rseqid) = iprot.readMessageBegin()
         if mtype == TMessageType.EXCEPTION:
@@ -477,29 +477,29 @@ class Client(Iface):
             x.read(iprot)
             iprot.readMessageEnd()
             raise x
-        result = ProductoMatricial_result()
+        result = producto_matricial_result()
         result.read(iprot)
         iprot.readMessageEnd()
         if result.success is not None:
             return result.success
-        raise TApplicationException(TApplicationException.MISSING_RESULT, "ProductoMatricial failed: unknown result")
+        raise TApplicationException(TApplicationException.MISSING_RESULT, "producto_matricial failed: unknown result")
 
 
 class Processor(Iface, TProcessor):
     def __init__(self, handler):
         self._handler = handler
         self._processMap = {}
-        self._processMap["Ping"] = Processor.process_Ping
-        self._processMap["SumaEscalar"] = Processor.process_SumaEscalar
-        self._processMap["RestaEscalar"] = Processor.process_RestaEscalar
-        self._processMap["ProductoEscalar"] = Processor.process_ProductoEscalar
-        self._processMap["DivisionEscalar"] = Processor.process_DivisionEscalar
-        self._processMap["SumaVectorial"] = Processor.process_SumaVectorial
-        self._processMap["RestaVectorial"] = Processor.process_RestaVectorial
-        self._processMap["ProductoVectorial"] = Processor.process_ProductoVectorial
-        self._processMap["SumaMatricial"] = Processor.process_SumaMatricial
-        self._processMap["RestaMatricial"] = Processor.process_RestaMatricial
-        self._processMap["ProductoMatricial"] = Processor.process_ProductoMatricial
+        self._processMap["ping"] = Processor.process_ping
+        self._processMap["suma_escalar"] = Processor.process_suma_escalar
+        self._processMap["resta_escalar"] = Processor.process_resta_escalar
+        self._processMap["producto_escalar"] = Processor.process_producto_escalar
+        self._processMap["division_escalar"] = Processor.process_division_escalar
+        self._processMap["suma_vectorial"] = Processor.process_suma_vectorial
+        self._processMap["resta_vectorial"] = Processor.process_resta_vectorial
+        self._processMap["producto_vectorial"] = Processor.process_producto_vectorial
+        self._processMap["suma_matricial"] = Processor.process_suma_matricial
+        self._processMap["resta_matricial"] = Processor.process_resta_matricial
+        self._processMap["producto_matricial"] = Processor.process_producto_matricial
         self._on_message_begin = None
 
     def on_message_begin(self, func):
@@ -522,13 +522,13 @@ class Processor(Iface, TProcessor):
             self._processMap[name](self, seqid, iprot, oprot)
         return True
 
-    def process_Ping(self, seqid, iprot, oprot):
-        args = Ping_args()
+    def process_ping(self, seqid, iprot, oprot):
+        args = ping_args()
         args.read(iprot)
         iprot.readMessageEnd()
-        result = Ping_result()
+        result = ping_result()
         try:
-            self._handler.Ping()
+            self._handler.ping()
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -540,18 +540,18 @@ class Processor(Iface, TProcessor):
             logging.exception('Unexpected exception in handler')
             msg_type = TMessageType.EXCEPTION
             result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
-        oprot.writeMessageBegin("Ping", msg_type, seqid)
+        oprot.writeMessageBegin("ping", msg_type, seqid)
         result.write(oprot)
         oprot.writeMessageEnd()
         oprot.trans.flush()
 
-    def process_SumaEscalar(self, seqid, iprot, oprot):
-        args = SumaEscalar_args()
+    def process_suma_escalar(self, seqid, iprot, oprot):
+        args = suma_escalar_args()
         args.read(iprot)
         iprot.readMessageEnd()
-        result = SumaEscalar_result()
+        result = suma_escalar_result()
         try:
-            result.success = self._handler.SumaEscalar(args.operando1, args.operando2)
+            result.success = self._handler.suma_escalar(args.operando1, args.operando2)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -563,18 +563,18 @@ class Processor(Iface, TProcessor):
             logging.exception('Unexpected exception in handler')
             msg_type = TMessageType.EXCEPTION
             result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
-        oprot.writeMessageBegin("SumaEscalar", msg_type, seqid)
+        oprot.writeMessageBegin("suma_escalar", msg_type, seqid)
         result.write(oprot)
         oprot.writeMessageEnd()
         oprot.trans.flush()
 
-    def process_RestaEscalar(self, seqid, iprot, oprot):
-        args = RestaEscalar_args()
+    def process_resta_escalar(self, seqid, iprot, oprot):
+        args = resta_escalar_args()
         args.read(iprot)
         iprot.readMessageEnd()
-        result = RestaEscalar_result()
+        result = resta_escalar_result()
         try:
-            result.success = self._handler.RestaEscalar(args.operando1, args.operando2)
+            result.success = self._handler.resta_escalar(args.operando1, args.operando2)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -586,18 +586,18 @@ class Processor(Iface, TProcessor):
             logging.exception('Unexpected exception in handler')
             msg_type = TMessageType.EXCEPTION
             result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
-        oprot.writeMessageBegin("RestaEscalar", msg_type, seqid)
+        oprot.writeMessageBegin("resta_escalar", msg_type, seqid)
         result.write(oprot)
         oprot.writeMessageEnd()
         oprot.trans.flush()
 
-    def process_ProductoEscalar(self, seqid, iprot, oprot):
-        args = ProductoEscalar_args()
+    def process_producto_escalar(self, seqid, iprot, oprot):
+        args = producto_escalar_args()
         args.read(iprot)
         iprot.readMessageEnd()
-        result = ProductoEscalar_result()
+        result = producto_escalar_result()
         try:
-            result.success = self._handler.ProductoEscalar(args.operando1, args.operando2)
+            result.success = self._handler.producto_escalar(args.operando1, args.operando2)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -609,18 +609,18 @@ class Processor(Iface, TProcessor):
             logging.exception('Unexpected exception in handler')
             msg_type = TMessageType.EXCEPTION
             result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
-        oprot.writeMessageBegin("ProductoEscalar", msg_type, seqid)
+        oprot.writeMessageBegin("producto_escalar", msg_type, seqid)
         result.write(oprot)
         oprot.writeMessageEnd()
         oprot.trans.flush()
 
-    def process_DivisionEscalar(self, seqid, iprot, oprot):
-        args = DivisionEscalar_args()
+    def process_division_escalar(self, seqid, iprot, oprot):
+        args = division_escalar_args()
         args.read(iprot)
         iprot.readMessageEnd()
-        result = DivisionEscalar_result()
+        result = division_escalar_result()
         try:
-            result.success = self._handler.DivisionEscalar(args.operando1, args.operando2)
+            result.success = self._handler.division_escalar(args.operando1, args.operando2)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -632,18 +632,18 @@ class Processor(Iface, TProcessor):
             logging.exception('Unexpected exception in handler')
             msg_type = TMessageType.EXCEPTION
             result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
-        oprot.writeMessageBegin("DivisionEscalar", msg_type, seqid)
+        oprot.writeMessageBegin("division_escalar", msg_type, seqid)
         result.write(oprot)
         oprot.writeMessageEnd()
         oprot.trans.flush()
 
-    def process_SumaVectorial(self, seqid, iprot, oprot):
-        args = SumaVectorial_args()
+    def process_suma_vectorial(self, seqid, iprot, oprot):
+        args = suma_vectorial_args()
         args.read(iprot)
         iprot.readMessageEnd()
-        result = SumaVectorial_result()
+        result = suma_vectorial_result()
         try:
-            result.success = self._handler.SumaVectorial(args.operando1, args.operando2)
+            result.success = self._handler.suma_vectorial(args.operando1, args.operando2)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -655,18 +655,18 @@ class Processor(Iface, TProcessor):
             logging.exception('Unexpected exception in handler')
             msg_type = TMessageType.EXCEPTION
             result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
-        oprot.writeMessageBegin("SumaVectorial", msg_type, seqid)
+        oprot.writeMessageBegin("suma_vectorial", msg_type, seqid)
         result.write(oprot)
         oprot.writeMessageEnd()
         oprot.trans.flush()
 
-    def process_RestaVectorial(self, seqid, iprot, oprot):
-        args = RestaVectorial_args()
+    def process_resta_vectorial(self, seqid, iprot, oprot):
+        args = resta_vectorial_args()
         args.read(iprot)
         iprot.readMessageEnd()
-        result = RestaVectorial_result()
+        result = resta_vectorial_result()
         try:
-            result.success = self._handler.RestaVectorial(args.operando1, args.operando2)
+            result.success = self._handler.resta_vectorial(args.operando1, args.operando2)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -678,18 +678,18 @@ class Processor(Iface, TProcessor):
             logging.exception('Unexpected exception in handler')
             msg_type = TMessageType.EXCEPTION
             result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
-        oprot.writeMessageBegin("RestaVectorial", msg_type, seqid)
+        oprot.writeMessageBegin("resta_vectorial", msg_type, seqid)
         result.write(oprot)
         oprot.writeMessageEnd()
         oprot.trans.flush()
 
-    def process_ProductoVectorial(self, seqid, iprot, oprot):
-        args = ProductoVectorial_args()
+    def process_producto_vectorial(self, seqid, iprot, oprot):
+        args = producto_vectorial_args()
         args.read(iprot)
         iprot.readMessageEnd()
-        result = ProductoVectorial_result()
+        result = producto_vectorial_result()
         try:
-            result.success = self._handler.ProductoVectorial(args.operando1, args.operando2)
+            result.success = self._handler.producto_vectorial(args.operando1, args.operando2)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -701,18 +701,18 @@ class Processor(Iface, TProcessor):
             logging.exception('Unexpected exception in handler')
             msg_type = TMessageType.EXCEPTION
             result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
-        oprot.writeMessageBegin("ProductoVectorial", msg_type, seqid)
+        oprot.writeMessageBegin("producto_vectorial", msg_type, seqid)
         result.write(oprot)
         oprot.writeMessageEnd()
         oprot.trans.flush()
 
-    def process_SumaMatricial(self, seqid, iprot, oprot):
-        args = SumaMatricial_args()
+    def process_suma_matricial(self, seqid, iprot, oprot):
+        args = suma_matricial_args()
         args.read(iprot)
         iprot.readMessageEnd()
-        result = SumaMatricial_result()
+        result = suma_matricial_result()
         try:
-            result.success = self._handler.SumaMatricial(args.operando1, args.operando2)
+            result.success = self._handler.suma_matricial(args.operando1, args.operando2)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -724,18 +724,18 @@ class Processor(Iface, TProcessor):
             logging.exception('Unexpected exception in handler')
             msg_type = TMessageType.EXCEPTION
             result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
-        oprot.writeMessageBegin("SumaMatricial", msg_type, seqid)
+        oprot.writeMessageBegin("suma_matricial", msg_type, seqid)
         result.write(oprot)
         oprot.writeMessageEnd()
         oprot.trans.flush()
 
-    def process_RestaMatricial(self, seqid, iprot, oprot):
-        args = RestaMatricial_args()
+    def process_resta_matricial(self, seqid, iprot, oprot):
+        args = resta_matricial_args()
         args.read(iprot)
         iprot.readMessageEnd()
-        result = RestaMatricial_result()
+        result = resta_matricial_result()
         try:
-            result.success = self._handler.RestaMatricial(args.operando1, args.operando2)
+            result.success = self._handler.resta_matricial(args.operando1, args.operando2)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -747,18 +747,18 @@ class Processor(Iface, TProcessor):
             logging.exception('Unexpected exception in handler')
             msg_type = TMessageType.EXCEPTION
             result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
-        oprot.writeMessageBegin("RestaMatricial", msg_type, seqid)
+        oprot.writeMessageBegin("resta_matricial", msg_type, seqid)
         result.write(oprot)
         oprot.writeMessageEnd()
         oprot.trans.flush()
 
-    def process_ProductoMatricial(self, seqid, iprot, oprot):
-        args = ProductoMatricial_args()
+    def process_producto_matricial(self, seqid, iprot, oprot):
+        args = producto_matricial_args()
         args.read(iprot)
         iprot.readMessageEnd()
-        result = ProductoMatricial_result()
+        result = producto_matricial_result()
         try:
-            result.success = self._handler.ProductoMatricial(args.operando1, args.operando2)
+            result.success = self._handler.producto_matricial(args.operando1, args.operando2)
             msg_type = TMessageType.REPLY
         except TTransport.TTransportException:
             raise
@@ -770,7 +770,7 @@ class Processor(Iface, TProcessor):
             logging.exception('Unexpected exception in handler')
             msg_type = TMessageType.EXCEPTION
             result = TApplicationException(TApplicationException.INTERNAL_ERROR, 'Internal error')
-        oprot.writeMessageBegin("ProductoMatricial", msg_type, seqid)
+        oprot.writeMessageBegin("producto_matricial", msg_type, seqid)
         result.write(oprot)
         oprot.writeMessageEnd()
         oprot.trans.flush()
@@ -778,7 +778,7 @@ class Processor(Iface, TProcessor):
 # HELPER FUNCTIONS AND STRUCTURES
 
 
-class Ping_args(object):
+class ping_args(object):
 
 
     def read(self, iprot):
@@ -799,7 +799,7 @@ class Ping_args(object):
         if oprot._fast_encode is not None and self.thrift_spec is not None:
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
-        oprot.writeStructBegin('Ping_args')
+        oprot.writeStructBegin('ping_args')
         oprot.writeFieldStop()
         oprot.writeStructEnd()
 
@@ -816,12 +816,12 @@ class Ping_args(object):
 
     def __ne__(self, other):
         return not (self == other)
-all_structs.append(Ping_args)
-Ping_args.thrift_spec = (
+all_structs.append(ping_args)
+ping_args.thrift_spec = (
 )
 
 
-class Ping_result(object):
+class ping_result(object):
 
 
     def read(self, iprot):
@@ -842,7 +842,7 @@ class Ping_result(object):
         if oprot._fast_encode is not None and self.thrift_spec is not None:
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
-        oprot.writeStructBegin('Ping_result')
+        oprot.writeStructBegin('ping_result')
         oprot.writeFieldStop()
         oprot.writeStructEnd()
 
@@ -859,12 +859,12 @@ class Ping_result(object):
 
     def __ne__(self, other):
         return not (self == other)
-all_structs.append(Ping_result)
-Ping_result.thrift_spec = (
+all_structs.append(ping_result)
+ping_result.thrift_spec = (
 )
 
 
-class SumaEscalar_args(object):
+class suma_escalar_args(object):
     """
     Attributes:
      - operando1
@@ -905,7 +905,7 @@ class SumaEscalar_args(object):
         if oprot._fast_encode is not None and self.thrift_spec is not None:
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
-        oprot.writeStructBegin('SumaEscalar_args')
+        oprot.writeStructBegin('suma_escalar_args')
         if self.operando1 is not None:
             oprot.writeFieldBegin('operando1', TType.I32, 1)
             oprot.writeI32(self.operando1)
@@ -930,15 +930,15 @@ class SumaEscalar_args(object):
 
     def __ne__(self, other):
         return not (self == other)
-all_structs.append(SumaEscalar_args)
-SumaEscalar_args.thrift_spec = (
+all_structs.append(suma_escalar_args)
+suma_escalar_args.thrift_spec = (
     None,  # 0
     (1, TType.I32, 'operando1', None, None, ),  # 1
     (2, TType.I32, 'operando2', None, None, ),  # 2
 )
 
 
-class SumaEscalar_result(object):
+class suma_escalar_result(object):
     """
     Attributes:
      - success
@@ -972,7 +972,7 @@ class SumaEscalar_result(object):
         if oprot._fast_encode is not None and self.thrift_spec is not None:
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
-        oprot.writeStructBegin('SumaEscalar_result')
+        oprot.writeStructBegin('suma_escalar_result')
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.I32, 0)
             oprot.writeI32(self.success)
@@ -993,13 +993,13 @@ class SumaEscalar_result(object):
 
     def __ne__(self, other):
         return not (self == other)
-all_structs.append(SumaEscalar_result)
-SumaEscalar_result.thrift_spec = (
+all_structs.append(suma_escalar_result)
+suma_escalar_result.thrift_spec = (
     (0, TType.I32, 'success', None, None, ),  # 0
 )
 
 
-class RestaEscalar_args(object):
+class resta_escalar_args(object):
     """
     Attributes:
      - operando1
@@ -1040,7 +1040,7 @@ class RestaEscalar_args(object):
         if oprot._fast_encode is not None and self.thrift_spec is not None:
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
-        oprot.writeStructBegin('RestaEscalar_args')
+        oprot.writeStructBegin('resta_escalar_args')
         if self.operando1 is not None:
             oprot.writeFieldBegin('operando1', TType.I32, 1)
             oprot.writeI32(self.operando1)
@@ -1065,15 +1065,15 @@ class RestaEscalar_args(object):
 
     def __ne__(self, other):
         return not (self == other)
-all_structs.append(RestaEscalar_args)
-RestaEscalar_args.thrift_spec = (
+all_structs.append(resta_escalar_args)
+resta_escalar_args.thrift_spec = (
     None,  # 0
     (1, TType.I32, 'operando1', None, None, ),  # 1
     (2, TType.I32, 'operando2', None, None, ),  # 2
 )
 
 
-class RestaEscalar_result(object):
+class resta_escalar_result(object):
     """
     Attributes:
      - success
@@ -1107,7 +1107,7 @@ class RestaEscalar_result(object):
         if oprot._fast_encode is not None and self.thrift_spec is not None:
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
-        oprot.writeStructBegin('RestaEscalar_result')
+        oprot.writeStructBegin('resta_escalar_result')
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.I32, 0)
             oprot.writeI32(self.success)
@@ -1128,13 +1128,13 @@ class RestaEscalar_result(object):
 
     def __ne__(self, other):
         return not (self == other)
-all_structs.append(RestaEscalar_result)
-RestaEscalar_result.thrift_spec = (
+all_structs.append(resta_escalar_result)
+resta_escalar_result.thrift_spec = (
     (0, TType.I32, 'success', None, None, ),  # 0
 )
 
 
-class ProductoEscalar_args(object):
+class producto_escalar_args(object):
     """
     Attributes:
      - operando1
@@ -1175,7 +1175,7 @@ class ProductoEscalar_args(object):
         if oprot._fast_encode is not None and self.thrift_spec is not None:
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
-        oprot.writeStructBegin('ProductoEscalar_args')
+        oprot.writeStructBegin('producto_escalar_args')
         if self.operando1 is not None:
             oprot.writeFieldBegin('operando1', TType.I32, 1)
             oprot.writeI32(self.operando1)
@@ -1200,15 +1200,15 @@ class ProductoEscalar_args(object):
 
     def __ne__(self, other):
         return not (self == other)
-all_structs.append(ProductoEscalar_args)
-ProductoEscalar_args.thrift_spec = (
+all_structs.append(producto_escalar_args)
+producto_escalar_args.thrift_spec = (
     None,  # 0
     (1, TType.I32, 'operando1', None, None, ),  # 1
     (2, TType.I32, 'operando2', None, None, ),  # 2
 )
 
 
-class ProductoEscalar_result(object):
+class producto_escalar_result(object):
     """
     Attributes:
      - success
@@ -1242,7 +1242,7 @@ class ProductoEscalar_result(object):
         if oprot._fast_encode is not None and self.thrift_spec is not None:
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
-        oprot.writeStructBegin('ProductoEscalar_result')
+        oprot.writeStructBegin('producto_escalar_result')
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.I32, 0)
             oprot.writeI32(self.success)
@@ -1263,13 +1263,13 @@ class ProductoEscalar_result(object):
 
     def __ne__(self, other):
         return not (self == other)
-all_structs.append(ProductoEscalar_result)
-ProductoEscalar_result.thrift_spec = (
+all_structs.append(producto_escalar_result)
+producto_escalar_result.thrift_spec = (
     (0, TType.I32, 'success', None, None, ),  # 0
 )
 
 
-class DivisionEscalar_args(object):
+class division_escalar_args(object):
     """
     Attributes:
      - operando1
@@ -1310,7 +1310,7 @@ class DivisionEscalar_args(object):
         if oprot._fast_encode is not None and self.thrift_spec is not None:
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
-        oprot.writeStructBegin('DivisionEscalar_args')
+        oprot.writeStructBegin('division_escalar_args')
         if self.operando1 is not None:
             oprot.writeFieldBegin('operando1', TType.I32, 1)
             oprot.writeI32(self.operando1)
@@ -1335,15 +1335,15 @@ class DivisionEscalar_args(object):
 
     def __ne__(self, other):
         return not (self == other)
-all_structs.append(DivisionEscalar_args)
-DivisionEscalar_args.thrift_spec = (
+all_structs.append(division_escalar_args)
+division_escalar_args.thrift_spec = (
     None,  # 0
     (1, TType.I32, 'operando1', None, None, ),  # 1
     (2, TType.I32, 'operando2', None, None, ),  # 2
 )
 
 
-class DivisionEscalar_result(object):
+class division_escalar_result(object):
     """
     Attributes:
      - success
@@ -1377,7 +1377,7 @@ class DivisionEscalar_result(object):
         if oprot._fast_encode is not None and self.thrift_spec is not None:
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
-        oprot.writeStructBegin('DivisionEscalar_result')
+        oprot.writeStructBegin('division_escalar_result')
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.I32, 0)
             oprot.writeI32(self.success)
@@ -1398,13 +1398,13 @@ class DivisionEscalar_result(object):
 
     def __ne__(self, other):
         return not (self == other)
-all_structs.append(DivisionEscalar_result)
-DivisionEscalar_result.thrift_spec = (
+all_structs.append(division_escalar_result)
+division_escalar_result.thrift_spec = (
     (0, TType.I32, 'success', None, None, ),  # 0
 )
 
 
-class SumaVectorial_args(object):
+class suma_vectorial_args(object):
     """
     Attributes:
      - operando1
@@ -1455,7 +1455,7 @@ class SumaVectorial_args(object):
         if oprot._fast_encode is not None and self.thrift_spec is not None:
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
-        oprot.writeStructBegin('SumaVectorial_args')
+        oprot.writeStructBegin('suma_vectorial_args')
         if self.operando1 is not None:
             oprot.writeFieldBegin('operando1', TType.LIST, 1)
             oprot.writeListBegin(TType.I32, len(self.operando1))
@@ -1486,15 +1486,15 @@ class SumaVectorial_args(object):
 
     def __ne__(self, other):
         return not (self == other)
-all_structs.append(SumaVectorial_args)
-SumaVectorial_args.thrift_spec = (
+all_structs.append(suma_vectorial_args)
+suma_vectorial_args.thrift_spec = (
     None,  # 0
     (1, TType.LIST, 'operando1', (TType.I32, None, False), None, ),  # 1
     (2, TType.LIST, 'operando2', (TType.I32, None, False), None, ),  # 2
 )
 
 
-class SumaVectorial_result(object):
+class suma_vectorial_result(object):
     """
     Attributes:
      - success
@@ -1533,7 +1533,7 @@ class SumaVectorial_result(object):
         if oprot._fast_encode is not None and self.thrift_spec is not None:
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
-        oprot.writeStructBegin('SumaVectorial_result')
+        oprot.writeStructBegin('suma_vectorial_result')
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.LIST, 0)
             oprot.writeListBegin(TType.I32, len(self.success))
@@ -1557,13 +1557,13 @@ class SumaVectorial_result(object):
 
     def __ne__(self, other):
         return not (self == other)
-all_structs.append(SumaVectorial_result)
-SumaVectorial_result.thrift_spec = (
+all_structs.append(suma_vectorial_result)
+suma_vectorial_result.thrift_spec = (
     (0, TType.LIST, 'success', (TType.I32, None, False), None, ),  # 0
 )
 
 
-class RestaVectorial_args(object):
+class resta_vectorial_args(object):
     """
     Attributes:
      - operando1
@@ -1614,7 +1614,7 @@ class RestaVectorial_args(object):
         if oprot._fast_encode is not None and self.thrift_spec is not None:
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
-        oprot.writeStructBegin('RestaVectorial_args')
+        oprot.writeStructBegin('resta_vectorial_args')
         if self.operando1 is not None:
             oprot.writeFieldBegin('operando1', TType.LIST, 1)
             oprot.writeListBegin(TType.I32, len(self.operando1))
@@ -1645,15 +1645,15 @@ class RestaVectorial_args(object):
 
     def __ne__(self, other):
         return not (self == other)
-all_structs.append(RestaVectorial_args)
-RestaVectorial_args.thrift_spec = (
+all_structs.append(resta_vectorial_args)
+resta_vectorial_args.thrift_spec = (
     None,  # 0
     (1, TType.LIST, 'operando1', (TType.I32, None, False), None, ),  # 1
     (2, TType.LIST, 'operando2', (TType.I32, None, False), None, ),  # 2
 )
 
 
-class RestaVectorial_result(object):
+class resta_vectorial_result(object):
     """
     Attributes:
      - success
@@ -1692,7 +1692,7 @@ class RestaVectorial_result(object):
         if oprot._fast_encode is not None and self.thrift_spec is not None:
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
-        oprot.writeStructBegin('RestaVectorial_result')
+        oprot.writeStructBegin('resta_vectorial_result')
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.LIST, 0)
             oprot.writeListBegin(TType.I32, len(self.success))
@@ -1716,13 +1716,13 @@ class RestaVectorial_result(object):
 
     def __ne__(self, other):
         return not (self == other)
-all_structs.append(RestaVectorial_result)
-RestaVectorial_result.thrift_spec = (
+all_structs.append(resta_vectorial_result)
+resta_vectorial_result.thrift_spec = (
     (0, TType.LIST, 'success', (TType.I32, None, False), None, ),  # 0
 )
 
 
-class ProductoVectorial_args(object):
+class producto_vectorial_args(object):
     """
     Attributes:
      - operando1
@@ -1773,7 +1773,7 @@ class ProductoVectorial_args(object):
         if oprot._fast_encode is not None and self.thrift_spec is not None:
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
-        oprot.writeStructBegin('ProductoVectorial_args')
+        oprot.writeStructBegin('producto_vectorial_args')
         if self.operando1 is not None:
             oprot.writeFieldBegin('operando1', TType.LIST, 1)
             oprot.writeListBegin(TType.I32, len(self.operando1))
@@ -1804,15 +1804,15 @@ class ProductoVectorial_args(object):
 
     def __ne__(self, other):
         return not (self == other)
-all_structs.append(ProductoVectorial_args)
-ProductoVectorial_args.thrift_spec = (
+all_structs.append(producto_vectorial_args)
+producto_vectorial_args.thrift_spec = (
     None,  # 0
     (1, TType.LIST, 'operando1', (TType.I32, None, False), None, ),  # 1
     (2, TType.LIST, 'operando2', (TType.I32, None, False), None, ),  # 2
 )
 
 
-class ProductoVectorial_result(object):
+class producto_vectorial_result(object):
     """
     Attributes:
      - success
@@ -1851,7 +1851,7 @@ class ProductoVectorial_result(object):
         if oprot._fast_encode is not None and self.thrift_spec is not None:
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
-        oprot.writeStructBegin('ProductoVectorial_result')
+        oprot.writeStructBegin('producto_vectorial_result')
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.LIST, 0)
             oprot.writeListBegin(TType.I32, len(self.success))
@@ -1875,13 +1875,13 @@ class ProductoVectorial_result(object):
 
     def __ne__(self, other):
         return not (self == other)
-all_structs.append(ProductoVectorial_result)
-ProductoVectorial_result.thrift_spec = (
+all_structs.append(producto_vectorial_result)
+producto_vectorial_result.thrift_spec = (
     (0, TType.LIST, 'success', (TType.I32, None, False), None, ),  # 0
 )
 
 
-class SumaMatricial_args(object):
+class suma_matricial_args(object):
     """
     Attributes:
      - operando1
@@ -1942,7 +1942,7 @@ class SumaMatricial_args(object):
         if oprot._fast_encode is not None and self.thrift_spec is not None:
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
-        oprot.writeStructBegin('SumaMatricial_args')
+        oprot.writeStructBegin('suma_matricial_args')
         if self.operando1 is not None:
             oprot.writeFieldBegin('operando1', TType.LIST, 1)
             oprot.writeListBegin(TType.LIST, len(self.operando1))
@@ -1979,15 +1979,15 @@ class SumaMatricial_args(object):
 
     def __ne__(self, other):
         return not (self == other)
-all_structs.append(SumaMatricial_args)
-SumaMatricial_args.thrift_spec = (
+all_structs.append(suma_matricial_args)
+suma_matricial_args.thrift_spec = (
     None,  # 0
     (1, TType.LIST, 'operando1', (TType.LIST, (TType.I32, None, False), False), None, ),  # 1
     (2, TType.LIST, 'operando2', (TType.LIST, (TType.I32, None, False), False), None, ),  # 2
 )
 
 
-class SumaMatricial_result(object):
+class suma_matricial_result(object):
     """
     Attributes:
      - success
@@ -2031,7 +2031,7 @@ class SumaMatricial_result(object):
         if oprot._fast_encode is not None and self.thrift_spec is not None:
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
-        oprot.writeStructBegin('SumaMatricial_result')
+        oprot.writeStructBegin('suma_matricial_result')
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.LIST, 0)
             oprot.writeListBegin(TType.LIST, len(self.success))
@@ -2058,13 +2058,13 @@ class SumaMatricial_result(object):
 
     def __ne__(self, other):
         return not (self == other)
-all_structs.append(SumaMatricial_result)
-SumaMatricial_result.thrift_spec = (
+all_structs.append(suma_matricial_result)
+suma_matricial_result.thrift_spec = (
     (0, TType.LIST, 'success', (TType.LIST, (TType.I32, None, False), False), None, ),  # 0
 )
 
 
-class RestaMatricial_args(object):
+class resta_matricial_args(object):
     """
     Attributes:
      - operando1
@@ -2125,7 +2125,7 @@ class RestaMatricial_args(object):
         if oprot._fast_encode is not None and self.thrift_spec is not None:
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
-        oprot.writeStructBegin('RestaMatricial_args')
+        oprot.writeStructBegin('resta_matricial_args')
         if self.operando1 is not None:
             oprot.writeFieldBegin('operando1', TType.LIST, 1)
             oprot.writeListBegin(TType.LIST, len(self.operando1))
@@ -2162,15 +2162,15 @@ class RestaMatricial_args(object):
 
     def __ne__(self, other):
         return not (self == other)
-all_structs.append(RestaMatricial_args)
-RestaMatricial_args.thrift_spec = (
+all_structs.append(resta_matricial_args)
+resta_matricial_args.thrift_spec = (
     None,  # 0
     (1, TType.LIST, 'operando1', (TType.LIST, (TType.I32, None, False), False), None, ),  # 1
     (2, TType.LIST, 'operando2', (TType.LIST, (TType.I32, None, False), False), None, ),  # 2
 )
 
 
-class RestaMatricial_result(object):
+class resta_matricial_result(object):
     """
     Attributes:
      - success
@@ -2214,7 +2214,7 @@ class RestaMatricial_result(object):
         if oprot._fast_encode is not None and self.thrift_spec is not None:
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
-        oprot.writeStructBegin('RestaMatricial_result')
+        oprot.writeStructBegin('resta_matricial_result')
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.LIST, 0)
             oprot.writeListBegin(TType.LIST, len(self.success))
@@ -2241,13 +2241,13 @@ class RestaMatricial_result(object):
 
     def __ne__(self, other):
         return not (self == other)
-all_structs.append(RestaMatricial_result)
-RestaMatricial_result.thrift_spec = (
+all_structs.append(resta_matricial_result)
+resta_matricial_result.thrift_spec = (
     (0, TType.LIST, 'success', (TType.LIST, (TType.I32, None, False), False), None, ),  # 0
 )
 
 
-class ProductoMatricial_args(object):
+class producto_matricial_args(object):
     """
     Attributes:
      - operando1
@@ -2308,7 +2308,7 @@ class ProductoMatricial_args(object):
         if oprot._fast_encode is not None and self.thrift_spec is not None:
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
-        oprot.writeStructBegin('ProductoMatricial_args')
+        oprot.writeStructBegin('producto_matricial_args')
         if self.operando1 is not None:
             oprot.writeFieldBegin('operando1', TType.LIST, 1)
             oprot.writeListBegin(TType.LIST, len(self.operando1))
@@ -2345,15 +2345,15 @@ class ProductoMatricial_args(object):
 
     def __ne__(self, other):
         return not (self == other)
-all_structs.append(ProductoMatricial_args)
-ProductoMatricial_args.thrift_spec = (
+all_structs.append(producto_matricial_args)
+producto_matricial_args.thrift_spec = (
     None,  # 0
     (1, TType.LIST, 'operando1', (TType.LIST, (TType.I32, None, False), False), None, ),  # 1
     (2, TType.LIST, 'operando2', (TType.LIST, (TType.I32, None, False), False), None, ),  # 2
 )
 
 
-class ProductoMatricial_result(object):
+class producto_matricial_result(object):
     """
     Attributes:
      - success
@@ -2397,7 +2397,7 @@ class ProductoMatricial_result(object):
         if oprot._fast_encode is not None and self.thrift_spec is not None:
             oprot.trans.write(oprot._fast_encode(self, [self.__class__, self.thrift_spec]))
             return
-        oprot.writeStructBegin('ProductoMatricial_result')
+        oprot.writeStructBegin('producto_matricial_result')
         if self.success is not None:
             oprot.writeFieldBegin('success', TType.LIST, 0)
             oprot.writeListBegin(TType.LIST, len(self.success))
@@ -2424,8 +2424,8 @@ class ProductoMatricial_result(object):
 
     def __ne__(self, other):
         return not (self == other)
-all_structs.append(ProductoMatricial_result)
-ProductoMatricial_result.thrift_spec = (
+all_structs.append(producto_matricial_result)
+producto_matricial_result.thrift_spec = (
     (0, TType.LIST, 'success', (TType.LIST, (TType.I32, None, False), False), None, ),  # 0
 )
 fix_spec(all_structs)

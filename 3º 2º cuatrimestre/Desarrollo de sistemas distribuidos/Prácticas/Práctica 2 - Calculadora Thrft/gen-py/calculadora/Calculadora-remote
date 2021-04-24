@@ -24,17 +24,17 @@ if len(sys.argv) <= 1 or sys.argv[1] == '--help':
     print('Usage: ' + sys.argv[0] + ' [-h host[:port]] [-u url] [-f[ramed]] [-s[sl]] [-novalidate] [-ca_certs certs] [-keyfile keyfile] [-certfile certfile] function [arg1 [arg2...]]')
     print('')
     print('Functions:')
-    print('  void Ping()')
-    print('  i32 SumaEscalar(i32 operando1, i32 operando2)')
-    print('  i32 RestaEscalar(i32 operando1, i32 operando2)')
-    print('  i32 ProductoEscalar(i32 operando1, i32 operando2)')
-    print('  i32 DivisionEscalar(i32 operando1, i32 operando2)')
-    print('   SumaVectorial( operando1,  operando2)')
-    print('   RestaVectorial( operando1,  operando2)')
-    print('   ProductoVectorial( operando1,  operando2)')
-    print('   SumaMatricial( operando1,  operando2)')
-    print('   RestaMatricial( operando1,  operando2)')
-    print('   ProductoMatricial( operando1,  operando2)')
+    print('  void ping()')
+    print('  i32 suma_escalar(i32 operando1, i32 operando2)')
+    print('  i32 resta_escalar(i32 operando1, i32 operando2)')
+    print('  i32 producto_escalar(i32 operando1, i32 operando2)')
+    print('  i32 division_escalar(i32 operando1, i32 operando2)')
+    print('   suma_vectorial( operando1,  operando2)')
+    print('   resta_vectorial( operando1,  operando2)')
+    print('   producto_vectorial( operando1,  operando2)')
+    print('   suma_matricial( operando1,  operando2)')
+    print('   resta_matricial( operando1,  operando2)')
+    print('   producto_matricial( operando1,  operando2)')
     print('')
     sys.exit(0)
 
@@ -114,71 +114,71 @@ protocol = TBinaryProtocol(transport)
 client = Calculadora.Client(protocol)
 transport.open()
 
-if cmd == 'Ping':
+if cmd == 'ping':
     if len(args) != 0:
-        print('Ping requires 0 args')
+        print('ping requires 0 args')
         sys.exit(1)
-    pp.pprint(client.Ping())
+    pp.pprint(client.ping())
 
-elif cmd == 'SumaEscalar':
+elif cmd == 'suma_escalar':
     if len(args) != 2:
-        print('SumaEscalar requires 2 args')
+        print('suma_escalar requires 2 args')
         sys.exit(1)
-    pp.pprint(client.SumaEscalar(eval(args[0]), eval(args[1]),))
+    pp.pprint(client.suma_escalar(eval(args[0]), eval(args[1]),))
 
-elif cmd == 'RestaEscalar':
+elif cmd == 'resta_escalar':
     if len(args) != 2:
-        print('RestaEscalar requires 2 args')
+        print('resta_escalar requires 2 args')
         sys.exit(1)
-    pp.pprint(client.RestaEscalar(eval(args[0]), eval(args[1]),))
+    pp.pprint(client.resta_escalar(eval(args[0]), eval(args[1]),))
 
-elif cmd == 'ProductoEscalar':
+elif cmd == 'producto_escalar':
     if len(args) != 2:
-        print('ProductoEscalar requires 2 args')
+        print('producto_escalar requires 2 args')
         sys.exit(1)
-    pp.pprint(client.ProductoEscalar(eval(args[0]), eval(args[1]),))
+    pp.pprint(client.producto_escalar(eval(args[0]), eval(args[1]),))
 
-elif cmd == 'DivisionEscalar':
+elif cmd == 'division_escalar':
     if len(args) != 2:
-        print('DivisionEscalar requires 2 args')
+        print('division_escalar requires 2 args')
         sys.exit(1)
-    pp.pprint(client.DivisionEscalar(eval(args[0]), eval(args[1]),))
+    pp.pprint(client.division_escalar(eval(args[0]), eval(args[1]),))
 
-elif cmd == 'SumaVectorial':
+elif cmd == 'suma_vectorial':
     if len(args) != 2:
-        print('SumaVectorial requires 2 args')
+        print('suma_vectorial requires 2 args')
         sys.exit(1)
-    pp.pprint(client.SumaVectorial(eval(args[0]), eval(args[1]),))
+    pp.pprint(client.suma_vectorial(eval(args[0]), eval(args[1]),))
 
-elif cmd == 'RestaVectorial':
+elif cmd == 'resta_vectorial':
     if len(args) != 2:
-        print('RestaVectorial requires 2 args')
+        print('resta_vectorial requires 2 args')
         sys.exit(1)
-    pp.pprint(client.RestaVectorial(eval(args[0]), eval(args[1]),))
+    pp.pprint(client.resta_vectorial(eval(args[0]), eval(args[1]),))
 
-elif cmd == 'ProductoVectorial':
+elif cmd == 'producto_vectorial':
     if len(args) != 2:
-        print('ProductoVectorial requires 2 args')
+        print('producto_vectorial requires 2 args')
         sys.exit(1)
-    pp.pprint(client.ProductoVectorial(eval(args[0]), eval(args[1]),))
+    pp.pprint(client.producto_vectorial(eval(args[0]), eval(args[1]),))
 
-elif cmd == 'SumaMatricial':
+elif cmd == 'suma_matricial':
     if len(args) != 2:
-        print('SumaMatricial requires 2 args')
+        print('suma_matricial requires 2 args')
         sys.exit(1)
-    pp.pprint(client.SumaMatricial(eval(args[0]), eval(args[1]),))
+    pp.pprint(client.suma_matricial(eval(args[0]), eval(args[1]),))
 
-elif cmd == 'RestaMatricial':
+elif cmd == 'resta_matricial':
     if len(args) != 2:
-        print('RestaMatricial requires 2 args')
+        print('resta_matricial requires 2 args')
         sys.exit(1)
-    pp.pprint(client.RestaMatricial(eval(args[0]), eval(args[1]),))
+    pp.pprint(client.resta_matricial(eval(args[0]), eval(args[1]),))
 
-elif cmd == 'ProductoMatricial':
+elif cmd == 'producto_matricial':
     if len(args) != 2:
-        print('ProductoMatricial requires 2 args')
+        print('producto_matricial requires 2 args')
         sys.exit(1)
-    pp.pprint(client.ProductoMatricial(eval(args[0]), eval(args[1]),))
+    pp.pprint(client.producto_matricial(eval(args[0]), eval(args[1]),))
 
 else:
     print('Unrecognized method %s' % cmd)
