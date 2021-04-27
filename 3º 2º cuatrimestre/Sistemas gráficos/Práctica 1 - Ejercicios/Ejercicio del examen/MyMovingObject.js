@@ -21,7 +21,7 @@ class MyMovingObject extends THREE.Object3D
 		const origin_point  = {p:0};
 		const end_point = {p:1};
 
-		this.shift_right = new TWEEN.Tween(origin_point)
+		this.shift_bot = new TWEEN.Tween(origin_point)
 			.to(end_point, 4000)
 			.easing(TWEEN.Easing.Quartic.InOut)
 			.onUpdate(() =>
@@ -40,8 +40,8 @@ class MyMovingObject extends THREE.Object3D
 			})
 			.start();
 
-		this.shift_left = new TWEEN.Tween(origin_point)
-			.to(end_point, 8000)
+		this.shift_top = new TWEEN.Tween(origin_point)
+			.to(end_point, 6000)
 			.easing(TWEEN.Easing.Quartic.InOut)
 			.onUpdate(() =>
 			{
@@ -59,8 +59,8 @@ class MyMovingObject extends THREE.Object3D
 			})
 			.start();
 
-		this.shift_right.chain(this.shift_left);
-		this.shift_left.chain(this.shift_right);
+		this.shift_bot.chain(this.shift_top);
+		this.shift_top.chain(this.shift_bot);
 	}
 
 	constructMesh ()
