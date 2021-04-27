@@ -1,6 +1,6 @@
-import * as THREE from '../libs/three.module.js'
-import { GUI } from '../libs/dat.gui.module.js'
-import { TrackballControls } from '../libs/TrackballControls.js'
+import * as THREE from '/libs/three.module.js'
+import { GUI } from '/libs/dat.gui.module.js'
+import { TrackballControls } from '/libs/TrackballControls.js'
 
 import { MyClock } from './MyClock.js'
 
@@ -68,7 +68,7 @@ class MyScene extends THREE.Scene {
 	constructGround ()
 	{
 		const ground_geom = new THREE.BoxGeometry(50, 0.2, 50);
-		const ground_tex  = new THREE.TextureLoader().load('../imgs/wood.jpg');
+		const ground_tex  = new THREE.TextureLoader().load('/imgs/wood.jpg');
 		const ground_mat  = new THREE.MeshPhongMaterial({map: ground_tex});
 		const ground_mesh = new THREE.Mesh(ground_geom, ground_mat);
 

@@ -1,4 +1,4 @@
-import * as THREE from '../libs/three.module.js';
+import * as THREE from '/libs/three.module.js';
 
 const BOX_DEFAULTS = {
 	SIZE_X: 1.0,

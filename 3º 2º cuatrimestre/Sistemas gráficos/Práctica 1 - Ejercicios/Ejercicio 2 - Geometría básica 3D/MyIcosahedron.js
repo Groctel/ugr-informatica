@@ -1,4 +1,4 @@
-import * as THREE from '../libs/three.module.js'
+import * as THREE from '/libs/three.module.js'
 
 const ICOSAHEDRON_DEFAULTS = {
 	RADIUS: 3.0,

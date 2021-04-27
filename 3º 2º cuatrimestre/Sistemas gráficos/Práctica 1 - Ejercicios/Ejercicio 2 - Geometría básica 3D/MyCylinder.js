@@ -1,4 +1,4 @@
-import * as THREE from '../libs/three.module.js'
+import * as THREE from '/libs/three.module.js'
 
 const CYLINDER_DEFAULTS = {
 	RADIUS_TOP:    1.0,

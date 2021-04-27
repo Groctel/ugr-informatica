@@ -1,4 +1,4 @@
-import * as THREE from '../libs/three.module.js'
+import * as THREE from '/libs/three.module.js'
 
 const CONE_DEFAULTS = {
 	RADIUS:   2.0,

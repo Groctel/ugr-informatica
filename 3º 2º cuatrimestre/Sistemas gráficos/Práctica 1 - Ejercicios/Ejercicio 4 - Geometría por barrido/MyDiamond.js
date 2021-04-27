@@ -1,4 +1,4 @@
-import * as THREE from '../libs/three.module.js'
+import * as THREE from '/libs/three.module.js'
 
 class MyDiamond extends THREE.Object3D
 {

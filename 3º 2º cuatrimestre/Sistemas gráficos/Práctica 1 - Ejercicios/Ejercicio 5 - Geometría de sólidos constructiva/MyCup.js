@@ -1,6 +1,6 @@
-import * as THREE from '../libs/three.module.js'
+import * as THREE from '/libs/three.module.js'
 
-import { ThreeBSP } from '../libs/ThreeBSP.js'
+import { ThreeBSP } from '/libs/ThreeBSP.js'
 
 class MyCup extends THREE.Object3D
 {

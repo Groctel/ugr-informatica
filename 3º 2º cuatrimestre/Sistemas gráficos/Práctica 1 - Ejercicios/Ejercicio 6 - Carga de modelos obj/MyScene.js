@@ -1,6 +1,6 @@
-import * as THREE from '../libs/three.module.js'
-import { GUI } from '../libs/dat.gui.module.js'
-import { TrackballControls } from '../libs/TrackballControls.js'
+import * as THREE from '/libs/three.module.js'
+import { GUI } from '/libs/dat.gui.module.js'
+import { TrackballControls } from '/libs/TrackballControls.js'
 
 import { My3DModel } from './My3DModel.js'
 
@@ -34,8 +34,8 @@ class MyScene extends THREE.Scene {
 		this.add (this.axes);
 
 		this.coche = new My3DModel(
-			'../models/porsche911/Porsche_911_GT2.obj',
-			'../models/porsche911/911.mtl'
+			'/models/porsche911/Porsche_911_GT2.obj',
+			'/models/porsche911/911.mtl'
 		);
 		this.add(this.coche);
 	}
@@ -69,7 +69,7 @@ class MyScene extends THREE.Scene {
 	constructGround ()
 	{
 		const ground_geom = new THREE.BoxGeometry(50, 0.2, 50);
-		const ground_tex  = new THREE.TextureLoader().load('../imgs/wood.jpg');
+		const ground_tex  = new THREE.TextureLoader().load('/imgs/wood.jpg');
 		const ground_mat  = new THREE.MeshPhongMaterial({map: ground_tex});
 		const ground_mesh = new THREE.Mesh(ground_geom, ground_mat);
 

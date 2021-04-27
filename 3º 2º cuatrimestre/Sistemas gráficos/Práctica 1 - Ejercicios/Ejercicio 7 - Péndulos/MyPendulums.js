@@ -1,4 +1,4 @@
-import * as THREE from '../libs/three.module.js'
+import * as THREE from '/libs/three.module.js'
 
 const PENDULUM_DEFAULTS = {
 	TOP_ANGLE:  0.0,
