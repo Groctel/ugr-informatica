@@ -2,6 +2,8 @@ import * as THREE from '/libs/three.module.js'
 import { GUI } from '/libs/dat.gui.module.js'
 import { TrackballControls } from '/libs/TrackballControls.js'
 
+import { MyMovingObject } from './MyMovingObject.js'
+
 const SCENE_DEFAULTS = {
 	AXES:            true,
 	LIGHT_INTENSITY: 0.5,
@@ -28,9 +30,14 @@ class MyScene extends THREE.Scene
 		this.gui      = this.constructGUI();
 		this.constructLights();
 		this.constructCamera();
+		this.constructGround();
 
 		this.axes = new THREE.AxesHelper (50);
 		this.add(this.axes);
+
+		this.pacman = new MyMovingObject();
+		this.pacman.translateY(5);
+		this.add(this.pacman);
 	}
 
 	constructCamera ()
@@ -57,6 +64,17 @@ class MyScene extends THREE.Scene
 		this.camera_control.zoomSpeed   = 2;
 		this.camera_control.panSpeed    = 0.5;
 		this.camera_control.target      = look;
+	}
+
+	constructGround ()
+	{
+		const ground_geom = new THREE.BoxGeometry(50, 0.2, 50);
+		const ground_tex  = new THREE.TextureLoader().load('/imgs/wood.jpg');
+		const ground_mat  = new THREE.MeshPhongMaterial({map: ground_tex});
+		const ground_mesh = new THREE.Mesh(ground_geom, ground_mat);
+
+		ground_mesh.position.y = -0.1;
+		this.add(ground_mesh);
 	}
 
 	constructGUI ()
@@ -117,6 +135,7 @@ class MyScene extends THREE.Scene
 		this.renderer.render(this, this.camera);
 		this.spotlight.intensity = this.properties.light_intensity;
 		this.camera_control.update();
+		this.pacman.update();
 
 		this.axes.visible = this.properties.axes;
 
