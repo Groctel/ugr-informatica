@@ -1,6 +1,8 @@
 import * as THREE from '/libs/three.module.js'
 import * as TWEEN from '/libs/tween.esm.js'
 
+import { ThreeBSP } from '/libs/ThreeBSP.js'
+
 class MyMovingObject extends THREE.Object3D
 {
 	constructor ()
@@ -59,16 +61,18 @@ class MyMovingObject extends THREE.Object3D
 
 	constructMesh ()
 	{
-		const cone = new THREE.Mesh(
-			new THREE.ConeGeometry(0.5, 3.0, 10),
-			new THREE.MeshPhongMaterial({color : 0x00CF00})
-		);
-		cone.rotation.x = Math.PI/2;
+		const head = new THREE.SphereGeometry(2, 32, 32);
+		const eye  = new THREE.CylinderGeometry(0.2, 0.2, 20, 20);
+		eye.translate(1, 0, 1);
+		eye.rotateZ(Math.PI/2);
+		eye.rotateY(Math.PI);
 
-		const mesh = new THREE.Object3D();
-		mesh.add(cone);
+		const head_bsp = new ThreeBSP(head);
+		const eye_bsp  = new ThreeBSP(eye);
 
-		return mesh;
+		const geometry = head_bsp.subtract(eye_bsp);
+
+		return geometry.toMesh(new THREE.MeshPhongMaterial({color: 0xffff00}));
 	}
 
 	constructTours ()
