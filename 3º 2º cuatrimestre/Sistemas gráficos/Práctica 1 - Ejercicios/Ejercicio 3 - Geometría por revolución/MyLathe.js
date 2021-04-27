@@ -1,5 +1,11 @@
 import * as THREE from '../libs/three.module.js'
 
+const LATHE_DEFAULTS = {
+	SEGMENTS:   12,
+	PHI_START:  0,
+	PHI_LENGTH: 6.3
+}
+
 class MyLathe extends THREE.Object3D
 {
 	constructor (gui, outline)
@@ -8,22 +14,16 @@ class MyLathe extends THREE.Object3D
 
 		this.outline = outline;
 
-		this.DEFAULTS = {
-			SEGMENTS:   12,
-			PHI_START:  0,
-			PHI_LENGTH: 6.3
-		}
-
 		this.properties = {
-			segments:   this.DEFAULTS.SEGMENTS,
-			phi_start:  this.DEFAULTS.PHI_START,
-			phi_length: this.DEFAULTS.PHI_LENGTH,
+			segments:   LATHE_DEFAULTS.SEGMENTS,
+			phi_start:  LATHE_DEFAULTS.PHI_START,
+			phi_length: LATHE_DEFAULTS.PHI_LENGTH,
 
 			default: () =>
 			{
-				this.properties.segments   = this.DEFAULTS.SEGMENTS;
-				this.properties.phi_start  = this.DEFAULTS.PHI_START;
-				this.properties.phi_length = this.DEFAULTS.PHI_LENGTH;
+				this.properties.segments   = LATHE_DEFAULTS.SEGMENTS;
+				this.properties.phi_start  = LATHE_DEFAULTS.PHI_START;
+				this.properties.phi_length = LATHE_DEFAULTS.PHI_LENGTH;
 				this.reconstructGeometry();
 			}
 		}

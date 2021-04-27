@@ -11,7 +11,7 @@ const SCENE_DEFAULTS = {
 
 class MyScene extends THREE.Scene
 {
-	constructor (myCanvas)
+	constructor (canvas)
 	{
 		super();
 
@@ -26,7 +26,7 @@ class MyScene extends THREE.Scene
 			}
 		};
 
-		this.renderer = this.constructRenderer(myCanvas);
+		this.renderer = this.constructRenderer(canvas);
 		this.gui = this.constructGUI ();
 		this.constructLights ();
 		this.constructCamera ();
@@ -94,13 +94,13 @@ class MyScene extends THREE.Scene
 		this.add(this.spotlight);
 	}
 
-	constructRenderer (myCanvas)
+	constructRenderer (canvas)
 	{
 		const renderer = new THREE.WebGLRenderer();
 
 		renderer.setClearColor(new THREE.Color(0xEEEEEE), 1.0);
 		renderer.setSize(window.innerWidth, window.innerHeight);
-		$(myCanvas).append(renderer.domElement);
+		$(canvas).append(renderer.domElement);
 
 		return renderer;
 	}

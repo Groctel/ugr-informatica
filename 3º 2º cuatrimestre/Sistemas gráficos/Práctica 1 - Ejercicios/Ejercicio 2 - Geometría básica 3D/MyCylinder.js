@@ -1,30 +1,30 @@
 import * as THREE from '../libs/three.module.js'
 
+const CYLINDER_DEFAULTS = {
+	RADIUS_TOP:    1.0,
+	RADIUS_BOTTOM: 1.0,
+	HEIGHT:        3.0,
+	SEGMENTS:      30
+}
+
 class MyCylinder extends THREE.Object3D
 {
 	constructor (gui)
 	{
 		super();
 
-		this.DEFAULTS = {
-			RADIUS_TOP:    1.0,
-			RADIUS_BOTTOM: 1.0,
-			HEIGHT:        3.0,
-			SEGMENTS:      30
-		}
-
 		this.properties = {
-			radius_top:    this.DEFAULTS.RADIUS_TOP,
-			radius_bottom: this.DEFAULTS.RADIUS_BOTTOM,
-			height:        this.DEFAULTS.HEIGHT,
-			segments:      this.DEFAULTS.SEGMENTS,
+			radius_top:    CYLINDER_DEFAULTS.RADIUS_TOP,
+			radius_bottom: CYLINDER_DEFAULTS.RADIUS_BOTTOM,
+			height:        CYLINDER_DEFAULTS.HEIGHT,
+			segments:      CYLINDER_DEFAULTS.SEGMENTS,
 
 			default: () =>
 			{
-				this.properties.radius_top    = this.DEFAULTS.RADIUS_TOP;
-				this.properties.radius_bottom = this.DEFAULTS.RADIUS_BOTTOM;
-				this.properties.height        = this.DEFAULTS.HEIGHT;
-				this.properties.segments      = this.DEFAULTS.SEGMENTS;
+				this.properties.radius_top    = CYLINDER_DEFAULTS.RADIUS_TOP;
+				this.properties.radius_bottom = CYLINDER_DEFAULTS.RADIUS_BOTTOM;
+				this.properties.height        = CYLINDER_DEFAULTS.HEIGHT;
+				this.properties.segments      = CYLINDER_DEFAULTS.SEGMENTS;
 				this.reconstructGeometry();
 			}
 		}

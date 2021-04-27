@@ -3,6 +3,16 @@ import { GUI } from '../libs/dat.gui.module.js';
 import { TrackballControls } from '../libs/TrackballControls.js';
 import { MyBox } from './MyBox.js';
 
+/*
+ * Definimos las propiedades por defecto de la clase fuera de ella par
+ * optimizar la memoria que usamos al crear el objeto.
+ */
+
+const SCENE_DEFAULTS = {
+	AXES:            true,
+	LIGHT_INTENSITY: 0.5,
+};
+
 class MyScene extends THREE.Scene
 {
 	/*
@@ -12,27 +22,22 @@ class MyScene extends THREE.Scene
 	 * visualizar.
 	 */
 
-	constructor (myCanvas)
+	constructor (canvas)
 	{
 		super();
 
-		this.DEFAULTS = {
-			axes:            true,
-			light_intensity: 0.5,
-		};
-
 		this.properties = {
-			axes:            this.DEFAULTS.axes,
-			light_intensity: this.DEFAULTS.light_intensity,
+			axes:            SCENE_DEFAULTS.AXES,
+			light_intensity: SCENE_DEFAULTS.LIGHT_INTENSITY,
 
 			default: () =>
 			{
-				this.axes            = this.DEFAULTS.axes;
-				this.light_intensity = this.DEFAULTS.light_intensity;
+				this.axes            = SCENE_DEFAULTS.AXES;
+				this.light_intensity = SCENE_DEFAULTS.LIGHT_INTENSITY;
 			}
 		};
 
-		this.renderer = this.constructRenderer(myCanvas);
+		this.renderer = this.constructRenderer(canvas);
 		this.gui      = this.constructGUI();
 		this.constructLights();
 		this.constructCamera();
@@ -146,13 +151,13 @@ class MyScene extends THREE.Scene
 	 * y un tamaño y se incluye en el lienzo pasado como argumento.
 	 */
 
-	constructRenderer (myCanvas)
+	constructRenderer (canvas)
 	{
 		const renderer = new THREE.WebGLRenderer();
 
 		renderer.setClearColor(new THREE.Color(0xEEEEEE), 1.0);
 		renderer.setSize(window.innerWidth, window.innerHeight);
-		$(myCanvas).append(renderer.domElement);
+		$(canvas).append(renderer.domElement);
 
 		return renderer;
 	}

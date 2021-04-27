@@ -1,30 +1,30 @@
 import * as THREE from '../libs/three.module.js'
 
+const TORUS_DEFAULTS = {
+	RADIUS:           2,
+	TUBE:             0.5,
+	SEGMENTS_RADIAL:  30,
+	SEGMENTS_TUBULAR: 50
+}
+
 class MyTorus extends THREE.Object3D
 {
 	constructor (gui)
 	{
 		super();
 
-		this.DEFAULTS = {
-			RADIUS:           2,
-			TUBE:             0.5,
-			SEGMENTS_RADIAL:  30,
-			SEGMENTS_TUBULAR: 50
-		}
-
 		this.properties = {
-			radius:           this.DEFAULTS.RADIUS,
-			tube:             this.DEFAULTS.TUBE,
-			segments_radial:  this.DEFAULTS.SEGMENTS_RADIAL,
-			segments_tubular: this.DEFAULTS.SEGMENTS_TUBULAR,
+			radius:           TORUS_DEFAULTS.RADIUS,
+			tube:             TORUS_DEFAULTS.TUBE,
+			segments_radial:  TORUS_DEFAULTS.SEGMENTS_RADIAL,
+			segments_tubular: TORUS_DEFAULTS.SEGMENTS_TUBULAR,
 
 			default: () =>
 			{
-				this.properties.radius           = this.DEFAULTS.RADIUS;
-				this.properties.tube             = this.DEFAULTS.TUBE;
-				this.properties.segments_radial  = this.DEFAULTS.SEGMENTS_RADIAL;
-				this.properties.segments_tubular = this.DEFAULTS.SEGMENTS_TUBULAR;
+				this.properties.radius           = TORUS_DEFAULTS.RADIUS;
+				this.properties.tube             = TORUS_DEFAULTS.TUBE;
+				this.properties.segments_radial  = TORUS_DEFAULTS.SEGMENTS_RADIAL;
+				this.properties.segments_tubular = TORUS_DEFAULTS.SEGMENTS_TUBULAR;
 				this.reconstructGeometry();
 			}
 		}

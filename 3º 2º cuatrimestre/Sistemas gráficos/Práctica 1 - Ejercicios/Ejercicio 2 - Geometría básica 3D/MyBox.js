@@ -1,27 +1,27 @@
 import * as THREE from '../libs/three.module.js';
 
+const BOX_DEFAULTS = {
+	SIZE_X: 1.0,
+	SIZE_Y: 1.0,
+	SIZE_Z: 1.0,
+};
+
 class MyBox extends THREE.Object3D
 {
 	constructor (gui)
 	{
 		super();
 
-		this.DEFAULTS = {
-			SIZE_X: 1.0,
-			SIZE_Y: 1.0,
-			SIZE_Z: 1.0,
-		};
-
 		this.properties = {
-			size_x: this.DEFAULTS.SIZE_X,
-			size_y: this.DEFAULTS.SIZE_Y,
-			size_z: this.DEFAULTS.SIZE_Z,
+			size_x: BOX_DEFAULTS.SIZE_X,
+			size_y: BOX_DEFAULTS.SIZE_Y,
+			size_z: BOX_DEFAULTS.SIZE_Z,
 
 			default: () =>
 			{
-				this.properties.size_x = this.DEFAULTS.SIZE_X;
-				this.properties.size_y = this.DEFAULTS.SIZE_Y;
-				this.properties.size_z = this.DEFAULTS.SIZE_Z;
+				this.properties.size_x = BOX_DEFAULTS.SIZE_X;
+				this.properties.size_y = BOX_DEFAULTS.SIZE_Y;
+				this.properties.size_z = BOX_DEFAULTS.SIZE_Z;
 			}
 		};
 

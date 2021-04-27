@@ -1,27 +1,27 @@
 import * as THREE from '../libs/three.module.js'
 
+const SPHERE_DEFAULTS = {
+	RADIUS:          2.0,
+	SEGMENTS_WIDTH:  32,
+	SEGMENTS_HEIGHT: 32
+}
+
 class MySphere extends THREE.Object3D
 {
 	constructor (gui)
 	{
 		super();
 
-		this.DEFAULTS = {
-			RADIUS:          2.0,
-			SEGMENTS_WIDTH:  32,
-			SEGMENTS_HEIGHT: 32
-		}
-
 		this.properties = {
-			radius:          this.DEFAULTS.RADIUS,
-			segments_width:  this.DEFAULTS.SEGMENTS_WIDTH,
-			segments_height: this.DEFAULTS.SEGMENTS_HEIGHT,
+			radius:          SPHERE_DEFAULTS.RADIUS,
+			segments_width:  SPHERE_DEFAULTS.SEGMENTS_WIDTH,
+			segments_height: SPHERE_DEFAULTS.SEGMENTS_HEIGHT,
 
 			default: () =>
 			{
-				this.properties.radius          = this.DEFAULTS.RADIUS;
-				this.properties.segments_width  = this.DEFAULTS.SEGMENTS_WIDTH;
-				this.properties.segments_height = this.DEFAULTS.SEGMENTS_HEIGHT;
+				this.properties.radius          = SPHERE_DEFAULTS.RADIUS;
+				this.properties.segments_width  = SPHERE_DEFAULTS.SEGMENTS_WIDTH;
+				this.properties.segments_height = SPHERE_DEFAULTS.SEGMENTS_HEIGHT;
 				this.reconstructGeometry();
 			}
 		}

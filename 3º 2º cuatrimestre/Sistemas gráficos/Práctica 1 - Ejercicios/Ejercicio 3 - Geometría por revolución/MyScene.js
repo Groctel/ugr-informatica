@@ -4,13 +4,18 @@ import { TrackballControls } from '../libs/TrackballControls.js'
 
 import { MyLathe } from './MyLathe.js'
 
+const SCENE_DEFAULTS = {
+	AXES:            true,
+	LIGHT_INTENSITY: 0.5,
+};
+
 class MyScene extends THREE.Scene
 {
-	constructor (myCanvas)
+	constructor (canvas)
 	{
 		super();
 
-		const outline = [
+		const pawn_outline = [
 			new THREE.Vector3(0.0,  -1.4, 0.0),
 			new THREE.Vector3(1.0,  -1.4, 0.0),
 			new THREE.Vector3(1.0,  -1.1, 0.0),
@@ -26,30 +31,25 @@ class MyScene extends THREE.Scene
 			new THREE.Vector3(0.0,  1.4, 0.0)
 		];
 
-		this.DEFAULTS = {
-			AXES:            true,
-			LIGHT_INTENSITY: 0.5,
-		};
-
 		this.properties = {
-			axes:            this.DEFAULTS.AXES,
-			light_intensity: this.DEFAULTS.LIGHT_INTENSITY,
+			axes:            SCENE_DEFAULTS.AXES,
+			light_intensity: SCENE_DEFAULTS.LIGHT_INTENSITY,
 
 			default: () =>
 			{
-				this.axes            = this.DEFAULTS.AXES;
-				this.light_intensity = this.DEFAULTS.LIGHT_INTENSITY;
+				this.axes            = SCENE_DEFAULTS.AXES;
+				this.light_intensity = SCENE_DEFAULTS.LIGHT_INTENSITY;
 			}
 		};
 
-		this.renderer = this.constructRenderer(myCanvas);
+		this.renderer = this.constructRenderer(canvas);
 		this.gui      = this.constructGUI();
 		this.constructLights();
 		this.constructCamera();
 
 		const line_geom    = new THREE.Geometry();
 		const material     = new THREE.MeshNormalMaterial()
-		line_geom.vertices = outline;
+		line_geom.vertices = pawn_outline;
 
 		this.line_axes  = new THREE.AxesHelper(3);
 		this.line_model = new THREE.Line(line_geom, material);
@@ -60,7 +60,7 @@ class MyScene extends THREE.Scene
 
 
 		this.lathe_axes  = new THREE.AxesHelper(3);
-		this.lathe_model = new MyLathe(this.gui, outline);
+		this.lathe_model = new MyLathe(this.gui, pawn_outline);
 		this.add(this.lathe_axes);
 		this.add(this.lathe_model);
 		this.lathe_axes.position.set(0, 0, 2.5);
@@ -123,13 +123,13 @@ class MyScene extends THREE.Scene
 		this.add(this.spotlight);
 	}
 
-	constructRenderer (myCanvas)
+	constructRenderer (canvas)
 	{
 		const renderer = new THREE.WebGLRenderer();
 
 		renderer.setClearColor(new THREE.Color(0xEEEEEE), 1.0);
 		renderer.setSize(window.innerWidth, window.innerHeight);
-		$(myCanvas).append(renderer.domElement);
+		$(canvas).append(renderer.domElement);
 
 		return renderer;
 	}
@@ -165,4 +165,3 @@ $(function ()
 	window.addEventListener('resize', () => scene.onWindowResize());
 	scene.update();
 });
-

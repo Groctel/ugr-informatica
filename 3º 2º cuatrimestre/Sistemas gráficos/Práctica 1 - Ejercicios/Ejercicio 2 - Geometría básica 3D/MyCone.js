@@ -1,27 +1,28 @@
 import * as THREE from '../libs/three.module.js'
 
+const CONE_DEFAULTS = {
+	RADIUS:   2.0,
+	HEIGHT:   4.0,
+	SEGMENTS: 30
+}
+
 class MyCone extends THREE.Object3D
 {
 	constructor (gui)
 	{
 		super();
 
-		this.DEFAULTS = {
-			RADIUS:   2.0,
-			HEIGHT:   4.0,
-			SEGMENTS: 30
-		}
 
 		this.properties = {
-			radius:   this.DEFAULTS.RADIUS,
-			height:   this.DEFAULTS.HEIGHT,
-			segments: this.DEFAULTS.SEGMENTS,
+			radius:   CONE_DEFAULTS.RADIUS,
+			height:   CONE_DEFAULTS.HEIGHT,
+			segments: CONE_DEFAULTS.SEGMENTS,
 
 			default: () =>
 			{
-				this.properties.radius   = this.DEFAULTS.RADIUS;
-				this.properties.height   = this.DEFAULTS.HEIGHT;
-				this.properties.segments = this.DEFAULTS.SEGMENTS;
+				this.properties.radius   = CONE_DEFAULTS.RADIUS;
+				this.properties.height   = CONE_DEFAULTS.HEIGHT;
+				this.properties.segments = CONE_DEFAULTS.SEGMENTS;
 				this.reconstructGeometry();
 			}
 		}

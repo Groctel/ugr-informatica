@@ -1,24 +1,24 @@
 import * as THREE from '../libs/three.module.js'
 
+const ICOSAHEDRON_DEFAULTS = {
+	RADIUS: 3.0,
+	DETAIL: 0,
+}
+
 class MyIcosahedron extends THREE.Object3D
 {
 	constructor (gui)
 	{
 		super();
 
-		this.DEFAULTS = {
-			RADIUS: 3.0,
-			DETAIL: 0,
-		}
-
 		this.properties = {
-			radius: this.DEFAULTS.RADIUS,
-			detail: this.DEFAULTS.DETAIL,
+			radius: ICOSAHEDRON_DEFAULTS.RADIUS,
+			detail: ICOSAHEDRON_DEFAULTS.DETAIL,
 
 			default: () =>
 			{
-				this.properties.radius = this.DEFAULTS.RADIUS;
-				this.properties.detail = this.DEFAULTS.DETAIL;
+				this.properties.radius = ICOSAHEDRON_DEFAULTS.RADIUS;
+				this.properties.detail = ICOSAHEDRON_DEFAULTS.DETAIL;
 				this.reconstructGeometry();
 			}
 		}

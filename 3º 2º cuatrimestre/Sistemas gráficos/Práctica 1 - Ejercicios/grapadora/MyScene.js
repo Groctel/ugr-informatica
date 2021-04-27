@@ -11,11 +11,11 @@ class MyScene extends THREE.Scene
 	 * deben añadirse manualmente. Recibe el lienzo html sobre el que se va a
 	 * visualizar.
 	 */
-	constructor (myCanvas)
+	constructor (canvas)
 	{
 		super();
 
-		this.renderer = this.createRenderer(myCanvas);
+		this.renderer = this.createRenderer(canvas);
 		this.gui = this.createGUI ();
 		this.createLights();
 		this.createCamera();
@@ -129,13 +129,13 @@ class MyScene extends THREE.Scene
 	 * y un tamaño y se incluye en el lienzo pasado como argumento.
 	 */
 
-	createRenderer (myCanvas)
+	createRenderer (canvas)
 	{
 		var renderer = new THREE.WebGLRenderer();
 
 		renderer.setClearColor(new THREE.Color(0xEEEEEE), 1.0);
 		renderer.setSize(window.innerWidth, window.innerHeight);
-		$(myCanvas).append(renderer.domElement);
+		$(canvas).append(renderer.domElement);
 
 		return renderer;
 	}

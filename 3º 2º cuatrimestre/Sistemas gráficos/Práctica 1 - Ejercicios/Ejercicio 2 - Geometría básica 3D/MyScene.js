@@ -9,29 +9,30 @@ import { MyIcosahedron } from './MyIcosahedron.js'
 import { MySphere      } from './MySphere.js'
 import { MyTorus       } from './MyTorus.js'
 
+const SCENE_DEFAULTS = {
+	AXES:            true,
+	LIGHT_INTENSITY: 0.5,
+};
+
+
 class MyScene extends THREE.Scene
 {
-	constructor (myCanvas)
+	constructor (canvas)
 	{
 		super();
 
-		this.DEFAULTS = {
-			AXES:            true,
-			LIGHT_INTENSITY: 0.5,
-		};
-
 		this.properties = {
-			axes:            this.DEFAULTS.AXES,
-			light_intensity: this.DEFAULTS.LIGHT_INTENSITY,
+			axes:            SCENE_DEFAULTS.AXES,
+			light_intensity: SCENE_DEFAULTS.LIGHT_INTENSITY,
 
 			default: () =>
 			{
-				this.axes            = this.DEFAULTS.AXES;
-				this.light_intensity = this.DEFAULTS.LIGHT_INTENSITY;
+				this.axes            = SCENE_DEFAULTS.AXES;
+				this.light_intensity = SCENE_DEFAULTS.LIGHT_INTENSITY;
 			}
 		};
 
-		this.renderer = this.constructRenderer(myCanvas);
+		this.renderer = this.constructRenderer(canvas);
 		this.gui      = this.constructGUI ();
 		this.constructLights();
 		this.constructCamera();
@@ -133,13 +134,13 @@ class MyScene extends THREE.Scene
 		this.add(this.spotlight);
 	}
 
-	constructRenderer (myCanvas)
+	constructRenderer (canvas)
 	{
 		const renderer = new THREE.WebGLRenderer();
 
 		renderer.setClearColor(new THREE.Color(0xEEEEEE), 1.0);
 		renderer.setSize(window.innerWidth, window.innerHeight);
-		$(myCanvas).append(renderer.domElement);
+		$(canvas).append(renderer.domElement);
 
 		return renderer;
 	}
