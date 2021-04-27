@@ -2,14 +2,13 @@ import * as THREE from '/libs/three.module.js'
 import { GUI } from '/libs/dat.gui.module.js'
 import { TrackballControls } from '/libs/TrackballControls.js'
 
-import { MyClock } from './MyClock.js'
-
 const SCENE_DEFAULTS = {
 	AXES:            true,
 	LIGHT_INTENSITY: 0.5,
 };
 
-class MyScene extends THREE.Scene {
+class MyScene extends THREE.Scene
+{
 	constructor (canvas)
 	{
 		super();
@@ -26,16 +25,12 @@ class MyScene extends THREE.Scene {
 		};
 
 		this.renderer = this.constructRenderer(canvas);
-		this.gui      = this.constructGUI ();
-		this.constructLights ();
-		this.constructCamera ();
-		this.constructGround();
+		this.gui      = this.constructGUI();
+		this.constructLights();
+		this.constructCamera();
 
 		this.axes = new THREE.AxesHelper (50);
 		this.add(this.axes);
-
-		this.reloj = new MyClock(this.gui);
-		this.add(this.reloj);
 	}
 
 	constructCamera ()
@@ -62,17 +57,6 @@ class MyScene extends THREE.Scene {
 		this.camera_control.zoomSpeed   = 2;
 		this.camera_control.panSpeed    = 0.5;
 		this.camera_control.target      = look;
-	}
-
-	constructGround ()
-	{
-		const ground_geom = new THREE.BoxGeometry(50, 0.2, 50);
-		const ground_tex  = new THREE.TextureLoader().load('/imgs/wood.jpg');
-		const ground_mat  = new THREE.MeshPhongMaterial({map: ground_tex});
-		const ground_mesh = new THREE.Mesh(ground_geom, ground_mat);
-
-		ground_mesh.position.y = -0.1;
-		this.add(ground_mesh);
 	}
 
 	constructGUI ()
@@ -133,7 +117,6 @@ class MyScene extends THREE.Scene {
 		this.renderer.render(this, this.camera);
 		this.spotlight.intensity = this.properties.light_intensity;
 		this.camera_control.update();
-		this.reloj.update();
 
 		this.axes.visible = this.properties.axes;
 

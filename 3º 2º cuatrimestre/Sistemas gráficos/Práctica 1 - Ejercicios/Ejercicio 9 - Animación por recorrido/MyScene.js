@@ -36,7 +36,6 @@ class MyScene extends THREE.Scene
 
 		this.moving_object = new MyMovingObject();
 		this.add(this.moving_object);
-
 	}
 
 	constructCamera ()
