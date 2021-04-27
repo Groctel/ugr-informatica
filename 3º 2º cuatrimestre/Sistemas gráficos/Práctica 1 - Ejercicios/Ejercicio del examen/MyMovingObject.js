@@ -10,10 +10,14 @@ class MyMovingObject extends THREE.Object3D
 		super();
 
 		this.constructTours();
+		this.constructMesh();
+		this.constructAnimation();
 
-		this.mesh = this.constructMesh();
-		this.add(this.mesh);
+		this.last_time = Date.now();
+	}
 
+	constructAnimation ()
+	{
 		const origin_point  = {p:0};
 		const end_point = {p:1};
 
@@ -26,9 +30,9 @@ class MyMovingObject extends THREE.Object3D
 				const posicion = this.bot_path.getPointAt(t);
 				const tangente = this.bot_path.getTangentAt(t);
 
-				this.mesh.position.copy(posicion);
+				this.pacman.position.copy(posicion);
 				posicion.add(tangente);
-				this.mesh.lookAt(posicion);
+				this.pacman.lookAt(posicion);
 			})
 			.onComplete(() =>
 			{
@@ -45,9 +49,9 @@ class MyMovingObject extends THREE.Object3D
 				const posicion = this.top_path.getPointAt(t);
 				const tangente = this.top_path.getTangentAt(t);
 
-				this.mesh.position.copy(posicion);
+				this.pacman.position.copy(posicion);
 				posicion.add(tangente);
-				this.mesh.lookAt(posicion);
+				this.pacman.lookAt(posicion);
 			})
 			.onComplete(() =>
 			{
@@ -61,18 +65,32 @@ class MyMovingObject extends THREE.Object3D
 
 	constructMesh ()
 	{
-		const head = new THREE.SphereGeometry(2, 32, 32);
-		const eye  = new THREE.CylinderGeometry(0.2, 0.2, 20, 20);
+		const mouth = new THREE.SphereGeometry(2, 32, 32, 0, Math.PI);
+		const head  = new THREE.SphereGeometry(2, 32, 32, Math.PI, Math.PI);
+		const eye   = new THREE.CylinderGeometry(0.2, 0.2, 20, 20);
+
 		eye.translate(1, 0, 1);
 		eye.rotateZ(Math.PI/2);
 		eye.rotateY(Math.PI);
 
+		const mouth_bsp = new ThreeBSP(mouth);
 		const head_bsp = new ThreeBSP(head);
 		const eye_bsp  = new ThreeBSP(eye);
 
-		const geometry = head_bsp.subtract(eye_bsp);
+		const head_geom = head_bsp.subtract(eye_bsp);
+		const top       = head_geom.toMesh(
+			new THREE.MeshPhongMaterial({color: 0xffff00})
+		);
 
-		return geometry.toMesh(new THREE.MeshPhongMaterial({color: 0xffff00}));
+		this.pacman_mouth = mouth_bsp.toMesh(
+			new THREE.MeshPhongMaterial({color: 0xffff00})
+		);
+
+		this.pacman = new THREE.Object3D();
+		this.pacman.add(top);
+		this.pacman.add(this.pacman_mouth);
+
+		this.add(this.pacman);
 	}
 
 	constructTours ()
@@ -116,6 +134,7 @@ class MyMovingObject extends THREE.Object3D
 	update ()
 	{
 		TWEEN.update();
+		this.pacman_mouth.rotation.x = (1 - Math.sin(Date.now()/100)) * 0.5;
 	}
 }
 
