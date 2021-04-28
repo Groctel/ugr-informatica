@@ -10,3 +10,5 @@ obj/
 *.toc
 
 *.o
+
+node_modules/
