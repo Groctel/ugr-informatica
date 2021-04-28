@@ -17,8 +17,6 @@
 	$event['descripción'] =  preg_replace("/$/", "</p>", $event['descripción']);
 	$event['descripción'] =  str_replace("\r\n\r\n", "</p><p>", $event['descripción']);
 
-	if ($event['id'] != '0')
-		echo $twig->render('evento.html', ['event' => $event]);
-	else
-		echo $twig->render('error_404.html', []);
+	echo $twig->render('evento-imprimir.html', ['event' => $event]);
 ?>
+

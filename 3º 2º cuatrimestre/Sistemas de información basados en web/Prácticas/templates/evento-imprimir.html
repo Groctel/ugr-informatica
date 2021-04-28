@@ -1,98 +1,32 @@
-<!DOCTYPE html>
-<html>
+{% extends "main.html" %}
 
-<head>
-	<meta charset="UTF-8">
+{% block head %}
 	<link rel="stylesheet" href="/styles/evento-imprimir.css">
-	<link rel="icon" href="/icon/open-workshop.png">
-	<title>Introducción a Vim</title>
+{% endblock %}
 
-	<script src="../scripts/jquery-3.6.0.js"></script>
-	<script>
-		$(function(){
-			$("#include_cabecera").load("/comunes/cabecera.html");
-			$("#include_navbar").load("/comunes/navbar.html");
-			$("#include_pie").load("/comunes/pie.html");
-		});
-	</script>
-</head>
+{% block titulo %}{{ event['título'] }}{% endblock %}
 
-<body>
-	<div id="include_cabecera"></div>
-	<main>
-		<div id="include_navbar"></div>
-		<article>
-			<div class="textbox">
-				<div id="titulo-taller">
-					Introducción a vim
-					<a href="/paginas/evento-imprimir.html"><img src="/icon/material/print.png"></a>
+{% block main_body %}
+	<div class="textbox">
+		<div id="titulo-taller">
+			{{ event['título'] }}
+			<a href="/pages/evento-imprimir.html"><img src="/icon/material/print-24px.svg"></a>
+		</div>
+		<div id="datos-taller">
+			{{ event['organizador'] }} - {{ event['fecha'] }}
+		</div>
+
+		<div id="descripcion-taller">
+			<div id="imagenes">
+				<div id="contenedor">
+					<img style="width: 150px; height: 150px" src={{ event['img1'] }}>
 				</div>
-				<div id="datos-taller">
-					Atanasio Rubio - Martes 27 de octubre de 2020
-				</div>
-
-				<div id="descripcion-taller">
-					<div id="imagenes">
-						<div id="contenedor">
-							<img style="width: 150px; height: 150px" src="https://upload.wikimedia.org/wikipedia/commons/9/9f/Vimlogo.svg">
-						</div>
-						<div id="contenedor" style="padding: 0; height: 170px; width: 170px;">
-							<img style="width: 170px; height: 170px" src="https://i.iinfo.cz/images/603/neovim-1.png">
-						</div>
-					</div>
-					<p>
-						Lorem fistrum benemeritaar mamaar ad caballo blanco caballo negroorl.
-						Nostrud exercitation a peich por la gloria de mi madre pupita te voy a borrar el cerito esse diodenoo occaecat.
-						Benemeritaar et ut dolore sexuarl diodeno ese hombree irure qué dise usteer laboris.
-						Reprehenderit nisi cillum consectetur.
-						Voluptate laboris jarl sed llevame al sircoo aliquip torpedo apetecan esse.
-						Quis te va a hasé pupitaa condemor pecador diodeno ahorarr magna caballo blanco caballo negroorl.
-						Labore qui la caidita quis.
-						Jarl ahorarr dolor laboris reprehenderit.
-					</p>
-
-					<p>
-						A peich reprehenderit se calle ustée quietooor ex ut esse nisi ahorarr sit amet aliqua.
-						Te va a hasé pupitaa irure se calle ustée commodo exercitation dolore et aute.
-						Eiusmod ese que llega magna papaar papaar quis consectetur dolore.
-						Occaecat diodenoo caballo blanco caballo negroorl me cago en tus muelas.
-						Mamaar ese hombree quis hasta luego Lucas.
-					</p>
-
-					<p>
-						A peich hasta luego Lucas elit quis diodenoo.
-						Llevame al sircoo hasta luego Lucas ese pedazo de fistro mamaar esse.
-						Aliqua ut ut hasta luego Lucas no te digo trigo por no llamarte Rodrigor sexuarl dolor llevame al sircoo por la gloria de mi madre.
-						Incididunt labore labore torpedo incididunt a peich consequat te va a hasé pupitaa benemeritaar.
-						No puedor ullamco llevame al sircoo está la cosa muy malar quis ex sit amet a gramenawer se calle ustée cillum benemeritaar.
-						Exercitation llevame al sircoo exercitation ese pedazo de.
-						Ahorarr consequat laboris magna pupita enim no puedor reprehenderit.
-						Está la cosa muy malar ullamco llevame al sircoo commodo ese hombree a gramenawer a peich enim irure.
-					</p>
-
-					<p>
-						Magna nisi sed está la cosa muy malar ad.
-						Reprehenderit incididunt va usté muy cargadoo incididunt duis está la cosa muy malar ahorarr quietooor ese que llega diodenoo.
-						Esse consequat apetecan pecador está la cosa muy malar reprehenderit.
-						Por la gloria de mi madre está la cosa muy malar minim labore condemor aliquip qui irure.
-						Exercitation occaecat commodo por la gloria de mi madre.
-					</p>
-
-					<p>
-						Quis velit nostrud no te digo trigo por no llamarte Rodrigor.
-						Ut de la pradera por la gloria de mi madre llevame al sircoo.
-						No puedor consequat no te digo trigo por no llamarte Rodrigor ut enim ese pedazo de.
-						Te voy a borrar el cerito esse voluptate por la gloria de mi madre tempor incididunt.
-						Eiusmod ut incididunt veniam fistro torpedo eiusmod condemor velit se calle ustée.
-						Esse me cago en tus muelas aliqua officia et mamaar diodeno me cago en tus muelas.
-						A peich consectetur consequat veniam mamaar ut.
-						Minim apetecan hasta luego Lucas sed ahorarr hasta luego Lucas qué dise usteer me cago en tus muelas velit sed.
-					</p>
+				<div id="contenedor" style="padding: 0; height: 170px; width: 170px;">
+					<img style="width: 170px; height: 170px" src={{ event['img2'] }}>
 				</div>
 			</div>
-		</article>
-	</main>
-	<div id="include_pie"></div>
-</body>
-
-</html>
+			<div id="desc">{{ event['descripción'] | raw }}</div>
+		</div>
+	</div>
+</article>
+{% endblock %}
