@@ -65,12 +65,25 @@
 	{
 		$mysqli = connect();
 		$table  = array();
-		$indice = 0;
+		$index  = 0;
 
 		foreach ($mysqli->query("SELECT id, título, img1 FROM Eventos") as $row)
-			$table[$indice++] = $row;
+			$table[$index++] = $row;
 
 		return $table;
 	}
 
+	function comment_table ($event_id)
+	{
+		$mysqli = connect();
+		$table  = array();
+		$index  = 0;
+
+		$query = "SELECT * FROM Comentarios WHERE id_evento='" . $event_id . "'";
+
+		foreach ($mysqli->query($query) as $row)
+			$table[$index++] = $row;
+
+		return $table;
+	}
 ?>

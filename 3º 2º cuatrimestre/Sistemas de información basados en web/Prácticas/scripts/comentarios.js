@@ -80,25 +80,10 @@ function ConstruirComentario (json, indice, contenedor)
 	contenedor.appendChild(caja_comentario);
 }
 
-function CargarComentarios ()
-{
-	const cajas       = document.getElementById('cajas');
-	const comentarios = JSON.parse(json_comentarios);
-
-	cajas.innerHTML = "";
-
-	for (i in comentarios.contenido)
-	{
-		ConstruirComentario(comentarios.contenido, i, cajas);
-	}
-}
-
 function AbrirCajaComentarios (comentarios, boton)
 {
 	if (json_comentarios == null)
 		json_comentarios = CargarJSON('/json/comentarios.json');
-
-	CargarComentarios();
 
 	const altura_caja = Math.min(AlturaComentarios(comentarios), 750);
 
@@ -196,3 +181,4 @@ const form_cuerpo       = document.getElementById('form-cuerpo');
 
 boton_comentarios.addEventListener('click', BotonComentarios);
 form_cuerpo.addEventListener('keyup', OcultarTacosEnDirecto);
+

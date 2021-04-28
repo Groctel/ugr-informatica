@@ -31,6 +31,16 @@
 		</div>
 		<div id="comentarios">
 			<div id="cajas">
+				{% for i in comments %}
+				<div id="caja-comentario">
+					<div id="autor">
+						<span id="nombre">{{i['autor']}}</span>
+						<span id="correo">{{i['correo']}}</span>
+						<span id="fecha">{{i['fecha']}}</span>
+					</div>
+					<div id="cuerpo">{{i['contenido']}}</div>
+				</div>
+				{%endfor%}
 			</div>
 
 			<form action="javascript:AniadirComentario()" id="form-comentario">
