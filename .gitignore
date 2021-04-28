@@ -12,3 +12,4 @@ obj/
 *.o
 
 node_modules/
+vendor/
