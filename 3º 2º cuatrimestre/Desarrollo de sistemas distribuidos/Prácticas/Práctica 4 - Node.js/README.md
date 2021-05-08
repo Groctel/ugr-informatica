@@ -18,3 +18,22 @@ yarn hola_mundo
 ```
 
 Accede a `http://127.0.0.1:8080/` en tu navegador.
+
+### Ejemplo 2: Calculadora
+
+```sh
+yarn calculadora
+```
+
+Accede a `http://127.0.0.1:8080/` en tu navegador y añade los siguientes elementos a la ruta:
+
+- **Operación:** `sumar`, `restar`, `multiplicar` o `dividir`.
+- **Operando1:** Cualquier número.
+- **Operando2:** Cualquier número.
+
+Por ejemplo:
+
+```
+http://127.0.0.1:8080/sumar/5/9
+http://127.0.0.1:8080/dividir/523/2321
+```
