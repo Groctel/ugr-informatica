@@ -4,14 +4,13 @@
 
 ### Ejemplo 1: Envío de mensaje simple
 
-Situarse en el directorio `src`, donde se encuentra el fichero `server.policy` y ejecutar `rmiregistry`.
-Luego, en otra pestaña dentro del mismo directorio o habiendo usado el operador `&`, compilar todos los ficheros `.java`:
+Situarse en el directorio `src`, donde se encuentra el fichero `server.policy` compilar todos los ficheros `.java`:
 
 ```sh
 javac ejemplo1/*.java
 ```
 
-Situados en dicho directorio, ejecutar el servidor:
+Situados en dicho directorio, ejecutar `rmiregistry` (es bloqueante, usar `&` u otra pestaña) y el servidor:
 
 ```sh
 java -cp . -Djava.rmi.server.codebase=file:./ -Djava.rmi.server.hostname=localhost -Djava.security.policy=server.policy ejemplo1/Ejemplo
@@ -21,4 +20,19 @@ Y ejecutar el cliente de nuevo desde `src`:
 
 ```sh
 java -cp . -Djava.rmi.server.codebase=file:./ -Djava.rmi.server.hostname=localhost -Djava.security.policy=server.policy ejemplo1/Cliente_Ejemplo localhost 1337
+```
+
+### Ejemplo 2: Envío de mensaje multihebrado
+
+Las instrucciones de compilación desde `src` son similares a las del ejemplo anterior:
+
+```sh
+javac ejemplo2/*.java
+rmiregistry
+```
+Ejecutar el servidor y el cliente desde el mismo directorio:
+
+```sh
+java -cp . -Djava.rmi.server.codebase=file:./ -Djava.rmi.server.hostname=localhost -Djava.security.policy=server.policy ejemplo1/Ejemplo
+java -cp . -Djava.rmi.server.codebase=file:./ -Djava.rmi.server.hostname=localhost -Djava.security.policy=server.policy ejemplo1/Cliente_Ejemplo_Multi_Thread localhost 10
 ```
