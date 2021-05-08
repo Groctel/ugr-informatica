@@ -1,0 +1,19 @@
+{
+  "dependencies": {
+    "@types/mongodb": "^3.6.12",
+    "@types/socket.io": "^2.1.13",
+    "mongodb": "^3.6.6",
+    "socket.io": "^4.0.2",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.4"
+  },
+  "scripts": {
+    "hola_mundo": "ts-node src/hola_mundo.ts"
+  },
+  "name": "practica4-nodejs",
+  "version": "1.0.0",
+  "description": "Práctica 4 de DSD",
+  "repository": "https://github.com/Groctel/ugr-informatica",
+  "author": "Atanasio Rubio Gil",
+  "license": "GPL-3.0"
+}

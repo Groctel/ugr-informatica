@@ -2,6 +2,7 @@
 __pycache__/
 bin/
 doc/
+node_modules/
 obj/
 
 *.aux
@@ -11,3 +12,5 @@ obj/
 *.out
 *.pdf
 *.toc
+
+yarn.lock
