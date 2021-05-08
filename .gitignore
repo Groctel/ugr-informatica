@@ -1,13 +1,13 @@
+.cache/
 __pycache__/
 bin/
 doc/
 obj/
-.cache/
 
 *.aux
+*.class
 *.log
+*.o
 *.out
 *.pdf
 *.toc
-
-*.o
