@@ -46,3 +46,13 @@ rmiregistry
 java -cp . -Djava.rmi.server.codebase=file:./ -Djava.rmi.server.hostname=localhost -Djava.security.policy=server.policy ejemplo3.Servidor
 java -cp . -Djava.rmi.server.codebase=file:./ -Djava.rmi.server.hostname=localhost -Djava.security.policy=server.policy ejemplo3.Cliente
 ```
+
+## Ejecución del ejercicio
+
+```sh
+javac ejercicio/*.java
+rmiregistry
+
+java -cp . -Djava.rmi.server.codebase=file:./ -Djava.rmi.server.hostname=localhost -Djava.security.policy=server.policy ejercicio.Servidor
+java -cp . -Djava.rmi.server.codebase=file:./ -Djava.rmi.server.hostname=localhost -Djava.security.policy=server.policy ejercicio.Cliente
+```
