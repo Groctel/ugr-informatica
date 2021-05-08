@@ -8,8 +8,9 @@
     "typescript": "^4.2.4"
   },
   "scripts": {
-    "hola_mundo": "ts-node src/hola_mundo.ts",
-    "calculadora": "ts-node src/calculadora.ts"
+    "hola-mundo": "ts-node src/hola-mundo.ts",
+    "calculadora": "ts-node src/calculadora.ts",
+    "calculadora-web": "ts-node src/calculadora-web.ts"
   },
   "name": "practica4-nodejs",
   "version": "1.0.0",

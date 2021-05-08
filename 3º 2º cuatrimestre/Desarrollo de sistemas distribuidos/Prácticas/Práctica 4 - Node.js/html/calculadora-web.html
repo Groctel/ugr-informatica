@@ -1,0 +1,48 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Calculadora</title>
+</head>
+
+<body>
+	<form action="javascript:void(0);" onsubmit="javascript:enviar();">
+		Valor1: <input type="label" id="val1"/><br/>
+		Valor2: <input type="label" id="val2"/><br/>
+		Operaci&oacute;n:
+		<select id="operacion">
+			<option value="sumar">Sumar</option>
+			<option value="restar">Restar</option>
+			<option value="multiplicar">Producto</option>
+			<option value="dividir">Dividir</option>
+		</select><br/>
+		<input type="submit"value="Calcular"/>
+	</form>
+
+	<span id="result"></span>
+</body>
+
+<script type="text/javascript">
+	const serviceURL = "http://127.0.0.1:8080";
+
+	function enviar ()
+	{
+		const val1 = document.getElementById("val1").value;
+		const val2 = document.getElementById("val2").value;
+		const oper = document.getElementById("operacion").value;
+		const url  = serviceURL+"/"+oper+"/"+val1+"/"+val2;
+
+		const httpRequest = new XMLHttpRequest();
+		httpRequest.onreadystatechange = function ()
+		{
+			if (httpRequest.readyState === 4)
+			{
+				const resultado = document.getElementById("result");
+				resultado.innerHTML = httpRequest.responseText;
+			}
+		};
+
+		httpRequest.open("GET", url, true);
+		httpRequest.send();
+	}
+</script>
+</html>

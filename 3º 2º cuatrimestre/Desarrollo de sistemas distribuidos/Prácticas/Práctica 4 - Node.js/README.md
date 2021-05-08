@@ -14,7 +14,7 @@ yarn install
 ### Ejemplo 1: Hola mundo
 
 ```sh
-yarn hola_mundo
+yarn hola-mundo
 ```
 
 Accede a `http://127.0.0.1:8080/` en tu navegador.
@@ -37,3 +37,11 @@ Por ejemplo:
 http://127.0.0.1:8080/sumar/5/9
 http://127.0.0.1:8080/dividir/523/2321
 ```
+
+### Ejemplo 3: Calculadora web
+
+```sh
+yarn calculadora-web
+```
+
+Accede a `http://127.0.0.1:8080/` en tu navegador y ejecuta las operaciones de la calculadora.
