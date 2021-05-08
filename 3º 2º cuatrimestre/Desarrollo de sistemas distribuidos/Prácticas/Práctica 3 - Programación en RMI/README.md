@@ -13,13 +13,13 @@ javac ejemplo1/*.java
 Situados en dicho directorio, ejecutar `rmiregistry` (es bloqueante, usar `&` u otra pestaña) y el servidor:
 
 ```sh
-java -cp . -Djava.rmi.server.codebase=file:./ -Djava.rmi.server.hostname=localhost -Djava.security.policy=server.policy ejemplo1/Ejemplo
+java -cp . -Djava.rmi.server.codebase=file:./ -Djava.rmi.server.hostname=localhost -Djava.security.policy=server.policy ejemplo1.Ejemplo
 ```
 
 Y ejecutar el cliente de nuevo desde `src`:
 
 ```sh
-java -cp . -Djava.rmi.server.codebase=file:./ -Djava.rmi.server.hostname=localhost -Djava.security.policy=server.policy ejemplo1/Cliente_Ejemplo localhost 1337
+java -cp . -Djava.rmi.server.codebase=file:./ -Djava.rmi.server.hostname=localhost -Djava.security.policy=server.policy ejemplo1.Cliente_Ejemplo localhost 1337
 ```
 
 ### Ejemplo 2: Envío de mensaje multihebrado
@@ -33,6 +33,16 @@ rmiregistry
 Ejecutar el servidor y el cliente desde el mismo directorio:
 
 ```sh
-java -cp . -Djava.rmi.server.codebase=file:./ -Djava.rmi.server.hostname=localhost -Djava.security.policy=server.policy ejemplo1/Ejemplo
-java -cp . -Djava.rmi.server.codebase=file:./ -Djava.rmi.server.hostname=localhost -Djava.security.policy=server.policy ejemplo1/Cliente_Ejemplo_Multi_Thread localhost 10
+java -cp . -Djava.rmi.server.codebase=file:./ -Djava.rmi.server.hostname=localhost -Djava.security.policy=server.policy ejemplo2.Ejemplo
+java -cp . -Djava.rmi.server.codebase=file:./ -Djava.rmi.server.hostname=localhost -Djava.security.policy=server.policy ejemplo2.Cliente_Ejemplo_Multi_Thread localhost 10
+```
+
+### Ejemplo 3: Contador
+
+```sh
+javac ejemplo3/*.java
+rmiregistry
+
+java -cp . -Djava.rmi.server.codebase=file:./ -Djava.rmi.server.hostname=localhost -Djava.security.policy=server.policy ejemplo3.Servidor
+java -cp . -Djava.rmi.server.codebase=file:./ -Djava.rmi.server.hostname=localhost -Djava.security.policy=server.policy ejemplo3.Cliente
 ```
