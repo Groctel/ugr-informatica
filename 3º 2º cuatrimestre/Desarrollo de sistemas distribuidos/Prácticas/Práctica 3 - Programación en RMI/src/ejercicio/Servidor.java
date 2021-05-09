@@ -4,34 +4,27 @@ import java.rmi.Naming;
 
 public class Servidor
 {
+	static final int replicas = 2;
+
 	public static void main (String [] args)
 	{
 		if (System.getSecurityManager() == null)
-		{
 			System.setSecurityManager(new SecurityManager());
-		}
 
 		try
 		{
-			int numReplicas = 5;
-
-			for (int i = 0; i < numReplicas; i++)
+			for (int i = 0; i < replicas; i++)
 			{
-				String remoteObjectName = "Replica" + i;
+				Replicas replica = new Replicas("localhost", i, replicas);
+				Naming.rebind("Replica"+i, replica);
 
-				Replicas replica = new Replicas("localhost", i, numReplicas);    // Servidor-servidor
-				Naming.rebind(remoteObjectName, replica);
-
-				Donaciones donaciones = new Donaciones("localhost", replica); // Cliente-servidor
-				Naming.rebind(remoteObjectName+"Donaciones", donaciones);
-
-				System.out.println("Réplica " + i + " lista");
+				System.out.println("Réplica " + i + " desplegada");
 			}
 
-			System.out.println("Todas las réplicas operativas.");
-
+			System.out.println("¡Desplegadas todas las réplicas!");
 		}
-		catch (Exception e) {
+		catch (Exception e)
+		{
 			System.err.println("Réplica exception");
 			e.printStackTrace();
 		}

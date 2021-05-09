@@ -54,5 +54,5 @@ javac ejercicio/*.java
 rmiregistry
 
 java -cp . -Djava.rmi.server.codebase=file:./ -Djava.rmi.server.hostname=localhost -Djava.security.policy=server.policy ejercicio.Servidor
-java -cp . -Djava.rmi.server.codebase=file:./ -Djava.rmi.server.hostname=localhost -Djava.security.policy=server.policy ejercicio.Cliente
+java -cp . -Djava.rmi.server.codebase=file:./ -Djava.rmi.server.hostname=localhost -Djava.security.policy=server.policy ejercicio.Terminal
 ```
