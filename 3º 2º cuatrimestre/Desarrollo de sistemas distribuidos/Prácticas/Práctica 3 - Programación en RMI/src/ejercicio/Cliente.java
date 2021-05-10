@@ -7,7 +7,7 @@ public class Cliente
 
 	Cliente (String host)
 	{
-		this.host    = host;
+		this.host = host;
 	}
 
 	void AsignarReplica (String replica)

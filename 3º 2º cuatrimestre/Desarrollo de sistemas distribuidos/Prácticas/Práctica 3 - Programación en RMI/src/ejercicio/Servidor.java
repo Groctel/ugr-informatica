@@ -15,7 +15,7 @@ public class Servidor
 		{
 			for (int i = 0; i < replicas; i++)
 			{
-				Replicas replica = new Replicas("localhost", i, replicas);
+				Replica replica = new Replica("localhost", i, replicas);
 				Naming.rebind("Replica"+i, replica);
 
 				System.out.println("Réplica " + i + " desplegada");

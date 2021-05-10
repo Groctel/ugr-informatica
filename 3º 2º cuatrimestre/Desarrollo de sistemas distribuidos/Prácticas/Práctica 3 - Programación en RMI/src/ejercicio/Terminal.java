@@ -17,7 +17,7 @@ class Terminal
 		int total_clientes          = 0;
 		boolean continuar           = true;
 		Registry registry           = LocateRegistry.getRegistry(host, 1099);
-		Replicas_I replica_base     = (Replicas_I) registry.lookup("Replica0");
+		Replica_I replica_base      = (Replica_I) registry.lookup("Replica0");
 
 		while (continuar)
 		{
@@ -65,7 +65,7 @@ class Terminal
 						int donacion = Integer.parseInt(scanner.nextLine());
 						System.out.println("");
 
-						Replicas_I replica = (Replicas_I) registry.lookup(
+						Replica_I replica = (Replica_I) registry.lookup(
 							"Replica" + cliente.replica
 						);
 						replica.Donar(num_cliente, donacion);
@@ -96,13 +96,13 @@ class Terminal
 					if (num_cliente >= 0 && num_cliente < total_clientes)
 					{
 						Cliente cliente = clientes.get(num_cliente);
-						Replicas_I replica = (Replicas_I) registry.lookup(
+						Replica_I replica = (Replica_I) registry.lookup(
 							"Replica" + cliente.replica
 						);
 
 						int total = replica.TotalDonado(num_cliente);
 
-						if (total >= 0)
+						if (total > 0)
 							System.out.println("Se han donado un total de " + total + "€.");
 						else
 							System.out.println("Acceso denegado, done primero.");

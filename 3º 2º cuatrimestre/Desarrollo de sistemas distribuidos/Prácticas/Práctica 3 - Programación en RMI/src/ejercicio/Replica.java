@@ -7,7 +7,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.Collection;
 import java.util.HashMap;
 
-public class Replicas extends UnicastRemoteObject implements Replicas_I
+public class Replica extends UnicastRemoteObject implements Replica_I
 {
 	private static final long serialVersionUID = 637584321;
 	private static int total_replicas;
@@ -44,24 +44,21 @@ public class Replicas extends UnicastRemoteObject implements Replicas_I
 		this.registrados.put(cliente, 0);
 	}
 
-	public Replicas (String host, int id, int total_replicas) throws RemoteException
+	public Replica (String host, int id, int total_replicas) throws RemoteException
 	{
-		registry            = LocateRegistry.getRegistry(host, 1099);
-		this.id             = id;
-		Replicas.total_replicas = total_replicas;
+		registry                = LocateRegistry.getRegistry(host, 1099);
+		this.id                 = id;
+		Replica.total_replicas = total_replicas;
 	}
 
 	public int TotalDonado (int cliente) throws RemoteException, NotBoundException
 	{
-		int total = -1;
+		int total = 0;
 
 		if (RegistradoYDonado(cliente))
 		{
-			total = SubtotalDonaciones();
-
-			for (int i = 0; i < Replicas.total_replicas; i++)
-				if (i != this.id)
-					total += ((Replicas_I) registry.lookup("Replica" + i)).SubtotalDonaciones();
+			for (int i = 0; i < Replica.total_replicas; i++)
+				total += ((Replica_I) registry.lookup("Replica" + i)).SubtotalDonaciones();
 		}
 
 		return total;
@@ -72,13 +69,13 @@ public class Replicas extends UnicastRemoteObject implements Replicas_I
 		int replica_min_registrados  = id;
 		int min_total_registrados    = TotalRegistrados();
 		boolean registrado           = false;
-		Replicas_I replica_candidata = (Replicas_I) this;
+		Replica_I replica_candidata = (Replica_I) this;
 
-		for (int i = 0; i < Replicas.total_replicas; i++)
+		for (int i = 0; i < Replica.total_replicas; i++)
 		{
 			if (i != this.id)
 			{
-				replica_candidata = (Replicas_I) registry.lookup("Replica" + i);
+				replica_candidata = (Replica_I) registry.lookup("Replica" + i);
 
 				if (!registrado)
 					registrado = replica_candidata.Registrado(cliente);
@@ -97,16 +94,14 @@ public class Replicas extends UnicastRemoteObject implements Replicas_I
 		{
 			if (replica_min_registrados != id)
 			{
-				replica_candidata = (Replicas_I) registry.lookup("Replica" + replica_min_registrados);
+				replica_candidata = (Replica_I) registry.lookup("Replica" + replica_min_registrados);
 				replica_candidata.Registrar(cliente);
 			}
 			else
 			{
 				System.out.println(
-					"Registrando cliente " +
-					cliente +
-					" en Réplica " +
-					this.id
+					"Registrando cliente " + cliente +
+					" en Réplica " + this.id
 				);
 				IntroducirRegistro(cliente);
 			}
@@ -122,11 +117,11 @@ public class Replicas extends UnicastRemoteObject implements Replicas_I
 
 	public void Donar (int cliente, int cantidad) throws RemoteException
 	{
-		registrados.put(cliente, cantidad);
+		registrados.put(cliente, registrados.get(cliente) + cantidad);
 
 		System.out.println(
 			"Recibida donación de " + cantidad +
-			" por parte de cliente " + cliente +
+			"€ por parte de cliente " + cliente +
 			" en Réplica " + this.id
 		);
 	}
