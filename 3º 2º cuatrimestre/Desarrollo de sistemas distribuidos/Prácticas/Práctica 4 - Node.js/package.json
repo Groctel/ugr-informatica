@@ -10,7 +10,8 @@
   "scripts": {
     "hola-mundo": "ts-node src/hola-mundo.ts",
     "calculadora": "ts-node src/calculadora.ts",
-    "calculadora-web": "ts-node src/calculadora-web.ts"
+    "calculadora-web": "ts-node src/calculadora-web.ts",
+    "connections": "ts-node src/connections.ts"
   },
   "name": "practica4-nodejs",
   "version": "1.0.0",
