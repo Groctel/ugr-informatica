@@ -11,7 +11,12 @@ public class Replica extends UnicastRemoteObject implements Replica_I
 {
 	private static final long serialVersionUID = 637584321;
 	private static int total_replicas;
+	private static int replica_decisiva = -1;
+	private static int valor_decisivo = -1;
+	private static boolean decision_ejecutada = false;
 
+	private boolean iniciadora   = false;
+	private boolean participante = false;
 	private int id;
 
 	// id_cliente, total_donado
@@ -39,9 +44,9 @@ public class Replica extends UnicastRemoteObject implements Replica_I
 		return subtotal;
 	}
 
-	private void IntroducirRegistro (int cliente)
+	private void IntroducirRegistro (Cliente cliente)
 	{
-		this.registrados.put(cliente, 0);
+		this.registrados.put(cliente.id(), 0);
 	}
 
 	public Replica (String host, int id, int total_replicas) throws RemoteException
@@ -64,50 +69,65 @@ public class Replica extends UnicastRemoteObject implements Replica_I
 		return total;
 	}
 
-	public int Registrar (int cliente) throws RemoteException, NotBoundException
+	public void Registrar (Cliente cliente) throws RemoteException, NotBoundException
 	{
-		int replica_min_registrados  = id;
-		int min_total_registrados    = TotalRegistrados();
-		boolean registrado           = false;
-		Replica_I replica_candidata = (Replica_I) this;
+		System.out.println(
+			"==> Recibida petición de registro de cliente " + cliente.id() +
+			" en réplica " + id
+		);
 
-		for (int i = 0; i < Replica.total_replicas; i++)
+		if (!participante)
 		{
-			if (i != this.id)
+			if (Replica.replica_decisiva == -1 && valor_decisivo == -1)
 			{
-				replica_candidata = (Replica_I) registry.lookup("Replica" + i);
-
-				if (!registrado)
-					registrado = replica_candidata.Registrado(cliente);
-
-				int total_registrados = replica_candidata.TotalRegistrados();
-
-				if (total_registrados < min_total_registrados)
-				{
-					replica_min_registrados = i;
-					min_total_registrados   = total_registrados;
-				}
+				System.out.println("  -> Iniciando operación de consenso " + id);
+				iniciadora               = true;
+				Replica.replica_decisiva = id;
+				Replica.valor_decisivo   = TotalRegistrados();
 			}
+			else if (TotalRegistrados() < valor_decisivo)
+			{
+				System.out.println("  -> Actualizando valores decisivos " + id);
+				Replica.replica_decisiva = id;
+				Replica.valor_decisivo   = TotalRegistrados();
+			}
+
+			participante = true;
 		}
-
-		if (!registrado)
+		else
 		{
-			if (replica_min_registrados != id)
-			{
-				replica_candidata = (Replica_I) registry.lookup("Replica" + replica_min_registrados);
-				replica_candidata.Registrar(cliente);
-			}
-			else
+			if (Replica.replica_decisiva == id)
 			{
 				System.out.println(
-					"Registrando cliente " + cliente +
+					"  -> Registrando cliente " + cliente.id() +
 					" en Réplica " + this.id
 				);
 				IntroducirRegistro(cliente);
+				cliente.asignarReplica(this.id);
+				Replica.decision_ejecutada = true;
 			}
 		}
 
-		return replica_min_registrados;
+		if (participante)
+		{
+			if (!Replica.decision_ejecutada)
+			{
+				Replica_I siguiente = (Replica_I) registry.lookup(
+					"Replica" + (id+1)%Replica.total_replicas
+				);
+				siguiente.Registrar(cliente);
+			}
+
+			participante = false;
+		}
+
+		if (iniciadora)
+		{
+			Replica.decision_ejecutada = false;
+			iniciadora                 = false;
+			Replica.replica_decisiva   = -1;
+			Replica.valor_decisivo     = -1;
+		}
 	}
 
 	public int TotalRegistrados () throws RemoteException

@@ -4,7 +4,7 @@ import java.rmi.Naming;
 
 public class Servidor
 {
-	static final int replicas = 2;
+	static final int replicas = 5;
 
 	public static void main (String [] args)
 	{

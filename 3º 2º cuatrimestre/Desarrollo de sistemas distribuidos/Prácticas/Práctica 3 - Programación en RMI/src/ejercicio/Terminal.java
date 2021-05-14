@@ -33,12 +33,9 @@ class Terminal
 
 			if (opcion == 1)
 			{
-				Cliente cliente = new Cliente(host);
-				int replica     = replica_base.Registrar(total_clientes);
-
-				cliente.AsignarReplica("" + replica);
+				Cliente cliente = new Cliente(host, total_clientes++);
+				replica_base.Registrar(cliente);
 				clientes.add(cliente);
-				total_clientes++;
 			}
 			else if (opcion == 2)
 			{
@@ -66,7 +63,7 @@ class Terminal
 						System.out.println("");
 
 						Replica_I replica = (Replica_I) registry.lookup(
-							"Replica" + cliente.replica
+							"Replica" + cliente.replica()
 						);
 						replica.Donar(num_cliente, donacion);
 					}
@@ -97,7 +94,7 @@ class Terminal
 					{
 						Cliente cliente = clientes.get(num_cliente);
 						Replica_I replica = (Replica_I) registry.lookup(
-							"Replica" + cliente.replica
+							"Replica" + cliente.replica()
 						);
 
 						int total = replica.TotalDonado(num_cliente);

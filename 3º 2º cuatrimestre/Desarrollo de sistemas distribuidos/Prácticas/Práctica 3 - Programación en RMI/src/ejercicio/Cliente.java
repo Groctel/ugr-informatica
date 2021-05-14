@@ -1,18 +1,38 @@
 package ejercicio;
 
-public class Cliente
-{
-	String host;
-	String replica = "null";
+import java.io.Serializable;
 
-	Cliente (String host)
+class Cliente implements Serializable
+{
+	private static final long serialVersionUID = 637894393;
+	private String host_;
+	private int id_;
+	private int replica_ = -1;
+
+	Cliente (String host, int id)
 	{
-		this.host = host;
+		host_ = host;
+		id_   = id;
 	}
 
-	void AsignarReplica (String replica)
+	void asignarReplica (int replica)
 	{
-		this.replica = replica;
+		replica_ = replica;
+	}
+
+	String host ()
+	{
+		return host_;
+	}
+
+	int id ()
+	{
+		return id_;
+	}
+
+	int replica ()
+	{
+		return replica_;
 	}
 }
 
