@@ -11,13 +11,13 @@ class Terminal
 {
 	public static void main (String [] args) throws RemoteException, NotBoundException
 	{
-		String host                 = "localhost";
-		Scanner scanner             = new Scanner(System.in);
-		ArrayList<Cliente> clientes = new ArrayList<>();
-		int total_clientes          = 0;
-		boolean continuar           = true;
-		Registry registry           = LocateRegistry.getRegistry(host, 1099);
-		Replica_I replica_base      = (Replica_I) registry.lookup("Replica0");
+		String host                   = "localhost";
+		Scanner scanner               = new Scanner(System.in);
+		ArrayList<Cliente_I> clientes = new ArrayList<>();
+		int total_clientes            = 0;
+		boolean continuar             = true;
+		Registry registry             = LocateRegistry.getRegistry(host, 1099);
+		Replica_I replica_base        = (Replica_I) registry.lookup("Replica0");
 
 		while (continuar)
 		{
@@ -33,7 +33,7 @@ class Terminal
 
 			if (opcion == 1)
 			{
-				Cliente cliente = new Cliente(host, total_clientes++);
+				Cliente_I cliente = new Cliente(host, total_clientes++);
 				replica_base.Registrar(cliente);
 				clientes.add(cliente);
 			}
@@ -55,12 +55,11 @@ class Terminal
 
 					if (num_cliente >= 0 && num_cliente < total_clientes)
 					{
-						Cliente cliente = clientes.get(num_cliente);
+						Cliente_I cliente = clientes.get(num_cliente);
 
 						System.out.print("¿Qué cantidad desea donar?: ");
 
 						int donacion = Integer.parseInt(scanner.nextLine());
-						System.out.println("");
 
 						Replica_I replica = (Replica_I) registry.lookup(
 							"Replica" + cliente.replica()
@@ -92,7 +91,7 @@ class Terminal
 
 					if (num_cliente >= 0 && num_cliente < total_clientes)
 					{
-						Cliente cliente = clientes.get(num_cliente);
+						Cliente_I cliente = clientes.get(num_cliente);
 						Replica_I replica = (Replica_I) registry.lookup(
 							"Replica" + cliente.replica()
 						);

@@ -1,36 +1,38 @@
 package ejercicio;
 
 import java.io.Serializable;
+import java.rmi.server.UnicastRemoteObject;
+import java.rmi.RemoteException;
 
-class Cliente implements Serializable
+class Cliente extends UnicastRemoteObject implements Cliente_I, Serializable
 {
 	private static final long serialVersionUID = 637894393;
 	private String host_;
 	private int id_;
 	private int replica_ = -1;
 
-	Cliente (String host, int id)
+	Cliente (String host, int id) throws RemoteException
 	{
 		host_ = host;
 		id_   = id;
 	}
 
-	void asignarReplica (int replica)
+	public void asignarReplica (int replica) throws RemoteException
 	{
 		replica_ = replica;
 	}
 
-	String host ()
+	public String host () throws RemoteException
 	{
 		return host_;
 	}
 
-	int id ()
+	public int id () throws RemoteException
 	{
 		return id_;
 	}
 
-	int replica ()
+	public int replica () throws RemoteException
 	{
 		return replica_;
 	}

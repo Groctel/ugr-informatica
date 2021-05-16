@@ -44,7 +44,7 @@ public class Replica extends UnicastRemoteObject implements Replica_I
 		return subtotal;
 	}
 
-	private void IntroducirRegistro (Cliente cliente)
+	private void IntroducirRegistro (Cliente_I cliente) throws RemoteException
 	{
 		this.registrados.put(cliente.id(), 0);
 	}
@@ -69,7 +69,7 @@ public class Replica extends UnicastRemoteObject implements Replica_I
 		return total;
 	}
 
-	public void Registrar (Cliente cliente) throws RemoteException, NotBoundException
+	public void Registrar (Cliente_I cliente) throws RemoteException, NotBoundException
 	{
 		System.out.println(
 			"==> Recibida petición de registro de cliente " + cliente.id() +

@@ -7,7 +7,6 @@ public class Servidor
 {
 	public static void main (String [] args)
 	{
-		// Crea e instala el gestor de seguridad
 		if (System.getSecurityManager() == null)
 			System.setSecurityManager(new SecurityManager());
 
@@ -16,8 +15,7 @@ public class Servidor
 			Contador micontador = new Contador();
 			Naming.rebind("micontador", micontador);
 
-			//suma = 0;
-			System.out.println("Servidor RemoteException | MalformedURLExceptiondor preparado");
+			System.out.println("Servidor preparado");
 		}
 		catch(RemoteException | MalformedURLException e)
 		{

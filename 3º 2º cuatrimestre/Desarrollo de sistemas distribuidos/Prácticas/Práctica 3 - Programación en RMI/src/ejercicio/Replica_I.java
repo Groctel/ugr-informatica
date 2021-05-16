@@ -11,5 +11,5 @@ public interface Replica_I extends Remote
 	public int TotalDonado (int cliente) throws RemoteException, NotBoundException;
 	public int TotalRegistrados () throws RemoteException;
 	public void Donar (int cliente, int cantidad) throws RemoteException;
-	public void Registrar (Cliente cliente) throws RemoteException, NotBoundException;
+	public void Registrar (Cliente_I cliente) throws RemoteException, NotBoundException;
 }
