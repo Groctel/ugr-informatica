@@ -22,7 +22,7 @@ let json_comentarios = null;
 function AlturaComentarios (comentarios)
 {
 	const cajas = comentarios.getElementsByTagName('div');
-	let altura  = 0;
+	let altura  = 25;
 
 	for (let i = 0; i < cajas.length; i++)
 	{
@@ -30,7 +30,8 @@ function AlturaComentarios (comentarios)
 			altura += cajas[i].offsetHeight + 20;
 	}
 
-	altura += document.getElementById('form-comentario').offsetHeight + 10;
+	if (document.getElementById('form-comentario'))
+		altura += document.getElementById('form-comentario').offsetHeight + 10;
 
 	return altura;
 }
@@ -110,11 +111,6 @@ function BotonComentarios ()
 		CerrarCajaComentarios(comentarios, boton);
 }
 
-function EmailValido (email)
-{
-	return (/^.+@.+\..+/.test(email));
-}
-
 function IntroducirComentario (nombre, email, cuerpo)
 {
 	const div_comentarios    = document.getElementById('comentarios');
@@ -176,9 +172,7 @@ function OcultarTacosEnDirecto ()
 	}
 }
 
-const boton_comentarios = document.getElementById('boton-comentarios');
-const form_cuerpo       = document.getElementById('form-cuerpo');
+document.getElementById('boton-comentarios').addEventListener('click', BotonComentarios);
 
-boton_comentarios.addEventListener('click', BotonComentarios);
-form_cuerpo.addEventListener('keyup', OcultarTacosEnDirecto);
-
+if (document.getElementById('form-comentario'))
+	document.getElementById('form-cuerpo').addEventListener('keyup', OcultarTacosEnDirecto);

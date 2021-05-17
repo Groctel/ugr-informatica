@@ -18,7 +18,11 @@
 			<ul>
 				<li><a href="/index.php">Inicio</a></li>
 				<li><a href="/index.php">Categorías</a></li>
-				<li><a href="/index.php">Mi cuenta</a></li>
+				{% if user %}
+					<li><a href="/account.php">Mi cuenta</a></li>
+				{% else %}
+					<li><a href="/login.php"><b>Iniciar sesión</b></a></li>
+				{% endif %}
 
 				<li style="float:right"><a href="/index.php">Ayuda</a></li>
 			</ul>
@@ -26,19 +30,29 @@
 	</div>
 
 	<main>
+		{% block navbar %}
 		<div class="navbar">
 			<div id="contenido">
+				{% if user %}
 				<ul>
 					<li><a href="/index.php"><img src="/icon/material/dashboard-24px.svg">Mis talleres</a></li>
 					<li><a href="/index.php"><img src="/icon/material/history-24px.svg">Historial</a></li>
 					<li><a href="/index.php"><img src="/icon/material/star-24px.svg">Favoritos</a></li>
 				</ul>
 				<ul>
-					<li><a href="/index.php"><img src="/icon/material/add_task-24px.svg">Programar taller</a></li>
+					{% if user['perm'] == 'manager' or user['perm'] == 'superuser' %}
+						<li><a href="/newevent.php"><img src="/icon/material/add_task-24px.svg">Programar taller</a></li>
+					{% endif %}
 					<li><a href="/index.php"><img src="/icon/material/payments-24px.svg">Mis pagos</a></li>
 				</ul>
+				{% else %}
+				<ul>
+					<li><a href="/login.php"><img src="/icon/material/login-24px.svg">Iniciar sesión</a></li>
+				</ul>
+				{% endif %}
 			</div>
 		</div>
+		{% endblock %}
 
 		<article>
 			{% block main_body %}
@@ -46,6 +60,7 @@
 		</article>
 	</main>
 
+	{% block footer %}
 	<footer>
 		<div class="enlaces-interes">
 			<div class="lista-enlaces">
@@ -72,5 +87,6 @@
 		Esta página y su código están distribuidos bajo la licencia <a href="https://www.gnu.org/licenses/old-licenses/gpl-2.0.html">GNU GENERAL PUBLIC LICENSE Version 2, June 1991</a> en <a href="https://github.com/Groctel/ugr-informatica"><tt>Groctel/ugr-informatica</tt></a>.
 		</p>
 	</footer>
+	{% endblock %}
 </body>
 </html>

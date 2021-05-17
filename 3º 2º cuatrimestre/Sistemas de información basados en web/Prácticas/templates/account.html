@@ -1,0 +1,94 @@
+{% extends "main.html" %}
+
+{% block head %}
+	<link rel="stylesheet" href="/styles/account.css">
+{% endblock %}
+
+{% block titulo %}{{ user_queried['name'] }}: Perfil{% endblock %}
+
+{% block main_body %}
+	<div class="textbox">
+		<h1>{{ user_queried['name'] }}</h1>
+		{{ user_queried['mail'] }}
+
+		{% if user_queried['id'] == user['id'] %}
+			<h3>Modifica tu cuenta:</h3>
+			<form action="account.php" method="post">
+				Contraseña actual:
+					<input type="password" name="pass" value=""/>
+					{% if form_used == true %}
+						{% if valid_pass == false %}
+							<p class="error">Contraseña incorrecta</p>
+						{% else %}
+							<br>
+						{% endif %}
+					{% else %}
+						<br>
+					{% endif %}
+				Nuevo correo:
+					<input type="text" name="mail" value="{{mail}}"/>
+					{% if form_used == true %}
+						{% if valid_mail == false %}
+							<p class="error">Introduce un correo válido.</p>
+						{% elseif dupli_mail == true %}
+							<p class="error">Ya existe un usuario con esta dirección.</p>
+						{% else %}
+							<br>
+						{% endif %}
+					{% else %}
+						<br>
+					{% endif %}
+				Nueva contraseña:
+					<input type="password" name="newpass"/>
+					<br>
+				<button type="submit"><img src="/icon/material/done-24px.svg"></button>
+			</form>
+
+			<div id="logout">
+				<b><a href="logout.php">Cerrar sesión</a></b>
+			</div>
+		{% endif %}
+
+		{% if user_queried['id'] != user['id'] and user['perm'] == 'superuser'%}
+		<h3>Gestionar permisos</h3>
+		<form action="account.php?account_id={{ user_queried['id'] }}" method="post">
+			Introduce tu contraseña:
+				<input type="password" name="pass" value=""/>
+				{% if form_used == true %}
+					{% if valid_pass == false %}
+						<p class="error">Contraseña incorrecta</p>
+					{% else %}
+						<br>
+					{% endif %}
+				{% else %}
+					<br>
+				{% endif %}
+			<input type="radio" id="everyone" name="perm" value="everyone"
+				{% if user_queried['perm'] == 'everyone' %}
+					checked="checked"
+				{% endif %}
+			>
+				<label for="everyone">Everyone</label>
+			<input type="radio" id="moderator" name="perm" value="moderator"
+				{% if user_queried['perm'] == 'moderator' %}
+					checked="checked"
+				{% endif %}
+			>
+				<label for="moderator">Moderator</label>
+			<input type="radio" id="manager" name="perm" value="manager"
+				{% if user_queried['perm'] == 'manager' %}
+					checked="checked"
+				{% endif %}
+			>
+				<label for="manager">Manager</label>
+			<input type="radio" id="superuser" name="perm" value="superuser"
+				{% if user_queried['perm'] == 'superuser' %}
+					checked="checked"
+				{% endif %}
+			>
+				<label for="superuser">Superuser</label>
+			<button type="submit"><img src="/icon/material/done-24px.svg"></button>
+		</form>
+		{% endif %}
+	</div>
+{% endblock %}

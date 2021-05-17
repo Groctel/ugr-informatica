@@ -1,9 +1,4 @@
-article
-{
-	background-color: #e3e3e3;
-}
-
-article #grid-talleres
+#grid-talleres
 {
 	background-color: white;
 	margin: 10px;
@@ -15,7 +10,7 @@ article #grid-talleres
 	grid-template-rows: minmax(100px, auto);
 }
 
-article #grid-talleres a
+#grid-talleres a
 {
 	display: grid;
 	grid-template-rows: auto auto;
@@ -30,24 +25,24 @@ article #grid-talleres a
 	transition: box-shadow .2s;
 }
 
-article #grid-talleres a:hover img
+#grid-talleres a:hover img
 {
 	transform: scale(1.5);
 }
 
-article #grid-talleres a:hover
+#grid-talleres a:hover
 {
 	box-shadow: 0 0px 5px 0px rgba(0, 0, 0, 0.8);
 }
 
-article #grid-talleres a:hover h1
+#grid-talleres a:hover h1
 {
 	background-color: #4e4e4e;
 	color: white;
 	padding-bottom: 10px;
 }
 
-article #grid-talleres a h1
+#grid-talleres a h1
 {
 	background-color: #e3e3e3;
 	font-size: 13px;
@@ -59,13 +54,13 @@ article #grid-talleres a h1
 	margin: 0;
 }
 
-article #grid-talleres a .imagen-taller
+#grid-talleres a .imagen-taller
 {
 	vertical-align: middle;
 	overflow: hidden;
 }
 
-article #grid-talleres a .imagen-taller img
+#grid-talleres a .imagen-taller img
 {
 	border-radius: 10px;
 	margin-top: 10px;
@@ -75,20 +70,5 @@ article #grid-talleres a .imagen-taller img
 	margin-left: auto;
 	margin-right: auto;
 	transition: transform .2s;
-	vertical-align: middle;
 }
 
-body
-{
-	font-family: 'Open Sans';
-	font-size: 16px;
-	margin: 0 auto;
-	max-width: 1000px;
-}
-
-main
-{
-	display: grid;
-	grid-template-columns: 225px auto;
-	grid-column-gap: 0px;
-}

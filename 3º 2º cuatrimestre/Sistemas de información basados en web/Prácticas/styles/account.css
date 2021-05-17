@@ -1,0 +1,48 @@
+.error
+{
+	font-size: 10px;
+	color: red;
+	margin: 0;
+}
+
+.textbox
+{
+	background-color: white;
+	margin: 10px;
+	padding: 5px 10px;
+	border-radius: 10px;
+}
+
+form input
+{
+	font-size: 14px;
+	color: #1d1d1d;
+}
+
+form button
+{
+	background-color: #ffffff;
+	border: none;
+}
+
+h1
+{
+	font-size: 40px;
+	margin: 0;
+}
+
+#logout
+{
+	margin-top: 20px;
+}
+
+a
+{
+	text-decoration: none;
+	color: #000000;
+}
+
+label
+{
+	margin-right: 20px;
+}

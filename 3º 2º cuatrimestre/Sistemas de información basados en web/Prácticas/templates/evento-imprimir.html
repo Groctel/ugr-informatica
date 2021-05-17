@@ -9,11 +9,11 @@
 {% block main_body %}
 	<div class="textbox">
 		<div id="titulo-taller">
-			{{ event['título'] }}
+			{{ event['title'] }}
 			<a href="/pages/evento-imprimir.html"><img src="/icon/material/print-24px.svg"></a>
 		</div>
 		<div id="datos-taller">
-			{{ event['organizador'] }} - {{ event['fecha'] }}
+			{{ org }} - {{ event['date'] }}
 		</div>
 
 		<div id="descripcion-taller">
@@ -25,7 +25,7 @@
 					<img style="width: 170px; height: 170px" src={{ event['img2'] }}>
 				</div>
 			</div>
-			<div id="desc">{{ event['descripción'] | raw }}</div>
+			<div id="desc">{{ event['desc'] | raw }}</div>
 		</div>
 	</div>
 </article>

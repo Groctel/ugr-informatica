@@ -7,13 +7,13 @@
 {% block main_body %}
 	<div id="grid-talleres">
 		{% for i in event_list %}
-		<a href="evento.php?event_id={{i['id']}}">
+		<a href="evento.php?event_id={{ i['id'] }}">
 			<div class="imagen-taller">
-				<img src="{{i['img1']}}">
+				<img src="{{ i['img1'] }}">
 			</div>
-			<h1>{{i['título']}}</h1>
+			<h1>{{ i['título'] }}</h1>
 			</a>
 		</a>
-		{%endfor%}
+		{% endfor %}
 	</div>
 {% endblock %}

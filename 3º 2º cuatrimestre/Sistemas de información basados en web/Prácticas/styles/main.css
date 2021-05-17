@@ -1,7 +1,21 @@
-body {
-	font-family: Arial, Helvetica, sans-serif;
-	margin: 0;
-	padding: 0
+body
+{
+	font-family: 'Open Sans';
+	font-size: 16px;
+	margin: 0 auto;
+	max-width: 1000px;
+}
+
+main
+{
+	display: grid;
+	grid-template-columns: 225px auto;
+	grid-column-gap: 0px;
+}
+
+main article
+{
+	background-color: #e3e3e3;
 }
 
 footer
@@ -172,4 +186,3 @@ header h1 img
 {
 	background-color: #e3e3e3;
 }
-

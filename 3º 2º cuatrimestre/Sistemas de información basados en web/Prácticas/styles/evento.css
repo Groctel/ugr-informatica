@@ -1,17 +1,13 @@
-article
-{
-	background-color: #e3e3e3;
-}
-
-article .textbox
+.textbox
 {
 	background-color: white;
 	margin: 10px;
 	padding: 5px 10px;
 	border-radius: 10px;
+	min-height: 470px;
 }
 
-article .textbox #comentarios
+.textbox #comentarios
 {
 	margin-top: 15px;
 	height: 0;
@@ -19,12 +15,12 @@ article .textbox #comentarios
 	transition: 0.5s;
 }
 
-article .textbox #comentarios form
+.textbox #comentarios form
 {
 	margin: 15px;
 }
 
-article .textbox #comentarios form #autor
+.textbox #comentarios form #autor
 {
 	display: grid;
 	grid-template-columns: auto auto;
@@ -32,18 +28,18 @@ article .textbox #comentarios form #autor
 	margin-right: 3px;
 }
 
-article .textbox #comentarios form #enviar
+.textbox #comentarios form #enviar
 {
 	padding-top: 15px;
 }
 
-article .textbox #comentarios form #enviar button
+.textbox #comentarios form #enviar button
 {
 	float: right;
 	margin-right: 20px;
 }
 
-article .textbox #comentarios #caja-comentario
+.textbox #comentarios #caja-comentario
 {
 	margin: 10px;
 	padding: 15px 20px;
@@ -51,32 +47,32 @@ article .textbox #comentarios #caja-comentario
 	box-shadow: 0 0px 10px 0px rgba(0, 0, 0, 0.2);
 }
 
-article .textbox #comentarios #caja-comentario #autor
+.textbox #comentarios #caja-comentario #autor
 {
 	margin-bottom: 5px;
 }
 
-article .textbox #comentarios #caja-comentario #autor #nombre
+.textbox #comentarios #caja-comentario #autor #nombre
 {
 	font-size: 16px;
 	font-weight: bold;
 }
 
-article .textbox #comentarios #caja-comentario #autor #email
+.textbox #comentarios #caja-comentario #autor #email
 {
 	font-size: 12px;
 	color: #1d1d1d;
 	margin-left: 10px;
 }
 
-article .textbox #comentarios #caja-comentario #autor #fecha
+.textbox #comentarios #caja-comentario #autor #fecha
 {
 	font-size: 12px;
 	color: #1d1d1d;
 	margin-left: 10px;
 }
 
-article .textbox #titulo-taller
+.textbox #titulo-taller
 {
 	margin-top: 10px;
 	font-family: 'Montserrat';
@@ -85,36 +81,36 @@ article .textbox #titulo-taller
 	text-transform: uppercase;
 }
 
-article .textbox #titulo-taller a
+.textbox #titulo-taller a
 {
 	float: right;
 	margin: 0 10px 10px 10px;
 }
 
-article .textbox #titulo-taller a img
+.textbox #titulo-taller a img
 {
 	width: 30px;
 }
 
-article .textbox #datos-taller
+.textbox #datos-taller
 {
 	font-family: 'Montserrat';
 	font-size: 20px;
 	font-weight: bold;
 }
 
-article .textbox #descripcion-taller
+.textbox #descripcion-taller
 {
 	margin-top: 30px;
 }
 
-article .textbox #descripcion-taller #imagenes
+.textbox #descripcion-taller #imagenes
 {
 	float: right;
 	margin: 0 10px;
 }
 
-article .textbox #descripcion-taller #imagenes #contenedor
+.textbox #descripcion-taller #imagenes #contenedor
 {
 	padding: 10px;
 	border-radius: 10px;
@@ -124,45 +120,38 @@ article .textbox #descripcion-taller #imagenes #contenedor
 	margin-bottom: 10px;
 }
 
-article .textbox #descripcion-taller #imagenes #contenedor img
+.textbox #descripcion-taller #imagenes #contenedor img
 {
 	transition: transform .2s;
 	transition-timing-function: linear;
 }
 
-article .textbox #descripcion-taller #imagenes #contenedor img:hover
+.textbox #descripcion-taller #imagenes #contenedor img:hover
 {
 	transform: scale(1.5);
 }
 
-article .textbox #descripcion-taller #boton-comentarios
+.textbox #descripcion-taller #boton-comentarios
 {
 	font-size: 17px;
 	font-weight: bold;
 }
 
-article .textbox #descripcion-taller #boton-comentarios:hover
+.textbox #descripcion-taller #boton-comentarios:hover
 {
 	text-decoration: underline;
 }
 
-body
+a
 {
-	font-family: 'Open Sans';
-	font-size: 16px;
-	margin: 0 auto;
-	max-width: 1000px;
+  text-decoration: none;
+  color: black;
 }
 
-button {
+button
+{
   background-color: #FFFFFF;
   border: none;
   text-decoration: none;
   display: inline-block;
-}
-
-main
-{
-	display: grid;
-	grid-template-columns: 225px auto;
 }
