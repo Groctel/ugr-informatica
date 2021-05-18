@@ -1,0 +1,35 @@
+\documentclass[10pt, a4paper]{aqademic}
+
+\usepackage[spanish]{babel}
+	\selectlanguage{spanish}
+
+% Document packages
+
+\usepackage[type=CC, modifier=by-nc-sa, version=4.0]{doclicense}
+\usepackage{graphicx}
+	\graphicspath{{img/}}
+
+% Document settings
+
+\author{Romero Lara, Rubio Gil}
+\title{Desarrollo de Software}
+
+\AqSetChapter{Práctica}
+
+% Document composition
+
+\begin{document}
+
+\AqMaketitle[%
+	author   = Clara María Romero Lara{,} Atanasio José Rubio Gil,
+	cover    = logo-ugr.png,
+	org      = Grado en Ingeniería Informática,
+	subtitle = Teoría,
+	url      = https://github.com/Groctel/ugr-informatica
+]
+% \tableofcontents
+
+\setcounter{chapter}{3}
+\input{Prácticas/Práctica 4.tex}
+
+\end{document}
