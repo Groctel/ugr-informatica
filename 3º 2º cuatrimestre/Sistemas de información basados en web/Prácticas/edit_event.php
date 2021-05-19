@@ -1,0 +1,51 @@
+<?php
+ini_set('display_errors', 1);
+
+require_once('vendor/autoload.php');
+require('scripts_php/database/event.php');
+require('scripts_php/database/user.php');
+
+$loader = new \Twig\Loader\FilesystemLoader('templates');
+$twig   = new \Twig\Environment($loader);
+
+session_start();
+
+$form_used = false;
+
+$user = db_user::get($_SESSION['user_id']);
+
+if (db_user::perms_geq($user['perm'], 'manager') && isset($_GET['event_id']))
+{
+	$event = db_event::get($_GET['event_id']);
+
+	if ($_SERVER['REQUEST_METHOD'] === 'POST')
+	{
+		$form_used = true;
+
+		$event['title'] = $_POST['title'];
+		$event['date']  = $_POST['date'];
+		$event['desc']  = $_POST['desc'];
+		$event['img1']  = $_POST['img1'];
+		$event['img2']  = $_POST['img2'];
+
+		if (!empty($event['title']) && !empty($event['date']) &&
+			!empty($event['desc']) && !empty($event['img1']) &&
+			!empty($event['img2'])
+		) {
+			db_event::update($event);
+			header("Location: evento.php?event_id=". $event['id']);
+			exit();
+		}
+	}
+
+	echo $twig->render('edit_event.html', [
+		'user'      => $user,
+		'form_used' => $form_used,
+		'event'     => $event,
+	]);
+}
+else
+{
+	echo $twig->render('error_404.html', []);
+}
+?>

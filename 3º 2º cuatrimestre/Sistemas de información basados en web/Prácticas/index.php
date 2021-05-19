@@ -1,21 +1,23 @@
 <?php
-	ini_set('display_errors', 1);
-	require_once "./vendor/autoload.php";
-	include('scripts_php/database.php');
+ini_set('display_errors', 1);
 
-	$loader = new \Twig\Loader\FilesystemLoader('templates');
-	$twig   = new \Twig\Environment($loader);
+require_once('vendor/autoload.php');
+require('scripts_php/database/event.php');
+require('scripts_php/database/user.php');
 
-	session_start();
+$loader = new \Twig\Loader\FilesystemLoader('templates');
+$twig   = new \Twig\Environment($loader);
 
-	$event_list = event_table();
-	$user = [];
+session_start();
 
-	if (isset($_SESSION['user_id']))
-		$user = user_data($_SESSION['user_id']);
+$events = db_event::event_table();
+$user   = [];
 
-	echo $twig->render('index.html', [
-		'user'       => $user,
-		'event_list' => $event_list,
-	]);
+if (isset($_SESSION['user_id']))
+	$user = db_user::get($_SESSION['user_id']);
+
+echo $twig->render('index.html', [
+	'user'   => $user,
+	'events' => $events,
+]);
 ?>

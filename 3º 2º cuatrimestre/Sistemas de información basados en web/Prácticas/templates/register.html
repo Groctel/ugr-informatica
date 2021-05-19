@@ -9,30 +9,38 @@
 {% block main_body %}
 	<form action="register.php" method="post">
 		<h2>Usuario</h2>
-			<input type="text" name="user" value="{{user}}"/>
-			{% if form_used == true %}
-				{% if not user %}
+			<input type="text" name="name" value="{{form_status['name']}}"/>
+
+			{% if form_status['used'] == true %}
+				{% if not form_status['name'] %}
 					<p class="error">Introduce un nombre de usuario.</p>
 				{% endif %}
 			{% endif %}
+
 		<h2>Correo</h2>
-			<input type="text" name="mail" value="{{mail}}"/>
-			{% if form_used == true %}
-				{% if not mail %}
+			<input type="text" name="mail" value="{{form_status['mail']}}"/>
+
+			{% if form_status['used'] == true %}
+				{% if not form_status['mail'] %}
 					<p class="error">Introduce un correo electrónico.</p>
-				{% elseif valid_mail == false %}
+
+				{% elseif form_status['valid_mail'] == false %}
 					<p class="error">Introduce un correo electrónico válido.</p>
-				{% elseif dupli_mail == true %}
+
+				{% elseif form_status['dupli_mail'] == true %}
 					<p class="error">Ya existe un usuario con esta dirección.</p>
 				{% endif %}
 			{% endif %}
+
 		<h2>Contraseña</h2>
 			<input type="password" name="pass" value=""/>
-			{% if form_used == true %}
-				{% if valid_pass == false %}
+
+			{% if form_status['used'] == true %}
+				{% if form_status['valid_pass'] == false %}
 					<p class="error">Introduce una contraseña.</p>
 				{% endif %}
 			{% endif %}
+
 		<button type="submit"><img src="/icon/material/login-24px.svg"></button>
 	</form>
 

@@ -9,6 +9,7 @@ article .textbox
 	margin: 10px;
 	padding: 5px 10px;
 	border-radius: 10px;
+	min-height: 470px;
 }
 
 article .textbox #titulo-taller
@@ -106,7 +107,7 @@ footer p a
 main
 {
 	display: grid;
-	grid-template-columns: auto auto;
+	grid-template-columns: auto;
 }
 
 main .navbar
