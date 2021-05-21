@@ -47,7 +47,7 @@
 
 	socket.on('output-evt', (data) =>
 	{
-		mostrarMensaje("Mensaje de servicio" + data);
+		mostrarMensaje("Mensaje de servicio: '" + data + "'");
 	});
 
 	socket.on('disconnect', () =>

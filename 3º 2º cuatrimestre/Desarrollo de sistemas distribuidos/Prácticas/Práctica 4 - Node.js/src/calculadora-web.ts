@@ -12,15 +12,15 @@ const mime_types = {
 	'swf':  "application/x-shockwave-flash",
 };
 
-function Calcular (operacion: string, val1: number, val2: number): number | String
+function Calcular (operacion: string, val1: number, val2: number): number | string
 {
-	if (operacion == "sumar")
+	if (operacion === "sumar")
 		return val1 + val2;
-	else if (operacion == "restar")
+	else if (operacion === "restar")
 		return val1 - val2;
-	else if (operacion == "multiplicar")
+	else if (operacion === "multiplicar")
 		return val1 * val2;
-	else if (operacion == "dividir")
+	else if (operacion === "dividir")
 		return val1 / val2;
 	else
 		return "Error: Par&aacute;metros no v&aacute;lidos";
@@ -31,33 +31,13 @@ const httpServer = http.createServer((request, response) =>
 	let uri = request.url;
 
 	if (uri === "/")
-		uri = "/html/calculadora-web.html"
+		uri = "/html/calculadora-web.html";
 
 	const fname = path.join(process.cwd(), uri);
 
-	fs.exists(fname, (exists) =>
+	fs.stat(fname, (error) =>
 	{
-		if (exists)
-		{
-			fs.readFile(fname, (err, data) =>
-			{
-				if (!err)
-				{
-					const extension = path.extname(fname).split(".")[1];
-					const mime_type = mime_types[extension];
-					response.writeHead(200, mime_type);
-					response.write(data);
-					response.end();
-				}
-				else
-				{
-					response.writeHead(200, {"Content-Type": "text/plain"});
-					response.write("Error de lectura en el fichero " + uri);
-					response.end();
-				}
-			});
-		}
-		else
+		if (error)
 		{
 			while(uri.indexOf('/') == 0)
 				uri = uri.slice(1);
@@ -82,6 +62,26 @@ const httpServer = http.createServer((request, response) =>
 				response.write("404 Not Found\n");
 				response.end();
 			}
+		}
+		else
+		{
+			fs.readFile(fname, (err, data) =>
+			{
+				if (!err)
+				{
+					const extension = path.extname(fname).split(".")[1];
+					const mime_type = mime_types[extension];
+					response.writeHead(200, mime_type);
+					response.write(data);
+					response.end();
+				}
+				else
+				{
+					response.writeHead(200, {"Content-Type": "text/plain"});
+					response.write("Error de lectura en el fichero " + uri);
+					response.end();
+				}
+			});
 		}
 	});
 });

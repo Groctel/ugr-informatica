@@ -1,14 +1,14 @@
 import * as http from 'http';
 
-function Calcular (operacion: String, val1: number, val2: number): number | String
+function Calcular (operacion: string, val1: number, val2: number): number | string
 {
-	if (operacion == "sumar")
+	if (operacion === "sumar")
 		return val1 + val2;
-	else if (operacion == "restar")
+	else if (operacion === "restar")
 		return val1 - val2;
-	else if (operacion == "multiplicar")
+	else if (operacion === "multiplicar")
 		return val1 * val2;
-	else if (operacion == "dividir")
+	else if (operacion === "dividir")
 		return val1 / val2;
 	else
 		return "Error: Par&aacute;metros no v&aacute;lidos";
@@ -35,11 +35,11 @@ const httpServer = http.createServer((request, response) =>
 	else
 	{
 		output = "Error: El n&uacute;mero de par&aacute;metros no es v&aacute;lido";
-
-		response.writeHead(200, {"Content-Type": "text/html"});
-		response.write(output);
-		response.end();
 	}
+
+	response.writeHead(200, {"Content-Type": "text/html"});
+	response.write(output);
+	response.end();
 });
 
 httpServer.listen(8080);

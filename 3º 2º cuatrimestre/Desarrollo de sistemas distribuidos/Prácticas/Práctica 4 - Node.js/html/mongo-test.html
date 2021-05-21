@@ -1,0 +1,60 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>MongoDB Test</title>
+</head>
+
+<body>
+	<div id="resultados"></div>
+</body>
+
+<script src="/socket.io/socket.io.js"></script>
+<script type="text/javascript">
+	function updateList (addr_array)
+	{
+		const listContainer = document.getElementById('resultados');
+		listContainer.innerHTML = '';
+
+		const listElement = document.createElement('ul');
+		listContainer.appendChild(listElement);
+
+		const num = addr_array.length;
+
+		for (let i = 0; i < num; i++)
+		{
+			const listItem = document.createElement('li');
+
+			listItem.innerHTML = addr_array[i].host + ":" + addr_array[i].port;
+			listElement.appendChild(listItem);
+		}
+	}
+
+	const serviceURL = document.URL;
+	const socket = io.connect(serviceURL);
+
+	socket.on('my-address', (addr) =>
+	{
+		const date = new Date();
+		socket.emit('put', {
+			host: addr.host,
+			port: addr.port,
+			time: date
+		});
+
+		socket.emit('get', {
+			host: addr.host
+		});
+	});
+
+	socket.on('get', (addr) =>
+	{
+		console.log(addr);
+		updateList(addr);
+	});
+
+	socket.on('disconnect', () =>
+	{
+		updateList({});
+	});
+</script>
+</html>

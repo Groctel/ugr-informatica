@@ -2,6 +2,9 @@ import * as http from 'http';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as socketio from 'socket.io';
+import * as mongodb from 'mongodb';
+
+const MongoClient = mongodb.MongoClient;
 
 const mime_types = {
 	'css':  "text/css",
@@ -18,7 +21,7 @@ const httpServer = http.createServer((request, response) =>
 	let uri = request.url;
 
 	if (uri === "/")
-		uri = "/html/connections.html";
+		uri = "/html/mongo-test.html";
 
 	const fname = path.join(process.cwd(), uri);
 
@@ -33,7 +36,8 @@ const httpServer = http.createServer((request, response) =>
 		}
 		else
 		{
-			fs.readFile(fname, (err, data) => {
+			fs.readFile(fname, (err, data) =>
+			{
 				if (!err)
 				{
 					const extension = path.extname(fname).split(".")[1];
@@ -53,48 +57,42 @@ const httpServer = http.createServer((request, response) =>
 	});
 });
 
-httpServer.listen(8080);
-
-const io = new socketio.Server().listen(httpServer);
-const allClients = new Array<{address: string, port: number}>();
-
-io.on('connection', (client) =>
+MongoClient.connect("mongodb://localhost:27017/", { useUnifiedTopology: true }, (_err, client) =>
 {
-	allClients.push({
-		address: client.client.request.socket.remoteAddress,
-		port:    client.client.request.socket.remotePort,
-	});
+	httpServer.listen(8080);
+	const io = new socketio.Server().listen(httpServer);
+	const db = client.db("mydb");
+	const coll_name = "mycoll";
 
-	console.log(
-		"New socket from " + client.client.request.socket.remoteAddress +
-		":" + client.client.request.socket.remotePort
-	);
-
-	io.sockets.emit('all-connections', allClients);
-
-	client.on('output-evt', () =>
+	db.collections((_err, colls) =>
 	{
-		client.emit('output-evt', "¡Hola, Cliente!");
-	});
+		if (colls.find((item) => { return item.collectionName === coll_name; }))
+			db.dropCollection(coll_name);
 
-	client.on('disconnect', () =>
-	{
-		const index = allClients.map((clnt) =>
+		db.createCollection(coll_name, (_err, collection) =>
 		{
-			return clnt.address;
-		}).indexOf(client.client.request.socket.remoteAddress);
+			io.on('connection', (client) =>
+			{
+				client.emit('my-address', {
+					host: client.request.socket.remoteAddress,
+					port: client.request.socket.remotePort
+				});
 
-		if (index != -1)
-		{
-			allClients.splice(index, 1);
-			io.sockets.emit('all-connections', allClients);
-		}
+				client.on('put', (addr) =>
+				{
+					collection.insertOne(addr, {});
+				});
 
-		console.log(
-			"El usuario " + client.client.request.socket.remoteAddress +
-			" se ha desconectado."
-		);
+				client.on('get', (addr) =>
+				{
+					collection.find({host: addr.host}).toArray((_err, results) =>
+					{
+						client.emit('get', results);
+					});
+				});
+			});
+		});
 	});
 });
 
-console.log("Servicio Socket.io iniciado");
+console.log("Servicio MongoDB iniciado.");

@@ -11,12 +11,18 @@
     "hola-mundo": "ts-node src/hola-mundo.ts",
     "calculadora": "ts-node src/calculadora.ts",
     "calculadora-web": "ts-node src/calculadora-web.ts",
-    "connections": "ts-node src/connections.ts"
+    "connections": "ts-node src/connections.ts",
+    "mongo-test": "ts-node src/mongo-test.ts"
   },
   "name": "practica4-nodejs",
   "version": "1.0.0",
   "description": "Práctica 4 de DSD",
   "repository": "https://github.com/Groctel/ugr-informatica",
   "author": "Atanasio Rubio Gil",
-  "license": "GPL-3.0"
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.24.0",
+    "@typescript-eslint/parser": "^4.24.0",
+    "eslint": "^7.26.0"
+  }
 }
