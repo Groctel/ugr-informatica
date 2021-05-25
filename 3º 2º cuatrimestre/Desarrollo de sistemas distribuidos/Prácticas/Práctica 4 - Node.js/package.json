@@ -1,7 +1,9 @@
 {
   "dependencies": {
+    "@types/jquery": "^3.5.5",
     "@types/mongodb": "^3.6.12",
     "@types/socket.io": "^2.1.13",
+    "jquery": "^3.6.0",
     "mongodb": "^3.6.6",
     "socket.io": "^4.0.2",
     "ts-node": "^9.1.1",
@@ -12,7 +14,8 @@
     "calculadora": "ts-node src/calculadora.ts",
     "calculadora-web": "ts-node src/calculadora-web.ts",
     "connections": "ts-node src/connections.ts",
-    "mongo-test": "ts-node src/mongo-test.ts"
+    "mongo-test": "ts-node src/mongo-test.ts",
+    "domotica": "ts-node src/domotica.ts"
   },
   "name": "practica4-nodejs",
   "version": "1.0.0",

@@ -1,0 +1,26 @@
+<html>
+	<head>
+	<meta http-equiv="Content-Type" content="text/html" charset="utf-8">
+	<title>Domotica: Entorno</title>
+	<script type="module" src="/src/domotica-env.js" defer></script>
+</head>
+
+<body>
+	<h1>Controlador de entorno:</h1>
+
+	<div class='luminosidad'>
+		<p><b>Luminosidad actual: </b><span id='lum_num'></span>%</p>
+		<input type='range' min='0' max='100' value='50' class='slider' id='lum_bar'>
+	</div>
+
+	<div class='temperatura'>
+		<p><b>Temperatura actual: </b><span id='temp_num'></span>ºC</p>
+		<input type='range' min='-20' max='60' value='25' class='slider' id='temp_bar'>
+	</div>
+
+	<p class="dispositivos">
+		Aire acondicionado <span id="aire">encendido</span><br>
+		Persianas <span id="persianas">cerradas</span>
+	</p>
+</body>
+</html>
