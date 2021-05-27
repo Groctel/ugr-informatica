@@ -19,14 +19,15 @@ class db_event
 		$mysqli = db_core::connect();
 
 		$mysqli->query(
-			"INSERT INTO Events (title, id_org, date, body, img1, img2)" .
+			"INSERT INTO Events (title, id_org, date, body, img1, img2, hidden)" .
 			"VALUES (" .
-				"'"     . $event['title'] . "'," .
-				"'"     . $id_org         . "'," .
-				"'"     . $event['date']  . "'," .
-				"'"     . $event['body']  . "'," .
-				"'"     . $event['img1']  . "'," .
-				"'"     . $event['img2']  . "'"  .
+				"'"     . $event['title']   . "'," .
+				"'"     . $id_org           . "'," .
+				"'"     . $event['date']    . "'," .
+				"'"     . $event['body']    . "'," .
+				"'"     . $event['img1']    . "'," .
+				"'"     . $event['img2']    . "'," .
+				"'"     . $event['hidden']  . "'"  .
 			")"
 		);
 
@@ -55,11 +56,12 @@ class db_event
 
 		$mysqli->query(
 			"UPDATE Events SET " .
-				"title = '" . $event['title'] . "'," .
-				"date  = '" . $event['date']  . "'," .
-				"body  = '" . $event['body']  . "'," .
-				"img1  = '" . $event['img1']  . "'," .
-				"img2  = '" . $event['img2']  . "'"  .
+				"title  = '" . $event['title']  . "'," .
+				"date   = '" . $event['date']   . "'," .
+				"body   = '" . $event['body']   . "'," .
+				"hidden = '" . $event['hidden'] . "'," .
+				"img1   = '" . $event['img1']   . "'," .
+				"img2   = '" . $event['img2']   . "'"  .
 			"WHERE Events.id = '" . $event['id'] . "'"
 		);
 
@@ -76,8 +78,9 @@ class db_event
 			'id_org' => '',
 			'date'   => '',
 			'body'   => '',
+			'hidden' => '',
 			'img1'   => '',
-			'img2'   => ''
+			'img2'   => '',
 		);
 
 		if (db_core::is_cropped_md5($event_id))
@@ -98,6 +101,7 @@ class db_event
 					'id_org' => $row['id_org'],
 					'date'   => $row['date'],
 					'body'   => $row['body'],
+					'hidden' => $row['hidden'],
 					'img1'   => $row['img1'],
 					'img2'   => $row['img2']
 				);
@@ -115,8 +119,9 @@ class db_event
 
 		$res = $mysqli->query(
 			"SELECT   id, title, img1 " .
-			"FROM     Events " .
+			"FROM     Events "  .
 			"WHERE    Events.date > '" . date("Y-m-d H:i:s") . "' " .
+			"AND      Events.hidden = '0'" .
 			"ORDER BY date"
 		);
 

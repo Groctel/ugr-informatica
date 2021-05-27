@@ -19,6 +19,9 @@
 				<p class="error">Introduce un título para el taller.</p>
 			{% endif %}
 
+			<input type="checkbox" id="hidden" name="hidden" value="hidden" {% if event['hidden'] %} checked {% endif %}>
+			<label for="hidden"> Oculto</label>
+
 			<h2>Fecha</h2>
 			<input type="date" name="date" value="{{event['date']}}"/>
 			{% if form_used and not event['date'] %}

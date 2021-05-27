@@ -23,17 +23,21 @@ if (db_user::perm_geq($user['perm'], 'manager') && isset($_GET['event_id']))
 	{
 		$form_used = true;
 
-		$event['title'] = $_POST['title'];
-		$event['date']  = $_POST['date'];
-		$event['body']  = $_POST['body'];
-		$event['img1']  = $_POST['img1'];
-		$event['img2']  = $_POST['img2'];
-		$tags           = $_POST['tags'];
+		$event['title']  = $_POST['title'];
+		$event['date']   = $_POST['date'];
+		$event['hidden'] = isset($_POST['hidden']);
+		$event['body']   = $_POST['body'];
+		$event['img1']   = $_POST['img1'];
+		$event['img2']   = $_POST['img2'];
+		$tags            = $_POST['tags'];
 
 		if (!empty($event['title']) && !empty($event['date']) &&
 			!empty($event['body']) && !empty($event['img1']) &&
 			!empty($event['img2'])
 		) {
+			if (empty($event['hidden']))
+				$event['hidden'] = 0;
+
 			db_event::update($event, $tags);
 			header("Location: evento.php?event_id=". $event['id']);
 			exit();

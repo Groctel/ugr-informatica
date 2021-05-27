@@ -140,6 +140,37 @@ header h1 img
 	height: 30px;
 }
 
+.search_bar
+{
+	background-color: white;
+	padding: 10px;
+	border-radius: 25px;
+	margin: 10px;
+	width: 958px;
+}
+
+.search_results
+{
+	position: absolute;
+	z-index: 1;
+	background-color: white;
+	padding: 10px;
+	width: 958px;
+	box-shadow: 0 0px 10px 0px rgba(0, 0, 0, 0.2);
+	display: none;
+}
+
+.search_results a
+{
+	text-decoration: none;
+	color: black;
+}
+
+.search_results a .hl
+{
+	font-weight: bold;
+}
+
 .topbar
 {
 	z-index: 1;

@@ -5,6 +5,7 @@
 	<link rel="stylesheet" href="/styles/main.css">
 	<link rel="icon" href="/icon/open-workshop.png">
 	<title>{% block titulo %}Open Workshop{% endblock %}</title>
+	<script src='scripts/livesearch.js' type='module'></script>
 	{% block head %}<!-- Hojas de estilo específicas -->{% endblock %}
 </head>
 
@@ -28,6 +29,9 @@
 			</ul>
 		</div>
 	</div>
+
+	<input type="text" class="search_bar">
+	<div class="search_results"></div>
 
 	<main>
 		{% block navbar %}
