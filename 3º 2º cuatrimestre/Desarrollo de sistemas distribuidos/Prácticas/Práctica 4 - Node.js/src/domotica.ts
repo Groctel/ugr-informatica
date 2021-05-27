@@ -86,6 +86,14 @@ MongoClient.connect("mongodb://localhost:27017/", { useUnifiedTopology: true }, 
 					});
 				}
 
+				if (type === 'clnt')
+				{
+					client.on('user-action', (content) =>
+					{
+						io.sockets.emit('get-action', content);
+					});
+				}
+
 				client.on('sensor-status', (sensor) =>
 				{
 					collection.insertOne({name: sensor.name, value: sensor.value, date: new Date()});

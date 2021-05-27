@@ -17,6 +17,17 @@ function initLum ()
 	$('#lum_num').html(lum_bar.attr('value'));
 }
 
+function initHum ()
+{
+	const lum_bar = $('#hum_bar');
+
+	lum_bar.on('input', function ()
+	{
+		socket.emit('sensor-status', {name: 'Humidity', value: Number(this.value)});
+	});
+	$('#hum_num').html(lum_bar.attr('value'));
+}
+
 function initSocket ()
 {
 	socket.on('connect', () =>
@@ -28,6 +39,8 @@ function initSocket ()
 	{
 		if (event.name === "Luminosity")
 			$('#lum_num').html(event.value);
+		else if (event.name === "Humidity")
+			$('#hum_num').html(event.value);
 		else if (event.name === "Temperature")
 			$('#temp_num').html(event.value);
 	});
@@ -52,6 +65,15 @@ function initSocket ()
 			else
 				status.text("cerradas");
 		}
+		else if (event.name === "Purifier")
+		{
+			const status = $('#purificador');
+
+			if (event.value === "on")
+				status.text("encendido");
+			else
+				status.text("apagado");
+		}
 	});
 }
 
@@ -69,6 +91,7 @@ function initTemp ()
 $(() =>
 {
 	initLum();
+	initHum();
 	initTemp();
 	initSocket();
 });
