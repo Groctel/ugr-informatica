@@ -8,9 +8,9 @@ class db_comment
 		$mysqli = db_core::connect();
 
 		$event = array(
-			'id'        => '-1',
-			'id_event'  => '-1',
-			'id_author' => '-1',
+			'id'        => '',
+			'id_event'  => '',
+			'id_author' => '',
 			'date'      => '',
 			'body'      => '',
 			'edited'    => '',
@@ -19,9 +19,9 @@ class db_comment
 		if (db_core::is_cropped_md5($id))
 		{
 			$res = $mysqli->query(
-				"SELECT *"            .
-				"FROM   Comentarios " .
-				"WHERE  id = '"   . $id . "'"
+				"SELECT *"         .
+				"FROM   Comments " .
+				"WHERE  id = '"    . $id . "'"
 			);
 
 			if ($res->num_rows > 0)
@@ -30,11 +30,11 @@ class db_comment
 
 				$event = array(
 					'id'        => $row['id'],
-					'id_event'  => $row['id_evento'],
-					'id_author' => $row['id_autor'],
-					'date'      => $row['fecha'],
-					'body'      => $row['contenido'],
-					'edited'    => $row['editado']
+					'id_event'  => $row['id_event'],
+					'id_author' => $row['id_author'],
+					'date'      => $row['date'],
+					'body'      => $row['body'],
+					'edited'    => $row['edited']
 				);
 			}
 		}
@@ -48,10 +48,12 @@ class db_comment
 		$table  = array();
 		$index  = 0;
 
-		$query = "SELECT DISTINCT Comentarios.*, Usuarios.* " .
-			"FROM   Comentarios, Usuarios    " .
-			"WHERE  Comentarios.id_evento = '" . $event_id . "' " .
-			"AND    Comentarios.id_autor  = Usuarios.id";
+		$query = "" .
+			"SELECT DISTINCT Comments.*, Users.* " .
+			"FROM     Comments, Users " .
+			"WHERE    Comments.id_event  = '" . $event_id . "' " .
+			"AND      Comments.id_author = Users.id " .
+			"ORDER BY Comments.date DESC";
 
 		foreach ($mysqli->query($query) as $row)
 			$table[$index++] = $row;
@@ -64,7 +66,7 @@ class db_comment
 		$mysqli = db_core::connect();
 
 		$mysqli->query(
-			"INSERT INTO Comentarios (id_evento, id_autor, fecha, contenido) " .
+			"INSERT INTO Comments (id_event, id_author, date, body) " .
 			"VALUES (" .
 				"'"   . $event_id           . "'," .
 				"'"   . $user_id            . "'," .
@@ -79,7 +81,7 @@ class db_comment
 		$mysqli = db_core::connect();
 
 		$mysqli->query(
-			"DELETE FROM Comentarios " .
+			"DELETE FROM Comments " .
 			"WHERE  id = '" . $id . "'"
 		);
 	}
@@ -88,18 +90,12 @@ class db_comment
 	{
 		$mysqli = db_core::connect();
 
-		echo "UPDATE Comentarios SET  " .
-				"fecha     =     '" . date("Y-m-d H:i:s") . "'," .
-				"contenido =     '" . $comment['body']    . "'," .
-				"editado   = '1' " .
-			"WHERE Comentarios.id = '" . $comment['id'] . "'";
-
 		$mysqli->query(
-			"UPDATE Comentarios SET  " .
-				"fecha     =     '" . date("Y-m-d H:i:s") . "'," .
-				"contenido =     '" . $comment['body']    . "'," .
-				"editado   = '1' " .
-			"WHERE Comentarios.id = '" . $comment['id'] . "'"
+			"UPDATE Comments SET " .
+				"date   = '" . date("Y-m-d H:i:s") . "'," .
+				"body   = '" . $comment['body']    . "'," .
+				"edited = 'TRUE' " .
+			"WHERE Comments.id = '" . $comment['id'] . "'"
 		);
 	}
 }

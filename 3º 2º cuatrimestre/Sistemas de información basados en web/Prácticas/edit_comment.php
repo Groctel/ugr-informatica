@@ -14,7 +14,7 @@ $form_used = false;
 
 $user = db_user::get($_SESSION['user_id']);
 
-if (db_user::perms_geq($user['perm'], 'moderator') && isset($_GET['comment_id']))
+if (db_user::perm_geq($user['perm'], 'moderator') && isset($_GET['comment_id']))
 {
 	$comment = db_comment::get($_GET['comment_id']);
 

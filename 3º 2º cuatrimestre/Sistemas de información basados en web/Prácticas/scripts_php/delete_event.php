@@ -12,7 +12,7 @@ session_start();
 
 $user = db_user::get($_SESSION['user_id']);
 
-if (db_user::perms_geq($user['perm'], 'manager'))
+if (db_user::perm_geq($user['perm'], 'manager'))
 	db_event::delete($_GET['event_id']);
 
 header("Location: ../index.php");

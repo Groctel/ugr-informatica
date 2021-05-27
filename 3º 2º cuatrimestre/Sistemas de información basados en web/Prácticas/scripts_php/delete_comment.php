@@ -12,7 +12,7 @@ session_start();
 
 $user = db_user::get($_SESSION['user_id']);
 
-if (db_user::perms_geq($user['perm'], 'moderator'))
+if (db_user::perm_geq($user['perm'], 'moderator'))
 	db_comment::delete($_GET['comment_id']);
 
 header("Location: ../evento.php?event_id=" . $_GET['event_id']);

@@ -18,7 +18,7 @@ if (isset($_GET['event_id']))
 	{
 		$user = db_user::get($_SESSION['user_id']);
 
-		if (db_user::perms_geq($user['perm'], 'everyone'))
+		if (db_user::perm_geq($user['perm'], 'everyone'))
 		{
 			if (isset($_POST['comment']))
 			{

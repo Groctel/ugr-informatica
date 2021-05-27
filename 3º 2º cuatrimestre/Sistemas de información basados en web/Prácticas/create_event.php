@@ -12,28 +12,30 @@ session_start();
 
 $form_status = array(
 	'date'  => '',
-	'desc'  => '',
+	'body'  => '',
 	'img1'  => '',
 	'img2'  => '',
+	'tags'  => '',
 	'title' => '',
 	'used'  => false,
 );
 
 $user = db_user::get($_SESSION['user_id']);
 
-if (db_user::perms_geq($user['perm'], 'manager'))
+if (db_user::perm_geq($user['perm'], 'manager'))
 {
 	if ($_SERVER['REQUEST_METHOD'] === 'POST')
 	{
 		$form_status['date']  = $_POST['date'];
-		$form_status['desc']  = $_POST['desc'];
+		$form_status['body']  = $_POST['body'];
 		$form_status['img1']  = $_POST['img1'];
 		$form_status['img2']  = $_POST['img2'];
+		$form_status['tags']  = $_POST['tags'];
 		$form_status['title'] = $_POST['title'];
 		$form_status['used']  = true;
 
 		if (!empty($form_status['title']) && !empty($form_status['date']) &&
-			!empty($form_status['desc']) && !empty($form_status['img1']) &&
+			!empty($form_status['body']) && !empty($form_status['img1']) &&
 			!empty($form_status['img2'])
 		) {
 			$event_id = db_event::insert($form_status, $user['id']);

@@ -26,8 +26,8 @@
 			{% endif %}
 
 			<h2>Descripción</h2>
-			<textarea name="desc" rows="10" cols="99" placeholder="Descripción del evento.">{{event['desc']}}</textarea>
-			{% if form_used and not event['desc'] %}
+			<textarea name="body" rows="10" cols="99" placeholder="Descripción del evento.">{{event['body']}}</textarea>
+			{% if form_used and not event['body'] %}
 				<p class="error">Introduce la descripción del taller.</p>
 			{% endif %}
 
@@ -39,6 +39,10 @@
 			{% if form_used and (not event['img1'] or not event['img2']) %}
 				<p class="error">Introduce dos enlaces a imágenes.</p>
 			{% endif %}
+
+			<h2>Etiquetas</h2>
+			Separadas por comas:
+			<input type="text" name="tags" value="{{tags}}"/>
 
 			<button type="submit"><img src="/icon/material/done-24px.svg"></button>
 		</form>

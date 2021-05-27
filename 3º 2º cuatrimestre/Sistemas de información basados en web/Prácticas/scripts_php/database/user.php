@@ -8,7 +8,7 @@ class db_user
 		$mysqli = db_core::connect();
 
 		$mysqli->query(
-			"INSERT INTO Usuarios (correo, nombre, pass)" .
+			"INSERT INTO Users (mail, name, pass)" .
 			"VALUES (" .
 				"'"     . $mail . "'," .
 				"'"     . $name . "'," .
@@ -24,16 +24,16 @@ class db_user
 		$mysqli = db_core::connect();
 
 		$data = array(
-			'id'   => '-1',
+			'id'   => '',
 			'mail' => '',
 			'name' => '',
 			'perm' => '',
 		);
 
 		$res = $mysqli->query(
-			"SELECT id, correo, nombre, tipo " .
-			"FROM   Usuarios " .
-			"WHERE  id = '"    . $id . "'"
+			"SELECT id, mail, name, perm " .
+			"FROM   Users " .
+			"WHERE  id = '" . $id . "'"
 		);
 
 		if ($res->num_rows > 0)
@@ -41,9 +41,9 @@ class db_user
 			$row = $res->fetch_assoc();
 
 			$data['id']   = $row['id'];
-			$data['mail'] = $row['correo'];
-			$data['name'] = $row['nombre'];
-			$data['perm'] = $row['tipo'];
+			$data['mail'] = $row['mail'];
+			$data['name'] = $row['name'];
+			$data['perm'] = $row['perm'];
 		}
 
 		return $data;
@@ -55,9 +55,9 @@ class db_user
 		$id     = '';
 
 		$res = $mysqli->query(
-			"SELECT id, pass  " .
-			"FROM   Usuarios  " .
-			"WHERE  correo = '" . $mail . "'"
+			"SELECT id, pass " .
+			"FROM   Users    " .
+			"WHERE  mail =  '" . $mail . "'"
 		);
 
 		if ($res->num_rows > 0)
@@ -76,9 +76,9 @@ class db_user
 		$mysqli = db_core::connect();
 
 		$res = $mysqli->query(
-			"SELECT *         " .
-			"FROM   Usuarios  " .
-			"WHERE  correo = '" . $mail . "'"
+			"SELECT * "       .
+			"FROM   Users "   .
+			"WHERE  mail = '" . $mail . "'"
 		);
 
 		return ($res->num_rows > 0);
@@ -89,9 +89,9 @@ class db_user
 		$mysqli = db_core::connect();
 
 		$mysqli->query(
-			"UPDATE Usuarios       " .
-			"SET    correo      = '" . $mail . "'" .
-			"WHERE  Usuarios.id = '" . $id   . "'"
+			"UPDATE Users       " .
+			"SET    mail     = '" . $mail . "'" .
+			"WHERE  Users.id = '" . $id   . "'"
 		);
 	}
 
@@ -100,9 +100,9 @@ class db_user
 		$mysqli = db_core::connect();
 
 		$mysqli->query(
-			"UPDATE Usuarios       " .
-			"SET    pass        = '" . $pass . "'" .
-			"WHERE  Usuarios.id = '" . $id   . "'"
+			"UPDATE Users       " .
+			"SET    pass     = '" . $pass . "'" .
+			"WHERE  Users.id = '" . $id   . "'"
 		);
 	}
 
@@ -111,13 +111,13 @@ class db_user
 		$mysqli = db_core::connect();
 
 		$mysqli->query(
-			"update Usuarios       " .
-			"set    tipo        = '" . $perm . "'" .
-			"where  Usuarios.id = '" . $id   . "'"
+			"update Users       " .
+			"set    perm     = '" . $perm . "'" .
+			"where  Users.id = '" . $id   . "'"
 		);
 	}
 
-	static function perms_geq ($queried_perm, $required_perm)
+	static function perm_geq ($queried_perm, $required_perm)
 	{
 		$success = false;
 

@@ -1,5 +1,6 @@
 <?php
 require_once("core.php");
+require_once("tag.php");
 
 class db_event
 {
@@ -8,8 +9,8 @@ class db_event
 		$mysqli = db_core::connect();
 
 		$mysqli->query(
-			"DELETE FROM Eventos  " .
-			"WHERE  Eventos.id = '" . $id   . "'"
+			"DELETE FROM Events  " .
+			"WHERE  Events.id = '" . $id . "'"
 		);
 	}
 
@@ -18,48 +19,51 @@ class db_event
 		$mysqli = db_core::connect();
 
 		$mysqli->query(
-			"INSERT INTO Eventos (título, id_org, fecha, descripción, img1, img2)" .
+			"INSERT INTO Events (title, id_org, date, body, img1, img2)" .
 			"VALUES (" .
-				"'"   . $event['title'] . "'," .
-				"'"   . $id_org         . "'," .
-				"'"   . $event['date']  . "'," .
-				"'"   . $event['desc']  . "'," .
-				"'"   . $event['img1']  . "'," .
-				"'"   . $event['img2']  . "'"  .
+				"'"     . $event['title'] . "'," .
+				"'"     . $id_org         . "'," .
+				"'"     . $event['date']  . "'," .
+				"'"     . $event['body']  . "'," .
+				"'"     . $event['img1']  . "'," .
+				"'"     . $event['img2']  . "'"  .
 			")"
 		);
 
 		$event_id = "";
 
 		$res = $mysqli->query(
-			"SELECT id        " .
-			"FROM   Eventos   " .
-			"WHERE  título = '" . $event['title'] . "'" .
-			"AND    fecha  = '" . $event['date']  . "'"
+			"SELECT id "       .
+			"FROM   Events   " .
+			"WHERE  title = '" . $event['title'] . "'" .
+			"AND    date  = '" . $event['date']  . "'"
 		);
 
 		if ($res->num_rows > 0)
 		{
 			$row      = $res->fetch_assoc();
 			$event_id = $row['id'];
+			db_tag::insert_tags($event['tags'], $event_id);
 		}
 
 		return $event_id;
 	}
 
-	static function update ($event)
+	static function update ($event, $tags)
 	{
 		$mysqli = db_core::connect();
 
 		$mysqli->query(
-			"UPDATE Eventos SET  " .
-				"título      =   '" . $event['title'] . "'," .
-				"fecha       =   '" . $event['date']  . "'," .
-				"descripción =   '" . $event['desc']  . "'," .
-				"img1        =   '" . $event['img1']  . "'," .
-				"img2        =   '" . $event['img2']  . "'"  .
-			"WHERE Eventos.id = '" . $event['id']    . "'"
+			"UPDATE Events SET " .
+				"title = '" . $event['title'] . "'," .
+				"date  = '" . $event['date']  . "'," .
+				"body  = '" . $event['body']  . "'," .
+				"img1  = '" . $event['img1']  . "'," .
+				"img2  = '" . $event['img2']  . "'"  .
+			"WHERE Events.id = '" . $event['id'] . "'"
 		);
+
+		db_tag::update($event['id'], $tags);
 	}
 
 	static function get ($event_id)
@@ -67,11 +71,11 @@ class db_event
 		$mysqli = db_core::connect();
 
 		$event = array(
-			'id'     => '-1',
+			'id'     => '',
 			'title'  => '',
 			'id_org' => '',
 			'date'   => '',
-			'desc'   => '',
+			'body'   => '',
 			'img1'   => '',
 			'img2'   => ''
 		);
@@ -79,9 +83,9 @@ class db_event
 		if (db_core::is_cropped_md5($event_id))
 		{
 			$res = $mysqli->query(
-				"SELECT *"        .
-				"FROM   Eventos " .
-				"WHERE  id = '"   . $event_id . "'"
+				"SELECT * "      .
+				"FROM   Events " .
+				"WHERE  id = '"  . $event_id . "'"
 			);
 
 			if ($res->num_rows > 0)
@@ -90,10 +94,10 @@ class db_event
 
 				$event = array(
 					'id'     => $row['id'],
-					'title'  => $row['título'],
+					'title'  => $row['title'],
 					'id_org' => $row['id_org'],
-					'date'   => $row['fecha'],
-					'desc'   => $row['descripción'],
+					'date'   => $row['date'],
+					'body'   => $row['body'],
 					'img1'   => $row['img1'],
 					'img2'   => $row['img2']
 				);
@@ -109,7 +113,14 @@ class db_event
 		$table  = array();
 		$index  = 0;
 
-		foreach ($mysqli->query("SELECT id, título, img1 FROM Eventos") as $row)
+		$res = $mysqli->query(
+			"SELECT   id, title, img1 " .
+			"FROM     Events " .
+			"WHERE    Events.date > '" . date("Y-m-d H:i:s") . "' " .
+			"ORDER BY date"
+		);
+
+		foreach ($res as $row)
 			$table[$index++] = $row;
 
 		return $table;

@@ -20,8 +20,9 @@ if (isset($_SESSION['user_id']))
 	else if (isset($_SESSION['update_perms_form']))
 		$form_status = $_SESSION['update_perms_form'];
 
-	if (isset($_GET['user_id']))
-		$user_queried = db_user::get($_GET['user_id']);
+	if (isset($_GET['id']))
+		$user_queried = db_user::get($_GET['id']);
+
 
 	echo $twig->render('account.html', [
 		'user'         => $user,

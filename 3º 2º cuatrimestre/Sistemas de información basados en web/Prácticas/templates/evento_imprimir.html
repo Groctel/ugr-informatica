@@ -4,7 +4,7 @@
 	<link rel="stylesheet" href="/styles/evento_imprimir.css">
 {% endblock %}
 
-{% block titulo %}{{event['título']}}{% endblock %}
+{% block titulo %}{{event['title']}}{% endblock %}
 
 {% block main_body %}
 	<div class="textbox">
@@ -25,7 +25,7 @@
 					<img style="width: 170px; height: 170px" src={{event['img2']}}>
 				</div>
 			</div>
-			<div id="desc">{{event['desc'] | raw}}</div>
+			<div id="body">{{event['body'] | raw}}</div>
 		</div>
 	</div>
 </article>
