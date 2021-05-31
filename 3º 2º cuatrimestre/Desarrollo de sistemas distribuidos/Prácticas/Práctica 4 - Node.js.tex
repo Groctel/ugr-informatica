@@ -142,7 +142,7 @@ Este ejercicio se compone de cuatro partes:
 	\item\textbf{Servidor central:}
 		Gestiona la comunicación entre los componentes del sistema.
 	\item\textbf{Controlador de entorno:}
-		Interfaz que simula sensores de temperatura y luminosidad.
+		Interfaz que simula sensores de luminosidad, humedad y temperatura.
 	\item\textbf{Cliente del entorno:}
 		Interfaz de usuario en la que éste puede modificar el estado de las persianas y el aire acondicionado.
 	\item\textbf{Agente inteligente:}
@@ -162,12 +162,12 @@ El acceso a cada uno de los nodos se hace mediante su url:
 		\texttt{http://127.0.0.1:8080/env}
 \end{itemize}
 
-Cuando modificamos los sensores (luminosidad y temperatura) y los sistemas (aire y persianas) los sensores y el cliente envían respectivamente una actualización de los datos al servidor central, que reenvía a todo el mundo la información con los nuevos datos.
+Cuando modificamos los sensores (luminosidad, humedad y y temperatura) y los sistemas (aire y persianas) los sensores y el cliente envían respectivamente una actualización de los datos al servidor central, que reenvía a todo el mundo la información con los nuevos datos.
 Es decir, la interfaz desde la que se modifica el estado del sistema domótico no se actualiza hasta que el servidor central ha recibido la información y la ha transmitido con éxito.
 De esta forma nos aseguramos que la información presentada en las interfaces sea la que todos los nodos han recibido.
 Esto es útil porque el servidor central va guardando las actualizaciones de los sensores y los sistemas en una colección de la base de datos \texttt{mybd} del ejemplo de MongoDB, de forma que todos los clientes deben estar sincronizados a la última actualización presentada en el histórico de la base de datos.
 
 El agente toma decisiones sencillas y avisa a los usuarios de ellas.
-Si la temperatura sobrepasa los 45ºC enciende el aire y si la luminosidad llega al 80{\%} cierra las persianas.
-Por otro lado, apaga el aire si la temperatura baja de 35ºC y abre las persianas si la luminosidad baja del 70{\%}.
-Cuando la temperatura y la luminosidad cruzan sus máximos de 45ºC y 80{\%}, también envía una alerta a todos los clientes conectados, que se muestra en pantalla y bloquea las interfaces hasta que se resuelva usando la función \texttt{alert()}.
+Si la luminosidad llega al 80{\%} cierra las persianas, si la humedad sobrepasa el 65 {\%} enciende el purificador y si la temperatura sobrepasa los 45ºC enciende el aire.
+Por otro lado, abre las persianas si la luminosidad baja del 70{\%}, apaga el purificador si la humedad baja del 15{\%} y apaga el aire si la temperatura baja de 35ºC, todo ello si el usuario no ha modificado su estado explícitamente.
+Cuando la luminosidad, la humedad y la temperatura cruzan sus máximos de 80{\%}, 65{\%} y 45ºC respectivamente, también envía una alerta a todos los clientes conectados, que se muestra en pantalla y bloquea las interfaces hasta que se resuelva usando la función \texttt{alert()}.
