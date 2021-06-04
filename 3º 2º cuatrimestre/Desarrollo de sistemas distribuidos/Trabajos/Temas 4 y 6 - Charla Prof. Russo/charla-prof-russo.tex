@@ -1,0 +1,97 @@
+\documentclass[runningheads]{llncs}
+
+\usepackage[spanish]{babel}
+	\selectlanguage{spanish}
+
+\title{Modelos \textit{middleware} y arquitecturas en sistemas distribuidos}
+
+\author{Atanasio José Rubio Gil}
+\institute{Universidad de Granada, 18010 Granada, España}
+
+\begin{document}
+\maketitle
+
+\begin{center}
+\keywords{\textit{Middleware} \and Sistemas distribuidos}
+\end{center}
+
+\section{Definiciones}
+
+Llamamos sistemas distribuidos a aquellos sistemas cuyos componetes se comunican exclusivamente mediante intercambio de mensajes a traves de una red de conexión.
+Estos sistemas realizan operaciones de forma concurrente, de manera que todos los nodos cooperan para alcanzar un objetivo.
+Sin embargo, la propia naturaleza del sistema implica que uno de los nodos puede no lograr completar una de sus tareas de forma correcta, afectando a las tareas que están intentado realizar el resto.
+Éste y otros factores, como la escalabilidad, seguridad y falta de heterogeneidad (los nodos deben cooperar y competir por los recursos del sistema), presentan desafíos de diseño a la hora de crear estos sistemas.
+Para minimzar la necesidad de afrontar dichos desafíos, existen sistemas \textit{middleware} que los abordan y proponen una solución para que los programadores las adopten.
+
+Cuando hablamos de \textit{middleware} nos referimos a piezas de \textit{software} que crean una capa de abstracción entre el sistema operativo y el programa que estamos escribiendo.
+Dado que hablan directamente con el S.O., son una solución a bajo nivel con una interfaz de un nivel más alto que permiten al programador trabajar con la eficiencia y complejidad de un sistema de bajo nivel pero sin perder toda la productividad y facilidad de trabajo de un sistema de alto nivel.
+
+\section{Sistemas \textit{middleware}}
+
+\subsection{RPC\@: \textit{Remote Procedure Call}}
+
+RPC nos permite realizar a una llamada a un procedimiento (o función) que se encuentra en un nodo remoto, distinto al nuestro.
+Para que esto funcione, tanto el proceso invocante como el invocado deben conocer la interfaz y estructuras de datos con las que van a trabajar.
+RPC se encarga de crear un\textit{stub} para los procesos cliente y servidor que automatiza el proceso de empaquetado, envío, recepción y desempaquetado de los datos y que permite que tanto el cliente como el servidor puedan realizar las llamdas al procedimiento remoto de la misma forma que si estuvieran llamando a un procedimiento local.
+
+\subsection{MOM\@: \textit{Message Oriented Middleware}}
+
+Este sistema abstrae colas de mensajes que los procesos se mandan entre sí, permitiendo emisión de mensajes de uno a uno o a muchos procesos indistintamente.
+MOM representa un modelo productor---consumidor con mensajes tipados, de forma que el consumidor debe elegir qué tipos de mensaje va a consumir en cada momento.
+Estos mensajes se almacenan en una cola gestionada por MOM que consultan los consumidores, con la ventaja de que los mensajes cuya trasnmisión no finaliza con éxito quedan alamecenados en la cola para posteriores consultas.
+
+\subsection{TS\@: \textit{Tuple Space Model}}
+
+TS es un sistema que sigue el patrón de diseño \textit{Pizarra}\cite{design-patterns} sobre la cual los procesos escritores publican tuplas de mensajes que consultan los procesos lectores, creando un espacio virtual compartido que pueden consultar todos los procesos.
+El acceso a las tuplas se hace mediante su tipo y contenido, no mediante su dirección, de forma que el programador no debe gestionar más que los metadatos del mensaje que desea consultar.
+
+\subsection{DOM\@: \textit{Distributed Objects Middleware}}
+
+En programación orientada a objetos, los objetos son estructuras que encapsulan funciones y estructuras de datos accesibles mediante una interfaz.
+Esta encapsulación ofrece al desarrollador una abstracción de los datos con los que trabaja, de forma que la solución que escribe es muchísimo más cercana al problema que a la arquitectura del sistema.
+
+Los sistemasa de objetos distribuidos se basan en RPC para realizar las llamadas a las funciones públicas de los objetos alojados en otros nodos.
+Debido a la complejidad de la gestión de objetos en un sistema distribuido descentralizado, que muy fácilmente puede convertirse en una sesión de malabarismo programático, se utiliza una arquitectura cliente---servidor que obliga a que las comunicaciones sean iniciadas siempre por el cliente.
+Para ello, al igual que en RPC, se crean \textit{stubs} que unifican las estructuras de datos y llamadas a funciones y permiten al programador trabajar con invocaciones a llamadas locales.
+
+Un problema que se da en estos sistemas es que el \textit{stub} no permite conocer la estructura interna de los objetos.
+La forma de subsanar este problema es mediante la gestión de un registro de los objetos creados en el sistema y sus propiedades y relaciones, de forma que los usuarios puedan consultarlo y acceder a ellos y a los objetos que puedan contener.
+
+\subsection{SOA\@: \textit{Service Oriented Architectures}}
+
+El enfoque de servicios en sistemas distribuidos permite a los desarrolladores aprovechar las ventajas de la ligadura débil, la independencia de los protocolos de comunicación utilizado y la estandarización de sus interfaces.
+Estos servicios se componen de proveedores, que ofrecen servicios a los consumidores para que los consuman.
+Para ello, deben estar localizables en un registro accesible por ambas partes.
+
+\subsubsection{Microservicios}
+
+Un subconjunto de las arquitecturas orientadas a servicios son los microservicios.
+El concepto es el mismo que el de los SOA, pero tiene la particularidad de que cada microservicio encapsula una funcionalidad del sistema (análogamente a la diferencia entre un \textit{kernel} monolítico y \textit{microkernel} en sistemas operativos).
+Esta encapsulación, al igual que en los \textit{kernels}, hace que el sistema sea más robusto en cuanto a los efectos adversos de fallos en el mismo, ya que un defecto de ejecución en una unidad no derriba el sistema, sino que sólo afecta a una funcionalidad específica hasta que se recupere.
+
+\section{\textit{Blockchain}}
+
+Por último, \textit{Blockchain} es una tecnología de gestión de transacciones totalmente descentralizada puesta en práctica por primera vez por el proyecto Bitcoin\cite{bitcoin}.
+Internamente, \textit{Blockchain} gestiona una lista enlazada de bloques (\textit{a chain of blocks}) que almacenan el código y valor de múltiples transacciones realizadas.
+Su verificación depende de la ejecución de una gran cantidad de iteraciones de funciones criptográficas hasta encontrar un resultado que cumpla una propiedad numérica buscada, de forma que la validez de los bloques se determina por la cantidad de trabajo computacional utilizado en su verificación.
+
+\section{Conlusión y valoraciones personales}
+
+La exposición de Stefano Russo ofrece un punto de vista general e histórico de los sistemas distribuidos a través del enfoque de las tecnologías \textit{middleware} utilizadas para su gestión.
+Estas tecnologías han avanzado junto con el resto de disciplinas informáticas, de forma que se han adaptado a la orientación a objetos a la vez que ésta ha ido ocupando su puesto como paradigma de programación dominante y luego se han ido centrando en los SOA y microservicios.
+La tecnología \textit{Blockchain} es uno de los máximos exponentes (si no el máximo) del desarrollo de sistemas distribuidos, ya que permite descentralizar totalmente el sistema bancario, que ha sido controlado por un número reducido de entidades desde cientos de años antes de Cristo.
+Desgraciadamente, es un sistema que requiere de muchísima potencia computacional y, por ello, energía, por lo que su distribución resulta muy contaminante para el planeta.
+Por otro lado, resulta chocante que un sistema que se presenta como descentralizado se utilice para especular con divisas tradicionales y centralizadas.
+Personalmente, creo que es una pena que una idea tan brillante como el \textit{Blockchain} y tan libre como una divisa descentralizada sea un componente dañino más del sistema capitalista que nos rodea.
+
+\begin{thebibliography}{8}
+\bibitem{russo}
+	Russo, S.: Middleware Models and Architectures for Univ\@. of Granada (6 May. 2021).
+
+\bibitem{design-patterns}
+	Gamma, E., Helm, R., Johnson, R., Vlissides, J.: Design Patterns: Elements of Reusable Object-Oriented Software. 2ª ed. Addison-Wesley, EE\@.UU\@. (1994).
+
+\bibitem{bitcoin}
+	Nakamoto, S.: Bitcoin: A Peer-to-Peer Electronic Cash System (2008). Recuperado de \url{https://bitcoin.org/bitcoin.pdf} en 4 de junio de 2021.
+\end{thebibliography}
+\end{document}
