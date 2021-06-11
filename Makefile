@@ -15,6 +15,7 @@ FIS      = $(C22)/Fundamentos\ de\ la\ ingeniería\ del\ software
 IA       = $(C22)/Inteligencia\ artificial
 MC       = $(C31)/Modelos\ de\ computación
 SG       = $(C21)/Sistemas\ gráficos
+SIBW     = $(C32)/Sistemas\ de\ información\ basados\ en\ web
 SO       = $(C21)/Sistemas\ operativos
 
 AC_OUT   = $(BIN)/"Arquitectura\ de\ computadores"
@@ -26,6 +27,7 @@ FIS_OUT  = $(BIN)/"Fundamentos\ de\ la\ ingeniería\ del\ software"
 IA_OUT   = $(BIN)/"Inteligencia\ artificial"
 MC_OUT   = $(BIN)/"Modelos\ de\ computación"
 SG_OUT   = $(BIN)/"Sistemas\ gráficos"
+SIBW_OUT = $(BIN)/"Sistemas\ de\ información\ basados\ en\ web"
 SO_OUT   = $(BIN)/"Sistemas\ operativos"
 
 AQADEMIA = $${HOME}/texmf/tex/latex/aqademia/
@@ -94,7 +96,7 @@ despedida:
 c21: ed so
 c22: ac alg fbd fis ia
 c31: mc
-c32: ds sg
+c32: ds sg sibw
 
 ac:
 	@$(MAKE) -s -C $(AC) OUT=$(AC_OUT)
@@ -131,6 +133,10 @@ mc:
 sg:
 	@$(MAKE) -s -C $(SG) OUT=$(SG_OUT)
 	$(call limpiatex, $(SG))
+
+sibw:
+	@$(MAKE) -s -C $(SIBW) OUT=$(SIBW_OUT)
+	$(call limpiatex, $(SIBW))
 
 so:
 	@$(MAKE) -s -C $(SO) OUT=$(SO_OUT)
