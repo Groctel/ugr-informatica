@@ -1,0 +1,19 @@
+{% extends "main.html" %}
+
+{% block head %}
+	<link rel="stylesheet" href="/styles/index.css">
+{% endblock %}
+
+{% block main_body %}
+	<div id="grid-talleres">
+		{% for ev in events %}
+		<a href="evento.php?event_id={{ev['id']}}">
+			<div class="imagen-taller">
+				<img src="{{ev['img1']}}">
+			</div>
+			<h1>{{ev['title']}}</h1>
+			</a>
+		</a>
+		{% endfor %}
+	</div>
+{% endblock %}

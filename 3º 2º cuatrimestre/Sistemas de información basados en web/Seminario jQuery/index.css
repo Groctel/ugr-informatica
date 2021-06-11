@@ -1,0 +1,25 @@
+body
+{
+	margin: 0 30%;
+}
+
+.seccion
+{
+	color: blue;
+}
+
+#bloque_animado
+{
+	padding: 20px;
+	background-color: #dedede;
+}
+
+#cuadrado
+{
+	background-color: red;
+	height: 50px;
+	width: 50px;
+	position: absolute;
+	top: 550px;
+	right: 32%;
+}

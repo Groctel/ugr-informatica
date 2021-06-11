@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Demo JQuery</title>
+	<link rel="stylesheet" href="index.css">
+	<script type="module" src="script-seminario.js" defer></script>
+</head>
+<body>
+	<h1 id="titulo">Seminario JQuery</h1>
+	<h5>Atanasio José Rubio Gil</h5>
+
+	<p>
+		Esta página no tiene <span>ninguna funcionalidad</span> por defecto.
+		¡Ve <span>descomentando poco a poco</span> elementos del script para ver cómo funciona JQuery!
+	</p>
+
+	<h2 class="seccion">0: Instalación</h2>
+	<p>
+		La <a href="https://jquery.com/download/">página oficial de JQuery</a> ofrece varias opciones de instalación.
+		En este seminario hemos usado un módulo de node siguendo las siguientes instrucciones:
+	</p>
+
+	<p>
+		<tt>npm install</tt><br>
+		<tt>python -m http.server</tt>
+	</p>
+
+	<p>
+		Ten en cuenta que puedes usar <tt>yarn</tt> en lugar de <tt>npm</tt> sin problemas y que la instalación se hace automática porque se proporciona un fichero <tt>package.json</tt>, por lo que no necesitas inicializar el paquete.
+	</p>
+
+	<h2 class="seccion">1: Selectores</h2>
+	<p>
+		Los selectores son extremadamente útiles porque nos permiten encontrar elementos en la página en alrededor de 10 caracteres.
+		Una cosa muy chula que nos permiten hacer es modificar elementos de una lista seleccionados paramétricamente:
+	</p>
+
+	<div id="cuadrado"></div>
+	<h3>Invitados a mi fiesta:</h3>
+	<ul>
+		<li>Pedro</li>
+		<li>Paco</li>
+		<li>Luis</li>
+		<li>Carmen</li>
+		<li>José</li>
+		<li>José otra vez</li>
+	</ul>
+
+	<h2 class="seccion">2: Eventos</h2>
+	<p>
+		Los eventos son muy útiles para ejecutar acciones cuando el usuario realiza una acción en la página.
+		Prueba a descomentar algunos eventos en el script, pulsar el botón y ver qué ocurre:
+	</p>
+	<button type="submit" id="boton1">Púlsame</button>
+	<h1 id="bloque_animado">Bloque animado</h1>
+	<p>
+		Una cosa muy interesante es que muchas funcionalidades son como los Sith: necesitan dos funciones que las gestionen.
+		Por ejemplo, <tt>slideUp</tt> y <tt>slideDown</tt> son dos funciones opuestas.
+		Para estos casos, siempre hay una versión <tt>toggle</tt> (como <tt>slideToggle</tt>) que comprueba el estado del objeto y ejecuta la función que lo modifique al opuesto.
+	</p>
+</body>
+</html>

@@ -1,0 +1,58 @@
+article
+{
+	background-color: #ffffff;
+}
+
+form
+{
+	margin-top: 50px;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	width: 205px;
+}
+
+form h2
+{
+	margin: 0;
+}
+
+form input
+{
+	font-size: 14px;
+	color: #1d1d1d;
+	margin-bottom: 20px;
+}
+
+form button
+{
+	background-color: #ffffff;
+	border: none;
+	margin-right: auto;
+	margin-left: auto;
+	display: block;
+}
+
+form button img
+{
+	width: 50px;
+}
+
+body
+{
+	font-family: 'Open Sans';
+	font-size: 16px;
+	margin: 0 auto;
+	max-width: 1000px;
+}
+
+p
+{
+	text-align: center;
+}
+
+p b a
+{
+	text-decoration: none;
+	color: #000000;
+}

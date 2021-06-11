@@ -1,0 +1,157 @@
+.textbox
+{
+	background-color: white;
+	margin: 10px;
+	padding: 5px 10px;
+	border-radius: 10px;
+	min-height: 470px;
+}
+
+.textbox #comentarios
+{
+	margin-top: 15px;
+	height: 0;
+	overflow: hidden;
+	transition: 0.5s;
+}
+
+.textbox #comentarios form
+{
+	margin: 15px;
+}
+
+.textbox #comentarios form #autor
+{
+	display: grid;
+	grid-template-columns: auto auto;
+	padding-bottom: 15px;
+	margin-right: 3px;
+}
+
+.textbox #comentarios form #enviar
+{
+	padding-top: 15px;
+}
+
+.textbox #comentarios form #enviar button
+{
+	float: right;
+	margin-right: 20px;
+}
+
+.textbox #comentarios #caja-comentario
+{
+	margin: 10px;
+	padding: 15px 20px;
+	border-radius: 25px;
+	box-shadow: 0 0px 10px 0px rgba(0, 0, 0, 0.2);
+}
+
+.textbox #comentarios #caja-comentario #autor
+{
+	margin-bottom: 5px;
+}
+
+.textbox #comentarios #caja-comentario #autor #nombre
+{
+	font-size: 16px;
+	font-weight: bold;
+}
+
+.textbox #comentarios #caja-comentario #autor #email
+{
+	font-size: 12px;
+	color: #1d1d1d;
+	margin-left: 10px;
+}
+
+.textbox #comentarios #caja-comentario #autor #fecha
+{
+	font-size: 12px;
+	color: #1d1d1d;
+	margin-left: 10px;
+}
+
+.textbox #titulo-taller
+{
+	margin-top: 10px;
+	font-family: 'Montserrat';
+	font-size: 35px;
+	font-weight: bold;
+	text-transform: uppercase;
+}
+
+.textbox #titulo-taller a
+{
+	float: right;
+	margin: 0 10px 10px 10px;
+}
+
+.textbox #titulo-taller a img
+{
+	width: 30px;
+}
+
+.textbox #datos-taller
+{
+	font-family: 'Montserrat';
+	font-size: 20px;
+	font-weight: bold;
+}
+
+.textbox #descripcion-taller
+{
+	margin-top: 30px;
+}
+
+.textbox #descripcion-taller #imagenes
+{
+	float: right;
+	margin: 0 10px;
+}
+
+.textbox #descripcion-taller #imagenes #contenedor
+{
+	padding: 10px;
+	border-radius: 10px;
+	background-color: #e3e3e3;
+	overflow:hidden;
+	background-size:cover;
+	margin-bottom: 10px;
+}
+
+.textbox #descripcion-taller #imagenes #contenedor img
+{
+	transition: transform .2s;
+	transition-timing-function: linear;
+}
+
+.textbox #descripcion-taller #imagenes #contenedor img:hover
+{
+	transform: scale(1.5);
+}
+
+.textbox #descripcion-taller #boton-comentarios
+{
+	font-size: 17px;
+	font-weight: bold;
+}
+
+.textbox #descripcion-taller #boton-comentarios:hover
+{
+	text-decoration: underline;
+}
+
+a
+{
+  text-decoration: none;
+  color: black;
+}
+
+button
+{
+  background-color: #FFFFFF;
+  border: none;
+  text-decoration: none;
+  display: inline-block;
+}

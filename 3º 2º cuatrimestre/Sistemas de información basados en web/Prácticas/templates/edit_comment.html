@@ -1,0 +1,23 @@
+{% extends "main.html" %}
+
+{% block head %}
+	<link rel="stylesheet" href="/styles/create_event.css">
+{% endblock %}
+
+{% block titulo %}Editar evento{% endblock %}
+
+{% block main_body %}
+	<div class="textbox">
+		<h1>Editar comentario:</h1>
+		<form action="edit_comment.php?comment_id={{comment['id']}}" method="post">
+			<h2>Contenido</h2>
+			<textarea name="body" rows="10" cols="99" placeholder="Descripción del evento.">{{comment['body']}}</textarea>
+			{% if form_used and not comment['body'] %}
+				<p class="error">El cuerpo del comentario no puede estar vacío.</p>
+			{% endif %}
+
+			<button type="submit"><img src="/icon/material/done-24px.svg"></button>
+		</form>
+	</div>
+</article>
+{% endblock %}

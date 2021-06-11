@@ -1,0 +1,74 @@
+#grid-talleres
+{
+	background-color: white;
+	margin: 10px;
+	padding: 10px;
+	border-radius: 10px;
+	display: grid;
+	grid-gap: 10px;
+	grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+	grid-template-rows: minmax(100px, auto);
+}
+
+#grid-talleres a
+{
+	display: grid;
+	grid-template-rows: auto auto;
+	border-radius: 10px;
+	background-color: #e3e3e3;
+	width: 170px;
+	height: 200px;
+	text-decoration: none;
+	margin-left: auto;
+	margin-right: auto;
+	overflow: hidden;
+	transition: box-shadow .2s;
+}
+
+#grid-talleres a:hover img
+{
+	transform: scale(1.5);
+}
+
+#grid-talleres a:hover
+{
+	box-shadow: 0 0px 5px 0px rgba(0, 0, 0, 0.8);
+}
+
+#grid-talleres a:hover h1
+{
+	background-color: #4e4e4e;
+	color: white;
+	padding-bottom: 10px;
+}
+
+#grid-talleres a h1
+{
+	background-color: #e3e3e3;
+	font-size: 13px;
+	font-weight: bold;
+	text-align: center;
+	color: black;
+	transition: background .18s, padding-bottom .18s, color .18s;
+	transition-timing-function: linear;
+	margin: 0;
+}
+
+#grid-talleres a .imagen-taller
+{
+	vertical-align: middle;
+	overflow: hidden;
+}
+
+#grid-talleres a .imagen-taller img
+{
+	border-radius: 10px;
+	margin-top: 10px;
+	width: 150px;
+	height: 150px;
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+	transition: transform .2s;
+}
+

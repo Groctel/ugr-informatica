@@ -2,6 +2,7 @@ bin/
 doc/
 node_modules/
 obj/
+vendor/
 .cache/
 
 *.aux

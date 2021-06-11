@@ -1,0 +1,51 @@
+{% extends "main.html" %}
+
+{% block head %}
+	<link rel="stylesheet" href="/styles/create_event.css">
+{% endblock %}
+
+{% block titulo %}Nuevo evento{% endblock %}
+
+{% block main_body %}
+	<div class="textbox">
+		<h1>Crea un nuevo evento:</h1>
+		<form action="create_event.php" method="post">
+			<h2>Título</h2>
+			<input type="text" name="title" value="{{form_status['title']}}"/>
+			{% if form_status['used'] and not form_status['title'] %}
+				<p class="error">Introduce un título para el taller.</p>
+			{% endif %}
+
+			<input type="checkbox" id="hidden" name="hidden" value="hidden" {% if form_status['hidden'] %} checked {% endif %}>
+			<label for="hidden"> Oculto</label>
+
+			<h2>Fecha</h2>
+			<input type="date" name="date" value="{{form_status['date']}}"/>
+			{% if form_status['used'] and not form_status['date'] %}
+				<p class="error">Introduce un fecha para el taller.</p>
+			{% endif %}
+
+			<h2>Descripción</h2>
+			<textarea name="body" rows="10" cols="99" placeholder="Descripción del evento.">{{form_status['body']}}</textarea>
+			{% if form_status['used'] and not form_status['body'] %}
+				<p class="error">Introduce la descripción del taller.</p>
+			{% endif %}
+
+			<h2>Imágenes</h2>
+			Imagen principal:
+				<input type="text" name="img1" value="{{form_status['img1']}}"/>
+			Imagen secundaria:
+				<input type="text" name="img2" value="{{form_status['img2']}}"/>
+			{% if form_status['used'] and (not form_status['img1'] or not form_status['img2']) %}
+				<p class="error">Introduce dos enlaces a imágenes.</p>
+			{% endif %}
+
+			<h2>Etiquetas</h2>
+			Separadas por comas:
+			<input type="text" name="tags" value="{{form_status['tags']}}"/>
+
+			<button type="submit"><img src="/icon/material/done-24px.svg"></button>
+		</form>
+	</div>
+</article>
+{% endblock %}

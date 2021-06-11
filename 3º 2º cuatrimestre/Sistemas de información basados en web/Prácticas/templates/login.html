@@ -1,0 +1,26 @@
+{% extends "main.html" %}
+
+{% block head %}
+	<link rel="stylesheet" href="/styles/register.css">
+{% endblock %}
+
+{% block navbar %} {% endblock %}
+
+{% block main_body %}
+	<form action="login.php" method="post">
+		<h2>Correo</h2>
+			<input type="text" name="mail" value="{{form_status['mail']}}"/>
+		<h2>Contraseña</h2>
+			<input type="password" name="pass" value=""/>
+			{% if form_status['used'] == true %}
+				<p class="error">Los datos introducidos no son correctos.</p>
+			{% endif %}
+		<button type="submit"><img src="/icon/material/login-24px.svg"></button>
+	</form>
+
+	<p>
+		¿No tienes cuenta de usuario? <b><a href="register.php">Regístrate</a></b>
+	</p>
+{% endblock %}
+
+{% block footer %} {% endblock %}
