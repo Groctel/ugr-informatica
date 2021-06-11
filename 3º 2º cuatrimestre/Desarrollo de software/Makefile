@@ -12,6 +12,9 @@ github:
 	@pdflatex "DS - GitHub.tex" > /dev/null
 
 practicas:
+	@printf "\033[1;33m-> \033[34mCopiando\033[0m \"%s\"...\n" \
+	        "Práctica 1"
+	@cp -r "Prácticas/Práctica 1/" $(OUT)
 	@printf "\033[1;33m-> \033[34mCompilando\033[0m \"%s.pdf\"...\n" \
 	        "DS - Prácticas"
 	@pdflatex "DS - Prácticas.tex" > /dev/null

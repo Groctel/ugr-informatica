@@ -4,6 +4,7 @@ node_modules/
 obj/
 vendor/
 .cache/
+.ccls-cache/
 
 *.aux
 *.log

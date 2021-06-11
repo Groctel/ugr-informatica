@@ -13,13 +13,13 @@ problemas:
 
 practicas:
 	@printf "\033[1;33m-> \033[34mCompilando\033[0m \"%s.pdf\"...\n" \
-	        "AC - Prácticas"
+	        "MC - Prácticas"
 	@pdflatex "MC - Prácticas.tex" > /dev/null
 	@pdflatex "MC - Prácticas.tex" > /dev/null
 
 teoria:
 	@printf "\033[1;33m-> \033[34mCompilando\033[0m \"%s.pdf\"...\n" \
-	        "AC - Teoría"
+	        "MC - Teoría"
 	@pdflatex "MC - Teoría.tex" > /dev/null
 	@pdflatex "MC - Teoría.tex" > /dev/null
 

@@ -81,7 +81,7 @@ lscpu
 El PC tiene $12$ núcleos lógicos y el \textit{atcgrid} tiene $24$ núcleos lógicos:
 
 \[\begin{split}
-           & \text{nº núcleos lógicos}=\text{sockets}\cdot\text{cores per socket}\cdot\text{threads per core}\\
+           & \text{n$^\circ$ núcleos lógicos}=\text{sockets}\cdot\text{cores per socket}\cdot\text{threads per core}\\
 PC\ \      & 1\cdot6\cdot2=12 \\
 \textit{atcgrid}\ \ & 2\cdot6\cdot2=24
 \end{split}\]
@@ -249,13 +249,13 @@ cat slurm-54392.out
 # Directorio de trabajo (en el que se ejecuta el script): /home/d1estudiante24/bp0/ejer3
 # Cola: ac
 # Nodo que ejecuta este trabajo:atcgrid.ugr.es
-# Nº de nodos asignados al trabajo: 1
+# N$^\circ$ de nodos asignados al trabajo: 1
 # Nodos asignados al trabajo: atcgrid1
 # CPUs por nodo: 24
 #
-# 1. Ejecución helloOMP una vez sin cambiar nº de threads (valor por defecto):
+# 1. Ejecución helloOMP una vez sin cambiar n$^\circ$ de threads (valor por defecto):
 # (8:Hello)(3:Hello)(5:Hello)(7:Hello)(11:Hello)(6:Hello)(1:Hello)(9:Hello)(4:Hello)(0:Hello)(2:Hello)(10:Hello)(0:World)
-# 2. Ejecución helloOMP varias veces con distinto nº de threads:
+# 2. Ejecución helloOMP varias veces con distinto n$^\circ$ de threads:
 #
 #   - Para 12 threads:(1:Hello)(8:Hello)(2:Hello)(11:Hello)(10:Hello)(9:Hello)(0:Hello)(7:Hello)(5:Hello)(4:Hello)(6:Hello)(3:Hello)(0:World)
 #   - Para 6 threads:(3:Hello)(0:Hello)(5:Hello)(4:Hello)(2:Hello)(1:Hello)(0:World)
@@ -333,7 +333,7 @@ En la columna ``Bytes de un vector'' hay que poner el total de bytes reservado p
 \begin{center}
 \begin{table}[!h]
 \begin{tabular}{r r r r r}
-\textbf{Componentes} & \textbf{Bytes por vector} & \textbf{Tº vect. locales} & \textbf{Tº vect. globales} & \textbf{Tº vect. dinámicos} \\
+\textbf{Componentes} & \textbf{Bytes por vector} & \textbf{T$^\circ$ vect. locales} & \textbf{T$^\circ$ vect. globales} & \textbf{T$^\circ$ vect. dinámicos} \\
 \toprule
 65536                   & 524288                      & 0                         & 0                          & 0                           \\
 131072                  & 1048576                     & 0                         & 0                          & 0                           \\
@@ -352,7 +352,7 @@ En la columna ``Bytes de un vector'' hay que poner el total de bytes reservado p
 
 \begin{table}[!h]
 \begin{tabular}{r r r r r}
-\textbf{Componentes} & \textbf{Bytes por vector} & \textbf{Tº vect. locales} & \textbf{Tº vect. globales} & \textbf{Tº vect. dinámicos} \\
+\textbf{Componentes} & \textbf{Bytes por vector} & \textbf{T$^\circ$ vect. locales} & \textbf{T$^\circ$ vect. globales} & \textbf{T$^\circ$ vect. dinámicos} \\
 \toprule
 65536                & 524288                    & 0                         & 0                          & 0                           \\
 131072               & 1048576                   & 0                         & 0                          & 0                           \\

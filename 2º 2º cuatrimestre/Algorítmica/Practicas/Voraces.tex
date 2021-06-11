@@ -82,7 +82,7 @@ Begin
 		if isBridge(start, v), then decrease v_count by 1
 		cnt = dfs(start, v, visited)
 		if difference between cnt and v_count <= 2, then
-			print the edge (start →‡ v)
+			print the edge (start -> v)
 			if isBridge(v, start), then decrease v_count by 1
 			remove edge from start and v
 			decrease edge by 1

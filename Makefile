@@ -13,8 +13,9 @@ ED       = $(C21)/Estructuras\ de\ datos
 FBD      = $(C22)/Fundamentos\ de\ bases\ de\ datos
 FIS      = $(C22)/Fundamentos\ de\ la\ ingeniería\ del\ software
 IA       = $(C22)/Inteligencia\ artificial
+IG       = $(C31)/Informática\ gráfica
 MC       = $(C31)/Modelos\ de\ computación
-SG       = $(C21)/Sistemas\ gráficos
+SG       = $(C32)/Sistemas\ gráficos
 SIBW     = $(C32)/Sistemas\ de\ información\ basados\ en\ web
 SO       = $(C21)/Sistemas\ operativos
 
@@ -25,6 +26,7 @@ ED_OUT   = $(BIN)/"Estructuras\ de\ datos"
 FBD_OUT  = $(BIN)/"Fundamentos\ de\ bases\ de\ datos"
 FIS_OUT  = $(BIN)/"Fundamentos\ de\ la\ ingeniería\ del\ software"
 IA_OUT   = $(BIN)/"Inteligencia\ artificial"
+IG_OUT   = $(BIN)/"Informática\ gráfica"
 MC_OUT   = $(BIN)/"Modelos\ de\ computación"
 SG_OUT   = $(BIN)/"Sistemas\ gráficos"
 SIBW_OUT = $(BIN)/"Sistemas\ de\ información\ basados\ en\ web"
@@ -125,6 +127,10 @@ fis:
 ia:
 	@$(MAKE) -s -C $(IA) OUT=$(IA_OUT)
 	$(call limpiatex, $(IA))
+
+ig:
+	@$(MAKE) -s -C $(IG) OUT=$(IG_OUT)
+	$(call limpiatex, $(IG))
 
 mc:
 	@$(MAKE) -s -C $(MC) OUT=$(MC_OUT)

@@ -13,8 +13,8 @@ practica3:
 reto2:
 	@printf "\033[1;33m-> \033[34mCompilando\033[0m \"%s.pdf\"...\n" \
 	        "ED - Reto 2"
-	@xelatex "ED - Reto 2.tex" > /dev/null
-	@xelatex "ED - Reto 2.tex" > /dev/null
+	@pdflatex "ED - Reto 2.tex" > /dev/null
+	@pdflatex "ED - Reto 2.tex" > /dev/null
 
 reto3:
 	@printf "\033[1;33m-> \033[34mCopiando\033[0m \"%s\"...\n" \
