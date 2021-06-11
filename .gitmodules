@@ -7,3 +7,6 @@
 [submodule "2º 2º cuatrimestre/Fundamentos de la ingeniería del software/Prácticas"]
 	path = 2º 2º cuatrimestre/Fundamentos de la ingeniería del software/Prácticas
 	url = git@github.com:Groctel/FIS-1920
+[submodule "3º 2º cuatrimestre/Desarrollo de software/Prácticas/Práctica 1"]
+	path = 3º 2º cuatrimestre/Desarrollo de software/Prácticas/Práctica 1
+	url = https://github.com/Groctel/DS21

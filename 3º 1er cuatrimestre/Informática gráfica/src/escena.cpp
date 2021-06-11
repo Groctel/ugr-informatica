@@ -49,19 +49,19 @@ Escena :: Escena () noexcept
 		{0.393548f, 0.271906f, 0.166721f, 1.0f},
 		25.6f
 	)),
-   cromo (new Material(
+	cromo (new Material(
 		{0.25f,     0.25f,     0.25f,     1.0f},
 		{0.4f,      0.4f,      0.4f,      1.0f},
 		{0.774597f, 0.774597f, 0.774597f, 1.0f},
 		76.8f
 	)),
-   goma_negra (new Material(
+	goma_negra (new Material(
 		{0.02f, 0.02f, 0.02f, 1.0f},
 		{0.01f, 0.01f, 0.01f, 1.0f},
 		{0.4f,  0.4f,  0.4f,  1.0f},
 		10.0f
 	)),
-   estanio (new Material(
+	estanio (new Material(
 		{0.105882f, 0.058824f, 0.113725f, 1.0f},
 		{0.427451f, 0.470588f, 0.541176f, 1.0f},
 		{0.333333f, 0.333333f, 0.521569f, 1.0f},
@@ -73,7 +73,7 @@ Escena :: Escena () noexcept
 		{0.992157f, 0.941176f, 0.807843f, 1.0f},
 		27.8974f
 	)),
-   obsidiana (new Material(
+	obsidiana (new Material(
 		{0.05375f,  0.05f,     0.06625f,  0.82f},
 		{0.18275f,  0.17f,     0.22525f,  0.82f},
 		{0.332741f, 0.328634f, 0.346435f, 0.82f},
@@ -85,7 +85,7 @@ Escena :: Escena () noexcept
 		{0.45f, 0.55f, 0.45f, 1.0f},
 		32.0f
 	)),
-   turquesa (new Material(
+	turquesa (new Material(
 		{0.1f,      0.18725f, 0.1745f,   1.0f},
 		{0.396f,    0.74151f, 0.69102f,  1.0f},
 		{0.297254f, 0.30829f, 0.306678f, 1.0f},
