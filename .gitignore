@@ -1,12 +1,12 @@
 bin/
 doc/
+node_modules/
 obj/
 .cache/
 
 *.aux
 *.log
+*.o
 *.out
 *.pdf
 *.toc
-
-*.o

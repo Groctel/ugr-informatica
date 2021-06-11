@@ -10,3 +10,6 @@
 [submodule "3º 2º cuatrimestre/Desarrollo de software/Prácticas/Práctica 1"]
 	path = 3º 2º cuatrimestre/Desarrollo de software/Prácticas/Práctica 1
 	url = https://github.com/Groctel/DS21
+[submodule "3º 2º cuatrimestre/Sistemas gráficos/Práctica 2 - CGPN"]
+	path = 3º 2º cuatrimestre/Sistemas gráficos/Práctica 2 - CGPN
+	url = git@github.com:Groctel/cgpn-sg

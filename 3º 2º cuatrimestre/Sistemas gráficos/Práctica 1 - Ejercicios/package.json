@@ -1,0 +1,14 @@
+{
+  "name": "sg-practica1",
+  "version": "1.0.0",
+  "description": "Ejercicios de la práctica 1 de sistemas gráficos",
+  "main": ".",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Atanasio José Rubio Gil",
+  "license": "GPL-2.0",
+  "devDependencies": {
+    "eslint": "^7.24.0"
+  }
+}
