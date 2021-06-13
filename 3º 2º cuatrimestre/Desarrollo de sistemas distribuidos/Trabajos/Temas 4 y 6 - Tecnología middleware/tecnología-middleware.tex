@@ -1,0 +1,284 @@
+\documentclass[runningheads]{llncs}
+
+\usepackage[spanish]{babel}
+	\selectlanguage{spanish}
+\usepackage{hyperref}
+\usepackage{listings}
+\lstset{%
+	basicstyle=\footnotesize\ttfamily,
+	captionpos=b,
+	frame=single,
+	tabsize=3,
+}
+
+\title{Tecnologías \textit{middleware}: \texttt{socket.io}}
+
+\author{Atanasio José Rubio Gil}
+\institute{Universidad de Granada, 18010 Granada, España}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Las tecnologías \textit{middleware} facilitan a los desarrolladores su labor de escritura de todo tipo de sistemas.
+En el ámbito de los sistemas distribuidos, una categoría muy útil de sistemas \textit{middleware} es la de gestores de comunicaciones entre nodos de dichos sistemas.
+Un ejemplo de estas tecnologías es \texttt{socket.io}, que abstrae las conexiones entre un servidor y varios clientes mediante WebSocket y sondeo largo HTTP\@.
+
+\keywords{Middleware \and Sistemas distribuidos \and Eventos \and WebSocket}
+\end{abstract}
+
+\section{Introducción y objetivos}
+
+Un pilar fundamental en la construcción de sistemas distribuidos es el paso de mensajes entre los diferentes nodos que componen dichos sistemas.
+El envío y recepción de estos mensajes presenta un reto de diseño para los desarrolladores, ya que los datos enviados deben coincidir con los recibidos y ser procesados de la misma forma que si hubieran sido trasladados localmente mediante llamadas a funciones de un mismo programa.
+También se plantea la dificultad de añadir metadatos a cada uno de los mensajes emitidos y de interpretarlos tras su recepción.
+Para simplificar esta tarea a los desarrolladores, existen componentes \textit{middleware} que simplifican enormemente esta tarea, de forma que el programador únicamente debe preocuparse en realizar llamadas a la API que éstos ofrecen y dejar que sea el \textit{middleware} quien se encargue de realizar todas las operaciones de composición, empaquetamiento, envío, recepción y desempaquetamiento de los mensajes.
+
+Uno de estos componentes es \texttt{socket.io}, una biblioteca que permite comunicación en tiempo real, bidireccional y basada en eventos entre el navegador y el servidor\cite{what-socketio-is}.
+Esta biblioteca se compone de un servidor Node.js y de un cliente escrito en Javascript.
+Aunque éste cliente es el único que mantiene oficialmente el proyecto, existen clientes mantenidos por la comunidad escritos en otros lenguajes de importancia, como C++\cite{socket.io-client-cpp} y Rust\cite{rust-socketio}.
+Al igual que hacen sistemas como Apache Thrift o TIRPC, \texttt{socket.io} busca ofrecer al programador una interfaz sencilla tanto a nivel de cliente como de servidor que le permita trabajar con el paso de mensajes (llamados \textit{eventos} por sus desarrolladores) entre los diferentes nodos de su sistema de la forma más transparente posible.
+
+\section{Diseño}
+
+La interfaz que ofrece \texttt{socket.io} a los desarrolladores abstrae las funcionalidades de las conexiones abiertas con WebSocket para simplificar el trabajo de los desarrolladores.
+Esta abstracción esconde todas las rutinas de gestión de los clientes conectados y aquellos a los que emitir eventos, de forma que estas responsabilidades se eliminan del extremo del programador.
+Además, utiliza términos fácilmente comprensibles y con una sintaxis sencilla de utilizar, de forma que la curva de aprendizaje de la herramienta sea lo más llana posible.
+
+\section{Características}
+
+Las conexiones de \texttt{socket.io} se caracterizan por su capacidad de reconexión automática y su fiabilidad garantizada por la capacidad del sistema de conectarse mediante HTTP si la conexión principal de WebSocket fallase.
+Junto con estas dos características principales, \texttt{socket.io} ofrece las siguientes facilidades para que el programador tenga más versatilidad a la hora de gestionar el paso de eventos entre los clientes y el servidor y que realizar menos gestión a bajo nivel de las conexiones y los eventos.
+
+\subsection{Eventos almacenados en memoria}
+
+Los eventos emitidos por un cliente o el servidor cuando el encaje (\textit{socket}) está desconectado se almacenan localmente en un búfer hasta que se reconecte y puedan enviarse de nuevo.
+Esto es útil cuando los tiempos de desconexión son cortos, pero podría resultar en un pico de eventos enviados al restaurarse la conexión\cite{buffered-events}
+Esto puede solucionarse utilizando eventos volátiles, que no se almacenan en memoria si el encaje no está conectado\cite{volatile-events}.
+
+\begin{figure}[!ht]
+\begin{lstlisting}
+socket.volatile.emit("hello", "might not arrive");
+\end{lstlisting}
+\caption{Emisión de un evento volátil con \texttt{socket.io}.}
+\end{figure}
+
+Otra forma de subsanarlo es limpiar la estructura que almacena los eventos pendientes de envío:
+
+\begin{figure}[!ht]
+\begin{lstlisting}
+socket.on('connect', () => {
+	socket.sendBuffer.length = 0;
+});
+\end{lstlisting}
+\caption{Liberación de los eventos pendientes.}
+\end{figure}
+
+\subsection{Acuse de recibo}
+
+En caso de que una de las partes necesite saber que la otra ha recibido un evento, \texttt{socket.io} permite al receptor ejecutar una llamada de vuelta (\textit{callback}) que el emisor puede procesar\cite{acknowledgements}.
+
+\begin{figure}[!ht]
+\begin{lstlisting}
+io.on("connection", (socket) => {
+	socket.on("callback event", (callback) => {
+		callback({ status: "ok" });
+	});
+});
+\end{lstlisting}
+\begin{lstlisting}
+socket.emit("callback event", (response) => {
+	console.log(response.status); // ok
+});
+\end{lstlisting}
+\caption{Acuse de recibo por parte del servidor (arriba) y cliente (abajo).}
+\end{figure}
+
+\subsection{Difusión de eventos}
+
+Los servidores de \texttt{socket.io} permiten enviar eventos a todos los clientes conectados o a todos menos al cliente que envía el eventos que quiere difundirse, facilitando la gestión de todos los usuarios conectados\cite{broadcast}.
+
+\begin{figure}[!ht]
+\begin{lstlisting}
+io.on("connection", (socket) => {
+  io.emit("hello", "world");
+});
+\end{lstlisting}
+\begin{lstlisting}
+io.on("connection", (socket) => {
+  socket.broadcast.emit("hello", "world");
+});
+\end{lstlisting}
+\caption{Difusión de mensajes a todos los clientes (arriba) y a todos menos el emisor (abajo).}
+\end{figure}
+
+\subsection{Habitaciones}
+
+En ocasiones, queremos aislar la comunicación entre varios clientes para algunos mensajes.
+La abstracción que ofrece \texttt{socket.io} para facilitar este aislamiento son las habitaciones, que permiten que los clientes \textit{entren} y \textit{salgan} de ellas y se comuniquen únicamente entre los integrantes de dicha habitación\cite{room}.
+
+\begin{figure}[!ht]
+\begin{lstlisting}
+io.on('connection', (socket) => {
+	socket.join('my room');
+});
+\end{lstlisting}
+\begin{lstlisting}
+io.to('my room').emit('some event');
+\end{lstlisting}
+\caption{Adición del cliente a la habitación \texttt{my room} (arriba) y emisión de mensajes a dicha habitación (abajo).}
+\end{figure}
+
+\section{Mecanismos, protocolos y servicios para la comunicación y coordinación}
+
+Internamente, \texttt{socket.io} utiliza WebSocket para gestionar el paso de eventos entre el cliente y el servidor, aunque, advierten, no es una interfaz de abstracción (\textit{wrapper}) de WebSocket\cite{what-socketio-is-not}.
+En caso de que una comunicación mediante WebSocket no sea posible, \texttt{socket.io} utiliza sondeo largo HTTP (\textit{HTTP long polling}) como alternativa para establecer las conexiones y el paso de eventos.
+Por ello, y porque \texttt{socket.io} introduce metadatos propios en los eventos, no es posible conectar clientes y servidores de WebSocket a servidores y clientes, respectivamente, de \texttt{socket.io}.
+
+\subsection{WebSocket}
+
+WebSocket es un protocolo que permite una comunicación bidireccional entre un cliente web y un servidor a través de un único encaje \cite{html5-websocket}.
+El hecho de que este protocolo utilice un único encaje permite una reducción considerable en la cantidad de tráfico necesaria para el paso de eventos entre el cliente y el servidor con respecto a la utilizada con otras soluciones que utilizan técnicas de sondeo no escalable.
+Estas técnicas simulan una conexión totalmente bidireccional manteniendo dos conexiones abiertas en todo momento, lo que hace que la cantidad de datos gestionados por los nodos conectados sea mayor.
+Para garantizar una compatibilidad con tecnologías anteriores a su protocolo, WebSocket inicia la conexión creando una conexión HTTP y realizando el cambio a WebSocket mediante un cambio de protocolo conocido como apretón de manos WebSocket (\textit{WebSocket handshake}).
+
+Al igual que con \texttt{socket.io}, la conexión con WebSocket se inicia construyendo el objeto \texttt{WebSocket}, definiendo las respuestas a los eventos y gestionando el paso de eventos hasta cerrar la conexión.
+
+\begin{figure}[!ht]
+\begin{lstlisting}
+const ws = new WebSocket("ws://www.websockets.org");
+ws.onopen = (evt) => {
+	alert("Connection open.");
+};
+ws.onmessage = (evt) => {
+	alert( "Received Message: " + evt.data);
+};
+ws.onclose = (evt) => {
+	alert("Connection closed.");
+};
+ws.send("Hello WebSockets!");
+ws.close();
+\end{lstlisting}
+\caption{Uso de la API HTML5 de WebSocket\cite{html5-websocket}}
+\end{figure}
+
+\subsection{Sondeo largo HTTP}
+
+El sondeo largo HTTP es la forma más sencilla de mantener una conexión persistente entre un cliente y un servidor sin utilizar protocolos como WebSocket o eventos por el lado del cliente\cite{jsinfo-polling}.
+La forma más simple de recibir información actualizada de un servidor web es mediante un sondeo periódico, consistente en realizar peticiones regulares que, inevitablemente, congestionan el servidor con demasiadas peticiones a lo largo de su vida útil.
+Una forma que implica un tráfico y una carga computacional mucho menor en el servidor es el sondeo largo, que se diferencia del regular en que el servidor no responde al cliente nada más llegar la petición, sino que la almacena para enviar la respuesta cuando ésta sea distinta a la anterior.
+Por ejemplo, si estuviéramos esperando en un cliente a recibir una notificación cuando un usuario enviara un fichero al servidor que compartimos, enviaríamos una petición de sondeo largo al servidor, que la registraría y enviaría la respuesta como acción de un disparador que se ejecutaría al recibir el fichero del otro usuario.
+
+\section{Propiedades de calidad}
+
+\subsection{Escalabilidad}
+
+El aumento de cantidad de conexiones gestionadas por \texttt{socket.io} únicamente hace que el servidor gestione más memoria y deba iterar entre más clientes para difundir eventos globalmente.
+El sistema permite gestionar más de un servidor integrándose con Redis\cite{redis}.
+
+\subsection{Fiabilidad}
+
+Para evitar que los eventos tarden mucho en enviarse o se pierdan, \texttt{socket.io} implementa rutinas de reconexión automática y un búfer de eventos pendientes.
+Además, hace uso de más de un protocolo de comunicación para mejorar la compatibilidad del sistema.
+
+\subsection{Seguridad}
+
+La seguridad de \texttt{socket.io} depende del protocolo de transferencia utilizado.
+Por ejemplo, HTTPS es más seguro que HTTP\@.
+
+\subsection{Interoperabilidad}
+
+El pilar principal de \texttt{socket.io} es la interoperabilidad, ya que es una herramienta que permite conectar múltiples dispositivos y programas que trabajan con \textit{hardware} y lenguajes diferentes ofreciendo una interfaz común para todos.
+
+\subsection{Calidad del servicio}
+
+Como ya hemos visto, el uso de WebSocket frente a sondeo largo HTTP hace que \texttt{socket.io} utilice la mínima cantidad de recursos posible, de forma que ni el servidor ni los clientes colapsen por la elevada carga de trabajo.
+
+\section{Análisis crítico}
+
+Hemos visto que \texttt{socket.io} es una tecnología \textit{middleware} de comunicación entre nodos de un sistema distribuido que abstrae las rutinas de gestión de dichas comunicaciones y ofrece una interfaz de programación muy intuitiva a los desarrolladores.
+A lo largo de todo su tiempo de desarrollo, ha demostrado ser más que capaz de gestionar sistemas de complejidad variable y en entornos de conectividad convulsa.
+Su uso está extendido por miles de sistemas distribuidos de índole tanto administrativa como lúdica, lo que le ha permitido evolucionar para adaptarse a las necesidades de los desarrolladores de dichos sistemas.
+Su capacidad de organizar clientes en distintas habitaciones y de gestionar acuses de recibo presentan a los desarrolladores un amplio abanico de posibilidades de transmisión de eventos en tiempo real.
+
+\section{Conclusiones}
+
+A lo largo de toda esta exposición hemos detallado múltiples características de \texttt{socket.io} y comentado sus capacidades de abstracción y organización de una gran cantidad de clientes.
+Como hemos visto, es una tecnología \texttt{middleware} que facilita enormemente la labor de los desarrolladores de sistemas que hacen uso de ella, ofreciendo una interfaz de alto nivel muy sencilla de utilizar.
+Como valoración personal final, \texttt{socket.io} me parece una herramienta muy versátil y fácilmente integrable en futuros proyectos de todo tipo.
+
+\vfill
+\pagebreak
+
+\begin{thebibliography}{8}
+\bibitem{what-socketio-is}
+	What Socket.IO is, \href{https://socket.io/docs/v4#What-Socket-IO-is}{\texttt{https://socket.io/docs/v4\#What-Socket-IO-is}}. Consultado en 13 de junio de 2021.
+
+\bibitem{socket.io-client-cpp}
+	Socket.IO C++ Client, \url{https://github.com/socketio/socket.io-client-cpp}. Consultado en 13 de junio de 2021.
+
+\bibitem{rust-socketio}
+	Rust-socketio-client, \url{https://github.com/1c3t3a/rust-socketio}. Consultado en 13 de junio de 2021.
+
+\bibitem{buffered-events}
+	Buffered events, \href{https://socket.io/docs/v4/client-offline-behavior/#Buffered-events}{\texttt{https://socket.io/docs/v4/client-offline-behavior/\#Buffered-events}}. Consultado en 13 de junio de 2021.
+
+\bibitem{volatile-events}
+	Volatile events, \href{https://socket.io/docs/v4/emitting-events/#Volatile-events}{\texttt{https://socket.io/docs/v4/emitting-events/\#Volatile-events}}. Consultado en 13 de junio de 2021.
+
+\bibitem{acknowledgements}
+	Acknowledgements, \href{https://socket.io/docs/v4/emitting-events/#Acknowledgements}{\texttt{https://socket.io/docs/v4/emitting-events/\#Acknowledgements}}. Consultado en 13 de junio de 2021.
+
+\bibitem{broadcast}
+	Broadcasting events, \url{https://socket.io/docs/v4/broadcasting-events/}. Consultado en 13 de junio de 2021.
+
+\bibitem{room}
+	Rooms, \url{https://socket.io/docs/v4/rooms/}. Consultado en 13 de junio de 2021.
+
+\bibitem{what-socketio-is-not}
+	What Socket.IO is not, \href{https://socket.io/docs/v4#What-Socket-IO-is-not}{\texttt{https://socket.io/docs/v4\#What-Socket-IO-is-not}}. Consultado en 13 de junio de 2021.
+
+\bibitem{html5-websocket}
+	About HTML5 WebSocket, \url{https://www.websocket.org/aboutwebsocket.html}. Consultado en 13 de junio de 2021.
+
+\bibitem{jsinfo-polling}
+	Long polling, \url{https://javascript.info/long-polling}. Consultado en 13 de junio de 2021.
+
+\bibitem{redis}
+	Redis, \url{https://redis.io/}. Consultado en 13 de junio de 2021.
+\end{thebibliography}
+
+\vfill
+\pagebreak
+
+\section*{Autoevaluación}
+
+\subsection*{Rúbrica}
+
+\begin{itemize}
+	\item
+		\textbf{¿La explicación es clara y el contenido está estructurado?}
+		Sí, como puede observarse.
+	\item
+		\textbf{¿Queda reflejado que se han estudiado y entendido las cuestiones de diseño, mecanismos, protocolos y servicios para la comunicación y coordinación relacionados en la bibliografía estudiada?}
+		Sí, las he estudiado antes de escribir el informe.
+	\item
+		\textbf{¿Se incluyen ejemplos que ayudan a explicar la descripción de la tecnología middleware seleccionada?}
+		Sí, en formato de bloques de código.
+	\item
+		\textbf{¿Queda reflejado en el trabajo que se ha buscado y analizado suficiente bibliografía adicional y se han incluido las referencias encontradas?}
+		Sí, todas citadas en formato Springer.
+	\item
+		\textbf{¿Se incluye un análisis crítico positivo y/o negativo de la tecnología middleware escogida y unas conclusiones como resultado del estudio y explicación realizadas?}
+		Sí, un análisis positivo en este caso.
+	\item
+		\textbf{¿El informe realizado me ha llevado tiempo y servido para comprender la solución al problema abordado?}
+		Sí, ha sido un trabajo extenso.
+	\item
+		\textbf{¿Se ha realizado alguna aportación adicional más allá de lo que en esencia pedía este trabajo?}
+		Sí, las explicaciones de WebSocket y sondeo largo HTTP\@.
+\end{itemize}
+
+\section*{Calificación númerica final: \underline{9}}
+
+\end{document}
