@@ -4,9 +4,11 @@ BIN      = $(MAKEDIR)/bin
 C21      = $(MAKEDIR)/2º\ 1er\ cuatrimestre
 C22      = $(MAKEDIR)/2º\ 2º\ cuatrimestre
 C31      = $(MAKEDIR)/3º\ 1er\ cuatrimestre
+C32      = $(MAKEDIR)/3º\ 2º\ cuatrimestre
 
 AC       = $(C22)/Arquitectura\ de\ computadores
 ALG      = $(C22)/Algorítmica
+DSD      = $(C32)/Desarrollo\ de\ sistemas\ distribuidos
 ED       = $(C21)/Estructuras\ de\ datos
 FBD      = $(C22)/Fundamentos\ de\ bases\ de\ datos
 FIS      = $(C22)/Fundamentos\ de\ la\ ingeniería\ del\ software
@@ -16,6 +18,7 @@ SO       = $(C21)/Sistemas\ operativos
 
 AC_OUT   = $(BIN)/"Arquitectura\ de\ computadores"
 ALG_OUT  = $(BIN)/"Algorítmica"
+DSD_OUT  = $(BIN)/"Desarrollo\ de\ sistemas\ distribuidos"
 ED_OUT   = $(BIN)/"Estructuras\ de\ datos"
 FBD_OUT  = $(BIN)/"Fundamentos\ de\ bases\ de\ datos"
 FIS_OUT  = $(BIN)/"Fundamentos\ de\ la\ ingeniería\ del\ software"
@@ -89,6 +92,7 @@ despedida:
 c21: ed so
 c22: ac alg fbd fis ia
 c31: mc
+c32: dsd
 
 ac:
 	@$(MAKE) -s -C $(AC) OUT=$(AC_OUT)
@@ -97,6 +101,10 @@ ac:
 alg:
 	@$(MAKE) -s -C $(ALG) OUT=$(ALG_OUT)
 	$(call limpiatex, $(ALG))
+
+dsd:
+	@$(MAKE) -s -C $(DSD) OUT=$(DSD_OUT)
+	$(call limpiatex, $(DSD))
 
 ed:
 	@$(MAKE) -s -C $(ED) OUT=$(ED_OUT)
