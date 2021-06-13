@@ -1,0 +1,31 @@
+{
+  "dependencies": {
+    "@types/jquery": "^3.5.5",
+    "@types/mongodb": "^3.6.12",
+    "@types/socket.io": "^2.1.13",
+    "jquery": "^3.6.0",
+    "mongodb": "^3.6.6",
+    "socket.io": "^4.0.2",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.4"
+  },
+  "scripts": {
+    "hola-mundo": "ts-node src/hola-mundo.ts",
+    "calculadora": "ts-node src/calculadora.ts",
+    "calculadora-web": "ts-node src/calculadora-web.ts",
+    "connections": "ts-node src/connections.ts",
+    "mongo-test": "ts-node src/mongo-test.ts",
+    "domotica": "ts-node src/domotica.ts"
+  },
+  "name": "practica4-nodejs",
+  "version": "1.0.0",
+  "description": "Práctica 4 de DSD",
+  "repository": "https://github.com/Groctel/ugr-informatica",
+  "author": "Atanasio Rubio Gil",
+  "license": "GPL-3.0",
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^4.24.0",
+    "@typescript-eslint/parser": "^4.24.0",
+    "eslint": "^7.26.0"
+  }
+}

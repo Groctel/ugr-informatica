@@ -1,14 +1,20 @@
+.cache/
+.ccls-cache/
+
+__pycache__/
+
 bin/
 doc/
 node_modules/
 obj/
 vendor/
-.cache/
-.ccls-cache/
 
 *.aux
+*.class
 *.log
 *.o
 *.out
 *.pdf
 *.toc
+
+yarn.lock

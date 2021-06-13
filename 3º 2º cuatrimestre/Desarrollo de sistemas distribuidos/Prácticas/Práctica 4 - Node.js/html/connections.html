@@ -1,0 +1,58 @@
+<html>
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<title>Connections</title>
+</head>
+
+<body>
+	<span id="mensaje_servicio"></span>
+	<div id="lista_usuarios"></div>
+</body>
+
+<script src="/socket.io/socket.io.js"></script>
+<script type="text/javascript">
+
+	function mostrarMensaje (msg)
+	{
+		const span_msg = document.getElementById('mensaje_servicio');
+		span_msg.innerHTML = msg;
+	}
+
+	function actualizarLista (usuarios)
+	{
+		const listContainer = document.getElementById('lista_usuarios');
+		listContainer.innerHTML = '';
+
+		const listElement = document.createElement('ul');
+		listContainer.appendChild(listElement);
+
+		const num = usuarios.length;
+
+		for (let i = 0; i < num; i++)
+		{
+			const listItem = document.createElement('li');
+
+			listItem.innetHTML = usuarios[i].address + ":" + usuarios[i].port;
+			listElement.appendChild(listItem);
+		}
+	}
+
+	const serviceURL = document.URL;
+	const socket = io.connect(serviceURL);
+
+	socket.on('connect', () =>
+	{
+		socket.emit('output-evt', "¡Hola, Servicio!");
+	});
+
+	socket.on('output-evt', (data) =>
+	{
+		mostrarMensaje("Mensaje de servicio: '" + data + "'");
+	});
+
+	socket.on('disconnect', () =>
+	{
+		mostrarMensaje("¡El servicio ha dejado de funcionar!");
+	});
+</script>
+</html>

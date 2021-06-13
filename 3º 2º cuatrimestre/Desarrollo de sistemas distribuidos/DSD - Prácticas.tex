@@ -1,0 +1,38 @@
+\documentclass[10pt, a4paper]{aqademic}
+
+\usepackage[spanish]{babel}
+	\selectlanguage{spanish}
+
+% Document packages
+
+\usepackage[type=CC, modifier=by-nc-sa, version=4.0]{doclicense}
+\usepackage{graphicx}
+	\graphicspath{{img/}}
+
+% Document settings
+
+\author{Atanasio José Rubio Gil}
+\title{Desarrollo de sistemas distribuidos}
+
+\AqSetChapter{Práctica}
+
+% Document composition
+
+\begin{document}
+
+\AqMaketitle[%
+	cover    = logo-ugr.png,
+	org      = Grado en Ingeniería Informática,
+	subtitle = Prácticas,
+	url      = https://github.com/Groctel/ugr-informatica
+]
+
+\input{RecursosTeX/post-portada.tex}
+\tableofcontents
+
+\setcounter{chapter}{1}
+\input{Prácticas/Práctica 2 - Calculadora Thrift.tex}
+\input{Prácticas/Práctica 3 - Programación en RMI.tex}
+\input{Prácticas/Práctica 4 - Node.js.tex}
+
+\end{document}
