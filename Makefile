@@ -1,6 +1,7 @@
 MAKEDIR  = $${PWD}
 BIN      = $(MAKEDIR)/bin
 
+C12      = $(MAKEDIR)/1º\ 2º\ cuatrimestre
 C21      = $(MAKEDIR)/2º\ 1er\ cuatrimestre
 C22      = $(MAKEDIR)/2º\ 2º\ cuatrimestre
 C31      = $(MAKEDIR)/3º\ 1er\ cuatrimestre
@@ -14,6 +15,7 @@ ED       = $(C21)/Estructuras\ de\ datos
 FBD      = $(C22)/Fundamentos\ de\ bases\ de\ datos
 FIS      = $(C22)/Fundamentos\ de\ la\ ingeniería\ del\ software
 IA       = $(C22)/Inteligencia\ artificial
+IES      = $(C12)/Ingeniería,\ empresa\ y\ sociedad
 IG       = $(C31)/Informática\ gráfica
 MC       = $(C31)/Modelos\ de\ computación
 SG       = $(C32)/Sistemas\ gráficos
@@ -28,6 +30,7 @@ ED_OUT   = $(BIN)/"Estructuras\ de\ datos"
 FBD_OUT  = $(BIN)/"Fundamentos\ de\ bases\ de\ datos"
 FIS_OUT  = $(BIN)/"Fundamentos\ de\ la\ ingeniería\ del\ software"
 IA_OUT   = $(BIN)/"Inteligencia\ artificial"
+IES_OUT  = $(BIN)/"Ingeniería,\ empresa\ y\ sociedad"
 IG_OUT   = $(BIN)/"Informática\ gráfica"
 MC_OUT   = $(BIN)/"Modelos\ de\ computación"
 SG_OUT   = $(BIN)/"Sistemas\ gráficos"
@@ -80,7 +83,7 @@ endef
 
 all: aqademia build
 
-build: saludo c21 c22 c31 c32 despedida
+build: saludo c12 c21 c22 c31 c32 despedida
 
 aqademia:
 	@printf "\033[35;1m:: \033[0mActualizando aqademia...\n"
@@ -97,6 +100,7 @@ saludo:
 despedida:
 	@printf "\033[1;32m:: \033[0mCompilación completada con éxito\n"
 
+c12: ies
 c21: ed so
 c22: ac alg fbd fis ia
 c31: mc
@@ -133,6 +137,10 @@ fis:
 ia:
 	@$(MAKE) -s -C $(IA) OUT=$(IA_OUT)
 	$(call limpiatex, $(IA))
+
+ies:
+	@$(MAKE) -s -C $(IES) OUT=$(IES_OUT)
+	$(call limpiatex, $(IES))
 
 ig:
 	@$(MAKE) -s -C $(IG) OUT=$(IG_OUT)

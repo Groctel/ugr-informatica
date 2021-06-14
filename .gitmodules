@@ -1,6 +1,3 @@
-[submodule "1º 2º cuatrimestre/Ingeniería, empresa y sociedad"]
-	path = 1º 2º cuatrimestre/Ingeniería, empresa y sociedad
-	url = git@github.com:Groctel/UGR_IES_18-19
 [submodule "2º 2º cuatrimestre/Fundamentos de la ingeniería del software/Prácticas"]
 	path = 2º 2º cuatrimestre/Fundamentos de la ingeniería del software/Prácticas
 	url = git@github.com:Groctel/FIS-1920
@@ -10,3 +7,6 @@
 [submodule "3º 2º cuatrimestre/Sistemas gráficos/Práctica 2 - CGPN"]
 	path = 3º 2º cuatrimestre/Sistemas gráficos/Práctica 2 - CGPN
 	url = git@github.com:Groctel/cgpn-sg
+[submodule "1º 2º cuatrimestre/Ingeniería, empresa y sociedad/Prácticas"]
+	path = 1º 2º cuatrimestre/Ingeniería, empresa y sociedad/Prácticas
+	url = git@github.com:Groctel/UGR_IES_18-19.git
