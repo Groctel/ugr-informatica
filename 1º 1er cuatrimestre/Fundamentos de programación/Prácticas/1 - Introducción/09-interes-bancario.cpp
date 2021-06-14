@@ -1,8 +1,8 @@
 #include <iostream>
 
-int main () {
-	double capital,
-	       interes;
+int main ()
+{
+	double capital, interes;
 
 	std::cout << "Introduzca su capital en euros: ";
 	std::cin  >> capital;
@@ -12,7 +12,7 @@ int main () {
 	capital += capital * interes / 100;
 
 	std::cout << "Su capital al cabo de un año valdrá " << capital << "€."
-	          << std::endl;
+		<< std::endl;
 
 	return 0;
 }

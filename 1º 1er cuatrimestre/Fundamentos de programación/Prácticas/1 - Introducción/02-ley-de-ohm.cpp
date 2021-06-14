@@ -1,16 +1,15 @@
 #include <iostream>
 
-int main () {
-	double intensidad,
-	       resistencia,
-	       voltaje;
+int main ()
+{
+	double intensidad, resistencia;
 
 	std::cout << "Introduzca la intensidad: ";
 	std::cin  >> intensidad;
 	std::cout << "Introduzca la resistencia: ";
 	std::cin  >> resistencia;
 
-	voltaje = intensidad * resistencia;
+	double voltaje = intensidad * resistencia;
 
 	std::cout << "El voltaje vale " << voltaje << "." << std::endl;
 

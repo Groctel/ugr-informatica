@@ -1,7 +1,8 @@
 #include <cmath>
 #include <iostream>
 
-int main () {
+int main ()
+{
 	double pi = 6 * asin(0.5);
 
 	std::cout << pi << std::endl;

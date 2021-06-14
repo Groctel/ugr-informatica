@@ -1,7 +1,8 @@
+.cache/
+.ccls-cache/
 bin/
 doc/
 obj/
-.cache/
 
 *.aux
 *.log

@@ -1,6 +1,7 @@
 #include <iostream>
 
-int main () {
+int main ()
+{
 	int salario_base;
 	int salario_final;
 	int incremento;

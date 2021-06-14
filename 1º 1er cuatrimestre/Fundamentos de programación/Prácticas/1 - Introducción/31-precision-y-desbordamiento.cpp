@@ -1,6 +1,7 @@
 #include <iostream>
 
-int main () {
+int main ()
+{
 	double grande,
 	       real1,
 	       real2,
