@@ -1,19 +1,22 @@
 MAKEDIR  = $${PWD}
 BIN      = $(MAKEDIR)/bin
 
+C11      = $(MAKEDIR)/1º\ 1er\ cuatrimestre
 C21      = $(MAKEDIR)/2º\ 1er\ cuatrimestre
 C22      = $(MAKEDIR)/2º\ 2º\ cuatrimestre
 
 AC       = $(C22)/Arquitectura\ de\ computadores
 ALG      = $(C22)/Algorítmica
+CA       = $(C11)/Cálculo
 ED       = $(C21)/Estructuras\ de\ datos
 FBD      = $(C22)/Fundamentos\ de\ bases\ de\ datos
 FIS      = $(C22)/Fundamentos\ de\ la\ ingeniería\ del\ software
 IA       = $(C22)/Inteligencia\ artificial
 SO       = $(C21)/Sistemas\ operativos
 
-AC_OUT   = $(BIN)"/Arquitectura\ de\ computadores"
+AC_OUT   = $(BIN)/"Arquitectura\ de\ computadores"
 ALG_OUT  = $(BIN)/"Algorítmica"
+CA_OUT   = $(BIN)/"Cálculo"
 ED_OUT   = $(BIN)/"Estructuras\ de\ datos"
 FBD_OUT  = $(BIN)/"Fundamentos\ de\ bases\ de\ datos"
 FIS_OUT  = $(BIN)/"Fundamentos\ de\ la\ ingeniería\ del\ software"
@@ -66,7 +69,7 @@ endef
 
 all: aqademia build
 
-build: saludo c21 c22 despedida
+build: saludo c11 c21 c22 despedida
 
 aqademia:
 	@printf "\033[35;1m:: \033[0mActualizando aqademia...\n"
@@ -83,6 +86,7 @@ saludo:
 despedida:
 	@printf "\033[1;32m:: \033[0mCompilación completada con éxito\n"
 
+c11: ca
 c21: ed so
 c22: ac alg fbd fis ia
 
@@ -93,6 +97,10 @@ ac:
 alg:
 	@$(MAKE) -s -C $(ALG) OUT=$(ALG_OUT)
 	$(call limpiatex, $(ALG))
+
+ca:
+	@$(MAKE) -s -C $(CA) OUT=$(CA_OUT)
+	$(call limpiatex, $(CA))
 
 ed:
 	@$(MAKE) -s -C $(ED) OUT=$(ED_OUT)

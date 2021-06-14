@@ -1,0 +1,310 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 21.05.2 ] */
+/* [wxMaxima: title   start ]
+Examen final de prácticas - Grupo A3
+   [wxMaxima: title   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Atanasio José Rubio Gil, 44599757C, 20/01/21
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: section start ]
+Interpolación
+   [wxMaxima: section end   ] */
+
+
+/* [wxMaxima: subsect start ]
+Calcula el polinomio de interpolación de Lagrange que pasa por los puntos (−1,2), (0,1), (1,1), (2,1/2) y (3,0).
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: comment start ]
+Cargamos el paquete:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+load(interpol);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Cargamos la lista de puntos:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+puntos:[
+    [-1, 2],
+    [0, 1],
+    [1, 1],
+    [2, 1/2],
+    [3, 0]
+];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Calculamos el polinomio de Lagrange haciendo uso de la función definida en el paquete:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+define(l(x), expand(lagrange(puntos)));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: subsect start ]
+Calcula el valor de las áreas en las que la gráfica del polinomio anterior divide al círculo de centro (2,0) y radio 1.
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: comment start ]
+Vamos a ver primero en qué puntos se cortan. Para ello nos apoyamos en la gráfica del siguiente apartado:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+define(circ(x), sqrt(1-(x-2)^2));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+corte1:find_root(l(x) - circ(x), x, 1, 2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+corte2:find_root(l(x) - circ(x), x, 1.5, 4);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Integramos:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+integral:quad_qags(abs(circ(x) - l(x)), x, corte1, corte2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+area1:integral[1];
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+area2:(%pi * 1^2) - area1;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+La zona superior tiene un área de 0.751071 (integral[1]) y la inferior un área de %pi - 0.751071.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: subsect start ]
+Representa gráficamente el polinomio de Lagrange, el círculo y los nodos y los puntos de corte del polinomio y el círculo.
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: input   start ] */
+wxdraw2d
+(
+    xaxis=true,
+    yaxis=true,
+    xrange=[-2,4],
+    yrange=[-2,4],
+    
+    point_size=2,
+    point_type=7,
+    
+    explicit(l(x), x, -4, 4),
+    
+    color=red,
+    points(puntos),
+    
+    color=black,
+    implicit((x-2)^2 + y^2 = 1, x, -4, 4, y, -4, 4)
+)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: section start ]
+Consideremos la función f : [−2,2] → R definida como f (x) = 3sen(x^2 − 1) + x/(x^2 +2x +3).
+   [wxMaxima: section end   ] */
+
+
+/* [wxMaxima: input   start ] */
+assume(x>=-2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+assume(x<=2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+define(f(x), 3*sin(x^2-1) + (x/(x^2+2*x+3)));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: subsect start ]
+Estudia los extremos relativos, la monotonía y la imagen de f en [−2,2].
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: comment start ]
+Representamos la función para ver lo que nos vamos a encontrar.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+wxplot2d(f(x), [x, -2, 2]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Calculamos la derivada para ver los puntos en los que se anula y la representamos igualmente:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+define(df(x), diff(f(x), x));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+wxplot2d(df(x), [x, -2, 2]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cero1:find_root(df(x), -2, -1);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cero2:find_root(df(x), -1, 1);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cero3:find_root(df(x), 1, 2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Conocidos estos tres ceros, vamos a ver si son máximos o mínimos:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+define(df2(x), diff(f(x), x, 2));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+df2(cero1);
+df2(cero2);
+df2(cero3);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+El primer y el tercer cero son máximos y el segundo es un mínimo.
+Tenemos que la función es
+    - Estrictamente creciente en [-2, -1.60082) y en (-0.116716, 1.60355)
+    - Estrictamente decreciente en (-1.60082, -0.116716) y en (1.60355, 2].
+
+Vamos a ver los valores de los extremos en la función:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+f(cero1);
+f(cero2);
+f(cero3);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Por tanto, la imagen de la función es [-2.54408, 3.18267].
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: subsect start ]
+Usando el método de bisección, encuentra el cero de f en el intervalo [1/2,3/2] con un error absoluto menor que 10^(-6). ¿Cuántos pasos son necesarios para encontrar dicho cero?
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: comment start ]
+Definimos la función de bisección:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+biseccion(expr,var,err,ext_inf,ext_sup):=block
+(
+    [   inferior:ext_inf,
+        superior:ext_sup,
+        punto_medio:(ext_inf+ext_sup)/2,
+        contador:0, /* número de repeticiones */
+        epsilon:10^(-err),
+        numer:true
+    ],
+    local(f),
+    define(f(x),subst(x,var,expr)),
+    
+    if (f(punto_medio) = 0)
+    then 
+        return([punto_medio,1])
+    ,
+    if (sign(f(inferior)) = sign(f(superior)))
+    then
+        error("La función no cambia de signo en los extremos")
+    ,
+    while ((superior-inferior)/2 > epsilon)
+    do (
+        contador:contador+1,
+        punto_medio:float((inferior+superior)/2),
+        
+        if (f(punto_medio) = 0)
+        then
+            return()
+        ,
+        if (sign(f(inferior)) = sign(f(punto_medio)))
+        then
+            inferior:punto_medio
+        else
+            superior:punto_medio
+    ),
+    
+    fpprintprec:err,
+    [punto_medio,contador]
+)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+biseccion(f(x), x, 6, 1/2, 3/2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+El cero se encuentra en 0.972086. Han hecho falta 19 pasos. Comprobamos la solución gráficamente:
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+wxplot2d(f(x), [x, 1/2, 3/2]);
+/* [wxMaxima: input   end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 21.05.2"$
