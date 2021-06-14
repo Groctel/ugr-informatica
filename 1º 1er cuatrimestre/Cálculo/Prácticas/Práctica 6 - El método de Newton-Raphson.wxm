@@ -1,0 +1,184 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 20.12.2 ] */
+/* [wxMaxima: input   start ] */
+newton_raphson(funcion, var, inicio, err_abs, err_rel):=block
+(
+    numer:true,
+    
+    local(f, df, tg),
+    define(f(var), funcion),
+    define(df(var), diff(f(var), var, 1)),
+    define(tg(a, g), f(a) + df(a)*(var-a)),
+    
+    [
+        resultado:   inicio,
+        resuelto:    false,
+        iteraciones: 0
+    ],
+    
+    for i:1 thru 50 do
+    (
+        anterior:  resultado,
+        resultado: float(resultado - f(resultado)/df(resultado)),
+        resuelto:  (
+            abs(resultado - anterior) < err_abs or
+            abs(resultado - anterior) / abs(resultado) < err_rel
+        ),
+        
+        print(resultado),
+        
+        if (resuelto) then
+        (
+            iteraciones: i,
+            return(0)
+        )
+    ),
+    
+    if (resuelto) then
+        return(concat("Encontrado en ", iteraciones, " iteraciones"))
+    else
+        return("No se pudo encontrar una solución :(")
+)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+f(x) := exp(sin(x)) - sin(exp(x)) - 1$
+newton_raphson(f(x), x, 0.5, 10.0^(-16/2), 10.0^(-16/2));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+newton_raphson_grafico(funcion):=block
+(
+    numer:true,
+    
+    local(f, df, tg),
+    define(f(x), funcion),
+    define(df(x), diff(f(x), x, 1)),
+    define(tg(a,x), f(a) + df(a)*(x-a))
+    
+    [
+        x0:0.5,
+        x1:rhs(solve(tg(x0,x)=0, x)[1]),
+        x2:rhs(solve(tg(x1,x)=0, x)[1])
+    ],
+    
+    wxdraw2d
+    (
+        xaxis=true, yaxis=true,
+        
+        explicit(f(x), x, 0, 1),
+
+        color=red,
+            explicit(tg(x0,x), x, 0, 1),
+            explicit(tg(x1,x), x, 0, 1),
+            explicit(tg(x2,x), x, 0, 1),
+
+        point_size=1,
+        point_type=7,
+        color=green,
+            points
+            ([
+                [x0, f(x0)],
+                [x0, 0],
+                [x1, f(x1)],
+                [x1, 0],
+                [x2, f(x2)],
+                [x2, 0]
+            ]),
+        
+        head_length=0.1,
+        head_angle=180,
+            vector([x0,0],[0,f(x0)]),
+            vector([x1,0],[0,f(x1)]),
+            vector([x2,0],[0,f(x2)])
+    )
+)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+newton_raphson_grafico(exp(sin(x))-sin(exp(x))-1);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+define(g(x), A*x+B);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+numer:false;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+solve([g(x1)=f(x1),g(x2)=f(x2)],[A,B]);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+x2;
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+define(g(x), (f(x1) - f(x2)) / (x1-x2)*x - (f(x1)*x2 - x1*f(x2)) / (x1-x2) );
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+solve(g(x) = 0, x);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+secante(funcion, var, inicio, fin, err_abs, err_rel):=block
+(
+    local(f),
+    define(f(x), subst(x, var, funcion)),
+    
+    [
+        x0:          inicio,
+        x1:          fin,
+        iteraciones: 0,
+        resuelto:    false
+    ],
+    
+    for i:1 thru 50 do
+    (
+        iteraciones: i,
+        x2: (x0*f(x1) - x1*f(x0)) / (f(x1) - f(x0)),
+        x0: x1,
+        x1: x2,
+        resuelto: (
+            abs(x0-x1)             < err_abs or
+            abs(f(x0)-f(x1))       < err_abs or
+            abs(x0-x1)/x0          < err_rel or
+            abs(f(x0)-f(x1))/f(x0) < err_rel
+        ),
+
+        print(x2),
+        
+        if (resuelto) then
+            return(0)
+    ),
+    
+    if (resuelto) then
+        return(concat("Encontrado en ", iteraciones, " iteraciones"))
+    else
+        return("No se pudo encontrar una solución :(")
+)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+g(x) := x^3 - 5$
+secante(g(x), x, -20, 10, 10.0^(-16/2), 10.0^(-16/2));
+/* [wxMaxima: input   end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 20.12.2"$

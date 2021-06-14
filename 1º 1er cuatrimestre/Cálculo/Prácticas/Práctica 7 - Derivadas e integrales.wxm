@@ -1,0 +1,79 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 20.11.1 ] */
+/* [wxMaxima: title   start ]
+PRÁCTICA 7 - DERIVADAS E INTEGRALES
+   [wxMaxima: title   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Atanasio José Rubio Gil
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: section start ]
+Dibuja la hipérbola xy = 1 y calcula los puntos de la gráfica de dicha hipérbola en los que la recta tangente pasa por el punto (-1, 1).
+   [wxMaxima: section end   ] */
+
+
+/* [wxMaxima: input   start ] */
+define(f(x), 1/x);
+define(df(x), diff(f(x), x));
+
+wxdraw2d
+(
+    xaxis=true,
+    yaxis=true,
+    xrange=[-5, 5],
+    yrange=[-5, 5],
+    
+    explicit(f(x), x, -5, 5),
+    
+    color=red,
+    explicit(df(x), x, -5, 5),
+    
+    color=green,
+    explicit(f(-1) + df(-1)*(x-(-1)), x, -5, 5),
+    point_size=2,
+    point_type=7,
+    points
+    ([
+        [-1, f(-1)]
+    ])
+);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+solve(df(x) = 1);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+kill(all);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: section start ]
+Haz la gráfica de la función f(x) = 2x^3 + 13x^2 + 5x + 9 y calcula los puntos de la gráfica en los que la recta tangente pasa por el origen de coordenadas.
+   [wxMaxima: section end   ] */
+
+
+/* [wxMaxima: input   start ] */
+f(x)  := 2*x^3 + 13*x^2 + 5*x + 9;
+df(x) := diff(f(x), x);
+
+wxdraw2d
+(
+    xaxis=true,
+    yaxis=true,
+    explicit(f(x), x, -6, 6),
+    
+    color=red,
+    explicit(df(x), x, -6, 6)
+);
+/* [wxMaxima: input   end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 20.11.1"$

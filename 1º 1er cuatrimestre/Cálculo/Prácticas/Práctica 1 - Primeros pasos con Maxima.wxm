@@ -1,0 +1,265 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 20.07.0 ] */
+/* [wxMaxima: title   start ]
+PRÁCTICA 1 - PRIMEROS PASOS CON MAXIMA
+   [wxMaxima: title   end   ] */
+
+
+/* [wxMaxima: comment start ]
+ATANASIO RUBIO GIL
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: section start ]
+Calcula:
+   [wxMaxima: section end   ] */
+
+
+/* [wxMaxima: subsect start ]
+Los 100 primeros dígitos del número e:
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fpprec:100$
+set_display('ascii)$
+
+bfloat(%e);
+
+set_display('xml)$
+fpprec:16$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: subsect start ]
+El logaritmo en base 3 de 16423203268260658146231467800709255289:
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: input   start ] */
+numer:true$
+log(16423203268260658146231467800709255289) / log(3);
+numer:false$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: subsect start ]
+El arcocoseno hiperbólico de 1:
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: input   start ] */
+acosh(1);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: subsect start ]
+El seno y el coseno de i:
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: input   start ] */
+sin(%i);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+numer:true$
+sin(%i);
+numer:false$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+cos(%i);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+numer:true$
+cos(%i);
+numer:false$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: subsect start ]
+El logaritmo de -2:
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: input   start ] */
+log(-2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+numer:true$
+log(-2);
+numer:false$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: subsect start ]
+Los 20 primeros la raíz cuadrada de 10:
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: input   start ] */
+fpprec:20$
+numer:true$
+sqrt(10);
+numer:false$
+fpprec:16$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: subsect start ]
+La expresión decimal de la suma de los primeros cinco números naturales:
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: input   start ] */
+numer:true$
+1/1 + 1/2 + 1/3 + 1/4 + 1/5;
+numer:false$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: section start ]
+¿Qué número es mayor: 1000^{999} o 999^{1000}?
+   [wxMaxima: section end   ] */
+
+
+/* [wxMaxima: comment start ]
+Usamos is en lugar de max porque el segundo devuelve la expresión desarrollada. Para ello comprobamos si el primer elemento es menor y luego si es igual (podría pasar).
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: input   start ] */
+is(1000^999 < 999^1000);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+is(1000^999 = 999^1000);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: section start ]
+b) Ordena de mayor a menor los números π, 73231844868435875 / 37631844868435563 y cosh(3) / 3:
+   [wxMaxima: section end   ] */
+
+
+/* [wxMaxima: input   start ] */
+is (%pi < cosh(3)/3);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+is (73231844868435875 / 37631844868435563 < %pi);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+73231844868435875 / 37631844868435563 < π < cosh(3) / 3
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: section start ]
+Descompón la fracción (x^2 − 4) / (x^5 + x^4 − 2x^3 − 2x^2 + x + 1) en fracciones simples:
+   [wxMaxima: section end   ] */
+
+
+/* [wxMaxima: input   start ] */
+partfrac((x^2 − 4) / (x^5 + x^4 − 2 * x^3 − 2 * x^2 + x + 1), x);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: section start ]
+Escribe sen(5x) cos(3x) en función de sen(x) y cos(x):
+   [wxMaxima: section end   ] */
+
+
+/* [wxMaxima: input   start ] */
+trigexpand(sin(5*x));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+trigexpand(cos(3*x));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: section start ]
+Comprueba si las funciones hiperbólicas y las correspondientes “arco”-versiones son inversas:
+   [wxMaxima: section end   ] */
+
+
+/* [wxMaxima: input   start ] */
+is(sinh(x) = 1/asinh(x));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+is(cosh(x) = 1/acosh(x));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+is(tanh(x) = 1/atanh(x));
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: section start ]
+Decide si los siguientes números son primos:
+   [wxMaxima: section end   ] */
+
+
+/* [wxMaxima: subsect start ]
+12341:
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: input   start ] */
+factor(12341);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+No es primo.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: subsect start ]
+329427:
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: input   start ] */
+factor(329427);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+No es primo.
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: subsect start ]
+14392017:
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: input   start ] */
+factor(14392017);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: comment start ]
+No es primo.
+   [wxMaxima: comment end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 20.07.0"$

@@ -1,0 +1,172 @@
+/* [wxMaxima batch file version 1] [ DO NOT EDIT BY HAND! ]*/
+/* [ Created with wxMaxima version 20.07.0 ] */
+/* [wxMaxima: title   start ]
+EXAMEN PARCIAL PRÁCTICAS 1 - 24/11/2020
+   [wxMaxima: title   end   ] */
+
+
+/* [wxMaxima: comment start ]
+Atanasio José Rubio Gil
+   [wxMaxima: comment end   ] */
+
+
+/* [wxMaxima: section start ]
+Encuentra el más pequeño natural n para que 1/2log(2) + 1/3log(3) + ... + 1/nlog(n) > 3,1. Verifícalo con algún comando del menú de Maxima.
+   [wxMaxima: section end   ] */
+
+
+/* [wxMaxima: input   start ] */
+sum_inv_log(minimo):=block
+(
+    [   suma:0.0,
+        indice:1.0
+    ],
+    
+    while suma < minimo do
+    (
+        indice:indice+1,
+        suma:suma+(1/(indice*log(indice)))
+    ),
+    entier(indice)
+);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+sum_inv_log(3.1);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+sum(1/(k*log(k)), k, 2.0, 22638.0);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: section start ]
+Sea la ecuación 2e^{−x} + log(x) = x^2(sen^2(x) + cos^2(2x)).
+   [wxMaxima: section end   ] */
+
+
+/* [wxMaxima: input   start ] */
+f(x):=2*exp(-x) + log(x) = x^2 * (sin(x)^2 + cos(2*x)^2);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: subsect start ]
+Resuelve la ecuación con algún comando de Maxima.
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: input   start ] */
+find_root(f(x),x,-10,-0.1);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: subsect start ]
+Implementa el método de bisección para resolver (1), con un error de 10−4y de forma que vayan saliendo en pantalla las aproximaciones a la soluciónen cada paso
+   [wxMaxima: subsect end   ] */
+
+
+/* [wxMaxima: input   start ] */
+biseccion(expr,var,err,ext_inf,ext_sup):=block
+(
+    [   inferior:ext_inf,
+        superior:ext_sup,
+        punto_medio:(ext_inf+ext_sup)/2,
+        contador:0, /* número de repeticiones */
+        epsilon:10^(-err),
+        numer:true
+    ],
+    local(f),
+    define(f(x),subst(x,var,expr)),
+    
+    if (f(punto_medio) = 0)
+    then 
+        return([punto_medio,1])
+    ,
+    if (sign(f(inferior)) = sign(f(superior)))
+    then
+        error("La función no cambia de signo en los extremos")
+    ,
+    while ((superior-inferior)/2 > epsilon)
+    do (
+        contador:contador+1,
+        punto_medio:float((inferior+superior)/2),
+        
+        if (f(punto_medio) = 0)
+        then
+            return()
+        ,
+        if (sign(f(inferior)) = sign(f(punto_medio)))
+        then
+            inferior:punto_medio
+        else
+            superior:punto_medio
+    ),
+    
+    fpprintprec:err,
+    [punto_medio,contador]
+)$
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: input   start ] */
+biseccion(f(x),x,-4,-10,-0.1);
+/* [wxMaxima: input   end   ] */
+
+
+/* [wxMaxima: section start ]
+Dibuja la circunferencia centrada en el punto (0,0) de radio 5 y el rectángulo de área √6 inscrito en ella. Utiliza el objeto gráfico rectangle para dibujar dicho rectángulo.
+   [wxMaxima: section end   ] */
+
+
+/* [wxMaxima: input   start ] */
+solve([x^2+y^2=5^2, x*y = sqrt(6)], [x,y]),numer;
+wxdraw2d(
+    proportional_axes=xy,
+    xaxis=true,
+    yaxis=true,
+    
+    /* Dibujo de la circunferencia */
+    implicit(x^2 + y^2 = 5^2, x,-6,6, y,-6,6),
+    
+    /* Curvas que conforman el área */
+    color=red,
+    implicit(x*y = sqrt(6), x,-6,6, y,-6,6),
+    
+    /* Puntos de corte (solve de la circunferencia y el área) */
+    color=purple,
+    point_size=2,
+    point_type=7,
+    points(
+        [   -4.975706047600809,
+             4.975706047600809,
+            -0.4922898819483668,
+             0.4922898819483668
+        ], 
+        [   -0.4922898819483612,
+             0.4922898819483612,
+            -4.975706047600804,
+             4.975706047600804
+        ]
+    ),
+    
+    color=red,
+    
+    /* Rectángulo horizontal */
+    rectangle(
+        [-4.975706047600809, -0.4922898819483612],
+        [ 4.975706047600809,  0.4922898819483612]
+    ),
+    
+    /* Rectángulo vertical */
+    rectangle(
+        [-0.4922898819483668, -4.975706047600804],
+        [ 0.4922898819483668,  4.975706047600804])
+);
+/* [wxMaxima: input   end   ] */
+
+
+
+/* Old versions of Maxima abort on loading files that end in a comment. */
+"Created with wxMaxima 20.07.0"$

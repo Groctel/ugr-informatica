@@ -1,0 +1,158 @@
+\chapter{Los números reales}\label{los-numeros-reales}
+
+\section{$\mathbb{R}$, el conjunto de los números reales}
+
+Dicho coloquialmente, $\mathbb{R}$ representa todos los números con los que se pueden medir cosas en el mundo real.
+Vamos a definirlo formalmente en función de las propiedades que cumple:
+
+\subsection{Propiedades de los números reales}
+
+\subsubsection{Los números reales se pueden sumar}
+
+Dados dos números reales $a$ y $b$, hay definido un nuevo número real que es la suma de $a$ y $b$ y se representa como $a+b$.
+Hacemos hincapié en que el nuevo número es real o, expresado matemáticamente:
+
+\[a,b \in\mathbb{R} \Rightarrow a+b \in\mathbb{R}, \forall a,b\]
+
+La suma satisface las siguientes propiedades:
+
+\begin{center}
+\begin{tabular}{l l}
+	\textbf{Propiedad}  & \textbf{Expresión}                                                 \\
+	\toprule
+	Asociativa          & $(a+b) + c = a + (b+c), \forall a,b,c \in\mathbb{R}$               \\
+	Conmutativa         & $a+b = b+a, \forall a,b \in\mathbb{R}$                             \\
+	Elemento neutro (0) & $a+0 = a, \forall m \in\mathbb{R}$                                 \\
+	Elemento opuesto    & $\exists! b \in\mathbb{R} : a + b = 0, \forall a, b \in\mathbb{R}$ \\
+	Cancelativa         & $a+b = a+c \Rightarrow b=c, \forall a,b,c \in\mathbb{R}$           \\
+\end{tabular}
+\end{center}
+
+\subsubsection{Los números reales se pueden multiplicar}
+
+Dados dos números reales $a$ y $b$, hay definido un nuevo número real que es el producto de $a$ y $b$ y se representa como $a \cdot b$ o simplemente $ab$.
+De nuevo, lo expresamos matemáticamente de la siguiente forma:
+
+\[a,b \in\mathbb{R} \Rightarrow a \cdot b \in\mathbb{R}, \forall a,b\]
+
+\begin{center}
+\begin{tabular}{l l}
+	\textbf{Propiedad}  & \textbf{Expresión}                                                                            \\
+	\toprule
+	Asociativa          & $(a \cdot b) \cdot c = a \cdot (b \cdot c), \forall a,b,c \in\mathbb{R}$                      \\
+	Conmutativa         & $a \cdot b = b \cdot a, \forall a,b \in\mathbb{R}$                                            \\
+	Elemento neutro (1) & $a \cdot 1 = a, \forall a \in\mathbb{R}$                                                      \\
+	Elemento inverso    & $\exists! b \in\mathbb{R} : b = \frac{1}{a} = a^{1}, ab + ba = 1, \forall a, b \in\mathbb{R}$ \\
+	Cancelativa         & $a \cdot b = a \cdot c \Rightarrow b=c, \forall a,b,c \in\mathbb{R}, a \neq 0$                \\
+\end{tabular}
+\end{center}
+
+También tenemos que la suma es distributiva respecto al producto:
+
+\[a \cdot (b+c) = a \cdot b + a \cdot c, \forall a,b,c \in\mathbb{R}\]
+
+\subsubsection{Los números reales se pueden ordenar}
+
+Cuando sumamos dos números reales obtenemos un número mayor a los dos números anteriores.
+Expresamos esta relación de la siguiente forma:
+
+\[\exists c \in\mathbb{R} : a+c = b \Rightarrow a \leq b, \forall a,b \in\mathbb{R}\]
+
+Esta relación de orden (\textit{menor o igual que} o $\leq$) satisface las siguientes tres propiedades con nombre\footnote{%
+	En general cualquier conjunto con cualquier relación de orden cumple estas cuatro propiedades, aunque aquí nos estemos centrando en el conjunto $\mathbb{R}$ y la relación $\leq$.
+}:
+
+\begin{center}
+\begin{tabular}{l l}
+	\textbf{Propiedad} & \textbf{Expresión}                                                          \\
+	\toprule
+	Reflexiva          & $a \leq a, \forall a \in\mathbb{R}$                                         \\
+	Asimétrica         & $a \leq b \land b \leq a \Rightarrow a=b, \forall a,b \in\mathbb{R}$        \\
+	Transitiva         & $a \leq b \land b \leq c \Rightarrow a \leq c, \forall a,b,c \in\mathbb{R}$ \\
+	Orden total        & $a \leq b \lor b \leq a, \forall a,b \in\mathbb{R}$                         \\
+\end{tabular}
+\end{center}
+
+Esta relación también cumple las siguientes propiedades
+
+\begin{itemize}
+	\item $a \leq b \Rightarrow a+c \leq b+c, \forall a,b,c \in\mathbb{R}$
+	\item $a+c \leq b+c \Rightarrow a \leq b, \forall a,b,c \in\mathbb{R}$
+	\item $a \leq b \Rightarrow a \cdot c \leq b \cdot c, \forall a,b,c \in\mathbb{R}$
+	\item $a \cdot a \leq b \cdot c \Rightarrow a \leq c, \forall a,b,c \in\mathbb{R}$
+\end{itemize}
+
+Sin embargo, la mayoría de las propiedades enumeradas hasta ahora se cumplen para otros conjuntos, como $\mathbb{Q}^+$ o $\mathbb{N}$.
+Para definir los números reales necesitamos una propiedad que no se cumpla en ningún otro conjunto.
+
+\subsubsection{La última propiedad}
+
+\[A,B \subset\mathbb{R} : a \leq b \forall a \in A, b \in B \Rightarrow \exists c \in\mathbb{R} : a \leq c \leq b, \forall a \in A, b \in B\]
+
+Esta propiedad nos dice que dado dos conjuntos tal que todos los elementos de uno sean mayores que los del otro, siempre habrá un número entre ambos conjuntos que sea igual al mínimo del primero y/o al máximo del segundo o totalmente diferente a los dos.
+Esto no ocurre en conjuntos como $\mathbb{N}$, donde entre todos los números mayores o iguales que el 10 y todos los números menores o iguales que el 9 no existe ningún número, ya que no hay elementos en $\mathbb{N}$ entre 9 y 10.
+
+\subsection{Subconjuntos destacados}
+
+\subsubsection{Números naturales ($\mathbb{N}$), enteros ($\mathbb{Z}$) y racionales ($\mathbb{Q}$)}
+
+A lo largo de esta asignatura trabajaremos con los siguientes conjuntos con nombre:
+
+\begin{itemize}
+	\item\textbf{Números naturales:}
+		$\mathbb{N} = \{1, 2, 3, \ldots\}$ es el menor conjunto que verifica el principio de inducción:
+		\begin{itemize}
+			\item $1 \in\mathbb{N}$
+			\item $n \in\mathbb{N} \Rightarrow n + 1 \in\mathbb{N}$
+		\end{itemize}
+		No tenemos en cuenta el 0 por comodidad.
+		Muchas de las definiciones de esta asignatura no se aplican para el 0, por lo que lo excluimos para no tener que recordarlo constantemente.
+	\item\textbf{Números enteros:}
+		$\mathbb{Z} = \{\ldots, -2, -1, 0, 1, 2, \ldots\}$.
+	\item\textbf{Números racionales:}
+		$\mathbb{Q} = \big\{\frac{p}{q} : p \in\mathbb{Z}, q \in\mathbb{N}\big\}$.
+	\item\textbf{Números irracionales:}
+		Son todos los números no racionales, es decir, $\mathbb{R}\backslash\mathbb{Q}$.
+\end{itemize}
+
+\subsubsection{Intervalos}
+
+Cuando nombramos subconjuntos de $\mathbb{R}$ que comprenden todo el rango de valores entre un número $a$ y otro número $b$, los definimos como intervalos.
+Formalmente, decimos que un conjunto $A \subset\mathbb{R}$ es un intervalo si dados $x,y \in A$ se cumple que $z \in A, \forall x < z < y$.
+Decimos que un intervalo es cerrado por uno de sus miembros si dicho miembro delimitador del mismo está incluido en el subconjunto y lo denotamos como $[]$.
+Por otro lado, los intervalos abiertos son aquellos en los que el miembro delimitador no se encuentra en el subconjunto y lo denotamos como $()$ o $][$.
+
+\section{Desigualdades}
+
+\subsection{Acotación}
+Decimos que $A \in\mathbb{R}$ está acotado superiormente si $\exists M \in\mathbb{R} : a \leq M, \forall a \in A$.
+En este caso, diremos que $M$ es una cota superior de $A$, en cuyo caso cualquier número $N \geq M$ es una cota superior.
+Por tanto, si un conjunto está acotado superiormente, el conjunto de las cotas es infinito.
+Las cotas inferiores se definen de forma análoga.
+
+Para un conjunto $A \subset\mathbb{R}$ decimos que $a_0 \in A$ es el máximo de $A$ si $a \leq a_0, \forall a \in A$.
+Este máximo es una cota superior, la única que pertenece a $A$ y la más pequeña de todas.
+El mínimo se define de forma análoga.
+
+\subsection{Valor absoluto}
+
+Definimos la aplicación valor absoluto $|| : \mathbb{R} \rightarrow \mathbb{R}^+$ de la siguiente forma:
+
+\[
+|x| =
+\begin{cases}
+	x  & \text{si } a \geq 0 \\
+	-x & \text{si } a < 0
+\end{cases}
+\]
+
+Informalmente hablando, esta aplicación nos devuelve la \textit{distancia de $x$ al 0} y cumple las siguientes propiedades:
+
+\begin{itemize}
+	\item $|x| \geq 0, \forall x \in\mathbb{R}$
+	\item $|x| = 0 \iff x = 0, \forall x \in\mathbb{R}$
+	\item $|x| \leq y \iff -y \leq x \leq y, \forall x,y \in\mathbb{R}$
+	\item $|x+y| \leq |x| + |y|, \forall x,y \in\mathbb{R}$
+	\item $||x| - |y|| \leq |x-y|, \forall x,y \in\mathbb{R}$
+	\item $|xy| = |x| \cdot |y|, \big|\frac{x}{y}\big| = \frac{|x|}{|y|}$
+\end{itemize}
