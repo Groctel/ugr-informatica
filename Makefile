@@ -40,7 +40,8 @@ SG_OUT   = $(BIN)/"Sistemas\ gráficos"
 SIBW_OUT = $(BIN)/"Sistemas\ de\ información\ basados\ en\ web"
 SO_OUT   = $(BIN)/"Sistemas\ operativos"
 
-AQADEMIA = $${HOME}/texmf/tex/latex/aqademia/
+AQADEMIA_ROOT = /usr/share/texmf-dist/tex/latex/aqademia/
+AQADEMIA_USER = $${HOME}/texmf/tex/latex/aqademia/
 
 # ==============================================================================
 # Creación de directorios
@@ -90,11 +91,12 @@ build: saludo c11 c12 c21 c22 c31 c32 despedida
 
 aqademia:
 	@printf "\033[35;1m:: \033[0mActualizando aqademia...\n"
-	@  (find $(AQADEMIA) \
-	   && git -C $(AQADEMIA) pull) 1>/dev/null 2>&1\
-	|| (mkdir -p ~/texmf/tex/latex \
-	   && git clone https://github.com/Groctel/aqademia $(AQADEMIA)) \
-	      1>/dev/null 2>&1
+	@(find $(AQADEMIA_ROOT)) 1>/dev/null 2>&1 || \
+		(find $(AQADEMIA_USER) && git -C $(AQADEMIA_USER) pull) 1>/dev/null 2>&1 \
+		|| (mkdir -p ~/texmf/tex/latex \
+				&& git clone https://github.com/Groctel/aqademia $(AQADEMIA_USER) \
+			) \
+		1>/dev/null 2>&1
 
 saludo:
 	@printf "\033[35;1m:: \033[0mComenzando compilación\n"
